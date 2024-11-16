@@ -8,6 +8,7 @@
     \subsubsection{Student Use Cases}
     
         \begin{enumerate}[label=\textbf{[US\arabic*]}, left = 0pt, align = left]
+            % -- US1 --
             \item \textbf{Student Registration}
             
             \begin{longtable}{|l|p{11cm}|}  
@@ -67,7 +68,7 @@
                 
             \end{longtable}
     
-            % ---------
+            % -- US2 --
             \newpage
             
             \item \textbf{Student Login}
@@ -116,7 +117,114 @@
                 \hline
                 
             \end{longtable}
-        
+
+            % -- US3 --
+            \newpage
+            
+            \item \textbf{Complete Student Profile}
+            
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Complete Student Profile} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Student \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The student has an account, is logged in, and is on his homepage. \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The student presses the "Edit Profile" button;
+                        \item S\&C redirects the student to the personal profile page;
+                        \item The student types the \textit{Basic Information} in the corresponding form field:
+                        \begin{itemize}[label=\textbullet, itemsep=0em]
+                            \item The student types the phone number;
+                            \item The student uploads the profile picture;
+                            \item The student enters the location for location-based internships.
+                        \end{itemize}
+
+                        \item The student types the \textit{Academic Information}:
+                        \begin{itemize}[label=\textbullet, itemsep=0em]
+                            \item University/college name;
+                            \item Degree program;
+                            \item Year of study;
+                            \item GPA;
+                            \item Relevant courses or projects;
+                            \item Graduation year.
+                        \end{itemize}
+
+                        \item The student types the \textit{Skills and Expertise}:
+                        \begin{itemize}[label=\textbullet, itemsep=0em]
+                            \item Technical skills (e.g., programming languages, tools, software);
+                            \item Soft skills (e.g., communication, teamwork, leadership);
+                            \item Certifications.
+                        \end{itemize}
+
+                        \item The student types the \textit{Experience and Achievements}:
+                        \begin{itemize}[label=\textbullet, itemsep=0em]
+                            \item Previous internship or work experience;
+                            \item Volunteer work or extracurricular activities;
+                            \item Achievements (e.g., awards, competitions, publications).
+                        \end{itemize}
+
+                        \item The student types the \textit{Internship Preferences}:
+                        \begin{itemize}[label=\textbullet, itemsep=0em]
+                            \item Desired field or industry (e.g., tech, finance, marketing);
+                            \item Preferred location (remote, specific cities, etc.);
+                            \item Availability (full-time, part-time, duration of internship);
+                            \item Desired start date.
+                        \end{itemize}
+
+                        \item The student uploads the \textit{CV};
+
+                        \item The student enters the \textit{Portfolio/Projects}:
+                        \begin{itemize}[label=\textbullet, itemsep=0em]
+                            \item Links to personal projects, GitHub, personal website, or portfolios for creative roles.
+                        \end{itemize}
+                        
+                        \item The student types the \textit{Languages Spoken}.
+                        \item The student presses the "Apply Changes" button;
+                        \item S\&C validates the data;
+                        \item S\&C redirects the student to the homepage of S\&C.
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The student's profile is successfully updated and saved in the system. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item Missing Required Fields:
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item If any mandatory fields are left empty, S\&C will display an error message.
+                            \end{itemize}
+                        \item Invalid Data Format:
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item If the phone number format is invalid, an error message is displayed;
+                                \item If the GPA is outside the valid range, the system prompts for correction.
+                            \end{itemize}
+                        \item Profile Picture Upload Failed:
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C displays an error if the file format is unsupported or the size exceeds limits.
+                            \end{itemize}
+                        \item CV Upload Failed:
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C prompts for a valid upload in case of failure.
+                            \end{itemize}
+                        \item System Validation Error:
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item Any inconsistency in the data (e.g., incorrect graduation year) triggers an error message.
+                            \end{itemize}            
+                    \end{enumerate} \\
+                \hline
+                
+            \end{longtable}
         \end{enumerate}
 
     \newpage
