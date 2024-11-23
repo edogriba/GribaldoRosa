@@ -4,6 +4,67 @@
 \subsection{External Interface Requirements}
 
 \subsection{Functional Requirements}
+    The listed requirements are in the form suggested by IEEE: 
+    \newline
+    \newline
+    [Condition][Subject][Action][Object][Constraints on the Action]
+    \subsubsection*{Users:}
+        \begin{enumerate}[label=\textbf{R\arabic*}]
+            \item S\&C shall allow users to sign up.
+            \item S\&C shall allow users to confirm their mail
+            \item S\&C shall allow users to log in.
+            \item After they registered and confirmed their email, S\&C shall allow users to upload their CV.
+            \item After they registered and confirmed their email, S\&C shall allow users to fill the required information (Name, Surname, etc).
+            \item S\&C shall allow users to update their profile information.
+            \item S\&C shall allow users to examine internship positions
+        \end{enumerate}
+        
+    \subsubsection*{Students:}
+        \begin{enumerate}[label=\textbf{R\arabic*},resume]
+            \item S\&C shall allow students to search for an internship.
+            \item S\&C shall allow students to apply for an internship.
+            \item If an internship position suited to a student is opened, S\&C shall notify the student
+            \item When a student issues a search for an internship, S\&C shall list the different positions aligned with the student's profile.
+    
+            
+        \end{enumerate}
+    
+    \subsubsection*{Applications:}
+        \begin{enumerate}[label=\textbf{R\arabic*},resume]
+            \item If an application has been accepted by a company, S\&C shall allow the student who made the application to confirm or refuse the internship
+            \item If a company signals that it needs a quiz of the students' skills, S\&C shall allow the student to schedule the quiz
+            \item After a quiz has been scheduled, S\&C shall allow the student to take the quiz
+            \item If a company signals that it needs an interview to test the students' skills, S\&C should allow the student and the company to schedule the interview
+            \item After the interview has been scheduled, S\&C should allow the student to access the link of the virtual room
+            \item S\&C shall allow the student to see the status of its applications
+            
+        \end{enumerate}
+    
+    \subsubsection*{Companies:}
+        \begin{enumerate}[label=\textbf{R\arabic*},resume]
+            \item S\&C shall allow companies to open internship positions.
+            \item S\&C shall allow companies to close internship positions.
+            \item If an a new profile of a student with a CV who could interest a company becomes available on the platform, S\&C shall notify the company
+        \end{enumerate}
+    
+    \subsubsection*{Communication during the internship:}
+         \begin{enumerate}[label=\textbf{R\arabic*},resume]
+            \item S\&C shall allow companies to leave private notes to students who are carrying out an internship with it
+            \item S\&C shall allow companies to send news about the internship to students who are carrying it out
+            \item S\&C shall allow both parties to communicate problems in a specific space of the website
+        \end{enumerate}
+    
+    \subsubsection*{Feedback and Suggestions:}
+        \begin{enumerate}[label=\textbf{R\arabic*},resume]
+            \item S\&C shall allow students who took an internship with a company to rate the internship and vice versa
+            \item S\&C shall allow students who took an internship with a company to give suggestions to the company and vice versa
+            \item S\&C shall allow companies to send news about the internship to students who are carrying it out
+            \item S\&C shall allow both parties involved in an internship to communicate problems in a dedicated space
+        \end{enumerate}
+        
+\newpage
+
+\subsection{Use Cases and Use Case Diagrams}
 
     \subsubsection{Student Use Cases}
     
@@ -109,7 +170,7 @@
                             \begin{itemize}[label=\textbullet, itemsep=0em]
                                 \item In that case, S\&C will display an error message on the screen.
                             \end{itemize}
-                        \item The entered password and the real password do not match.
+                        \item The entered password and the stored password do not match.
                             \begin{itemize}[label=\textbullet, itemsep=0em]
                                 \item In that case, S\&C will display an error message on the screen.
                             \end{itemize}
@@ -225,12 +286,115 @@
                 \hline
                 
             \end{longtable}
+
+            \item \textbf{Internship Search}
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Internship Search} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Student \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                The student knows the search criteria \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item Included use case: Student Login
+                        \item The student clicks on the "Search" button
+                        \item S\&C redirects the student to the search page;
+                        \item The student searches for keyword or compiles some filters options;
+                        \item The student issues the search
+                        \item S\&C looks for the results and shows them in a view where each element has just some information;
+                        \item The student can now scroll the list of internships that match the search criteria;
+                        \item If the student is interested in any of the shown positions can click to discover more about it;
+                        \item Included use case: Application for internship
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The user leaves the search page by clicking any button redirecting him or her to another page of the website \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The criteria do not match any open position
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will redirect the company will show a notification on the screen saying that no open position matched the search criteria
+                            \end{itemize}
+                        \item The email entered isn't valid.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an error message on the screen.
+                            \end{itemize}
+                        \item One or more keywords entered are not valid.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an empty list and a warning message on the screen saying that the input keywords don't exist.
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+            \end{longtable}
+
+        \item \textbf{Application for internship}
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Application for Internship} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Student \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                The student decides to apply to an internship\\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item Included use case: Student Login
+                        \item Included use case: Internship Search
+                        \item the student chooses an internship to which he would like to apply
+                        \item The student presses the "Apply" button;
+                        \item S\&C redirects the student to the page of the internship position;
+                        \item The student can see all the information
+                        \item The student has to accept terms and condition of the application
+                        \item The student presses the "Confirm" button
+                        \
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The user sent the application and gets redirected to his own profile page\\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The criteria do not match any open position
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an empty list and a notification on the screen saying that no open position matched the search criteria
+                            \end{itemize}
+                        \item The email entered isn't valid.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an error message on the screen.
+                            \end{itemize}
+                        \item One or more keywords entered are not valid.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an empty list and a warning message on the screen saying that the input keywords don't exist.
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+            \end{longtable}
+        
         \end{enumerate}
 
     \newpage
     \subsubsection{Company Use Cases}
     
-        \begin{enumerate}[label=\textbf{[US\arabic*]}, left = 0pt, align = left, start=2]
+        \begin{enumerate}[label=\textbf{[US\arabic*]}, left = 0pt, align = left, resume]
             \item \textbf{Company Registration}
         
             \begin{longtable}{|l|p{11cm}|}  
@@ -289,5 +453,179 @@
                 \hline
                 
             \end{longtable}
-        
+    \newpage
+    \item \textbf{Company Login}
+            
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Company Login} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Company \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The company has an account and is on the main page of S\&C. \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The company presses the "Login" button;
+                        \item S\&C redirects the company to the login page;
+                        \item The company types the Email in the corresponding form field;
+                        \item The company types the password in the corresponding form field;
+                        \item The company presses the "Log in" button;
+                        \item S\&C validates the data;
+                        \item S\&C redirects the student to the homepage of S\&C.
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The company logs into his profile. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item A user with the entered email doesn't exists.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an error message on the screen.
+                            \end{itemize}
+                        \item The entered password and the real password do not match.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an error message on the screen.
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+                
+            \end{longtable}
+
+        \item \textbf{Application Acceptance or Rejection}
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Application Acceptance or Rejection} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Company, Student \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The company knows which candidate to accept or reject \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item Included use case: Company Login
+                        \item The company goes to the page of an open internship it has;
+                        \item The company clicks on the button to see the list of candidates;
+                        \item The company can click on each item of the list to visit the profile page of the candidate;
+                        \item The company clicks "Accept" or "Reject" 
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The candidate is accepted or rejected. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The company has no candidates for an open internship.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will show an empty list an display a notification which says no applications were found for that position.
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+            \end{longtable}
+
+
+        \item \textbf{Further Assessment for Application}
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Further Assessment for Application} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Company, Student\\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The company knows which candidates have to undergo more assessment before being accepted or rejected \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item Included use case: Company Login
+                        \item The company goes to the page of an open internship it has;
+                        \item The company clicks on the button to see the list of candidates;
+                        \item The company can click on each item of the list to visit the profile page of the candidate;
+                        \item The company clicks "Assess Further" 
+                        \item Included use case: Create assessment 
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The candidate is notified that he has to undergo a phase of assessment. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The company has no candidates for an open internship.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will show an empty list and display a notification which says no applications were found for that position.
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+            \end{longtable}
+
+            \item \textbf{Create Assessment}
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Further Assessment for Application} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Company, Student\\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The company pressed the button "Further Assess" on an application \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The company is prompted the number of questions it wants to ask to the student
+                        \item The company must create the questions;
+                        \item The company must create the answers, indicating the wrong ones and the right one;
+                        \item The company can indicate a link for the virtual meeting or not;
+                        \item The company clicks "Create Assessment" 
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The assessment for the student has been created. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The company inputs wrong answers.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will show an empty list and display a notification which says no applications were found for that position.
+                            \end{itemize}
+                        \item The company abruptly exits from the page without clicking "Create Assessment".
+                        \begin{itemize}[label=\textbullet, itemsep=0em]
+                        \item In that case, the status of the application will remain in the state "Assessment Needed". Questions and answers created previously are lost. 
+                        \end{itemize}
+                    \end{enumerate} \\
+                \hline
+            \end{longtable}
+
+
+            
         \end{enumerate}
+
+

@@ -141,9 +141,10 @@
             \end{enumerate}
         }
     
-    % -----------------------------------------------------
-    
+    % -----------------------------------------------------.
+    \newpage
     \subsubsection{Domain Class Diagram}
+    To capture the different classes, their methods and their interactions we drew the following domain class diagram
         \begin{figure}[h!]
             \centering
             \includegraphics[width=1\textwidth]{RASD/Images/ClassDiagram.png}
@@ -155,14 +156,18 @@
     % -----------------------------------------------------
     
     \subsubsection{State Diagrams}
-        The most crucial aspect of the application is the creation and evolution of the internship positions on the platform. Not to leave any room for doubts, we explain both the point of view of the company and the one of the student. 
-        The following is the point of view of a company:
+        The most crucial aspect of the application is the creation and evolution of the internship positions on the platform. Not to leave any room for doubts, we explain both the point of view of the company and the one of the student.
+        \\
+        A company can close an internship position whenever it wants to. Once it closes the internship, the applications who were accepted but not confirmed or not refused, the pending applications, and the applications needing an further assessments are automatically rejected. Instead, for those who confirmed, we consider the moment of the closing of the open position by the company as the moment in which they start their internship.
+        \\
+        The following is the point of view of the company
         \begin{figure}[h!]
             \centering
             \includegraphics[width=1\textwidth]{RASD/Images/CompanyPOV.png}
             \caption{The evolution of an internship position on the platform from the point of view of a company}
             \label{fig:example}
         \end{figure}
+        \\
         The following one, instead, is the point of view of a student:
         \begin{figure}[h!]
             \centering
@@ -170,6 +175,7 @@
             \caption{The evolution of an internship position on the platform from the point of view of a student}
             \label{fig:example}
         \end{figure}
+        
 
 % -----------------------------------------------------
 
@@ -184,7 +190,7 @@
         \\ Companies can create new internships positions by establishing the expired deadline to apply, the work place, the role title, the responsibilities, the required experience, the required skills and the salary range.
         \item \textbf {Management of the Selection Process}
         \\ Companies see the profiles of students who applied to an internship. S\&C enable them to configure the selection process based on their needs. They can reject students who applied to an internship position after checking their qualifications on their profiles; they can directly accept one or more of them. Companies can propose dates of tests to assess the preparation of students who applied for an internship position and finalize the decisions after the tests or requesting an online interview.
-        \\item \textbf {Communication Space}
+        \item \textbf {Communication Space}
         \\ After an internship is started, both the students and companies have dedicated sections of the website to exchange information, communicate problems, indicate suggestions, make announcements (all regarding the internship) such that both of the interested parties can benefit from the sharing of information. 
         \item \textbf {Feedback Management}
         \\ After the internship is finished the platform asks both the company and the student to rate and review each other. Moreover it asks both parties for suggestions. Collecting this kind of information is particularly important to feed and improve the recommendation system.
