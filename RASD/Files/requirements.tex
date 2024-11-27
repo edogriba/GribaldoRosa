@@ -13,6 +13,7 @@
             \item S\&C shall allow users to sign up.
             \item S\&C shall allow users to confirm their mail
             \item S\&C shall allow users to log in.
+            \item S\&C shall allow users to log out.
             \item After they registered and confirmed their email, S\&C shall allow users to upload their CV.
             \item After they registered and confirmed their email, S\&C shall allow users to fill the required information (Name, Surname, etc).
             \item S\&C shall allow users to update their profile information.
@@ -21,10 +22,10 @@
         
     \subsubsection*{Students:}
         \begin{enumerate}[label=\textbf{R\arabic*},resume]
-            \item S\&C shall allow students to search for an internship.
-            \item S\&C shall allow students to apply for an internship.
+            \item S\&C shall allow students to search for a specific kind of internship.    
+            \item S\&C shall allow students to apply for an internship.     % US DONE
             \item If an internship position suited to a student is opened, S\&C shall notify the student
-            \item When a student issues a search for an internship, S\&C shall list the different positions aligned with the student's profile.
+            \item When a student issues a search for an internship, S\&C shall list the different positions aligned with the student's profile.         % US DONE
     
             
         \end{enumerate}
@@ -131,7 +132,6 @@
     
             % -- US2 --
             \newpage
-            
             \item \textbf{Student Login}
             
             \begin{longtable}{|l|p{11cm}|}  
@@ -180,8 +180,47 @@
             \end{longtable}
 
             % -- US3 --
-            \newpage
+            \item \textbf{Student Logout}
             
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Student Logout} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Student \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The student has an account and is on the main page of S\&C. \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The student presses the "Logout" button;
+                        \item S\&C displays a Success Message;
+                        \item S\&C redirects the student to the main page;
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The student logs out his profile. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The student doesn't have an account.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an error message on the screen.
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+                
+            \end{longtable}
+            
+            % -- US4 --
+            \newpage
             \item \textbf{Complete Student Profile}
             
             \begin{longtable}{|l|p{11cm}|}  
@@ -287,7 +326,10 @@
                 
             \end{longtable}
 
+            % -- US5 --
+            \newpage
             \item \textbf{Internship Search}
+            
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
                 \textbf{Name} & 
@@ -309,7 +351,7 @@
                         \item S\&C redirects the student to the search page;
                         \item The student searches for keyword or compiles some filters options;
                         \item The student issues the search
-                        \item S\&C looks for the results and shows them in a view where each element has just some information;
+                        \item S\&C looks for the results and shows them with a preview for each internship;
                         \item The student can now scroll the list of internships that match the search criteria;
                         \item If the student is interested in any of the shown positions can click to discover more about it;
                         \item Included use case: Application for internship
@@ -324,7 +366,7 @@
                     \begin{enumerate}[label=\arabic*., itemsep=0.1em]
                         \item The criteria do not match any open position
                             \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will redirect the company will show a notification on the screen saying that no open position matched the search criteria
+                                \item In that case, S\&C will redirect the student will show a notification on the screen saying that no open position matched the search criteria
                             \end{itemize}
                         \item The email entered isn't valid.
                             \begin{itemize}[label=\textbullet, itemsep=0em]
@@ -338,7 +380,10 @@
                 \hline
             \end{longtable}
 
-        \item \textbf{Application for internship}
+            % -- US6 --
+            \newpage
+            \item \textbf{Application for internship}
+            
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
                 \textbf{Name} & 
@@ -395,6 +440,7 @@
     \subsubsection{Company Use Cases}
     
         \begin{enumerate}[label=\textbf{[US\arabic*]}, left = 0pt, align = left, resume]
+            % -- US7 --
             \item \textbf{Company Registration}
         
             \begin{longtable}{|l|p{11cm}|}  
@@ -453,8 +499,10 @@
                 \hline
                 
             \end{longtable}
-    \newpage
-    \item \textbf{Company Login}
+            
+            % -- US8 --
+            \newpage
+            \item \textbf{Company Login}
             
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
@@ -501,7 +549,177 @@
                 
             \end{longtable}
 
-        \item \textbf{Application Acceptance or Rejection}
+            % -- US9 --
+            \item \textbf{Company Logout}
+            
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Company Logout} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Company \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The company has an account and is on the main page of S\&C. \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The company presses the "Logout" button;
+                        \item S\&C displays a Success Message;
+                        \item S\&C redirects the company to the main page;
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The company logs out his profile. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The company doesn't have an account.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, S\&C will display an error message on the screen.
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+                
+            \end{longtable}
+
+            % -- US10 --
+            \newpage
+            \item \textbf{Post a new internship}
+            
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Post a new internship} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Company \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The company has an account and is logged in. \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The company presses the "Add New Internship" button;
+                        \item S\&C displays a form that the company have to fill;
+                        \item The company fills the form;
+                        \item The company presses the "Public" button;
+                        \item S\&C validates the data;
+                        \item S\&C displays a Success Message;
+                        \item S\&C redirects the company to the main page;
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The company posts a new internship. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The company leaves one or more mandatory fields empty.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C displays an error message indicating the missing fields.
+                                \item S\&C highlights the empty fields in the form.
+                                \item The company is prompted to complete the form before resubmitting.
+                            \end{itemize}
+                        \item The company provides invalid data (e.g., incorrect date formats, non-numeric salary inputs).
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C validates the input and detects the invalid data.
+                                \item S\&C displays an error message explaining the specific validation errors.
+                                \item The company must correct the errors and resubmit the form
+                            \end{itemize}
+                        \item The company is not logged in.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C denies access and displays an error message: "You must be logged in with a company account to perform this action."
+                                \item S\&C redirects the user to the login page.
+                            \end{itemize}
+                        \item The company attempts to post an internship with identical details to an already existing one.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C detects the duplicate entry and displays a warning: "An internship with similar details already exists. Please review your submission."
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+                
+            \end{longtable}
+
+            % -- US11 --
+            \newpage
+            \item \textbf{Close a new internship}
+            
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Close a new internship} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    Company \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    \begin{itemize}[label=\textbullet, itemsep=0em]
+                        \item The company has an account and is logged in;
+                        \item The company has at least one open internship.
+                    \end{itemize}
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The company enters the open internship section;
+                        \item The company chooses the internship they want to close;
+                        \item The company fills the form;
+                        \item The company presses the "Public" button;
+                        \item S\&C validates the data;
+                        \item S\&C displays a Success Message;
+                        \item S\&C redirects the company to the main page;
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The company posts a new internship. \\
+                \hline
+                
+                \textbf{Exceptions} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+                        \item The company leaves one or more mandatory fields empty.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C displays an error message indicating the missing fields.
+                                \item S\&C highlights the empty fields in the form.
+                                \item The company is prompted to complete the form before resubmitting.
+                            \end{itemize}
+                        \item The company provides invalid data (e.g., incorrect date formats, non-numeric salary inputs).
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C validates the input and detects the invalid data.
+                                \item S\&C displays an error message explaining the specific validation errors.
+                                \item The company must correct the errors and resubmit the form
+                            \end{itemize}
+                        \item The company is not logged in.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C denies access and displays an error message: "You must be logged in with a company account to perform this action."
+                                \item S\&C redirects the user to the login page.
+                            \end{itemize}
+                        \item The company attempts to post an internship with identical details to an already existing one.
+                            \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item S\&C detects the duplicate entry and displays a warning: "An internship with similar details already exists. Please review your submission."
+                            \end{itemize}
+                    \end{enumerate} \\
+                \hline
+                
+            \end{longtable}
+
+            % -- US10 --
+            \newpage
+            \item \textbf{Application Acceptance or Rejection}
+            
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
                 \textbf{Name} & 
@@ -540,8 +758,9 @@
                 \hline
             \end{longtable}
 
-
-        \item \textbf{Further Assessment for Application}
+            % -- US11 --
+            \item \textbf{Further Assessment for Application}
+            
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
                 \textbf{Name} & 
@@ -581,7 +800,10 @@
                 \hline
             \end{longtable}
 
+            % -- US12 --
+            \newpage
             \item \textbf{Create Assessment}
+            
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
                 \textbf{Name} & 
