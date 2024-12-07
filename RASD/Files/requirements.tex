@@ -16,11 +16,12 @@
             \item S\&C shall allow users to log out.                    % US DONE
             % US DONE
             \item S\&C shall allow users to update their profile information.       % US DONE
-            \item S\&C shall allow users to examine internship positions.           
+                       
         \end{enumerate}
         
     \subsubsection*{Students:}
         \begin{enumerate}[label=\textbf{R\arabic*},resume]
+            \item S\&C shall allow users to examine internship positions.
             \item After they registered and confirmed their email, S\&C shall allow students to upload their CV.   % US DONE
             \item After they registered and confirmed their email, S\&C shall allow users to fill the required information (Name, Surname, etc).
             \item S\&C shall allow students to search for a specific kind of internship.    % US DONE 
@@ -555,7 +556,7 @@
                         \item S\&C looks for the results and shows them with a preview for each internship;
                         \item The student can now scroll the list of internships that match the search criteria;
                         \item If the student is interested in any of the shown positions can click to discover more about it;
-                        \item Included use case: Application for internship
+                        %\item Included use case: Application for internship
                     \end{enumerate} \\
                 \hline
                 
@@ -569,10 +570,6 @@
                             \begin{itemize}[label=\textbullet, itemsep=0em]
                                 \item In that case, S\&C will redirect the student will show a notification on the screen saying that no open position matched the search criteria
                             \end{itemize}
-                        \item The email entered isn't valid.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
                         \item One or more keywords entered are not valid.
                             \begin{itemize}[label=\textbullet, itemsep=0em]
                                 \item In that case, S\&C will display an empty list and a warning message on the screen saying that the input keywords don't exist.
@@ -580,6 +577,13 @@
                     \end{enumerate} \\
                 \hline
             \end{longtable}
+
+                \newpage
+                \begin{figure}[h!]
+                \centering
+                    \includegraphics[width=1\textwidth]{RASD/Images/UseCases/InternshipSearch.drawio.png}
+                \label{fig:example}
+                \end{figure}
 
             % -- US9 --
             \newpage
@@ -622,14 +626,6 @@
                 
                 \textbf{Exceptions} &
                     \begin{enumerate}[label=\arabic*., itemsep=0.1em]
-                        \item The criteria do not match any open position
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an empty list and a notification on the screen saying that no open position matched the search criteria
-                            \end{itemize}
-                        \item The email entered isn't valid.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
                         \item One or more keywords entered are not valid.
                             \begin{itemize}[label=\textbullet, itemsep=0em]
                                 \item In that case, S\&C will display an empty list and a warning message on the screen saying that the input keywords don't exist.
@@ -639,6 +635,14 @@
             \end{longtable}
         
         \end{enumerate}
+
+    \newpage
+                \begin{figure}[h!]
+                \centering
+                    \includegraphics[width=1\textwidth]{RASD/Images/UseCases/InternshipApplication.drawio.png}
+                \label{fig:example}
+                \end{figure}
+
 
     \newpage
     \subsubsection{Company Use Cases}
