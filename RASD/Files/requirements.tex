@@ -65,7 +65,7 @@
             \item S\&C shall allow companies to send news about the internship to students who are carrying it out
             \item S\&C shall allow both parties involved in an internship to communicate problems in a dedicated space
         \end{enumerate}
-        \subsubsection*{Companies:}
+        \subsubsection*{Universities:}
         \begin{enumerate}[label=\textbf{R\arabic*},resume]
             \item After they registered and confirmed their email, S\&C shall allow universities to complete their profile by filling the required field
             \item S\&C shall allow universities to monitor the status of the internship of their students
@@ -246,7 +246,7 @@
             \end{longtable}
             
         \end{enumerate}
-
+\newpage
         \begin{figure}[h!]
                 \centering
                     \includegraphics[width=1\textwidth]{RASD/Images/UseCases/UserUpdate.drawio.png}
@@ -315,7 +315,7 @@
                     \end{enumerate} \\
                 \hline
             \end{longtable}
-
+\newpage
                     \begin{figure}[h!]
                 \centering
                     \includegraphics[width=1\textwidth]{RASD/Images/UseCases/StudentRegistration.drawio.png}
@@ -323,93 +323,93 @@
                 \end{figure}
 
             % -- US5 --                                                         %% DA ELIMINARE
-            \newpage
-            \item \textbf{Student Login}
+            % \newpage
+            % \item \textbf{Student Login}
             
-            \begin{longtable}{|l|p{11cm}|}  
-                \hline
-                \textbf{Name} & 
-                    \textbf{Student Login} \\
-                \hline
+            % \begin{longtable}{|l|p{11cm}|}  
+            %     \hline
+            %     \textbf{Name} & 
+            %         \textbf{Student Login} \\
+            %     \hline
                 
-                \textbf{Actors} & 
-                    Student \\
-                \hline
+            %     \textbf{Actors} & 
+            %         Student \\
+            %     \hline
                 
-                \textbf{Entry Condition} & 
-                    The student has an account and is on the main page of S\&C. \\
-                \hline
+            %     \textbf{Entry Condition} & 
+            %         The student has an account and is on the main page of S\&C. \\
+            %     \hline
                 
-                \textbf{Event Flow} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
-                        \item The student presses the "Login" button;
-                        \item S\&C redirects the student to the login page;
-                        \item The student types the Email in the corresponding form field;
-                        \item The student types the password in the corresponding form field;
-                        \item The student presses the "Log in" button;
-                        \item S\&C validates the data;
-                        \item S\&C redirects the student to the homepage of S\&C.
-                    \end{enumerate} \\
-                \hline
+            %     \textbf{Event Flow} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+            %             \item The student presses the "Login" button;
+            %             \item S\&C redirects the student to the login page;
+            %             \item The student types the Email in the corresponding form field;
+            %             \item The student types the password in the corresponding form field;
+            %             \item The student presses the "Log in" button;
+            %             \item S\&C validates the data;
+            %             \item S\&C redirects the student to the homepage of S\&C.
+            %         \end{enumerate} \\
+            %     \hline
                 
-                \textbf{Exit Condition} & 
-                    The student logs into his profile. \\
-                \hline
+            %     \textbf{Exit Condition} & 
+            %         The student logs into his profile. \\
+            %     \hline
                 
-                \textbf{Exceptions} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
-                        \item A user with the entered email doesn't exists.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
-                        \item The entered password and the stored password do not match.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
-                    \end{enumerate} \\
-                \hline
+            %     \textbf{Exceptions} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+            %             \item A user with the entered email doesn't exists.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, S\&C will display an error message on the screen.
+            %                 \end{itemize}
+            %             \item The entered password and the stored password do not match.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, S\&C will display an error message on the screen.
+            %                 \end{itemize}
+            %         \end{enumerate} \\
+            %     \hline
                 
-            \end{longtable}
+            % \end{longtable}
 
-            % -- US6 --                                                         %% DA ELIMINARE
-            \item \textbf{Student Logout}
+            % % -- US6 --                                                         %% DA ELIMINARE
+            % \item \textbf{Student Logout}
                                                                                 
-            \begin{longtable}{|l|p{11cm}|}  
-                \hline
-                \textbf{Name} & 
-                    \textbf{Student Logout} \\
-                \hline
+            % \begin{longtable}{|l|p{11cm}|}  
+            %     \hline
+            %     \textbf{Name} & 
+            %         \textbf{Student Logout} \\
+            %     \hline
                 
-                \textbf{Actors} & 
-                    Student \\
-                \hline
+            %     \textbf{Actors} & 
+            %         Student \\
+            %     \hline
                 
-                \textbf{Entry Condition} & 
-                    The student has an account and is on the main page of S\&C. \\
-                \hline
+            %     \textbf{Entry Condition} & 
+            %         The student has an account and is on the main page of S\&C. \\
+            %     \hline
                 
-                \textbf{Event Flow} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
-                        \item The student presses the "Logout" button;
-                        \item S\&C displays a Success Message;
-                        \item S\&C redirects the student to the main page;
-                    \end{enumerate} \\
-                \hline
+            %     \textbf{Event Flow} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+            %             \item The student presses the "Logout" button;
+            %             \item S\&C displays a Success Message;
+            %             \item S\&C redirects the student to the main page;
+            %         \end{enumerate} \\
+            %     \hline
                 
-                \textbf{Exit Condition} & 
-                    The student logs out his profile. \\
-                \hline
+            %     \textbf{Exit Condition} & 
+            %         The student logs out his profile. \\
+            %     \hline
                 
-                \textbf{Exceptions} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
-                        \item The student doesn't have an account.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
-                    \end{enumerate} \\
-                \hline
+            %     \textbf{Exceptions} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+            %             \item The student doesn't have an account.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, S\&C will display an error message on the screen.
+            %                 \end{itemize}
+            %         \end{enumerate} \\
+            %     \hline
                 
-            \end{longtable}                       
+            % \end{longtable}                       
             
             % -- US7 --                                                         
             \newpage
@@ -518,15 +518,16 @@
                 
             \end{longtable}
 
+\newpage
             \begin{figure}[h!]
-                \centering
-                    \includegraphics[width=1\textwidth]{RASD/Images/UseCases/CompleteProfile.drawio.png}
-                \label{fig:example}
+                \centering  \includegraphics[width=1\textwidth]{RASD/Images/UseCases/CompleteProfile.drawio.png}
+                \label{fig:CompleteStudentProfile}
                 \end{figure}
 
-            
+\newpage           
 
             % -- US8 --
+            
             \newpage
             \item \textbf{Internship Search}
             
@@ -578,12 +579,13 @@
                 \hline
             \end{longtable}
 
-                \newpage
-                \begin{figure}[h!]
-                \centering
-                    \includegraphics[width=1\textwidth]{RASD/Images/UseCases/InternshipSearch.drawio.png}
-                \label{fig:example}
+                
+\newpage
+            \begin{figure}[h!]
+                \centering  \includegraphics[]{RASD/Images/UseCases/InternshipSearch.drawio.png}
+                \label{fig:CompleteStudentProfile}
                 \end{figure}
+\newpage
 
             % -- US9 --
             \newpage
@@ -635,18 +637,16 @@
             \end{longtable}
         
         \end{enumerate}
-
-    \newpage
+\newpage
                 \begin{figure}[h!]
-                \centering
-                    \includegraphics[width=1\textwidth]{RASD/Images/UseCases/InternshipApplication.drawio.png}
-                \label{fig:example}
+                \centering   \includegraphics{RASD/Images/UseCases/InternshipApplication.drawio.png}
+                \label{fig: Application for Internship}
                 \end{figure}
 
 
-    \newpage
+
+\newpage
     \subsubsection{Company Use Cases}
-    
         \begin{enumerate}[label=\textbf{[US\arabic*]}, left = 0pt, align = left, resume]
             % -- US10 --
             \item \textbf{Company Registration}
@@ -707,95 +707,102 @@
                 \hline
                 
             \end{longtable}
-            
-            % -- US11 --                                                         %% DA ELIMINARE
-            \newpage
-            \item \textbf{Company Login}
-            
-            \begin{longtable}{|l|p{11cm}|}  
-                \hline
-                \textbf{Name} & 
-                    \textbf{Company Login} \\
-                \hline
-                
-                \textbf{Actors} & 
-                    Company \\
-                \hline
-                
-                \textbf{Entry Condition} & 
-                    The company has an account and is on the main page of S\&C. \\
-                \hline
-                
-                \textbf{Event Flow} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
-                        \item The company presses the "Login" button;
-                        \item S\&C redirects the company to the login page;
-                        \item The company types the Email in the corresponding form field;
-                        \item The company types the password in the corresponding form field;
-                        \item The company presses the "Log in" button;
-                        \item S\&C validates the data;
-                        \item S\&C redirects the student to the homepage of S\&C.
-                    \end{enumerate} \\
-                \hline
-                
-                \textbf{Exit Condition} & 
-                    The company logs into his profile. \\
-                \hline
-                
-                \textbf{Exceptions} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
-                        \item A user with the entered email doesn't exists.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
-                        \item The entered password and the real password do not match.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
-                    \end{enumerate} \\
-                \hline
-                
-            \end{longtable}
 
-            % -- US12 --                                                        %% DA ELIMINARE
-            \item \textbf{Company Logout}
             
-            \begin{longtable}{|l|p{11cm}|}  
-                \hline
-                \textbf{Name} & 
-                    \textbf{Company Logout} \\
-                \hline
+\newpage
+            \begin{figure}[h!]
+                \centering  \includegraphics[width=1\textwidth]{RASD/Images/UseCases/CompanyRegistration.drawio.png}
+                \label{fig:CompanyRegistration}
+                \end{figure}
+\newpage
+            % -- US11 --                                                         %% DA ELIMINARE
+            % \newpage
+            % \item \textbf{Company Login}
+            
+            % \begin{longtable}{|l|p{11cm}|}  
+            %     \hline
+            %     \textbf{Name} & 
+            %         \textbf{Company Login} \\
+            %     \hline
                 
-                \textbf{Actors} & 
-                    Company \\
-                \hline
+            %     \textbf{Actors} & 
+            %         Company \\
+            %     \hline
                 
-                \textbf{Entry Condition} & 
-                    The company has an account and is on the main page of S\&C. \\
-                \hline
+            %     \textbf{Entry Condition} & 
+            %         The company has an account and is on the main page of S\&C. \\
+            %     \hline
                 
-                \textbf{Event Flow} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
-                        \item The company presses the "Logout" button;
-                        \item S\&C displays a Success Message;
-                        \item S\&C redirects the company to the main page;
-                    \end{enumerate} \\
-                \hline
+            %     \textbf{Event Flow} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+            %             \item The company presses the "Login" button;
+            %             \item S\&C redirects the company to the login page;
+            %             \item The company types the Email in the corresponding form field;
+            %             \item The company types the password in the corresponding form field;
+            %             \item The company presses the "Log in" button;
+            %             \item S\&C validates the data;
+            %             \item S\&C redirects the student to the homepage of S\&C.
+            %         \end{enumerate} \\
+            %     \hline
                 
-                \textbf{Exit Condition} & 
-                    The company logs out his profile. \\
-                \hline
+            %     \textbf{Exit Condition} & 
+            %         The company logs into his profile. \\
+            %     \hline
                 
-                \textbf{Exceptions} &
-                    \begin{enumerate}[label=\arabic*., itemsep=0.1em]
-                        \item The company doesn't have an account.
-                            \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, S\&C will display an error message on the screen.
-                            \end{itemize}
-                    \end{enumerate} \\
-                \hline
+            %     \textbf{Exceptions} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+            %             \item A user with the entered email doesn't exists.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, S\&C will display an error message on the screen.
+            %                 \end{itemize}
+            %             \item The entered password and the real password do not match.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, S\&C will display an error message on the screen.
+            %                 \end{itemize}
+            %         \end{enumerate} \\
+            %     \hline
                 
-            \end{longtable}
+            % \end{longtable}
+
+            % % -- US12 --                                                        %% DA ELIMINARE
+            % \item \textbf{Company Logout}
+            
+            % \begin{longtable}{|l|p{11cm}|}  
+            %     \hline
+            %     \textbf{Name} & 
+            %         \textbf{Company Logout} \\
+            %     \hline
+                
+            %     \textbf{Actors} & 
+            %         Company \\
+            %     \hline
+                
+            %     \textbf{Entry Condition} & 
+            %         The company has an account and is on the main page of S\&C. \\
+            %     \hline
+                
+            %     \textbf{Event Flow} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+            %             \item The company presses the "Logout" button;
+            %             \item S\&C displays a Success Message;
+            %             \item S\&C redirects the company to the main page;
+            %         \end{enumerate} \\
+            %     \hline
+                
+            %     \textbf{Exit Condition} & 
+            %         The company logs out his profile. \\
+            %     \hline
+                
+            %     \textbf{Exceptions} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+            %             \item The company doesn't have an account.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, S\&C will display an error message on the screen.
+            %                 \end{itemize}
+            %         \end{enumerate} \\
+            %     \hline
+                
+            % \end{longtable}
 
             % -- US13 --
             \newpage
@@ -820,7 +827,7 @@
                         \item The company presses the "Add New Internship" button;
                         \item S\&C displays a form that the company have to fill;
                         \item The company fills the form;
-                        \item The company presses the "Public" button;
+                        \item The company presses the "Publish" button;
                         \item S\&C validates the data;
                         \item S\&C displays a Success Message;
                         \item S\&C redirects the company to the main page;
@@ -858,13 +865,12 @@
                 \hline
                 
             \end{longtable}
-
+\newpage
             \begin{figure}[h!]
-                \centering
-                    \includegraphics[width=1\textwidth]{RASD/Images/UseCases/PostNewInternship.drawio.png}
+                \centering        \includegraphics{RASD/Images/UseCases/PostNewInternship.drawio.png}
                 \label{fig:example}
                 \end{figure}
-
+\newpage
             % -- US14 --
             \newpage
             \item \textbf{Close a new internship}
@@ -930,6 +936,13 @@
                 
             \end{longtable}
 
+\newpage
+            \begin{figure}[h!]
+                \centering        \includegraphics{RASD/Images/UseCases/CloseInternship.drawio.png}
+                \label{fig:example}
+                \end{figure}
+\newpage
+
             % -- US15 --
             \newpage
             \item \textbf{Application Acceptance or Rejection}
@@ -972,8 +985,14 @@
                 \hline
             \end{longtable}
 
-            % -- US16 --
-            \item \textbf{Further Assessment for Application}
+\newpage
+            \begin{figure}[h!]
+                \centering        \includegraphics{RASD/Images/UseCases/ApplicationAcceptanceRejection.drawio.png}
+                \label{fig:example}
+                \end{figure}
+\newpage
+
+ \item \textbf{Further Assessment for Application}
             
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
@@ -982,26 +1001,27 @@
                 \hline
                 
                 \textbf{Actors} & 
-                    Company, Student\\
+                    Company\\
                 \hline
                 
                 \textbf{Entry Condition} & 
-                    The company knows which candidates have to undergo more assessment before being accepted or rejected \\
+                    The company is logged in and knows which candidates have to undergo more assessment before being accepted or rejected \\
                 \hline
                 
                 \textbf{Event Flow} &
                     \begin{enumerate}[label=\arabic*., itemsep=0.2em]
-                        \item Included use case: Company Login
                         \item The company goes to the page of an open internship it has;
                         \item The company clicks on the button to see the list of candidates;
                         \item The company can click on each item of the list to visit the profile page of the candidate;
                         \item The company clicks "Assess Further" 
-                        \item Included use case: Create assessment 
+                        \item The company is prompted a calendar to choose when to schedule the interview and an input field to put the link of the online room
+                        \item The company confirms the date
+                        
                     \end{enumerate} \\
                 \hline
                 
                 \textbf{Exit Condition} & 
-                    The candidate is notified that he has to undergo a phase of assessment. \\
+                    The company is redirected to its profile page \\
                 \hline
                 
                 \textbf{Exceptions} &
@@ -1009,55 +1029,230 @@
                         \item The company has no candidates for an open internship.
                             \begin{itemize}[label=\textbullet, itemsep=0em]
                                 \item In that case, S\&C will show an empty list and display a notification which says no applications were found for that position.
-                            \end{itemize}
+                                \end{itemize}                           
+                                \item The company inserted the wrong link.
+                                \begin{itemize}[label=\textbullet, itemsep=0em]
+                                \item In that case, the company will have to inform the student with a different communication mean (e. g. by email)
+                                \end{itemize}
                     \end{enumerate} \\
                 \hline
             \end{longtable}
 
-            % -- US17 --
-            \newpage
-            \item \textbf{Request Assessment}
+\newpage
+            \begin{figure}[h!]
+                \centering        \includegraphics{RASD/Images/UseCases/FurtherAssessment.drawio.png}
+                \label{fig:example}
+                \end{figure}
+\newpage
+
+
+\newpage
+    \subsubsection{Users (Company and Student) Use Cases}
+    Notice that in this subsection when we refer to users we intend students and companies only.
+\item \textbf{Feedback from User}
             
             \begin{longtable}{|l|p{11cm}|}  
                 \hline
                 \textbf{Name} & 
-                    \textbf{Request Assessment} \\
+                    \textbf{Feedback from User} \\
                 \hline
                 
                 \textbf{Actors} & 
-                    Company, Student\\
+                    User\\
                 \hline
                 
                 \textbf{Entry Condition} & 
-                    The company pressed the button "Request Assessment" on an application \\
+                    The internship has finished\\
                 \hline
                 
                 \textbf{Event Flow} &
                     \begin{enumerate}[label=\arabic*., itemsep=0.2em]
-                        \item The company is prompted a calendar to choose when to schedule the interview and an input field to put the link of the online room
-                        \item After confirming the decision, the company is redirected to the page of the internship needing the assessment;
-                        \item From now on it will be able to accept or reject the student;
-                        \item The company clicks "Create Assessment" 
+                        \item The user navigates to the page of the just finished internship;
+                        \item The user clicks the button to create a feedback;
+                        \item The user inserts a rating and a comment;
+                        \item The user sends it by clicking "Send" 
                     \end{enumerate} \\
                 \hline
                 
                 \textbf{Exit Condition} & 
-                    The assessment for the student has been created. \\
+                    The feedback is sent and the user is redirected to the application page \\
+                \hline
+                \hline
+            \end{longtable}
+
+            \begin{figure}[h!]
+                \centering        \includegraphics{RASD/Images/UseCases/FeedbackFromUser.drawio.png}
+                \label{fig:example}
+                \end{figure}
+\newpage
+
+\item \textbf{Communication between Users}
+            
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{Feedback from Student/Company} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    User\\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    A user has to communicate something while an internship is ongoing\\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The user navigates to the page of the ongoing internship;
+                        \item The user clicks the button to create a new message;
+                        \item The user inserts a message and sends it; 
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The message is sent and the student/company is redirected to the application page \\
+                \hline
+                \hline
+            \end{longtable}
+
+            \begin{figure}[h!]
+                \centering        \includegraphics{RASD/Images/UseCases/CommunicationBetweenUsers.drawio.png}
+                \label{fig:example}
+                \end{figure}
+\newpage
+    
+\newpage
+    \subsubsection{Universities Use Cases}
+            \item \textbf{University Monitors Internships}
+            
+            \begin{longtable}{|l|p{11cm}|}  
+                \hline
+                \textbf{Name} & 
+                    \textbf{University Monitors Internships} \\
+                \hline
+                
+                \textbf{Actors} & 
+                    University \\
+                \hline
+                
+                \textbf{Entry Condition} & 
+                    The university is logged in \\
+                \hline
+                
+                \textbf{Event Flow} &
+                    \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+                        \item The university has a list of internships done by its students on its home page;
+                        \item The university can click on any of them to get more details;
+                    \end{enumerate} \\
+                \hline
+                
+                \textbf{Exit Condition} & 
+                    The university stops scrolling the list of hits students who got an internship  profile. \\
                 \hline
                 
                 \textbf{Exceptions} &
                     \begin{enumerate}[label=\arabic*., itemsep=0.1em]
-                        \item The company inputs the wrong date.
+                        \item The universities has no students who got an internship.
                             \begin{itemize}[label=\textbullet, itemsep=0em]
-                                \item In that case, the company will have to inform the student with a different communication mean (e. g. by email)
+                                \item In that case, S\&C will display a message on the screen saying that no enrolled student got any internship.
                             \end{itemize}
-                        \item The company inserted the wrong link.
-                        \begin{itemize}[label=\textbullet, itemsep=0em]
-                        \item In that case, the company will have to inform the student with a different communication mean (e. g. by email)
-                        \end{itemize}
                     \end{enumerate} \\
                 \hline
+                
             \end{longtable}
+            
+            \begin{figure}[h!]
+                \centering        \includegraphics{RASD/Images/UseCases/UniversityMonitorsInternships.drawio.png}
+                \label{fig:example}
+                \end{figure}
+% I merged the 2 use cases into 1
+            % % -- US16 --
+            % \item \textbf{Further Assessment for Application}
+            
+            % \begin{longtable}{|l|p{11cm}|}  
+            %     \hline
+            %     \textbf{Name} & 
+            %         \textbf{Further Assessment for Application} \\
+            %     \hline
+                
+            %     \textbf{Actors} & 
+            %         Company, Student\\
+            %     \hline
+                
+            %     \textbf{Entry Condition} & 
+            %         The company knows which candidates have to undergo more assessment before being accepted or rejected \\
+            %     \hline
+                
+            %     \textbf{Event Flow} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+            %             \item Included use case: Company Login
+            %             \item The company goes to the page of an open internship it has;
+            %             \item The company clicks on the button to see the list of candidates;
+            %             \item The company can click on each item of the list to visit the profile page of the candidate;
+            %             \item The company clicks "Assess Further" 
+            %             \item Included use case: Create assessment 
+            %         \end{enumerate} \\
+            %     \hline
+                
+            %     \textbf{Exit Condition} & 
+            %         The candidate is notified that he has to undergo a phase of assessment. \\
+            %     \hline
+                
+            %     \textbf{Exceptions} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+            %             \item The company has no candidates for an open internship.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, S\&C will show an empty list and display a notification which says no applications were found for that position.
+            %                 \end{itemize}
+            %         \end{enumerate} \\
+            %     \hline
+            % \end{longtable}
+
+            % % -- US17 --
+            % \newpage
+            % \item \textbf{Request Assessment}
+            
+            % \begin{longtable}{|l|p{11cm}|}  
+            %     \hline
+            %     \textbf{Name} & 
+            %         \textbf{Request Assessment} \\
+            %     \hline
+                
+            %     \textbf{Actors} & 
+            %         Company, Student\\
+            %     \hline
+                
+            %     \textbf{Entry Condition} & 
+            %         The company pressed the button "Request Assessment" on an application \\
+            %     \hline
+                
+            %     \textbf{Event Flow} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.2em]
+            %             \item The company is prompted a calendar to choose when to schedule the interview and an input field to put the link of the online room
+            %             \item After confirming the decision, the company is redirected to the page of the internship needing the assessment;
+            %             \item From now on it will be able to accept or reject the student;
+            %             \item The company clicks "Create Assessment" 
+            %         \end{enumerate} \\
+            %     \hline
+                
+            %     \textbf{Exit Condition} & 
+            %         The assessment for the student has been created. \\
+            %     \hline
+                
+            %     \textbf{Exceptions} &
+            %         \begin{enumerate}[label=\arabic*., itemsep=0.1em]
+            %             \item The company inputs the wrong date.
+            %                 \begin{itemize}[label=\textbullet, itemsep=0em]
+            %                     \item In that case, the company will have to inform the student with a different communication mean (e. g. by email)
+            %                 \end{itemize}
+            %             \item The company inserted the wrong link.
+            %             \begin{itemize}[label=\textbullet, itemsep=0em]
+            %             \item In that case, the company will have to inform the student with a different communication mean (e. g. by email)
+            %             \end{itemize}
+            %         \end{enumerate} \\
+            %     \hline
+            % \end{longtable}
 
 
             

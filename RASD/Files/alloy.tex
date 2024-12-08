@@ -1,1 +1,102 @@
-Organize this section according to the rules defined in the project description. 
+\begin{verbatim}
+module util/boolean
+
+abstract ApplicationStatus{}
+one sig ACCEPTED extends ApplicationStatus{}
+one sig REJECTED extends ApplicationStatus{}
+one sig PENDING extends ApplicationStatus{}
+one sig TOBEASSESSED extends ApplicationStatus{}
+
+abstract sig User {
+    email: one String
+    password: one String
+    isProfileCompleted: Bool
+}
+
+sig Student extends User {
+    username: one String
+    applications: set Application
+    internships: set Internship
+}
+
+sig Company extends User {
+    name: one String
+}
+
+
+sig University {
+    name: one String
+    students: set Students
+}
+
+
+sig Internship {
+    company: one Company
+    applicants: set Student
+    accepted: set Student
+    assessed: set Student
+    rejected: set Student
+    isOpen: Bool
+}
+
+sig Application {
+    internship: one Internship
+    student: one Student
+    status: ApplicationStatus
+}
+
+sig FeedbackByStudent {
+    giver: one Student
+    receiver: one Company
+    rating: Int
+    message: lone String
+}
+
+sig FeedbackByCompany{
+    giver: one Student
+    receiver: one Company
+    rating: Int
+    message: lone String
+}
+
+
+# If an internship position is open, it will eventually be closed
+fact NotAlwaysOpenInternship {
+    all i: Internship | 
+        always ( i.isOpen = True
+                implies 
+                    eventually i.isOpen = False )
+}
+# If an internship is open it has been open since the beginning
+fact NowOpenPreviouslyOpenInternship {
+    all i: Internship | 
+        always ( i.isOpen = True
+                    implies 
+                        historically i.isOpen = True )
+}
+# If an internship is open now it has always been open before
+fact NowOpenPreviouslyOpen {
+    all i: Internship | 
+        always (i.isOpen = True 
+            implies
+                before i.isOpen = True)
+}
+
+pred close[i: Internship] {
+    i.isOpen = True
+    i.isOpen' = False
+}
+# If an internship is closed now it has been closed in an instnat in the past
+fact IfClosedDidClose {
+all i: Internship |
+    always (i.isOpen = False
+        implies 
+            once break[i]
+}
+
+
+fact ApplyToOpenInternship {
+# Have to think about it
+}
+
+\end{verbatim}
