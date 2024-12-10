@@ -1,24 +1,58 @@
-This document has been prepared to help you approaching Latex as a formatting tool for your Travlendar+ deliverables. This document suggests you a possible style and format for your deliverables and contains information about basic formatting commands in Latex. A good guide to Latex is available here \href{https://tobi.oetiker.ch/lshort/lshort.pdf}{https://tobi.oetiker.ch/lshort/lshort.pdf}, but you can find many other good references on the web. 
+%This document has been prepared to help you approaching Latex as a formatting tool for your Travlendar+ deliverables. This document suggests you a possible style and format for your deliverables and contains information about basic formatting commands in Latex. A good guide to Latex is available here \href{https://tobi.oetiker.ch/lshort/lshort.pdf}{https://tobi.oetiker.ch/lshort/lshort.pdf}, but you can find many other good references on the web. 
 
-Writing in Latex means writing textual files having a \texttt{.tex} extension and exploiting the Latex markup commands for formatting purposes. Your files then need to be compiled using the Latex compiler. Similarly to programming languages, you can find many editors that help you writing and compiling your latex code. Here \href{https://beebom.com/best-latex-editors/}{https://beebom.com/best-latex-editors/} you have a short oviewview of some of them. Feel free to choose the one you like.  
+%Writing in Latex means writing textual files having a \texttt{.tex} extension and exploiting the Latex markup commands for formatting purposes. Your files then need to be compiled using the Latex compiler. Similarly to programming languages, you can find many editors that help you writing and compiling your latex code. Here \href{https://beebom.com/best-latex-editors/}{https://beebom.com/best-latex-editors/} you have a short oviewview of some of them. Feel free to choose the one you like.  
 
-Include a subsection for each of the following items\footnote{By the way, what follows is the structure of an itemized list in Latex.}:
-\begin{itemize}
-\item
-Purpose: here we include the goals of the project
-\item
-Scope: here we include an analysis of the world and of the shared phenomena
-\item
-Definitions, Acronyms, Abbreviations
-\item
-Revision history
-\item
-Reference Documents 
-\item
-Document Structure
-\end{itemize}
-Below you see how to define the header for a subsection.
+%Include a subsection for each of the following items\footnote{By the way, what follows is the structure of an itemized list in Latex.}:
+
+% -----------------------------------------------------
+
+\subsection{Purpose}
+    In today's job market, when looking for a job, having a previous work experience has become an important criteria of evaluation, therefore more and more students try to find an internship. On the other side, many companies are willing to invest into young talents in order to build a skilled workforce that can help them to drive innovation and foster and secure a competitive edge in the future. \\
+    Student\&Companies is a platform that offers to students the possibility to look up for internships and to companies the possibility of advertising. The matchmaking process of student and companies is enabled through a (proprietary) recommendation algorithm, that creates the most suited matches, through the collection of statistics and feedback. \\
+    Moreover Students\&Companies allows for the management of the selection process and the monitoring of the execution of the internships. The goal is to provide a platform for both students and companies to make the process of finding, offering and tracking internships easier and more efficient for both parties.
+
+% -----------------------------------------------------
+
 \subsection{Scope}
-... Here you see a subsubsection
-\subsubsection{World Phenomena}
+    The platform S\&C has two major stakeholders: students and companies. On one hand, students upload their CV and indicate their skills and domain of interest on the platform. Then they can proactively look out for internships or they can get suggestions from the platform, when new positions become available. On the other hand, companies can open internship positions, with the related domain and required skills, advertise those positions but also get notified when profiles of students, aligned with the requirements of one of their open positions, appear on the platform.
+    Once both parties express interest on the platform, a contact between the two is established. Then the management of the set up and the conduct of interview starts. When a candidate is selected, the platform tracks the conduction of the internship through feedback, complaints and exchange of information by both parties. Indeed a specific space of the website is devoted to communication between a student and company that have started an internship process together. The system run analytics on statistics collected by the platform itself on both students and companies to guarantee the best match possible between the two.
+
+% -----------------------------------------------------
+
+\subsection{Revision History}
+The following is the revision history of the document:
+\begin{enumerate}
+    \item Version 1.0 (07/01/25)
+\end{enumerate}
+% -----------------------------------------------------
+
+\subsection{Reference Documents}
+    This document is based on the following reference documents:
+    \begin{itemize}
+        \item {The document of the 2024/2025 assignment for RASD and DD }
+        \item {The slides of the course found on WeBeep}
+    \end{itemize}
+
+% -----------------------------------------------------
+
+\subsection{Document Structure}
+    \begin{enumerate}
+        \item\textbf{Introduction}\\
+        The introduction identifies the purpose and the scope of the project, explains acronyms, abbreviations that will be used in the document, specifies the version of the document and the reference documents on which the current version it is based.
+        \item\textbf{Architectural Design}\\
+        The architectural design gives a general overview on the structure of the project. First, it describes the application at the highest level possible and lists the taken choices. Then it goes a little bit deeper and focuses on components and their interactions
+        \item\textbf{User Interface Design} \\
+        Here there are some snippets of user interfaces of the website
+        \item\textbf{Requirements Traceability} \\
+        In the requirements traceability section, there are tables clearly linking components and the requirements they contribute to satisfy.
+        \item\textbf{Implementation, Integration and Test Plan Traceability} \\ 
+         This section presents a precise plan to implement, test and integrate the code written for the S\&C platform
+        \item\textbf{Effort spent} \\
+        The effort spent is described by a simple table
+        \item\textbf{References}\\
+        It has pointers to all the resources used or cited in this project
+    \end{enumerate}
+
+
+
 %what you write here is a comment that is not shown in the final text
