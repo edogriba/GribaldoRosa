@@ -6,6 +6,12 @@ one sig ACCEPTED extends ApplicationStatus{}
 one sig REJECTED extends ApplicationStatus{}
 one sig PENDING extends ApplicationStatus{}
 one sig TOBEASSESSED extends ApplicationStatus{}
+one sig CONFIRMED extends ApplicationStatus{}
+one sig REFUSED extends ApplicationStatus{}
+
+abstract InternshipStatus{}
+one sig ONGOING extends ApplicationStatus{}
+one sig FINISHED extends ApplicationStatus{}
 
 abstract sig User {
     email: one String
@@ -23,19 +29,21 @@ sig Company extends User {
     name: one String
 }
 
-
 sig University {
     name: one String
     students: set Students
 }
 
-
 sig Internship {
+    student: one Student
     company: one Company
-    applicants: set Student
-    accepted: set Student
-    assessed: set Student
-    rejected: set Student
+    application: one Application
+    status: InternshipStatus
+}
+
+sig InternshipPosition {
+    company: one Company
+    applications: set Application
     isOpen: Bool
 }
 
@@ -43,6 +51,7 @@ sig Application {
     internship: one Internship
     student: one Student
     status: ApplicationStatus
+    confirmed: Bool
 }
 
 sig FeedbackByStudent {
@@ -59,44 +68,110 @@ sig FeedbackByCompany{
     message: lone String
 }
 
+------------------------------------------------------------------------------
+Part dedicated to Internship Positions
+------------------------------------------------------------------------------
+
+# All positions are open at the beginning
+fact DefaultOpenInternshipPosition {
+    all i: InternshipPosition | i.isOpen
+}
+
+pred close[i: InternshipPosition] {
+    i.isOpen = True
+    i.isOpen' = False
+}
 
 # If an internship position is open, it will eventually be closed
-fact NotAlwaysOpenInternship {
-    all i: Internship | 
+fact NotAlwaysOpenInternshipPosition {
+    all i: InternshipPosition | 
         always ( i.isOpen = True
                 implies 
                     eventually i.isOpen = False )
 }
-# If an internship is open it has been open since the beginning
-fact NowOpenPreviouslyOpenInternship {
-    all i: Internship | 
+# If an internship position is open it has been open since the beginning
+fact NowOpenPreviouslyOpenInternshipPosition {
+    all i: InternshipPosition | 
         always ( i.isOpen = True
                     implies 
                         historically i.isOpen = True )
 }
-# If an internship is open now it has always been open before
-fact NowOpenPreviouslyOpen {
-    all i: Internship | 
+# If an internship position is open now it has always been open before
+fact NowOpenPreviouslyOpenInternshipPosition {
+    all i: InternshipPosition | 
         always (i.isOpen = True 
             implies
                 before i.isOpen = True)
 }
 
-pred close[i: Internship] {
-    i.isOpen = True
-    i.isOpen' = False
-}
-# If an internship is closed now it has been closed in an instnat in the past
+# If an internship is closed now it has been closed in an instant in the past
 fact IfClosedDidClose {
-all i: Internship |
+all i: InternshipPosition |
     always (i.isOpen = False
         implies 
             once break[i]
 }
 
+# If I applied to an internship position it must have been open in the past
+assert OnlyApplyToOpenInternship { # to verify
+    all a: Application | 
+        always (once a.internship.isOpen)
+        
+}
 
-fact ApplyToOpenInternship {
-# Have to think about it
+------------------------------------------------------------------------------
+Part dedicated to Applications
+------------------------------------------------------------------------------
+
+# Application process
+pred applyToInternshipPosition[s: Student, i: InternshipPosition, a: Application] {
+    i.isOpen = True                         
+    s.isProfileCompleted = True              
+    a not in i.applications
+    
+    i.applications' = i.applications + a 
+    s.applications' = s.applications + a 
+    some a: Application | {                  
+        a.student = s                         
+        a.internship = i                      
+        a.status = PENDING                      
+    }
+}
+
+# If an application is pending, it will eventually be either rejected or confirmed
+or refused
+fact EventualStatusPendingApplication {
+    all a: Application | 
+        always ( a.status = PENDING
+                implies 
+                    eventually a.status = REJECTED or 
+                    a.status = CONFIRMED or a.status = REFUSED )
+
+# If an application is pending, it will eventually be either rejected or confirmed
+or refused
+fact EventuallyRejectedAcceptedToBeAssessedApplication {
+    all a: Application | 
+        always ( a.status = TOBEASSESSED
+                implies 
+                    eventually a.status = REJECTED or 
+                    a.status = CONFIRMED or a.status = REFUSED )
+
+# Pending applications are referred only to open internship positions
+assert PendingApplicationReferToOpenPositions {
+    all a: Application | 
+        a.status = PENDING implies a.internship.isOpen
+}
+
+# Pending applications are referred only to open internship positions
+assert AcceptedApplicationReferToOpenPositions {
+    all a: Application | 
+        a.status = ACCEPTED implies a.internship.isOpen
+}
+
+# Applications which request further assessment are referred only to open internship positions
+assert AcceptedApplicationReferToOpenPositions {
+    all a: Application | 
+        a.status = TOBEASSESSED implies a.internship.isOpen
 }
 
 \end{verbatim}

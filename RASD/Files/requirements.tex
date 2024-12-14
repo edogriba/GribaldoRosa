@@ -3,11 +3,25 @@
 
 \subsection{External Interface Requirements}
     \subsubsection{User Interfaces}
+    We prefer not to tie our design to any guidelines so early in the project so we will probably give some snippet of the user interfaces in the Design Document. However the principles who will guide our design will be clearness and minimalism. We believe that at the basis of well working web application there must be a nice user interface. We are also convinced that being minimal and simple looking is a plus for a web application since a confusing user interface is one of the biggest reason why users dislike a certain website and prefer another to it.
+
     \subsubsection{Hardware Interfaces}
+    Being our project a web application there are not many hardware requirements. From the client side perspective the only request is about the size of the monitor. Indeed the website is going to be developed for desktop view exclusively. Apart of that any laptop with a stable internet access will suffice. On the server side any kind of is okay since our website does not have any particular need for any kind of special computing power or similar things.
+
     \subsubsection{Software Interfaces}
+    From the point of view of software interfaces there are some more requests but still pretty standard ones. Here is the list of the software interfaces needed:
+    \begin{enumerate}
+        \item  \textbf{Browser Compatibility}: the platform must be compatible with all last stable versions of major web browsers
+        \item \textbf{Email Service Provider}: to send automatic emails to confirm accounts creation and registration
+    \end{enumerate}
     \subsubsection{Communication Interfaces}
+    Apart of the email confirmation system, discussed in the section above on Software Interface, S\&C communicates important information to users through notifications on the website.
+    \begin{enumerate}
+        \item  \textbf{Push Notifications}: notifications created when a company posted an internship or a student with right skill set for an internship becomes available on the platform
+        \item \textbf{Real Time Notifications}: notifications created when an action is performed by a user to let him/her know that it has been successful or not
+    \end{enumerate}
 \subsection{Functional Requirements}
-    The listed requirements are in the form suggested by IEEE: 
+    The listed requirements are in the form suggested by IEEE\cite{502838}: 
     \newline
     \newline
     [Condition][Subject][Action][Object][Constraints on the Action]

@@ -1,9 +1,4 @@
 \input{commandsFile}
-\usepackage{svg}
-\usepackage{graphicx}
-
-\usepackage{array}
-\usepackage{adjustbox} 
 
 \begin{document}
 
@@ -18,7 +13,7 @@
 \centering
 \begin{tabu} to \textwidth { X[1.3,r,p] X[1.7,l,p] }
 \textcolor{Blue}
-{\textbf{\small{S\&C project by E.S. Gribaldo and F. Rosa}}} & \includegraphics[scale=0.5]{Images/PolimiLogo}
+{\textbf{\small{S\&C project E. S. Gribaldo, F. Rosa}}} & \includegraphics[scale=0.5]{Images/PolimiLogo}
 \end{tabu}
 \end{table}}~\\ [7cm]
 
@@ -27,7 +22,7 @@
 \begin{flushleft}
 
 %Replace the text string with your title
-{\textcolor{Blue}{\textbf{\Huge{Requirement Analysis and Specification
+{\textcolor{Blue}{\textbf{\Huge{ Design
         Document}}}} \\ [1cm]
 
 \end{flushleft}
@@ -39,11 +34,12 @@
 \begin{table}[h!]
 \begin{tabu} to \textwidth { X[0.3,r,p] X[0.7,l,p] }
 \hline
-\textbf{Deliverable:} & RASD\\
-\textbf{Title:} & Requirement Analysis and Verification Document \\
-\textbf{Authors:} & Edoardo S. Gribaldo, Federico Rosa \\
+
+\textbf{Deliverable:} & DD\\
+\textbf{Title:} & Design Document \\
+\textbf{Authors:} & Edoardo Silvio Gribaldo, Federico Rosa \\
 \textbf{Version:} & 1.0 \\ 
-\textbf{Date:} & 23/12/24 \\
+\textbf{Date:} & 07/01/2025 \\
 \textbf{Download page:} & https://github.com/edogriba/GribaldoRosa \\
 \textbf{Copyright:} & Copyright © 2025, E. S. Gribaldo, F. Rosa – All rights reserved \\
 \hline
@@ -70,25 +66,31 @@
 \clearpage
 {\color{Blue}{\section{Introduction}}}
 \label{sect:introduction}
-\input{Files/introduction}
+\input{DD/Files/introduction}
 
 %------------------------------------------------------------------------------------------------------------------------------------------------
 \clearpage
-{\color{Blue}{\section{Overall Description}}}
+{\color{Blue}{\section{Architectural Design}}}
 \label{sect:overview}
-\input{Files/overview}
+\input{DD/Files/architecture}
 
 %------------------------------------------------------------------------------------------------------------------------------------------------
 \clearpage
-{\color{Blue}{\section{Specific Requirements}}}
+{\color{Blue}{\section{User Interface Design}}}
 \label{sect:requirements}
-\input{Files/requirements}
+\input{DD/Files/interface}
 
 %------------------------------------------------------------------------------------------------------------------------------------------------
 \clearpage
-{\color{Blue}{\section{Formal Analysis Using Alloy}}}
+{\color{Blue}{\section{Requirements Traceability}}}
 \label{sect:alloy}
-\input{Files/alloy}
+\input{DD/Files/traceability}
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Implementation, Integration and Test Plan Traceability}}}
+\label{sect:alloy}
+\input{Files/test}
 
 %------------------------------------------------------------------------------------------------------------------------------------------------
 \clearpage
