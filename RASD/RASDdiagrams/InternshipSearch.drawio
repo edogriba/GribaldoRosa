@@ -1,0 +1,96 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.15" version="25.0.1">
+  <diagram name="Page-1" id="2YBvvXClWsGukQMizWep">
+    <mxGraphModel dx="821" dy="554" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="CObYJEAy56xA2G8EUnc1-1" value="S&amp;amp;C" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="320" y="40" width="100" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-6" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlActor;" parent="1" vertex="1">
+          <mxGeometry x="145" y="40" width="20" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-7" value="Student" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="90" y="50" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-8" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;" parent="1" source="CObYJEAy56xA2G8EUnc1-6" target="CObYJEAy56xA2G8EUnc1-1" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="190" y="120" as="sourcePoint" />
+            <mxPoint x="369.5" y="180" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="270" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-9" value="requestSearchPage()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="190" y="96" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-15" value="&lt;b&gt;SD&lt;/b&gt;&amp;nbsp;Internship Search" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=160;height=30;" parent="1" vertex="1">
+          <mxGeometry x="80" width="400" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-17" value="" style="endArrow=none;dashed=1;html=1;rounded=0;exitX=0.014;exitY=0.49;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.994;entryY=0.495;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="99.99999999999996" y="380" as="sourcePoint" />
+            <mxPoint x="452.7999999999999" y="381" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-19" value="else" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="95" y="350" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-20" value="if searchInternship(filtersData):" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="115" y="300" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-23" value="redirectToInternshipPage(internshipList)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" edge="1" target="CObYJEAy56xA2G8EUnc1-6">
+          <mxGeometry x="-0.0028" relative="1" as="geometry">
+            <mxPoint x="369.5" y="360" as="sourcePoint" />
+            <mxPoint x="190" y="360" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-24" value="redirectToInternshipCreationPage(emptyList, message)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" edge="1" target="CObYJEAy56xA2G8EUnc1-6">
+          <mxGeometry x="-0.0028" relative="1" as="geometry">
+            <mxPoint x="369.75" y="430" as="sourcePoint" />
+            <mxPoint x="190.25" y="430" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HJIBpvxVfIBrpGYPyr1l-3" value="redirectToRequestPage()" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="CObYJEAy56xA2G8EUnc1-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="370" y="150" as="sourcePoint" />
+            <mxPoint x="190.42857142857144" y="150" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="280.5" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HJIBpvxVfIBrpGYPyr1l-5" value="searchInternship(filtersData)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="195" y="160" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HJIBpvxVfIBrpGYPyr1l-8" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="155" y="190" as="sourcePoint" />
+            <mxPoint x="370" y="190" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="270" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HJIBpvxVfIBrpGYPyr1l-12" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="365" y="220" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="HJIBpvxVfIBrpGYPyr1l-13" value="searchInternships(filtersData)" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" target="HJIBpvxVfIBrpGYPyr1l-12" parent="1">
+          <mxGeometry x="-1" y="-61" relative="1" as="geometry">
+            <mxPoint x="370" y="200" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="400" y="230" />
+            </Array>
+            <mxPoint x="-60" y="-51" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CObYJEAy56xA2G8EUnc1-14" value="alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=80;height=30;" parent="1" vertex="1">
+          <mxGeometry x="100" y="270" width="360" height="250" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
