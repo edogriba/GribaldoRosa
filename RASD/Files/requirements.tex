@@ -9,13 +9,11 @@
     Being our project a web application there are not many hardware requirements. From the client side perspective the only request is about the size of the monitor. Indeed the website is going to be developed for desktop view exclusively. Apart of that any laptop with a stable internet access will suffice. On the server side any kind of is okay since our website does not have any particular need for any kind of special computing power or similar things.
 
     \subsubsection{Software Interfaces}
-    From the point of view of software interfaces there are some more requests but still pretty standard ones. Here is the list of the software interfaces needed:
-    \begin{enumerate}
-        \item  \textbf{Browser Compatibility}: the platform must be compatible with all last stable versions of major web browsers
-        \item \textbf{Email Service Provider}: to send automatic emails to confirm accounts creation and registration
-    \end{enumerate}
+    From the point of view of software interfaces there is only one pretty standard request: the platform must be compatible with all last stable versions of major web browsers
+    
     \subsubsection{Communication Interfaces}
-    Apart of the email confirmation system, discussed in the section above on Software Interface, S\&C communicates important information to users through notifications on the website.
+    S\&C communicates important information to users through notifications on the website.
+    
     \begin{enumerate}
         \item  \textbf{Push Notifications}: notifications created when a company posted an internship or a student with right skill set for an internship becomes available on the platform
         \item \textbf{Real Time Notifications}: notifications created when an action is performed by a user to let him/her know that it has been successful or not
@@ -28,43 +26,38 @@
     \subsubsection*{Users:}
         \begin{enumerate}[label=\textbf{R\arabic*}]
             \item S\&C shall allow users to sign up.                  
-            \item S\&C shall allow users to confirm their mail        
+            \item S\&C shall allow users to fill their profile information on sign up
             \item S\&C shall allow users to log in.                   
             \item S\&C shall allow users to log out.                  
             % US DONE
             \item S\&C shall allow users to update their profile information.      
-            \item S\&C shall allow users to examine internship positions.
+            \item S\&C shall allow users to examine their own internships.
             \end{enumerate}
         
     \subsubsection*{Students:}
         \begin{enumerate}[label=\textbf{R\arabic*},resume]
-            \item After they registered and confirmed their email, S\&C shall allow students to upload their CV.  
-            \item After they registered and confirmed their email, S\&C shall allow users to fill the required information (Phone number, Degree program, etc).
+            \item S\&C shall allow users to examine open internship positions. % To check
+            \item S\&C shall allow users to examine their own applications.
             \item S\&C shall allow students to search for a specific kind of internship.  
-            \item S\&C shall allow students to apply for an internship.                    
+            \item S\&C shall allow students to apply for an internship.    
             \item If an internship position suited to a student is opened, S\&C shall notify the student
             \item When a student issues a search for an internship, S\&C shall list the different positions aligned with the student's profile.         
-    
-            
         \end{enumerate}
     
     \subsubsection*{Applications:}
         \begin{enumerate}[label=\textbf{R\arabic*},resume]
             \item If an application has been accepted by a company, S\&C shall allow the student who made the application to confirm or refuse the internship
-            \item If a company signals that it needs a quiz of the students' skills, S\&C shall allow the student to schedule the quiz
-            \item After a quiz has been scheduled, S\&C shall allow the student to take the quiz
-            \item If a company signals that it needs an interview to test the students' skills, S\&C should allow the student and the company to schedule the interview
-            \item After the interview has been scheduled, S\&C should allow the student to access the link of the virtual room
+            \item If a company signals that it needs an assessment of the students' skills, S\&C shall allow the student to schedule the quiz
+            \item After an assessment has been scheduled, S\&C shall allow the student to access the link and see the date of the assessment
             \item S\&C shall allow the student to see the status of its applications
-            
         \end{enumerate}
     
     \subsubsection*{Companies:}
         \begin{enumerate}[label=\textbf{R\arabic*},resume]
-            \item After they registered and confirmed their email, S\&C shall allow companies to fill the required information (Name, Surname, etc).
-            \item S\&C shall allow companies to open internship positions.
+            \item S\&C shall allow companies to open and examine its internship positions.
+            \item S\&C shall allow companies to accept or reject applications to their internship positions.
             \item S\&C shall allow companies to close internship positions.
-            \item If an a new profile of a student with a CV who could interest a company becomes available on the platform, S\&C shall notify the company
+            \item If an a new profile of a student who could interest a company becomes available on the platform, S\&C shall notify the company
         \end{enumerate}
     
     \subsubsection*{Communication during the internship:}
@@ -83,9 +76,8 @@
         \end{enumerate}
         \subsubsection*{Universities:}
         \begin{enumerate}[label=\textbf{R\arabic*},resume]
-            \item After they registered and confirmed their email, S\&C shall allow universities to complete their profile by filling the required field
             \item S\&C shall allow universities to monitor the status of the internship of their students
-            \item S\&C shall allow universities to see details of the internship of their students
+            \item S\&C shall allow universities to see details of the internships of their students
         \end{enumerate}
         
 \newpage
@@ -1005,6 +997,157 @@
             \end{figure}
 
         \end{enumerate}
+        
+\newpage
+
+\subsubsection{Requirement Mapping}
+
+\begin{enumerate}[label={[G\arabic*]}]
+\item \textbf{G1: Internship Lookup for Students}: 
+                Help students in their search for an internship by connecting their profiles with well-suited internship offers from companies.
+
+\begin{longtable}{|p{8cm}|p{8cm}|}
+\hline
+\rowcolor[HTML]{CFE2F3} 
+\textbf{Requirements} & \textbf{Mapped To} \\
+\hline
+\endfirsthead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+R1 S\&C shall allow users to sign up. & D1 Students insert correct information about their skills and experience \\
+RS\&C shall allow users to fill their profile information on sign up & D2 Students apply to jobs in countries where they have a work permit \\
+R3 S\&C shall allow users to log in. & D3 Companies offer existing and legal contracts for the internships \\
+R4 S\&C shall allow users to log out. & D4 Companies insert correct information about the internships \\
+R5 S\&C shall allow users to update their profile information. & D5 Companies periodically review information about the internship candidates \\
+R6 S\&C shall allow users to examine their own internships. & \\
+R7 S\&C shall allow users to examine open internship positions.  & \\% To check
+R8 S\&C shall allow users to examine their own applications. & \\
+R9 S\&C shall allow students to search for a specific kind of internship.  & \\ 
+R10 S\&C shall allow students to apply for an internship.     & \\
+R11 If an internship position suited to a student is opened, S\&C shall notify the student & \\
+R12 When a student issues a search for an internship, S\&C shall list the different positions aligned with the student's profile.  & \\
+R13 If an application has been accepted by a company, S\&C shall allow the student who made the application to confirm or refuse the internship & \\
+R14 If a company signals that it needs a quiz of the students' skills, S\&C shall allow the student to schedule the quiz & \\
+R15 After an assessment has been scheduled, S\&C shall allow the student to access the link and see the date of the assessment & \\
+R16 S\&C shall allow the student to see the status of its applications & \\
+R17 S\&C shall allow companies to accept or reject applications to their internship positions & \\
+R18 S\&C shall allow companies to open and examine its internship positions. & \\
+R19 S\&C shall allow companies to close internship positions. & \\
+R20 If an a new profile of a student who could interest a company becomes available on the platform, S\&C shall notify the company & \\
+
+\end{longtable}
+
+\item \textbf{Selection Process Management}: 
+                Support the interaction and selection by providing a platform to companies to set up and conduct interviews, gather structured information about students and finalize the selections.
+
+\begin{longtable}{|p{8cm}|p{8cm}|}
+\hline
+\rowcolor[HTML]{CFE2F3} 
+\textbf{Requirements} & \textbf{Mapped To} \\
+\hline
+\endfirsthead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+
+R1 S\&C shall allow users to sign up. & D1 Students insert correct information about their skills and experience \\
+RS\&C shall allow users to fill their profile information on sign up & D2 Students apply to jobs in countries where they have a work permit \\
+R3 S\&C shall allow users to log in. & D3 Companies offer existing and legal contracts for the internships \\
+R4 S\&C shall allow users to log out. & D4 Companies insert correct information about the internships \\
+R5 S\&C shall allow users to update their profile information. & D5 Companies periodically review information about the internship candidates \\
+R8 S\&C shall allow users to examine their own applications. & \\
+R10 S\&C shall allow students to apply for an internship.     & \\
+R13 If an application has been accepted by a company, S\&C shall allow the student who made the application to confirm or refuse the internship & \\
+R14 If a company signals that it needs an assessment of the students' skills, S\&C shall allow the student to schedule the quiz & \\
+R15 After an assessment has been scheduled, S\&C shall allow the student to access the link and see the date of the assessment & \\
+R16 S\&C shall allow the student to see the status of its applications & \\
+R17 S\&C shall allow companies to accept or reject applications to their internship positions & \\
+R18 S\&C shall allow companies to open and examine its internship positions. & \\
+R19 S\&C shall allow companies to close internship positions. & \\
+R20 If an a new profile of a student who could interest a company becomes available on the platform, S\&C shall notify the company & \\
+
+
+\end{longtable}
+
+\newpage
+\item \textbf{Data Collection for Recommendation System}: 
+                Collect statistics in order to allow the efficiency of the matchmaking process of the recommendation system 
+
+
+\begin{longtable}{|p{8cm}|p{8cm}|}
+\hline
+\rowcolor[HTML]{CFE2F3} 
+\textbf{Requirements} & \textbf{Mapped To} \\
+\hline
+\endfirsthead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+R21 S\&C shall allow companies to leave private notes to students who are carrying out an internship with it & D1 Students insert correct information about their skills and experience \\
+R22 S\&C shall allow companies to send news about the internship to students who are carrying it out & D2 Companies insert correct information about the internships \\
+R23 S\&C shall allow both parties to communicate problems in a specific space of the website & D3 Students provide valuable feedback when asked for it \\
+R24 S\&C shall allow students who took an internship with a company to rate the internship and vice versa & \\
+R25 S\&C shall allow students who took an internship with a company to give suggestions to the company and vice versa & \\
+R26 S\&C shall allow companies to send news about the internship to students who are carrying it out & \\
+R27 S\&C shall allow both parties involved in an internship to communicate problems in a dedicated space & \\
+
+\end{longtable}
+\item \textbf{Enhance Communication}: 
+                Enhance communication between students and companies, through a shared space where they can exchange information, raise problems and collect complaints about the internships
+
+\begin{longtable}{|p{8cm}|p{8cm}|}
+\hline
+\rowcolor[HTML]{CFE2F3} 
+\textbf{Requirements} & \textbf{Mapped To} \\
+\hline
+\endfirsthead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+R21 S\&C shall allow companies to leave private notes to students who are carrying out an internship with it & D5 Students provide valuable feedback when asked for it \\
+R22 S\&C shall allow companies to send news about the internship to students who are carrying it out & D7 Companies provide valuable feedback when asked for it \\
+R23 S\&C shall allow both parties to communicate problems in a specific space of the website & D8 Students raise problems through the platform\\
+R24 S\&C shall allow students who took an internship with a company to rate the internship and vice versa & D9 Companies use the platform as principal mean of communication regarding the internships \\
+R25 S\&C shall allow students who took an internship with a company to give suggestions to the company and vice versa & \\
+R26 S\&C shall allow companies to send news about the internship to students who are carrying it out & \\
+R27 S\&C shall allow both parties involved in an internship to communicate problems in a dedicated space & \\
+
+
+\end{longtable}
+
+\item \textbf{Monitoring of Internships by Universities}: 
+    Allow universities to see the situation of the internships of their students, including the complaints about them.
+
+\begin{longtable}{|p{8cm}|p{8cm}|}
+\hline
+\rowcolor[HTML]{CFE2F3} 
+\textbf{Requirements} & \textbf{Mapped To} \\
+\hline
+\endfirsthead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+R28 S\&C shall allow universities to monitor the status of the internship of their students & D10 Universities must register on the platform before their students can create accounts, as students are required to link their profiles to their university \\ 
+R29 S\&C shall allow universities to see details of the internships of their students & \\
+
+\end{longtable}
+\end{enumerate}
             
 % I merged the 2 use cases into 1
             % % -- US16 --

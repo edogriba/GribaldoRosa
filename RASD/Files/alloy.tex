@@ -1,6 +1,6 @@
 In this Alloy section we focused mainly on the two most critical point of S\&C: the opening and closing of an internship position and the application by a student to an open position.
 At the end there are also some screenshot from the Alloy analyzer that proved our predicates to be consistent or say that assertion may be valid since no counterexample were found (which is equivalent to say that the assertions made were fine since Alloy does bounded verification). 
-In order to improve the readability of the Alloy part we decided to divide the code into different sections, namely Signatures, Internship Positions, Applications and Feedback and Universities.
+In order to improve the readability of the Alloy part we decided to divide the code into different sections, namely Signatures, Internship Positions, Applications, Internships and Feedback and Universities.
 \begin{verbatim}
 --------------------------------------------------------------------------------
 Signatures:
@@ -10,13 +10,6 @@ enum ApplicationStatus {Accepted, Rejected, Pending, ToBeAssessed, Confirmed, Re
 enum InternshipStatus {Ongoing, Finished}
 
 enum InternshipPositionStatus { Open, Closed }
-
-
-abstract sig Feedback{
-    rating: Int,
-    review: String,
-    internship: one Internship
-}
 
 abstract sig User {
     email:  String,
@@ -56,6 +49,12 @@ sig Application {
     var status: ApplicationStatus,
 }
 
+abstract sig Feedback{
+    rating: Int,
+    review: String,
+    internship: one Internship
+}
+
 sig FeedbackByStudent extends Feedback {
     giver: one Student
 }
@@ -63,15 +62,15 @@ sig FeedbackByStudent extends Feedback {
 sig FeedbackByCompany extends Feedback{
     giver: one Company
 }
+
 --------------------------------------------------------------------------------
 Internship Positions
 --------------------------------------------------------------------------------
+
 // All internship positions are open at the beginning
 fact DefaultOpenInternshipPosition {
     all i: InternshipPosition | i.status = Open
 }
-
-
 
 // Closed internship positions will not reopen
 fact InternshipPositionClosedWontReopen {
@@ -87,6 +86,7 @@ fact NotAlwaysOpenInternshipPosition {
                 implies 
                     eventually i.status = Closed )
 }
+
 // If an internship position is open it has been open since the beginning
 fact NowOpenPreviouslyOpenInternshipPosition {
     all i: InternshipPosition | 
@@ -95,9 +95,8 @@ fact NowOpenPreviouslyOpenInternshipPosition {
                         historically i.status = Open )
 }
 
-
 // If an internship position is closed now it has been closed in an instant in the past
-fact IfClosedDidClose {
+fact IfClosedDidCloseInternshipPosition {
 all i: InternshipPosition |
     always (i.status = Closed
         implies 
@@ -119,8 +118,8 @@ pred close[i: InternshipPosition] {
     i.status' = Closed
 }
 
-run close for 15 but 4 InternshipPosition, 2 Company, 2 Student, 2 Application, 2 University, 4 steps
-
+run close for 15 but 4 InternshipPosition, 2 Company, 2 Student, 2 Application, 
+2 University, 6 Internship, 4 steps
 
 pred showThatInternshipCloses{
 InternshipPosition.status = Open
@@ -142,8 +141,6 @@ The results of the instructions above:
     \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/predshowThatInternshipCloses.png}
     \label{fig:predshowThatInternshipCloses}
 \end{figure}
-
-
 
 \begin{verbatim}
 --------------------------------------------------------------------------------
@@ -168,8 +165,8 @@ fact EventualStatusOfPendingApplication {
                     eventually a.status = Rejected or 
                     a.status = Confirmed or a.status = Refused )
 }
-// If an application is pending, it will eventually be either rejected or confirmed or refused
 
+// If an application is pending, it will eventually be either rejected or confirmed or refused
 fact EventuallyRejectedAcceptedToBeAssessedApplication {
     all a: Application | 
         always ( a.status = ToBeAssessed
@@ -177,6 +174,7 @@ fact EventuallyRejectedAcceptedToBeAssessedApplication {
                     eventually a.status = Rejected or 
                     a.status = Confirmed or a.status = Refused )
 }
+
 // Pending applications are referred only to open internship positions
 assert PendingApplicationReferToOpenPositions {
     all a: Application | 
@@ -209,6 +207,60 @@ The results of the instructions above:
     \label{fig:TobeAssessedApplicationReferToOpenPositions}
 \end{figure}
 
+\begin{verbatim}
+--------------------------------------------------------------------------------
+Internships
+--------------------------------------------------------------------------------
+
+// All internships are ongoing at the beginning
+fact DefaultInternship {
+    all i: Internship | i.status = Ongoing
+}
+
+// All internships refer to confirmed application 
+fact AllInternshipReferToConfirmedApplication {
+    all i: Internship | i.application.status = Confirmed
+}
+
+// If an internship is ongoing, it will eventually be finished
+fact NotAlwaysOngoingInternship {
+    all i: Internship | 
+        always ( i.status = Ongoing
+                implies 
+                    eventually i.status = Finished )
+}
+
+// If an internship is nongoing it has been ongoing since the beginning
+fact NowOpenPreviouslyOpenInternship {
+    all i: Internship | 
+        always ( i.status = Ongoing
+                    implies 
+                        historically i.status = Ongoing )
+}
+
+// If an internship is finished now it has been finished in an instant in the past
+fact IfClosedDidCloseInternship {
+all i: Internship |
+    always (i.status = Finished
+        implies 
+            once finish[i])
+}
+
+pred finish[i: Internship] {
+    i.status = Ongoing
+    i.status' = Finished
+}
+
+run finish for 15 but 4 InternshipPosition, 2 Company, 2 Student, 2 Application,  6 Internship,
+2 University, 4 steps
+--------------------------------------------------------------------------------
+\end{verbatim}
+
+The results of the instructions above:
+\begin{figure}[h!]
+    \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/predfinish.png}
+    \label{fig:predfinish}
+\end{figure}
 
 \begin{verbatim}
 
@@ -220,21 +272,25 @@ Feedback and Universities
 assert FeedbackStudentGivenOnFinishedInternship {
     all f: FeedbackByStudent | f.internship.status = Finished
 }
+
 // All feedbacks given by copanies are given after an internship is finished
 assert FeedbackCompanyGivenOnFinishedInternship {
     all f: FeedbackByCompany| f.internship.status = Finished
 }
+
 // A student can only give feedback for an internship he has taken
 fact StudentFeedbackOnlyTheirInternship {
     all f: FeedbackByStudent | 
         f.giver in f.internship.application.student
 }
+
 // A company can only give feedback for an internship he has offered
 fact CompanyFeedbackOnlyTheirInternship {
     all f: FeedbackByCompany | 
         f.giver in f.internship.application.company
 }
 
+// University sees the applications of its own students 
 fact UniversityMonitorsItsStudentsInternship {
     all u: University, i: Internship | 
         i in u.internship implies i.application.student.university = u
