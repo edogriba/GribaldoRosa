@@ -12,14 +12,20 @@ enum InternshipStatus {Ongoing, Finished}
 enum InternshipPositionStatus { Open, Closed }
 
 abstract sig User {
+    id: String,
     email:  String,
     password:  String,
 }
 
 sig Student extends User {
-    username: String,
+    firstName: String,
+    lastName: String,
+    phoneNumber: String,
+    location: String,
+    degreeProgram: String,
+    GPA: Int,
+    graduationYear: Int,
     var applications: set Application,
-    var internships: set Internship,
     var university: one University
 }
 
@@ -28,8 +34,11 @@ sig Company extends User {
 }
 
 sig University {
+    id: String,
     name: String,
-    var internship: set Internship    
+    var internship: set Internship,
+    address: String,
+    website: String
 }
 
 sig Internship {
@@ -38,11 +47,18 @@ sig Internship {
 } 
 
 sig InternshipPosition {
+    id: String,
+    programName: String,
+    location: String,
+    roleTitle: String,
+    compensation: Int,
+    
     var applications: set Application,
     var status: InternshipPositionStatus
 }
 
 sig Application {
+    id: String,
     company: one Company,
     internshipPosition: one InternshipPosition,
     student: one Student,
@@ -50,6 +66,7 @@ sig Application {
 }
 
 abstract sig Feedback{
+    id: String,
     rating: Int,
     review: String,
     internship: one Internship
@@ -63,6 +80,19 @@ sig FeedbackByCompany extends Feedback{
     giver: one Company
 }
 
+abstract sig Complaint {
+    id: String,
+    content: String,
+    internship: one Internship
+}
+
+sig ComplaintByStudent extends Complaint {
+    giver: one Student
+}
+
+sig ComplaintByCompany extends Complaint{
+    giver: one Company
+}
 --------------------------------------------------------------------------------
 Internship Positions
 --------------------------------------------------------------------------------
@@ -141,7 +171,7 @@ The results of the instructions above:
     \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/predshowThatInternshipCloses.png}
     \label{fig:predshowThatInternshipCloses}
 \end{figure}
-
+\newpage
 \begin{verbatim}
 --------------------------------------------------------------------------------
 Applications
@@ -157,19 +187,10 @@ fact DefaultPendingApplication {
     all a: Application | a.status = Pending
 }
 
-// If an application is pending, it will eventually be either rejected or confirmed or refused
+// If an application is pending or to be assessed, it will eventually be either rejected or confirmed or refused
 fact EventualStatusOfPendingApplication {
     all a: Application | 
-        always ( a.status = Pending
-                implies 
-                    eventually a.status = Rejected or 
-                    a.status = Confirmed or a.status = Refused )
-}
-
-// If an application is pending, it will eventually be either rejected or confirmed or refused
-fact EventuallyRejectedAcceptedToBeAssessedApplication {
-    all a: Application | 
-        always ( a.status = ToBeAssessed
+        always ( a.status = Pending or a.status = ToBeAssessed
                 implies 
                     eventually a.status = Rejected or 
                     a.status = Confirmed or a.status = Refused )
@@ -179,12 +200,6 @@ fact EventuallyRejectedAcceptedToBeAssessedApplication {
 assert PendingApplicationReferToOpenPositions {
     all a: Application | 
         a.status = Pending implies a.internshipPosition.status = Open
-}
-
-// Pending applications are referred only to open internship positions
-assert AcceptedApplicationReferToOpenPositions {
-    all a: Application | 
-        a.status = Accepted implies a.internshipPosition.status = Open
 }
 
 // Applications which request further assessment are referred only to open internship positions
@@ -199,14 +214,10 @@ The results of the instructions above:
     \label{fig:checkPendingApplicationsReferToOpenPositions}
 \end{figure}
 \begin{figure}[h!]
-    \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/checkAcceptedApplicationReferToOpenPositions.png}
-    \label{fig:checkAcceptedApplicationReferToOpenPositions}
-\end{figure}
-\begin{figure}[h!]
     \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/checkTobeAssessedApplicationReferToOpenPositions.png}
     \label{fig:TobeAssessedApplicationReferToOpenPositions}
 \end{figure}
-
+\newpage
 \begin{verbatim}
 --------------------------------------------------------------------------------
 Internships
@@ -251,9 +262,8 @@ pred finish[i: Internship] {
     i.status' = Finished
 }
 
-run finish for 15 but 4 InternshipPosition, 2 Company, 2 Student, 2 Application,  6 Internship,
-2 University, 4 steps
---------------------------------------------------------------------------------
+run finish for 15 but 4 InternshipPosition, 2 Company, 2 Student, 2 Application, 
+6 Internship, 2 University, 4 steps
 \end{verbatim}
 
 The results of the instructions above:
@@ -261,11 +271,10 @@ The results of the instructions above:
     \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/predfinish.png}
     \label{fig:predfinish}
 \end{figure}
-
+\newpage
 \begin{verbatim}
-
 --------------------------------------------------------------------------------
-Feedback and Universities
+Feedback 
 --------------------------------------------------------------------------------
 
 // All feedbacks given by student are given after an internship is finished
@@ -273,9 +282,9 @@ assert FeedbackStudentGivenOnFinishedInternship {
     all f: FeedbackByStudent | f.internship.status = Finished
 }
 
-// All feedbacks given by copanies are given after an internship is finished
+// All feedbacks given by companies are given after an internship is finished
 assert FeedbackCompanyGivenOnFinishedInternship {
-    all f: FeedbackByCompany| f.internship.status = Finished
+    all f: FeedbackByCompany | f.internship.status = Finished
 }
 
 // A student can only give feedback for an internship he has taken
@@ -290,12 +299,6 @@ fact CompanyFeedbackOnlyTheirInternship {
         f.giver in f.internship.application.company
 }
 
-// University sees the applications of its own students 
-fact UniversityMonitorsItsStudentsInternship {
-    all u: University, i: Internship | 
-        i in u.internship implies i.application.student.university = u
-}
-
 check FeedbackCompanyGivenOnFinishedInternship for 10
 
 \end{verbatim}
@@ -306,7 +309,49 @@ The results of the instructions above:
     \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/checkFeedbackStudentGivenOnFinishedInternship.png}
     \label{fig:checkFeedbackStudentGivenOnFinishedInternship}
 \end{figure}
+\newpage
+\begin{verbatim}
+   
+--------------------------------------------------------------------------------
+Complaints 
+--------------------------------------------------------------------------------
+
+// All complaints given by student are given during an internship 
+fact ComplaintByStudentDuringInternship {
+    all f: ComplaintByStudent | f.internship.status = Ongoing
+}
+
+// All complaints given by companies are given during an internship 
+fact ComplaintByCompanyDuringInternship {
+    all f: ComplaintByCompany | f.internship.status = Ongoing
+}
+
+// A student can only complain about an internship he is taking
+fact StudentComplainsOnlyTheirInternship {
+    all f: ComplaintByStudent | 
+        f.giver in f.internship.application.student
+}
+
+// A company can only complain about an internship it is offering
+fact CompanyComplainsOnlyTheirInternship {
+    all f: ComplaintByCompany | 
+        f.giver in f.internship.application.company
+}
+\end{verbatim}
+\begin{verbatim}
+--------------------------------------------------------------------------------
+Universities 
+--------------------------------------------------------------------------------
+
+// University sees the applications of its own students 
+fact UniversityMonitorsItsStudentsInternship {
+    all u: University, i: Internship | 
+        i in u.internship implies i.application.student.university = u
+}
+
+\end{verbatim}
 \begin{figure}[h!]
     \centering\includegraphics[width=0.5\textwidth]{RASD/Images/Alloy/checkFeedbackCompanyGivenOnFinishedInternship.png}
     \label{fig:checkFeedbackCompanyGivenOnFinishedInternship}
 \end{figure}
+

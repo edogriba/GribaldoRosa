@@ -7,16 +7,16 @@
 % -----------------------------------------------------
 
 \subsection{Purpose}
-    In today's job market, when looking for a job, having a previous work experience has become an important criteria of evaluation, therefore, more and more students try to find an internship. However, many companies are willing to invest in young talents in order to build a skilled workforce that can help them drive innovation and foster and secure a competitive edge in the future. \\
-    Student\&Companies is a platform that offers students the opportunity to search for internships and companies the opportunity to advertise. The matchmaking process of student and companies is enabled through a (proprietary) recommendation algorithm that creates the most suited matches, through the collection of statistics and feedback. \\
+    In today's job market, when looking for a job, having a previous work experience has become an important criteria of evaluation, therefore, more and more students try to find an internship. On the other hand, many companies are willing to invest in young talents in order to build a skilled workforce that can help them drive innovation and secure a competitive edge in the future. \\
+    Student\&Companies is a platform that offers to students the opportunity to search for internships and to companies the opportunity to advertise. The matchmaking process of student and companies is enabled through a (proprietary) recommendation algorithm that creates the most suited matches, through the collection of statistics and feedback. \\
     Moreover Students\&Companies allows for the management of the selection process and the monitoring of the execution of the internships. The goal is to provide a platform for both students and companies to make the process of finding, offering, and tracking internships easier and more efficient for both parties.
 
     \subsubsection{Goals}
         \begin{enumerate}[label={[G\arabic*]}]
             \item \textbf{Internship Lookup for Students}: 
                 Help students in their search for an internship by connecting their profiles with well-suited internship offers from companies.
-            \item \textbf{Internship Advertisement for Companies}: 
-                Allow companies to advertise their internships to students and inform them about the availability of eligible candidates.
+            \item \textbf{Visibility for Internship Positions of the Companies}: 
+                Allow companies to promote their internship positions to students and inform them about the availability of eligible candidates.
             \item \textbf{Selection Process Management}: 
                 Support the interaction and selection by providing a platform to companies to set up and conduct interviews, gather structured information about students and finalize the selections.
             \item \textbf{Data Collection for Recommendation System}: 
@@ -31,8 +31,8 @@
 
 \subsection{Scope}
     The platform S\&C has three major stakeholders: students, companies and universities. On one hand, students upload their CV and indicate their skills and domain of interest on the platform. Then they can proactively look out for internships or they can get suggestions from the platform, when new positions become available. On the other hand, companies can open internship positions, with the related domain and required skills, advertise those positions but also get notified when profiles of students, aligned with the requirements of one of their open positions, appear on the platform.
-    Once both parties express interest on the platform, a contact between the two is established. Then the management of the set up and the conduct of interview starts. When a candidate is selected, the platform tracks the conduction of the internship through feedback, complaints and exchange of information by both parties. Indeed a specific space of the website is devoted to communication between a student and company that have started an internship process together. The system run analytics on statistics collected by the platform itself on both students and companies to guarantee the best match possible between the two.
-    The universities can look into the list of their students who are carrying or carried out an internship and see its details.
+    Once both parties express interest on the platform, a contact between the two is established. Then the management of the set up and the conduct of interview starts. When a candidate is selected, the platform tracks the conduction of the internship through feedback, complaints and exchange of information by both parties. Indeed a specific space of the website is devoted to communication between a student and a company that are involved an internship together. The system run analytics on statistics collected by the platform itself on both students and companies to guarantee the best match possible between the two.
+    Finally, the universities can look into the list of their students who are carrying or carried out an internship and see its details.
 
     % ----
     \newpage
@@ -42,6 +42,7 @@
             \item {Students write their own CVs}
             \item {Students acquire new skills }
             \item {Companies and students carry out internships on which they agreed upon}
+            \item {Students enroll to a university}
         \end{enumerate}
 
     % ----
@@ -52,7 +53,7 @@
             \begin{enumerate}[label={[SPWC\arabic*]}]
                 \item {Companies create an internship position}
                 \item {Companies carry out the selection process}
-                \item {Companies select one student among the candidates}
+                \item {Companies select some students among the candidates}
                 \item {Companies write complaints}
                 \item {Companies communicate problems}
                 \item {Students fill their profile with their personal information}
@@ -85,11 +86,11 @@
             \item \textbf{Feedback}: 
             The reviews and ratings provided by students or companies after internship
             \item \textbf{Application}: 
-            A submission to an internship position posted by a company made by a student through the S\&C platform  
+            A submission made by a student to an internship position posted by a company through the S\&C platform 
             \item \textbf{Contact}: 
-            A connection that S\&C creates between a student who applied for an internship posting of a company and the company itself. It precedes the phase of confirmation by the student.
-            \item \textbf{Match}: 
-            Creates a connection
+            A connection that S\&C creates between a student who applied for an internship position of a company and the company itself. It precedes the phase of confirmation by the student.
+            \item \textbf{Communication}: 
+            Any exchange of information between a company and a student regarding an internship (e.g. news, complaints, announcements, private notes)
         \end{itemize}
 
     % ----
@@ -111,8 +112,9 @@
             \item {WP*: World Phenomena}
             \item {SPWC*: Shared Phenomena World Controlled}
             \item {SPMC*: Shared Phenomena Machine Controlled}
-            \item {FR*: Functional Requirement}
-            \item {UC*: Use Case}
+            \item {R*: Requirement}
+            \item {US*: Use Case}
+            \item {D*: Domain Assumption}
         \end{itemize}
 
 % -----------------------------------------------------
@@ -138,11 +140,11 @@
         \item\textbf{Introduction}\\
             The introduction identifies the purpose and the scope of the project, defines the goals, lists the related world and shared phenomena, explains acronyms, abbreviations that will be used in the document, specifies the version of the document and the reference document on which the current version it is based.
         \item\textbf{Overall Description}\\
-            The overall description points out and explains the various scenarios, including class diagrams for the most difficult ones. It also includes product functions, user characteristics plus assumptions for the specific domain of the application, dependencies of the applications and constraints.
+            The overall description points out and explains the various scenarios, including their class diagrams. It also includes product functions, user characteristics plus assumptions for the specific domain of the application and constraints.
         \item\textbf{Specific Requirements}\\
-            The specific requirements section defines the different interface and most importantly outlines all the functional requirements, alongside with all the possible use cases.
+            The specific requirements section outlines all the functional requirements, alongside with all the possible use cases.
         \item\textbf{Formal Analysis} \\
-            The part about formal analysis uses Alloy to formally verify the most difficult parts of the project
+            The part about formal analysis uses Alloy to formally verify the most involved parts of the project
         \item\textbf{Effort Spent}\\
             The effort spent is described by a simple table
         \item\textbf{References}\\
