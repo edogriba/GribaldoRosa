@@ -83,7 +83,7 @@ class StudentRegistration(Resource):
             # Generate a JWT token for the registered student
             token = jwt.encode({
                 'user_id': cursor.lastrowid,
-                'exp': datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=24)  # Token valid for 24 hours
+                'exp': datetime.now(datetime.UTC) + datetime.timedelta(hours=24)  # Token valid for 24 hours
             }, SECRET_KEY, algorithm="HS256")
 
             # Return success response
@@ -129,7 +129,7 @@ class UniversityRegistration(Resource):
 
             token = jwt.encode({
                     'user_id': cursor.lastrowid,
-                    'exp': datetime.datetime.now(datetime.UTC) + timedelta(hours=24)  # Token valid for 24 hours
+                    'exp': datetime.now(datetime.UTC) + timedelta(hours=24)  # Token valid for 24 hours
                 }, SECRET_KEY, algorithm="HS256")
 
             
