@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Register from './components/Register';
+import RegisterStudent from './components/RegisterStudent';
+import RegisterCompany from './components/RegisterCompany';
+import RegisterUniversity from './components/RegisterUniversity';
+import Login from './components/Login';
+import Welcome from './components/Welcome';
 
 function App() {
   const [students, setStudents] = useState([]); 
@@ -14,20 +21,16 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <h1>Students List:</h1>
-      {students.length === 0 ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {students.map(student => (
-            <li key={student.id}>
-              <strong>{student.name}</strong> -  Media: {student.gpa}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Router>
+    <Routes>
+      <Route path="/" element={<Welcome />}/>
+      <Route path="/register" element={<Register />}/>
+      <Route path="register/student" element={<RegisterStudent />}/>
+      <Route path="register/company" element={<RegisterCompany />}/>
+      <Route path="register/university" element={<RegisterUniversity />}/>
+      <Route path="/login" element={<Login />} />
+    </Routes>
+  </Router>
   );
 }
 
