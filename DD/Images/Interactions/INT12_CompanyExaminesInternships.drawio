@@ -1,17 +1,20 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0" scale="1" border="0" version="25.0.3">
   <diagram name="Page-1" id="2YBvvXClWsGukQMizWep">
-    <mxGraphModel dx="1434" dy="1846" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="683" dy="1455" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-6" value=":Object" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
           <mxGeometry x="780" y="-10" width="100" height="350" as="geometry" />
         </mxCell>
+        <mxCell id="mksPIx8jkp4qCgNzETlC-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="QDihuIbp6Lw-h8ZXW96g-6">
+          <mxGeometry x="45" y="100" width="10" height="50" as="geometry" />
+        </mxCell>
         <mxCell id="CObYJEAy56xA2G8EUnc1-1" value="S&amp;amp;C" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
           <mxGeometry x="320" width="100" height="340" as="geometry" />
         </mxCell>
         <mxCell id="hh9Ni2VgHgSeFQTvjpv2-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="CObYJEAy56xA2G8EUnc1-1" vertex="1">
-          <mxGeometry x="45" y="74" width="10" height="96" as="geometry" />
+          <mxGeometry x="45" y="70" width="10" height="100" as="geometry" />
         </mxCell>
         <mxCell id="CObYJEAy56xA2G8EUnc1-6" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlActor;" parent="1" vertex="1">
           <mxGeometry x="110" width="20" height="340" as="geometry" />
@@ -21,17 +24,17 @@
         </mxCell>
         <mxCell id="CObYJEAy56xA2G8EUnc1-8" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="120.10000000000002" y="74" as="sourcePoint" />
-            <mxPoint x="369.5" y="74" as="targetPoint" />
+            <mxPoint x="120.10000000000002" y="70" as="sourcePoint" />
+            <mxPoint x="369.5" y="70" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="270" y="74" />
+              <mxPoint x="270" y="70" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="CObYJEAy56xA2G8EUnc1-9" value="requestInternshipPositionList(profile)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="130" y="50" width="230" height="30" as="geometry" />
+        <mxCell id="CObYJEAy56xA2G8EUnc1-9" value="requestInternshipList(profile)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="155" y="46" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="CObYJEAy56xA2G8EUnc1-15" value="&lt;b&gt;Interaction&lt;/b&gt; Company Examines Internship Positions" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=330;height=30;" parent="1" vertex="1">
+        <mxCell id="CObYJEAy56xA2G8EUnc1-15" value="&lt;b&gt;Interaction&lt;/b&gt; Company Examines Internship" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=330;height=30;" parent="1" vertex="1">
           <mxGeometry x="60" y="-60" width="1090" height="430" as="geometry" />
         </mxCell>
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-1" value="API" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -53,7 +56,7 @@
           <mxGeometry x="1010" y="-10" width="100" height="350" as="geometry" />
         </mxCell>
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-33" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="QDihuIbp6Lw-h8ZXW96g-8" vertex="1">
-          <mxGeometry x="45" y="100" width="10" height="40" as="geometry" />
+          <mxGeometry x="45" y="110" width="10" height="30" as="geometry" />
         </mxCell>
         <mxCell id="SL6PgUiu9ieBlHFa4yMH-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="QDihuIbp6Lw-h8ZXW96g-8" vertex="1">
           <mxGeometry x="45" y="252" width="10" height="40" as="geometry" />
@@ -61,10 +64,10 @@
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-11" value="Database" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1000" y="-10" width="110" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-13" value="requestInternshipPositionList(profile)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="372" y="55" width="230" height="30" as="geometry" />
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-13" value="requestInternshipList(profile)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="397" y="55" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-14" value="InternshipPositionListPage" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" target="hh9Ni2VgHgSeFQTvjpv2-1" edge="1">
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-14" value="InternshipListPage" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" target="hh9Ni2VgHgSeFQTvjpv2-1" edge="1">
           <mxGeometry x="-0.0023" relative="1" as="geometry">
             <mxPoint x="599" y="150" as="sourcePoint" />
             <mxPoint x="369" y="150" as="targetPoint" />
@@ -74,30 +77,28 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-16" value="getInternshipPositionList(profile)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="732" y="66" width="200" height="30" as="geometry" />
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-16" value="getInternshipList(profile)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="633" y="66" width="160" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-21" value="redirectToInternshipPositionListPage(profile)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" target="CObYJEAy56xA2G8EUnc1-6" edge="1">
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-21" value="redirectToInternshipListPage(profile)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" target="CObYJEAy56xA2G8EUnc1-6" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="370" y="170" as="sourcePoint" />
             <mxPoint x="140" y="170" as="targetPoint" />
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-23" value="requestInternshipPositionPage(internshipPosition)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="450" y="207" width="300" height="30" as="geometry" />
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-23" value="requestInternshipPage(internship)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="495" y="207" width="210" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-24" value="InternshipPositionList" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" edge="1">
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-24" value="InternshipList" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" edge="1" target="mksPIx8jkp4qCgNzETlC-1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1059.25" y="129.97000000000003" as="sourcePoint" />
-            <mxPoint x="604.75" y="129.97000000000003" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="735.75" y="129.97" />
-            </Array>
+            <mxPoint x="730" y="130" as="targetPoint" />
+            <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-25" value="getInternshipPositionDetails(internshipPosition)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="825" y="217" width="290" height="30" as="geometry" />
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-25" value="getInternshipDetails(internship)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="850" y="217" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-27" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;" parent="1" target="SL6PgUiu9ieBlHFa4yMH-6" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">
@@ -111,7 +112,7 @@
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-28" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
           <mxGeometry x="825" y="230" width="10" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-29" value="internshipPositionDetails" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" target="QDihuIbp6Lw-h8ZXW96g-28" edge="1">
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-29" value="internshipDetails" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" target="QDihuIbp6Lw-h8ZXW96g-28" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1060" y="282.05" as="sourcePoint" />
             <mxPoint x="835" y="282.05" as="targetPoint" />
@@ -123,7 +124,7 @@
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-30" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
           <mxGeometry x="365" y="222" width="10" height="88" as="geometry" />
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-32" value="internshipPositionDetailsPage" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" edge="1">
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-32" value="internshipDetailsPage" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" edge="1">
           <mxGeometry x="0.0011" relative="1" as="geometry">
             <mxPoint x="825" y="290" as="sourcePoint" />
             <mxPoint x="375.0000000000001" y="290" as="targetPoint" />
@@ -142,7 +143,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-7" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;elbow=vertical;" parent="1" source="QDihuIbp6Lw-h8ZXW96g-15" target="QDihuIbp6Lw-h8ZXW96g-8" edge="1">
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-7" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;elbow=vertical;" parent="1" source="QDihuIbp6Lw-h8ZXW96g-15" target="mksPIx8jkp4qCgNzETlC-1" edge="1">
           <mxGeometry x="-0.0435" y="30" width="160" relative="1" as="geometry">
             <mxPoint x="600" y="90" as="sourcePoint" />
             <mxPoint x="830" y="90" as="targetPoint" />
@@ -152,8 +153,8 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="QDihuIbp6Lw-h8ZXW96g-17" value="requestInternshipPositionPage(internshipPosition)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="105" y="196" width="300" height="30" as="geometry" />
+        <mxCell id="QDihuIbp6Lw-h8ZXW96g-17" value="requestInternshipPage(internship)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="140" y="197" width="210" height="30" as="geometry" />
         </mxCell>
         <mxCell id="QDihuIbp6Lw-h8ZXW96g-20" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;" parent="1" source="CObYJEAy56xA2G8EUnc1-6" target="QDihuIbp6Lw-h8ZXW96g-30" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">
@@ -173,12 +174,32 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="N4ezWAQjIMXn5G-POvpN-3" value="redirectToInternshipPositionPage(internshipPosition)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" source="QDihuIbp6Lw-h8ZXW96g-30" target="CObYJEAy56xA2G8EUnc1-6" edge="1">
-          <mxGeometry x="0.0001" relative="1" as="geometry">
+        <mxCell id="N4ezWAQjIMXn5G-POvpN-3" value="redirectToInternshipPage(internship)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" parent="1" source="QDihuIbp6Lw-h8ZXW96g-30" target="CObYJEAy56xA2G8EUnc1-6" edge="1">
+          <mxGeometry x="-0.0004" relative="1" as="geometry">
             <mxPoint x="365.00000000000006" y="310" as="sourcePoint" />
             <mxPoint x="139.30999999999997" y="310" as="targetPoint" />
             <Array as="points">
               <mxPoint x="275.50000000000006" y="310" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mksPIx8jkp4qCgNzETlC-2" value="InternshipList" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="QDihuIbp6Lw-h8ZXW96g-15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="825" y="139.97000000000003" as="sourcePoint" />
+            <mxPoint x="600.75" y="140" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mksPIx8jkp4qCgNzETlC-3" value="getInternshipList(profile)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="863" y="76" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mksPIx8jkp4qCgNzETlC-4" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=blockThin;endFill=1;rounded=0;elbow=vertical;" edge="1" parent="1">
+          <mxGeometry x="-0.0435" y="30" width="160" relative="1" as="geometry">
+            <mxPoint x="835" y="100" as="sourcePoint" />
+            <mxPoint x="1055" y="100" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="955" y="100" />
             </Array>
             <mxPoint as="offset" />
           </mxGeometry>
