@@ -39,12 +39,14 @@ Before proceeding, ensure you have the following installed:
 
    ```bash
    npm install
+   npm install @mui/material @emotion/react @emotion/styled @mui/styled-engine-sc styled-components
+   npm install react-router-dom
    ```
 
 ### Start the development server
 
 ```bash
-npm start
+npm start dev
 ```
 
 The React app should now be running at [http://localhost:3000/](http://localhost:3000/).
@@ -141,7 +143,8 @@ The project is structured as follows:
     - `api/`                    : API interface
     - `assets/`                 : Assets such as images, styles, etc.
     - `components/`             : Reusable components
-    - `hooks/`                  :
+    - `hooks/`                  : Share logic between components
     - `pages/`                  : Pages
-    - `util/`                   :
+    - `util/`                   : Utility functions and helpers
+    - `.env`                    : Frontend environment
 - `README.md`       : This file
