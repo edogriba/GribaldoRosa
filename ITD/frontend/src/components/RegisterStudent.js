@@ -61,6 +61,7 @@ const RegisterStudent = () => {
     console.log("DataStudent: ", dataStudent);
     try {
       const res = await api.studentRegistration(dataStudent);
+      console.log("APPENA INVIATO");
       const data = await res.json();
 
       // Save the token to localStorage

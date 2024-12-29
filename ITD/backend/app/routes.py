@@ -1,7 +1,7 @@
 from flask import jsonify, Flask, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import sqlite3
-import pdb
+#import pdb
 import jwt
 import bcrypt
 from datetime import datetime, timedelta
@@ -13,7 +13,7 @@ SECRET_KEY = "123456"
 def create_main_app():
 
     app = Flask(__name__)
-    CORS(app, resources={r"/": {"origins": ""}})
+    CORS(app)
 
     # SQLite database setup
     DATABASE = 'app/SC.db'
@@ -128,8 +128,6 @@ def create_main_app():
         languages_spoken = data.get('languageSpoken')
         university_id = data.get('university')
 
-        print("Data: ", data)
-        print("Password: ", password)
         # Hash the password
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
