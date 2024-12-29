@@ -1,13 +1,7 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS
 import sqlite3
-#import pdb
-import jwt
-import bcrypt
-from datetime import datetime, timedelta
-
-
-SECRET_KEY = "123456"
+from app.utils.auth import hash_password, generate_token
 
 
 def create_main_app():
@@ -40,7 +34,26 @@ def create_main_app():
             }), 500
         finally:
             conn.close()
+    
                  
+    @app.route('/studentlist', methods=['GET'])
+    def student_list():
+        try:
+            conn = get_db()
+            students = conn.execute("SELECT id, name, gpa FROM students").fetchall()
+
+            # Transform the query result into a list of dictionaries
+            result = [{'id': student['id'], 'firstName': student['name'], 'GPA': student['gpa']} for student in students]
+
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify({
+                "type": "database_error",
+                "message": str(e)
+            }), 500
+        finally:
+            conn.close()
+
 
     @app.route('/register/university', methods=['POST'])
     def university_register():
@@ -63,7 +76,7 @@ def create_main_app():
             }), 400
 
         # Hash the password
-        hashed_password = hashpw(password.encode('utf-8'), gensalt()).decode('utf-8')
+        hashed_password = hash_password(password)
 
         conn = get_db()
         try:
@@ -75,10 +88,7 @@ def create_main_app():
             conn.commit()
 
             # Generate a JWT token
-            token = encode({
-                'user_id': cursor.lastrowid,
-                'exp': datetime.now(datetime.UTC) + timedelta(hours=24)  # Token valid for 24 hours
-            }, SECRET_KEY, algorithm="HS256")
+            token = generate_token(cursor.lastrowid)
 
             # Success response
             return jsonify({
@@ -128,8 +138,7 @@ def create_main_app():
         languages_spoken = data.get('languageSpoken')
         university_id = data.get('university')
 
-        # Hash the password
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        hashed_password = hash_password(password)
 
         conn = get_db()
         try:
@@ -149,10 +158,7 @@ def create_main_app():
             conn.commit()
 
             # Generate a JWT token for the registered student
-            token = jwt.encode({
-                'user_id': cursor.lastrowid,
-                'exp': datetime.now(datetime.UTC) + timedelta(hours=24)  # Token valid for 24 hours
-            }, SECRET_KEY, algorithm="HS256")
+            token = generate_token(cursor.lastrowid)
 
             # Return success response
             return jsonify({
