@@ -1,75 +1,95 @@
 import React, {useState, useEffect} from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
+import { api } from '../api/api';
 
 const RegisterStudent = () => {
-        const [email, setEmail] = useState('');
-        const [password, setPassword] = useState('');
-        const [firstName, setFirstName] = useState('');
-        const [lastName, setLastName] = useState('');
-        const [phoneNumber, setPhoneNumber] = useState('');
-        const [profilePicturePath, setProfilePicturePath] = useState('');
-        const [location, setLocation] = useState('');
-        const [degreeProgram, setDegreeProgram] = useState('');
-        const [gpa, setGpa] = useState('');
-        const [graduationYear, setGraduationYear] = useState('');
-        const [cvPath, setCvPath] = useState('');
-        const [skills, setSkills] = useState('');
-        const [languageSpoken, setLanguageSpoken] = useState('');
-        const [universities, setUniversities] = useState([]); // Array to hold universities
-        const [university, setUniversity] = useState(''); // Selected university ID
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [profilePicturePath, setProfilePicturePath] = useState('');
+  const [location, setLocation] = useState('');
+  const [degreeProgram, setDegreeProgram] = useState('');
+  const [gpa, setGpa] = useState('');
+  const [graduationYear, setGraduationYear] = useState('');
+  const [cvPath, setCvPath] = useState('');
+  const [skills, setSkills] = useState('');
+  const [languageSpoken, setLanguageSpoken] = useState('');
 
-        useEffect(() => {
-            const fetchUniversities = async () => {
-              try {
-                const response = await axios.get('http://127.0.0.1:5000/universitylist'); // Adjust endpoint as needed
-                setUniversities(response.data);
-                console.log(university) // Assumes response contains an array of universities
-              } catch (error) {
-                console.error('Error fetching universities:', error.message);
-                alert('Failed to load universities. Please try again later.');
-              }
-            };
-        
-            fetchUniversities();
-          }, []);
-        
-      
-        const handleSubmit = async (e) => {
-          e.preventDefault();
-      
-          const data = {
-            email,
-            password,
-            firstName,
-            lastName,
-            phoneNumber,
-            profilePicturePath,
-            location,
-            degreeProgram,
-            GPA: parseFloat(gpa), // Ensure GPA is a number
-            graduationYear: parseInt(graduationYear, 10), // Ensure graduationYear is an integer
-            CVpath: cvPath,
-            skills,
-            languageSpoken,
-            university // Ensure university ID is an integer
-          };
-      
-          try {
-            const response = await axios.post('http://127.0.0.1:5000/register/student', data);
-      
-            // Save the token to localStorage
-            localStorage.setItem('token', response.data.token);
-      
-            console.log('Registration successful:', response.data);
-      
-            // Redirect to student dashboard or another protected route
-            return <Link to="/dashboard/student"></Link>;
-          } catch (error) {
-            console.error('Error registering student:', error.response?.data?.message || error.message);
-            alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
-          }
-        };
+  const [universities, setUniversities] = useState([]); // Array to hold universities
+  const [university, setUniversity] = useState(''); // Selected university ID
+
+  useEffect(() => {
+    const fetchUniversities = async () => {
+      try {
+        const res = await api.getUniversityList();
+        const data = await res.json();
+
+        setUniversities(data);
+      } catch (error) {
+        console.error('Error fetching universities:', error.message);
+        alert('Failed to load universities. Please try again later.');
+      }
+    };
+
+    fetchUniversities();
+  }, []);
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const dataStudent = {
+      email,
+      password,
+      firstName,
+      lastName,
+      phoneNumber,
+      profilePicturePath,
+      location,
+      degreeProgram,
+      GPA: parseFloat(gpa), // Ensure GPA is a number
+      graduationYear: parseInt(graduationYear, 10), // Ensure graduationYear is an integer
+      CVpath: cvPath,
+      skills,
+      languageSpoken,
+      university // Ensure university ID is an integer
+    };
+    
+    console.log("DataStudent: ", dataStudent);
+    try {
+      const res = await api.studentRegistration(dataStudent);
+      const data = await res.json();
+
+      // Save the token to localStorage
+      localStorage.setItem('token', data.token);
+      console.log("data: ", dataStudent);
+      console.log("return studentRegistration(dataStudent): ", res);         // debug
+      // Redirect to student dashboard or another protected route
+      return <Link to="/dashboard/student"></Link>;
+    } catch (error) {
+      console.error('Error registering student:', error.response?.data?.message || error.message);
+      alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+    }
+    /*
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/register/student', data);
+
+      // Save the token to localStorage
+      localStorage.setItem('token', response.data.token);
+
+      console.log('Registration successful:', response.data);
+
+      // Redirect to student dashboard or another protected route
+      return <Link to="/dashboard/student"></Link>;
+    } catch (error) {
+      console.error('Error registering student:', error.response?.data?.message || error.message);
+      alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+    }
+      */
+  };
   return (
 <div>
     {/* NavBar */}

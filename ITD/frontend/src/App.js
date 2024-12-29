@@ -9,6 +9,7 @@ import Login from './components/Login';
 import Welcome from './components/Welcome';
 
 function App() {
+  /*
   const [students, setStudents] = useState([]); 
 
   useEffect(() => {
@@ -19,7 +20,7 @@ function App() {
       })
       .catch(error => console.error('Error:', error));
   }, []);
-
+  */
   return (
     <Router>
     <Routes>

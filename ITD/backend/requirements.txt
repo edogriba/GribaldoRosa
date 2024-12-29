@@ -1,4 +1,5 @@
 flask_restful
-flask_cors
+Flask-Cors
 bcrypt
 jwt
+python-dotenv
