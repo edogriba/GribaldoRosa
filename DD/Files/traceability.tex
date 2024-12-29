@@ -1,0 +1,155 @@
+In this section there are tables that show the mapping between the requirements and the modules of S\&C.
+
+\begin{enumerate}   
+    % Tab 1 
+    \item Tab relative to \textbf{user registration}
+    \begin{center}
+        \begin{tabular}{  |p{4cm}|p{10cm}| } 
+        \hline
+        \multirow{2}{6em}{\textbf{Requirements}} 
+        & [R1] S\&C shall allow users to sign up. \\  
+        & [R2] S\&C shall allow users to fill in their profile information when signing up. \\
+        \hline
+        \multirow{4}{6em}{\textbf{Components}} 
+        & WebApp \\ 
+        & API \\ 
+        & RegistrationManager \\ 
+        & Database \\
+        \hline
+        \end{tabular}
+    \end{center}
+    
+    % Tab 2
+    \item Tab relative to user \textbf{login} and \textbf{logout} 
+    \begin{center}
+        \begin{tabular}{ |p{4cm}|p{10cm}| } 
+        \hline
+        \multirow{2}{6em}{\textbf{Requirements}} 
+        & [R3] S\&C shall allow users to log in. \\                 
+        & [R4] S\&C shall allow users to log out. \\          
+        \hline
+        \multirow{4}{6em}{\textbf{Components}} 
+        & WebApp \\ 
+        & API \\ 
+        & LoginManager \\ 
+        & Database \\
+        \hline
+        \end{tabular}
+    \end{center}
+    
+    
+    
+    % Tab 3
+    \item Tab relative to \textbf{profile examination} by users
+    \begin{center}
+        \begin{tabular}{  |p{4cm}|p{10cm}| } 
+        \hline
+        \multirow{3}{6em}{\textbf{Requirements}} 
+        & [R5] S\&C shall allow users to update their profile information. \\                 
+        & [R6] S\&C shall allow users to examine their own internships. \\
+        & [R8] S\&C shall allow students to examine their own applications. \\
+        \hline
+        \multirow{4}{6em}{\textbf{Components}} 
+        & WebApp \\ 
+        & API \\ 
+        & ProfileManager \\ 
+        & Database \\
+        \hline
+        \end{tabular}
+    \end{center}
+    
+    % Tab 4 
+    \item Tab relative to \textbf{internship positions search}
+    \begin{center}
+        \begin{tabular}{ |p{4cm}|p{10cm}| } 
+        \hline
+        \multirow{3}{6em}{\textbf{Requirements}} 
+        & [R7] S\&C shall allow students to examine open internship positions \\
+        & [R9] S\&C shall allow students to search for a specific kind of internship position \\
+        & [R12] When a student searches for an internship, S\&C shall list the different positions aligned with the
+        student’s profile. \\
+        \hline
+        \multirow{4}{6em}{\textbf{Components}} 
+        & WebApp \\ 
+        & API \\ 
+        & SearchManager \\ 
+        & Database \\
+        \hline
+        \end{tabular}
+    \end{center}
+
+    \newpage
+    % Tab 5 
+    \item Tab relative to \textbf{applications} to internship positions
+    \begin{center}
+        \begin{tabular}{ |p{4cm}|p{10cm}| } 
+        \hline
+        \multirow{6}{6em}{\textbf{Requirements}} 
+        & [R10] S\&C shall allow students to apply for an internship position. \\
+        & [R13]  If an application has been accepted by a company, S\&C shall allow the student who made the application to confirm or refuse the internship. \\
+        & [R14] If a company signals that it needs an assessment of the students’ skills, S\&C shall allow the company to schedule an interview. \\
+        & [R15] After an interview has been scheduled, S\&C shall allow the student to access the link and see the date of the meeting. \\
+        & [R16] S\&C shall allow the students to see the status of their applications. \\
+        & [R18] S\&C shall allow companies to accept or reject applications for their internship positions \\
+        \hline
+        \multirow{5}{6em}{\textbf{Components}} 
+        & WebApp \\ 
+        & API \\ 
+        & ApplicationManager \\ 
+        & ProfileManager \\
+        & Database \\
+        \hline
+        \end{tabular}
+    \end{center}
+    
+    % Tab 6 
+    \item Tab relative \textbf{notifications}
+    \begin{center}
+        \begin{tabular}{ |p{4cm}|p{10cm}| } 
+        \hline
+        \multirow{2}{6em}{\textbf{Requirements}} 
+        & [R11] If an internship position suitable for a student is opened, S\&C shall notify the student. \\
+        & [R20]  If a new profile of a student who could interest a company becomes available on the platform, S\&C
+        shall notify the company. \\
+        \hline
+        \multirow{4}{6em}{\textbf{Components}} 
+        & WebApp \\ 
+        & API \\ 
+        & NotificationManager \\ 
+        & Database \\
+        \hline
+        \end{tabular}
+    \end{center}
+    
+    \newpage
+    % Tab 7 
+    \item Tab relative to \textbf{internship position }and \textbf{ internship management}
+    \begin{center}
+        \begin{tabular}{ |p{4cm}|p{10cm}| } 
+        \hline
+        \multirow{12}{6em}{\textbf{Requirements}} 
+        & [R17] S\&C shall allow companies to open and examine its internship positions. \\
+        & [R19] S\&C shall allow companies to close internship positions. \\
+        & [R20] If a new profile of a student who could interest a company becomes available on the platform, S\&C
+        shall notify the company. \\
+        & [R21] S\&C shall allow companies to leave private notes to students who are doing an internship with it. \\
+        & [R22] S\&C shall allow companies to send news about the internship to the students who participate in it. \\
+        & [R23] S\&C shall allow both parties to communicate problems in a specific space of the website. \\
+        & [R24] S\&C shall allow students who took an internship with a company to rate the internship and vice versa. \\
+        & [R25] S\&C shall allow students who took an internship with a company to give suggestions to the company and vice versa. \\
+        & [R26] S\&C shall allow companies to send news about the internship to students who are carrying it out. \\
+        & [R27] S\&C shall allow both parties involved in an internship to make complaints in a dedicated space. \\
+        & [R28] S\&C shall allow universities to monitor the status of the internship of their students. \\
+        & [R29] S\&C shall allow universities to see details of the internships of their students. \\
+        \hline
+        \multirow{5}{6em}{\textbf{Components}} 
+        & WebApp \\ 
+        & API \\ 
+        & ProfileManager \\ 
+        & InternshipManager \\
+        & Database \\
+        \hline
+        \end{tabular}
+    \end{center}
+
+\end{enumerate}

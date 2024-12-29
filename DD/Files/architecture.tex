@@ -46,12 +46,15 @@ The main components of the back-end are:
 \newpage
 \begin{figure}[h!]
         \centering  \includegraphics[width=1\textwidth]{DD/Images/CD.png}
-        \label{fig:ComponentViewDiagram}
+\caption*{Component View Diagram}
+\label{fig:ComponentViewDiagram}
 \end{figure}
 \newpage
 
 \newpage
 \subsection{Runtime View}
+
+In this subsection there will be listed the interactions diagram along with their textual descriptions.
 
 \begin{enumerate}
     % -- INT01 --
@@ -59,7 +62,7 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT01_UserLogin.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram shows the process of a user logging into S\&C. The sequence begins with the user requesting the login page through the API. The API retrieves and displays the login page for the user to interact with. Once the user inputs their credentials, such as a username and password, these are submitted to the API. The API then forwards the credentials to the LoginManager, which is responsible for handling the authentication process. The LoginManager communicates with the Database to retrieve the stored credentials associated with the submitted user details. After getting the stored credentials, the LoginManager compares them with the provided ones to check the user's identity. If the credentials match, the validation is successful and the user is redirected to the homepage. If the credentials do not match, an error is raised and the user is redirected to the login page.
+            \caption*{The interaction diagram shows the process of a user logging into S\&C. The sequence begins with the user requesting the login page through the \textbf{API}. The \textbf{API} retrieves and displays the login page for the user to interact with. Once the user inputs their credentials, such as a username and password, these are submitted to the \textbf{API}. The \textbf{API} then forwards the credentials to the \textbf{LoginManager}, which is responsible for handling the authentication process. The \textbf{LoginManager} communicates with the \textbf{Database} to retrieve the stored credentials associated with the submitted user details. After getting the stored credentials, the \textbf{LoginManager} compares them with the provided ones to check the user's identity. If the credentials match, the validation is successful and the user is redirected to the homepage. If the credentials do not match, an error is raised and the user is redirected to the login page.
             }
     \end{figure}
 
@@ -70,7 +73,7 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT02_UserLogout.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram describes the process of a user logging out from S\&C The sequence begins with the user starting the logout operation by sending a request to the API, specifying their profile. The API forwards this request to the LoginManager, which is responsible for handling session management and user authentication. The LoginManager then closes the user's session and clears any associated session data. Once the session is successfully invalidated, the LoginManager informs the API that the user has been logged out. The API then redirects the user to the login page, notifies the completion of the logout process.
+            \caption*{The interaction diagram describes the process of a user logging out from S\&C The sequence begins with the user starting the logout operation by sending a request to the \textbf{API}, specifying their profile. The \textbf{API} forwards this request to the \textbf{LoginManager}, which is responsible for handling session management and user authentication. The \textbf{LoginManager} then closes the user's session and clears any associated session data. Once the session is successfully invalidated, the \textbf{LoginManager} informs the \textbf{API} that the user has been logged out. The \textbf{API} then redirects the user to the login page, notifies the completion of the logout process.
             }
     \end{figure}
 
@@ -80,8 +83,8 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT03_UserUpdate.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram shows the process of updating a user profile in S\&C. The sequence begins with the user requesting the profile update page by sending their profile information to the API. The API forwards this request to the ProfileManager, which retrieves the data that can be updated  from the Database. The API then displays the update page with the pre-compiled data to the user.
-            Once the user makes changes to their profile and submits the modifications, the API sends the updated information to the ProfileManager for processing. The ProfileManager validates the submitted modifications through its internal logic. If the modifications are valid, the ProfileManager writes the changes to the Database.
+            \caption*{The interaction diagram shows the process of updating a user profile in S\&C. The sequence begins with the user requesting the profile update page by sending their profile information to the \textbf{API}. The \textbf{API} forwards this request to the \textbf{ProfileManager}, which retrieves the data that can be updated  from the \textbf{Database}. The \textbf{API} then displays the update page with the pre-compiled data to the user.
+            Once the user makes changes to their profile and submits the modifications, the \textbf{API} sends the updated information to the \textbf{ProfileManager} for processing. The \textbf{ProfileManager} validates the submitted modifications through its internal logic. If the modifications are valid, the \textbf{ProfileManager} writes the changes to the \textbf{Database}.
             the user is redirected to their profile page. If the update fails due to an error, the API redirects the user back to the update page with an error message.}
     \end{figure}
 
@@ -91,7 +94,7 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT04_StudentRegistration.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram shows the process of a student registering within S\&C. The process begins when the student requests access to the registration page through the API. The API retrieves the registration interface by interacting with the RegistrationManager, which provides the appropriate page. The API then displays the registration page to the student. Once the student submits their credentials, the API forwards the submitted data to the RegistrationManager, which validates the credentials to ensure they meet the required standards. If the credentials are valid, the RegistrationManager saves the student’s data to the Database. Upon successful storage, the RegistrationManager proceeds to find matching companies based on the student’s profile. If relevant companies are identified, the RegistrationManager triggers the NotificationManager to send notifications to these companies, informing them of the newly available student profile. If the credentials are evaluated correct, the API redirects the student to their profile page. Otherwise the RegistrationManager communicates the problem to the API, which redirects the student back to the login page displaying an error message.
+            \caption*{The interaction diagram shows the process of a student registering within S\&C. The process begins when the student requests access to the registration page through the \textbf{API}. The \textbf{API} retrieves the registration interface by interacting with the \textbf{RegistrationManager}, which provides the appropriate page. The \textbf{API} then displays the registration page to the student. Once the student submits their credentials, the \textbf{API} forwards the submitted data to the \textbf{RegistrationManager}, which validates the credentials to ensure they meet the required standards. If the credentials are valid, the \textbf{RegistrationManager} saves the student’s data to the Database. Upon successful storage, the \textbf{RegistrationManager} proceeds to find matching companies based on the student’s profile. If relevant companies are identified, the \textbf{RegistrationManager} triggers the \textbf{NotificationManager} to send notifications to these companies, informing them of the newly available student profile. If the credentials are evaluated correct, the \textbf{API} redirects the student to their profile page. Otherwise the \textbf{RegistrationManager} communicates the problem to the \textbf{API}, which redirects the student back to the login page displaying an error message.
             }
     \end{figure}
 
@@ -101,7 +104,7 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT05_InternshipSearch.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram describes the process of searching for internship positions within S\&C. The sequence begins when the user requests access to the internship search page through the API. The API processes this request and redirects the user to the internship search page. Once on the search page, the user provides search criteria, which may include filters values but also keywords. These data are sent from the API to the SearchManager to be validated and if they are evaluated correct, the SearchManager uses them to query the Database for matching internships. If the Database returns a list of internships that match the user's criteria, the SearchManager runs a ranking algorithm on them to put first the most suited ones to the profile who issued the search, then the API redirects the user to the internship results page and displays the available options. If no matches are found, the API redirects the user to an empty internship results page, along with a message indicating that no internship meets the specified criteria. 
+            \caption*{The interaction diagram describes the process of searching for internship positions within S\&C. The sequence begins when the user requests access to the internship search page through the \textbf{API}. The \textbf{API} processes this request and redirects the user to the internship search page. Once on the search page, the user provides search criteria, which may include filters values but also keywords. These data are sent from the \textbf{API} to the \textbf{SearchManager} to be validated and if they are evaluated correct, the \textbf{SearchManager} uses them to query the \textbf{Database} for matching internships. If the \textbf{Database} returns a list of internships that match the user's criteria, the \textbf{SearchManager} runs a ranking algorithm on them to put first the most suited ones to the profile who issued the search, then the \textbf{API} redirects the user to the internship results page and displays the available options. If no matches are found, the \textbf{API} redirects the user to an empty internship results page, along with a message indicating that no internship meets the specified criteria. 
             }
     \end{figure}
 
@@ -112,8 +115,8 @@ The main components of the back-end are:
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT06_InternshipApplication.drawio.png}
             \label{fig:ComponentViewDiagram}
             \caption*{
-            The interaction diagram shows the process of applying for an internship within S\&C. The sequence begins when the user accesses the internship application page by interacting with the API. The API redirects the user to the internship position page where he/she must accept the terms and conditions. Once the user submits their application, the API forwards the data to the Application Manager, which validates the submission. This validation includes ensuring that the user has accepted the terms and conditions of the internship application. If the validation is successful, the Application Manager writes the relevant profile data to the Database to store the application and then the API redirects the user to their profile page to confirm the completion of the application process.
-            If the validation fails the API keeps the user into the internship application page showing an error message.
+            The interaction diagram shows the process of applying for an internship within S\&C. The sequence begins when the user accesses the internship application page by interacting with the \textbf{API}. The \textbf{API} redirects the user to the internship position page where he/she must accept the terms and conditions. Once the user submits their application, the \textbf{API} forwards the data to the \textbf{ApplicationManager}, which validates the submission. This validation includes ensuring that the user has accepted the terms and conditions of the internship application. If the validation is successful, the \textbf{ApplicationManager} writes the relevant profile data to the Database to store the application and then the \textbf{API} redirects the user to their profile page to confirm the completion of the application process.
+            If the validation fails the \textbf{API} keeps the user into the internship application page showing an error message.
             }
     \end{figure}
 
@@ -123,9 +126,9 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT07_StudentExaminesApplications.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram shows the process of a student examining their internship applications within S\&C. The process begins when the user requests to view their application history. This request is handled by the API, which redirects the user to the application list page. The API communicates with the ProfileManager to retrieve the user’s profile-related data and then queries the ApplicationManager for a list of the student’s applications.
-            The ApplicationManager consults the Database to gather the details of all internship applications associated with the user. Once the information is retrieved, it is sent back to the API, which displays the application list to the user on the application list page.
-            If the user selects a specific application to examine in more detail, the API processes this request by communicating with the ApplicationManager. The ApplicationManager retrieves the details of the selected application from the Database and sends them back to the API. Finally, the API redirects the user to a detailed view of the selected application, where they can review the information related to it.
+            \caption*{The interaction diagram shows the process of a student examining their internship applications within S\&C. The process begins when the user requests to view their application history. This request is handled by the \textbf{API}, which redirects the user to the application list page. The \textbf{API} communicates with the \textbf{ProfileManager} to retrieve the user’s profile-related data and then queries the \textbf{ApplicationManager} for a list of the student’s applications.
+            The \textbf{ApplicationManager} consults the \textbf{Database} to gather the details of all internship applications associated with the user. Once the information is retrieved, it is sent back to the \textbf{API}, which displays the application list to the user on the application list page.
+            If the user selects a specific application to examine in more detail, the \textbf{API} processes this request by communicating with the \textbf{ApplicationManager}. The \textbf{ApplicationManager} retrieves the details of the selected application from the \textbf{Database} and sends them back to the \textbf{API}. Finally, the \textbf{API} redirects the user to a detailed view of the selected application, where they can review the information related to it.
             }
     \end{figure}
 
@@ -135,7 +138,7 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT08_CompanyRegistration.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram describes the process of company registration within the S\&C. The process begins when a company starting a request to access the registration page. The API handles this request and redirects the company to the appropriate page for inputting registration details. Once the company provides its credentials, the API forwards the submitted information to the RegistrationManager that validates them, checking their correctness and ensuring they meet the necessary requirements. If the validation is successful, the RegistrationManager stores the new credentials by writing them to the Database. After confirmation of successful storage, the API redirects the company to their newly created profile page. If the credentials fail validation due to errors or missing information, the RegistrationManager notifies the API. In this case, the API redirects the company back to the login page with an appropriate error message.
+            \caption*{The interaction diagram describes the process of company registration within the S\&C. The process begins when a company starting a request to access the registration page. The \textbf{API} handles this request and redirects the company to the appropriate page for inputting registration details. Once the company provides its credentials, the \textbf{API} forwards the submitted information to the \textbf{RegistrationManager} that validates them, checking their correctness and ensuring they meet the necessary requirements. If the validation is successful, the \textbf{RegistrationManager} stores the new credentials by writing them to the \textbf{Database}. After confirmation of successful storage, the API redirects the company to their newly created profile page. If the credentials fail validation due to errors or missing information, the \textbf{RegistrationManager} notifies the API. In this case, the API redirects the company back to the login page with an appropriate error message.
             }
     \end{figure}
 
@@ -145,7 +148,7 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT09_PostNewInternship.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption*{The interaction diagram describes the process of posting a new internship position within S\&C. The sequence starts with a company accessing the internship creation page through the API. On this page, the user inputs all the relevant details for the internship position, which the API forwards to the InternshipManager. The InternshipManager is responsible for validating the provided internship data to ensure it meets the required standards and format. If the data passes validation, the InternshipManager stores the internship information in the Database. After successfully saving the data, the InternshipManager proceeds to identify students whose profiles match the specified internship criteria. For each matched student, a notification is triggered by the InternshipManager and sent to the student, informing them of the new internship opportunity. In cases where the validation process fails due to incomplete or incorrect data, the InternshipManager informs the API of the issue. The API then redirects the user back to the internship creation page, providing a message with details about the error.
+            \caption*{The interaction diagram describes the process of posting a new internship position within S\&C. The sequence starts with a company accessing the internship creation page through the \textbf{API}. On this page, the user inputs all the relevant details for the internship position, which the API forwards to the \textbf{InternshipManager}. The \textbf{InternshipManager} is responsible for validating the provided internship data to ensure it meets the required standards and format. If the data passes validation, the \textbf{InternshipManager} stores the internship information in the \textbf{Database}. After successfully saving the data, the \textbf{InternshipManager} proceeds to identify students whose profiles match the specified internship criteria. For each matched student, a notification is triggered by the \textbf{InternshipManager} and sent to the student, informing them of the new internship opportunity. In cases where the validation process fails due to incomplete or incorrect data, the \textbf{InternshipManager} informs the API of the issue. The API then redirects the user back to the internship creation page, providing a message with details about the error.
             }       
     \end{figure}
 
@@ -256,7 +259,7 @@ The main components of the back-end are:
     \begin{figure}[h!]
             \centering  \includegraphics[width=1\textwidth]{DD/Images/Interactions/INT17_ CommunicationBetweenUsers.drawio.png}
             \label{fig:ComponentViewDiagram}
-            \caption{
+            \caption*{
             The interaction diagram shows the process of a user examining applications related to a specific internship and deciding to send a message within S\&C. The process begins when the user requests to view their applications history. This request is handled by the \textbf{API}, which redirects the user to the application list page. The \textbf{API} communicates with the \textbf{ProfileManager} to retrieve the internship data and then queries the \textbf{ApplicationManager} for a list of the students’ applications associated with the internship.
             The \textbf{ApplicationManager} consults the \textbf{Database} to gather details of all applications associated with the internship. 
             Once the information is retrieved, it is sent back to the \textbf{API}, which displays the applications list to the user on the applications list page.
@@ -313,13 +316,17 @@ The choice of implementing a three-tier architecture has several advantages.
     \item The division in three tiers makes the separation of different functions more clear and makes the code easier to be understood and maintained
     \item The separation in three allows each layer to be scaled independently from the others, thus enhancing the overall scalability of the web application
 \end{itemize}
-To facilitate the communication between the presentation  and the application layers we decided to adopt the use of REST APIs. This choice brings many advantages:
+To facilitate the communication between the presentation  and the application layers we decided to adopt the use of REST APIs. The use of REST APIs is, in general, a choice towards flexibility, indeed they bring many advantages such as:
 \begin{itemize}
     \item \textbf{Decoupling}: it allows the developers to separate the scope and the concerns of the modules in three different layers, making the maintenance of the web application and the deployment of new features easier.
     \item \textbf{Easier future integration with third party services}: if for any reason in the future it will be necessary to add third party services they could be  effortlessly integrated into the system. 
     \item \textbf{Standard formats of communication}: REST APIs use standard HTTP methods and the JSON format to communicate which are the common standard for the world wide web.
     \item \textbf{Scalability}: each tier can be scaled independently from the others (up to a certain point of course).
+    \item \textbf{Caching Support}: if needed in the future caches can be added to speed up the application since REST API integrate seamlessly with caches.
 \end{itemize}
+   
+    Since our app it is not huge, a monolithic structure will suffice. Indeed microservices are suited to those kinds of applications who suffer of scalability issues. S\&C requirements are far less constraining than the ones of big tech companies; therefore we believe that the development of a microservice based application that can request a lot of expertise and ability, would not be a good design choice. 
+    
 \subsection{Other Design Decisions}
 
 \subsubsection{Standard Compliance}

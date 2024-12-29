@@ -1,0 +1,469 @@
+\subsection{Overview}
+This chapter explains how the platform will be implemented and tested. The primary goal of testing is to identify and resolve as many bugs as possible that may have been introduced by the development team. In addiction, this section provides a description of the most important implementation strategies used to develop the project (Section 5.2) and a detailed explanation of how the components are integrated with each other (Section 5.3).
+
+% -----------------------------------------------------------------
+\subsection{Features identification}
+The features to implement are delivered according to the project requirements. Some requirements require the creation of new components, while others require only minor modifications to existing functionalities. Below is a summary of the most important features, grouped into high-level epics, which parallel the concept of \textit{"epics"} in Scrum methodology.
+\\Each epic represents a collection of functionalities that address a specific requirement or a set of closely related requirements. This structure ensures a clear understanding of the system's scope and priorities.
+
+\begin{enumerate}
+    % - 1 -
+    \item \textbf{User Authentication and Session Management}:
+    \begin{itemize}
+        \item \textbf{Sign-In, Sign-Up, and Logout}
+        \\Implement sign-in, sign-up, and logout functionalities for all user types: companies, students, and universities. These core features ensure secure access to the platform and a seamless user experience.
+    \end{itemize}
+
+    % - 2 - 
+    \item \textbf{Profile Management}:
+    \begin{itemize}
+        \item \textbf{Modification of User Profile}
+        \\Allow companies, students, and universities to edit their profiles, updating key information like contact details, descriptions, or preferences.
+    \end{itemize}
+
+    % - 3 - 
+    \item \textbf{Internship Life-cycle Management}:
+    \begin{itemize}
+        \item \textbf{Creation of an Internship Position}
+        \\Enable companies to post internship positions, specifying details such as title, description, duration, and requirements.
+        \item \textbf{Creation of an Internship}
+        \\Transform an application to an internship position into an actual internship after the company accepts it and the student confirms. This step marks the beginning of the internship life-cycle.
+        \item \textbf{Closing of an Internship Position}
+        \\Provide companies with the ability to close internship positions once filled or no longer needed.
+        \item \textbf{Closing of an Internship}
+        \\Allow companies to close internships after completion, recording the result for reporting and feedback purposes.
+    \end{itemize}
+
+    % - 4 -
+    \item \textbf{Application Management}:
+    \begin{itemize}
+        \item \textbf{Creation of an Application for an Internship Position}
+        \\Students can apply to internship positions, submitting necessary documents and information through the platform.
+        \item \textbf{Acceptance, Rejection, or Further Assessment of Applications}
+        \\Companies can evaluate applications, marking them as accepted, rejected, or requiring further assessment.
+        \item \textbf{Acceptance or refusal of an Internship by a Student}
+        \\Students must confirm or decline internships after their application is accepted by a company.
+    \end{itemize}
+
+    % - 5 -
+    \item \textbf{Search and Viewing Functionalities}
+    \begin{itemize}
+        \item \textbf{Search for Internship Positions}
+        \\Students can search for internship positions using filters like location, duration, company, and skills required.  The search is enhanced by a recommendation algorithm.
+        \item \textbf{View Applications}
+        \\Companies can view applications for their internship positions to access student suitability.
+        \item \textbf{View Internship Positions}
+        \\Students can view detailed information about available internship positions, including requirements and company details.
+        \item \textbf{View Internships}
+        \\Enable students, companies, and universities to view details about active or completed internships, facilitating transparency and monitoring.
+    \end{itemize}
+
+    % - 6 - 
+    \item \textbf{Communication and Feedback}
+    \begin{itemize}
+        \item \textbf{Communication During an Internship}
+        \\Allow students and companies to exchange messages during an internship to discuss progress, challenges, and updates.
+        \item \textbf{Feedback Between Students and Companies}
+        \\After an internship ends, both the student and the company can provide feedback in the form of ratings and comments.
+    \end{itemize}
+
+    % - 7 -
+    \item \textbf{University Monitoring}
+    \begin{itemize}
+        \item \textbf{Monitoring of Student Internships by Universities}
+        \\Universities can track the progress of internships involving their students, ensuring academic and professional alignment.
+    \end{itemize}
+\end{enumerate}
+
+% -----------------------------------------------------------------
+\subsection{Features Mapping}
+This section connects the features identified in the system with the components responsible for their implementation. Each feature is mapped to one or more components from the component diagram, indicating their roles in ensuring the functionality of the system.
+
+    \begin{enumerate}
+        % - 1 - 
+        \item \textbf{Sign-In, Sign-Up, and Logout}
+        \begin{itemize}
+            \item \textit{\textbf{LoginManager}}: Manages authentication processes for signing in and logging out.
+            \item \textit{\textbf{RegistrationManager}}: Handles new user registration and validation.
+            \item \textit{\textbf{NotificationManager}}: Notifies companies with internship positions that match a student's profile after the student registers.
+            \item \textit{\textbf{Database}}: Stores and retrieves user profile information.
+            \item \textit{\textbf{API}}: Interfaces with the WebApp to process requests related to authentication and registration.
+        \end{itemize}
+
+        % - 2 -
+        \item \textbf{Modification of User Profile}
+        \begin{itemize}
+            \item \textit{\textbf{ProfileManager}}: Handles profile data retrieval and updates.
+            \item \textit{\textbf{Database}}: Stores and retrieves user profile information.
+            \item \textit{\textbf{API}}: Acts as the communication layer between the WebApp and the ProfileManager.
+        \end{itemize}
+
+        % - 3 -
+        \item \textbf{Creation of an Internship Position}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Responsible for creating and managing internship positions.
+            \item \textit{\textbf{NotificationManager}}: Notifies students that match with the new internship position.
+            \item \textit{\textbf{Database}}: Stores and retrieves internship position details.
+            \item \textit{\textbf{API}}: Facilitates interaction between the company and the InternshipManager.
+        \end{itemize}
+
+        % - 4 -
+        \item \textbf{Creation of an Internship}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Converts an internship position into an internship when a student is accepted.
+            \item \textit{\textbf{ApplicationManager}}: Tracks and manages the applications related to an internship.
+            \item \textit{\textbf{Database}}: Maintains records of internships and applications.
+            \item \textit{\textbf{API}}: Acts as the communication layer between the WebApp and the InternshipManager.
+        \end{itemize}
+
+        % - 5 -
+        \item \textbf{Closing of an Internship Position}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Handles closing internship positions.
+            \item \textit{\textbf{Database}}: Updates the status of the internship position.
+            \item \textit{\textbf{API}}: Facilitates requests from the WebApp to close internship positions.
+        \end{itemize}
+
+        % - 6 -
+        \item \textbf{Closing of an Internship}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Manages the termination process for internships.
+            \item \textit{\textbf{Database}}: Updates the internship status.
+            \item \textit{\textbf{API}}: Acts as the communication layer between the WebApp and the InternshipManager.
+        \end{itemize}
+
+        % - 7 -
+        \item \textbf{Creation of an Application for an Internship Position}
+        \begin{itemize}
+            \item \textit{\textbf{ApplicationManager}}: Manages application submissions.
+            \item \textit{\textbf{Database}}: Records application data.
+            \item \textit{\textbf{API}}: Handles communication between the student interface and the ApplicationManager.
+        \end{itemize}
+
+        % - 8 -
+        \item \textbf{Acceptance, Rejection, or Further Assessment of Applications}
+        \begin{itemize}
+            \item \textit{\textbf{ApplicationManager}}: Processes the application status updates.
+            \item \textit{\textbf{Database}}: Updates the application status.
+            \item \textit{\textbf{API}}: Interacts with the WebApp for user actions.
+        \end{itemize}
+        
+        % - 9 -
+        \item \textbf{Acceptance or rejection of an Internship by a Student}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Updates internship status based on student decisions.
+            \item \textit{\textbf{Database}}: Records the final status of the internship.
+            \item \textit{\textbf{API}}: Interacts with the WebApp for user actions.
+        \end{itemize}
+
+        % - 10 -
+        \item \textbf{Search for Internship Positions}
+        \begin{itemize}
+            \item \textit{\textbf{SearchManager}}: Handles search queries and applies filters.
+            \item \textit{\textbf{Database}}: Provides data for search results.
+            \item \textit{\textbf{API}}: Processes search requests from the WebApp.
+        \end{itemize}
+
+        % - 11 - 
+        \item \textbf{View Applications}
+        \begin{itemize}
+            \item \textit{\textbf{ApplicationManager}}: Retrieves application details.
+            \item \textit{\textbf{Database}}: Stores application data.
+            \item \textit{\textbf{API}}: Displays application information to the company.
+        \end{itemize}
+
+        % - 12 - 
+        \item \textbf{View Internship Positions}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Provides data about available internship positions.
+            \item \textit{\textbf{Database}}: Stores internship position details.
+            \item \textit{\textbf{API}}: Facilitates the interaction.
+        \end{itemize}
+
+        % - 13 - 
+        \item \textbf{View Internships}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Provides internship details to the user.
+            \item \textit{\textbf{Database}}: Stores internship records.
+            \item \textit{\textbf{API}}: Handles request from the WebApp.
+        \end{itemize}
+
+        % - 14 - 
+        \item \textbf{Communication During an Internship}
+        \begin{itemize}
+            \item \textit{\textbf{ProfileManager}}:  Sends and tracks communication.    
+            \item \textit{\textbf{Database}}: Logs messages or communication details.
+            \item \textit{\textbf{API}}: Provides the interface for communication.
+        \end{itemize}
+
+        % - 15 - 
+        \item \textbf{Feedback Between Students and Companies}
+        \begin{itemize}
+            \item \textit{\textbf{InternshipManager}}: Tracks feedback data.
+            \item \textit{\textbf{Database}}: Stores feedback comments and ratings.
+            \item \textit{\textbf{API}}: Facilitates interaction between parties for feedback submission.
+        \end{itemize}
+
+        % - 16 - 
+        \item \textbf{Monitoring of Student Internships by Universities}
+        \begin{itemize}
+            \item \textit{\textbf{ProfileManager}}: Provides university access to students' progress.
+            \item \textit{\textbf{InternshipManager}}: Shares updates on the internship.
+            \item \textit{\textbf{Database}}: Stores monitoring records and internship status.
+            \item \textit{\textbf{API}}: Facilitates interaction between parties for feedback submission.
+        \end{itemize}
+    \end{enumerate}
+
+% \subsection{Components Integration}
+%     The architecture of the system relies on multiple \textbf{Manager components}, each designed to encapsulate specific functionalities and provide well-defined services. These components ensure modularity, maintainability, and efficient implementation. Below is a detailed explanation of each Manager's responsibilities:
+%     \begin{enumerate}
+%         % - 1 - 
+%         \item \textbf{LoginManager}:
+%         \\The \textbf{LoginManager} is responsible for handling all authentication-related functionalities, including:
+%         \begin{itemize}
+%             \item Managing user credentials for \textit{sign-in} and \textit{logout} processes.
+%             \item Ensuring secure authentication by validating user-provided credentials.
+%             \item Generating session tokens for authenticated users and managing session timeouts.
+%             \item Requesting user information from the \textbf{Database}
+%             \item Notifying the \textbf{API} in case of errors.
+%         \end{itemize}
+
+%         % - 2 - 
+%         \item \textbf{RegistrationManager}:
+%         \\The \textbf{RegistrationManager} oversees the registration of the users in the system, including students, companies, and universities. Its functionalities include:
+%         \begin{itemize}
+%             \item Managing user credentials for \textit{sign-up} process.
+%             \item Validating input data during registration to ensure it meets system requirements.
+%             \item Storing new user credentials in the \textbf{Database} upon successful validation.
+%             \item Notifying the \textbf{API} in case of errors or missing information.
+%         \end{itemize}
+
+%         % - 3 - 
+%         \item \textbf{SearchManager}:
+%         \\The \textbf{SearchManager} provides functionality for retrieving data based on user queries. This includes:
+%         \begin{itemize}
+%             \item Enabling searching for internship positions with filtering options (e.g., by location, duration, or skills).
+%             \item Optimizing queries to ensure quick and accurate results.
+%             \item Interfacing with the \textbf{Database} to retrieve relevant data.
+%             \item Notifying the \textbf{API} in case of errors.
+%         \end{itemize}
+
+%         % - 4 - 
+%         \item \textbf{ApplicationManager}:
+%         \\The \textbf{ApplicationManager} manages the entire life-cycle of applications submitted by students. Its responsibilities include:
+%         \begin{itemize}
+%             \item Enabling \textit{creation}, \textit{submission}, and \textit{retrieval} of application for internship positions.
+%             \item Tracking application status updates, including \textit{acceptance}, \textit{rejection}, and \textit{further assessments} by companies.
+%             \item Tracking application status updates, including \textit{acceptance} or \textit{rejection} by the student after the company has accepted the application.
+%             \item Recording the outcomes of internships and maintaining application-related data.
+%             \item Interfacing with the \textbf{Database} to store application, update information, and retrieve relevant data.
+%             \item Notifying the \textbf{API} in case of errors or missing information.
+%         \end{itemize}
+
+%         % - 5 - 
+%         \item \textbf{ProfileManager}:
+%         \\The \textbf{ProfileManager} handles all tasks related to user profiles, ensuring seamless management of profile-related features:
+%         \begin{itemize}
+%             \item Supporting \textit{profile modification} for companies, students, and universities.
+%             \item Maintaining user-related information in the \textbf{Database} and providing secure access.
+%             \item Sharing profile information with other managers as required.
+%             \item Notifying the \textbf{API} for user interactions.
+%         \end{itemize}
+
+%         % - 6 -
+%         \item \textbf{NotificationManager}:
+%         \\The \textbf{NotificationManager} ensures efficient communication between users by:
+%         \begin{itemize}
+%             \item Sending notification to companies with internship positions that match a student’s
+%             profile after the student registration.
+%             \item Sensing notification to students that match with a new internship position.
+%         \end{itemize}
+
+%         % - 7 - 
+%         \item \textbf{InternshipManager}:
+%         \\The \textbf{InternshipManager} focuses on managing internships and internship positions. Its key responsibilities include:
+%         \begin{itemize}
+%             \item \textit{Creation} and \textit{closure} of internship positions by companies.
+%             \item Converting an internship position into an internship upon acceptance of a student by the company.
+%             \item Facilitating access to internship details for companies, students, and universities.
+%             \item Tracking the life-cycle of internships, including their closure and the collection of feedback.
+%         \end{itemize}
+%     \end{enumerate}
+% % -----------------------------------------------------------------
+% \newpage
+
+
+
+\subsection{Implementation Plan}
+Our implementation strategy combines two complementary approaches: \textbf{bottom-up implementation} and \textbf{incremental implementation}, tailored to our small team size and limited time frame. These approaches ensure efficient progress and prioritize delivering functional, high-priority feature early in the development process.
+
+    \subsubsection{Combined Implementation Strategy}
+    \begin{enumerate}
+        \item \textbf{Bottom-Up Implementation}: 
+        \begin{itemize}
+            \item This approach focuses first on developing core, low-level functionalities. These foundational components provide the building blocks for higher-level features, ensuring stability and reliability as development progresses. 
+        \end{itemize}
+        \item \textbf{Incremental Implementation}:
+        \begin{itemize}
+            \item The features are added one by one, starting with those of highest priority. By addressing critical functionalities first, we ensure that the system delivers value early and minimizes inter-dependencies between tasks. This reduces the risk of blocked tasks and keeps the workflow smooth.
+        \end{itemize}
+    \end{enumerate}
+
+    \subsubsection{Adapted Scrum-Like Workflow}
+    Although our team consists of only two members and the available time is short, we adapt the principles of the Scrum framework to suit our needs. This lightweight Scrum-like setup emphasizes flexibility, iterative development, and frequent communication.
+    \begin{enumerate}
+        \item \textbf{Planning}:
+        \begin{itemize}
+            \item Identify and prioritize all required tasks using \textit{MoSCoW} prioritization (Must-have, Should-have, Could-have, Won't-have).
+            \item  Divide the workload into manageable units, keeping in mind the dependencies of the tasks.
+            \item Agree on short, focused iterations (e.g., mini-sprints lasting a few days).
+        \end{itemize}
+        
+        \item \textbf{Development Iterations}:
+        \begin{itemize}
+            \item At the beginning of each mini-sprint, select a subset of tasks based on their priority and feasibility.
+            \item During the iteration:
+            \begin{itemize}
+                \item Implement core functionalities using a bottom-up approach.
+                \item Incrementally add prioritized features, testing each one after implementation.
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{Daily Sync-Ups}:
+        \begin{itemize}
+            \item Instead of traditional standups, hold daily check-ins (e.g., 10 minutes) to discuss progress, challenges, and next steps.
+            \item This practice ensures both team members stay aligned and can quickly address any roadblocks.
+        \end{itemize}
+
+        \item \textbf{Testing and Integration}:
+        \begin{itemize}
+            \item Test each feature immediately after its implementation to identify and fix issues early.
+            \item Perform integration tests frequently to ensure that all components work together as intended.
+        \end{itemize}
+
+        \item \textbf{Review and Adjustment}:
+        \begin{itemize}
+            \item At the end of each iteration, review the progress made, and adjust plans for the next iteration as needed.
+            \item Incorporate any new insights or changes to the scope of the project into the plan.
+        \end{itemize}
+
+        \item \textbf{Delivery}:
+        \begin{itemize}
+            \item Performing periodic delivery of functional increments, ensuring that a working product is always available, even in the early stages.
+            \item Prioritize the most critical features to maximize the value of the project in a limited time.
+        \end{itemize}
+    \end{enumerate}
+
+    \subsubsection{Focus on Efficiency and Flexibility}
+    Given our small team size and limited time, this Scrum-like workflow prioritizes efficiency, with frequent and direct communication replacing more formalized Scrum ceremonies. By combining bottom-up and incremental strategies, we ensure a steady development pace and maximize the chance of meeting deadlines with a functional and high-quality product.
+
+% -----------------------------------------------------------------
+\subsection{Test Plan}
+This section outlines the test plan for the main features of the platform. The testing approach is designed to ensure robust functionality, secure operation, and seamless user experience. Each feature is tested using \textbf{unit testing} combined with \textbf{integration testing} to verify the interactions between components. Automated tests are prioritized where applicable to accelerate development and improve accuracy.
+
+    \subsubsection{Testing Strategy}
+    To ensure comprehensive coverage, \textbf{unit testing} is used for validating the implementation of individual features, while \textbf{integration testing} ensures proper interaction between components (e.g., \textit{APIs} and \textit{Managers}). For critical workflows like authentication, \textbf{security testing} is added to verify data protection and session management. Testing adheres to the guidelines outlined in the \textit{\textbf{ISTQB Testing Standards}} (see \cite{ISTQBStandard}) and uses tools like \textit{Selenium} for UI testing and \textit{Postman} for API validation.
+
+    \subsubsection{Testing Methodology}
+    \begin{enumerate}
+        % - 1 - 
+        \item \textbf{Profile Management}:
+        \begin{itemize}
+            \item \textbf{Unit Testing}: 
+            Validate that profile modification functionality works for all user types and includes form validation for fields like email addresses and contact numbers.
+            \item \textbf{Regression Testing}: 
+            Ensure changes to profile data are reflected in the database and on relevant interfaces.
+            \item \textbf{Test Cases}:
+            \begin{itemize}
+                \item Edit profile details with valid and invalid input.
+                \item Verify updates across all connected components.
+            \end{itemize}
+        \end{itemize}
+    
+        % - 2 - 
+        \item \textbf{Profile Management}:
+        \begin{itemize}
+            \item \textbf{Unit Testing}: 
+            Validate that profile modification functionality works for all user types and includes form validation for fields like email addresses and contact numbers.
+            \item \textbf{Regression Testing}: 
+            Ensure changes to profile data are reflected in the database and on relevant interfaces.
+            \item \textbf{Test Cases}:
+            \begin{itemize}
+                \item Edit profile details with valid and invalid input.
+                \item Verify updates across all connected components.
+            \end{itemize}
+        \end{itemize}
+    
+        % - 3 -
+        \item \textbf{Internship Life-cycle Management}:
+        \begin{itemize}
+            \item \textbf{Integration Testing}: 
+            Validate interactions between \textit{InternshipManager}, \textit{ApplicationManager}, and \textit{NotificationManager} during the internship life-cycle.
+            \item \textbf{Unit Testing}: 
+            Confirm that life-cycle transitions (e.g., from position creation to closing) are seamless.
+            \item \textbf{Test Cases}:
+            \begin{itemize}
+                \item Create internship positions with valid/invalid inputs.
+                \item Transform internship positions into internship after application acceptance.
+                \item Verify data consistency after closing internships.
+            \end{itemize}
+        \end{itemize}
+    
+        % - 4 - 
+        \item \textbf{Application Management}:
+        \begin{itemize}
+            \item \textbf{Unit Testing}: 
+            Test application creation, submission, and updates through all stages of the review process (acceptance, rejection, or further assessment).
+            \item \textbf{Boundary Testing}: 
+            Validate limits for input fields.
+            \item \textbf{Test Cases}:
+            \begin{itemize}
+                \item Apply to positions with valid/invalid information.
+                \item Change the status of an application and verify user notifications.
+                \item Test acceptance/rejection handling by students and companies.
+            \end{itemize}
+        \end{itemize}
+    
+        % - 5 -
+        \item \textbf{Search and Viewing Functionalities}:
+        \begin{itemize}
+            \item \textbf{Usability Testing}: 
+            Ensure the search interface is intuitive and filters function as expected.
+            \item \textbf{Performance Testing}: 
+            Test search response times and database query optimization under heavy load.
+            \item \textbf{Test Cases}:
+            \begin{itemize}
+                \item Search internship positions with various filters.
+                \item Test viewing detailed internship positions, applications, and internship statuses.
+                \item Validate access permissions for viewing by user role (e.g., student, company, university).
+            \end{itemize}
+        \end{itemize}
+    
+        % - 6 - 
+        \item \textbf{Communication and Feedback}:
+        \begin{itemize}
+            \item \textbf{Unit Testing}: 
+            Test real-time messaging between students and companies, ensuring no messages are lost.
+            \item \textbf{Usability Testing}: 
+            Validate that feedback forms are accessible and store data correctly in the system.
+            \item \textbf{Test Cases}:
+            \begin{itemize}
+                \item Send messages between users during internships and check delivery information.
+                \item Submit feedback with valid/invalid inputs and verify system storage.
+            \end{itemize}
+        \end{itemize}
+    
+        % - 7 -
+        \item \textbf{University Monitoring}:
+        \begin{itemize}
+            \item \textbf{Integration Testing}: 
+            Ensure universities can view internship details and track student progress through the \textit{InternshipManager}.
+            \item \textbf{Unit Testing}: 
+            Validate that only authorized university users can access monitoring tools.
+            \item \textbf{Test Cases}:
+            \begin{itemize}
+                \item View student internships with valid credentials.
+                \item Test access control for unauthorized university users.
+            \end{itemize}
+        \end{itemize}
+    \end{enumerate}
