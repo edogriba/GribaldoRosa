@@ -39,12 +39,14 @@ Before proceeding, ensure you have the following installed:
 
    ```bash
    npm install
+   npm install @mui/material @emotion/react @emotion/styled @mui/styled-engine-sc styled-components
+   npm install react-router-dom
    ```
 
 ### Start the development server
 
 ```bash
-npm start
+npm start dev
 ```
 
 The React app should now be running at [http://localhost:3000/](http://localhost:3000/).
@@ -113,7 +115,7 @@ Restart the development server if it was running.
 Start the Flask server:
 
 ```bash
-flask run
+python run.py
 ```
 The Flask backend should now be running at http://127.0.0.1:5000/.
 
@@ -128,8 +130,12 @@ If you encounter any issues, check the logs or consult the project documentation
 The project is structured as follows:
 
 - `backend/`        : Flask API
-  - `app.py`              : Flask App
+  - `app/`                : Flask App
+    - `api.md`                  :
+    - `routes.py`               :
   - `requirements.txt`    : Requirements
+  - `.env`                : Backend environment
+  - `run.py`              : To run the project
   - `SC.db`               : Database SQLite
 - `frontend/`       : React application
   - `public/`             : Static files that are served as-is
@@ -137,5 +143,8 @@ The project is structured as follows:
     - `api/`                    : API interface
     - `assets/`                 : Assets such as images, styles, etc.
     - `components/`             : Reusable components
+    - `hooks/`                  : Share logic between components
     - `pages/`                  : Pages
+    - `util/`                   : Utility functions and helpers
+    - `.env`                    : Frontend environment
 - `README.md`       : This file

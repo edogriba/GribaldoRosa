@@ -1,19 +1,15 @@
-from flask import Flask, jsonify, request
-from flask_restful import Api, Resource
+### ---------------------- ###
+ #      PER ORA INUTILE     #
+### ---------------------- ###
+
 import sqlite3
-from flask_cors import CORS
-import bcrypt
-import jwt
-from datetime import datetime, timedelta
+from flask import jsonify, Flask, request
 
-SECRET_KEY = "123456" 
-
-app = Flask(__name__)
-api = Api(app)
-CORS(app)
 
 # SQLite database setup
 DATABASE = 'SC.db'
+
+SECRET_KEY = "123456" 
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
@@ -105,57 +101,3 @@ class StudentRegistration(Resource):
             # Handle other exceptions
             return {'message': f'An error occurred: {str(e)}'}, 500
 
-
-
-class UniversityRegistration(Resource):
-    def post(self):
-        data = request.get_json()
-        email = data.get('university_email')
-        password = data.get('university_password')
-        name = data.get('name')
-        location = data.get('location') 
-        description = data.get('description')
-        logoPath = data.get('logoPath', '')  # Optional logo field
-        
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
-        conn = get_db()
-        try:
-            cursor = conn.execute("""
-                    INSERT INTO universities (email, password, name, location, description)
-                    VALUES (?, ?, ?, ?, ?)
-                """, (email, hashed_password, name, location, description))
-            conn.commit()
-
-            token = jwt.encode({
-                    'user_id': cursor.lastrowid,
-                    'exp': datetime.now(datetime.UTC) + timedelta(hours=24)  # Token valid for 24 hours
-                }, SECRET_KEY, algorithm="HS256")
-
-            
-            return {
-                    'message': 'Registration successful',
-                    'token': token,
-                    'user': {
-                        'id': cursor.lastrowid,
-                        'email': email,
-                        'name': name
-                    }
-                }, 201
-        except sqlite3.IntegrityError:
-            return {'message': 'Email already exists'}, 400
-
-class UniversityList(Resource):
-    def get(self):
-        conn = get_db()
-        university_list = conn.execute("SELECT id, name FROM universities").fetchall()
-        return jsonify([{'id': u['id'], 'name': u['name']} for u in university_list])
-
-api.add_resource(StudentList, '/studentlist')
-api.add_resource(UniversityRegistration, '/register/university')
-api.add_resource(StudentRegistration, '/register/student')
-api.add_resource(UniversityList, '/universitylist')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
