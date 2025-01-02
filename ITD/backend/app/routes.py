@@ -34,8 +34,8 @@ def create_main_app():
             }), 500
         finally:
             conn.close()
-    
-                 
+
+
     @app.route('/studentlist', methods=['GET'])
     def student_list():
         try:
@@ -155,11 +155,10 @@ def create_main_app():
                 location, degree_program, gpa, graduation_year, cv_path, skills,
                 languages_spoken, university_id
             ))
-            conn.commit()
-
             # Generate a JWT token for the registered student
             token = generate_token(cursor.lastrowid)
 
+            conn.commit()
             # Return success response
             return jsonify({
                 'message': 'Registration successful',
@@ -174,12 +173,14 @@ def create_main_app():
 
         except sqlite3.IntegrityError:
             # Handle unique constraint violations (e.g., duplicate email)
+            conn.rollback()
             return jsonify({
                 "type": "conflict",
                 "message": "Email already exists."
             }), 400
         except Exception as e:
             # Handle other exceptions
+            conn.rollback()
             return jsonify({
                 "type": "server_error",
                 "message": str(e)

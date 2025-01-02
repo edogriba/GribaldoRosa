@@ -30,7 +30,15 @@ def generate_token(user_id):
     algorithm, ensuring that it can be used for authentication and authorization
     purposes. The generated token is returned as a string.
     """
-    return jwt.encode(
-        {'user_id': user_id, 'exp': datetime.now(datetime.UTC) + timedelta(hours=24)},
-        SECRET_KEY, algorithm="HS256"
-    )
+    try:
+        token = jwt.encode(
+            {'user_id': user_id, 'exp': datetime.now(datetime.UTC) + timedelta(hours=24)},
+            SECRET_KEY, algorithm="HS256"
+        )
+        return token
+    except jwt.PyJWTError as e:
+        # Catch specific JWT encoding errors and propagate
+        raise Exception(f"Error generating JWT token: {str(e)}")
+    except Exception as e:
+        # Catch any other exceptions and propagate
+        raise Exception(f"Unexpected error occurred: {str(e)}")
