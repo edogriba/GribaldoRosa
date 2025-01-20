@@ -8,6 +8,10 @@ import {
   studentRegistration
 } from './student'
 
+import {
+  userLogin
+} from './user'
+
 import { example } from './example';
 
 export const Method = {
@@ -23,5 +27,6 @@ export const api = {
   getUniversityList,
   getStudentsList,
   studentRegistration,
-  universityRegistration
+  universityRegistration,
+  userLogin
 };

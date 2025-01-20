@@ -46,3 +46,5 @@ def generate_token(user_id):
     except Exception as e:
         # Catch any other exceptions and propagate
         raise Exception(f"Unexpected error occurred: {str(e)}")
+
+    

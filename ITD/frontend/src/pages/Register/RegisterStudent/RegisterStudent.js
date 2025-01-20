@@ -25,10 +25,10 @@ const RegisterStudent = () => {
   useEffect(() => {
     const fetchUniversities = async () => {
       try {
-        const res = await api.getUniversityList();
-        const data = await res.json();
+          const res = await api.getUniversityList();
+          const data = await res.json();
 
-        setUniversities(data);
+          setUniversities(data);
       } catch (error) {
         console.error('Error fetching universities:', error.message);
         alert('Failed to load universities. Please try again later.');
@@ -59,15 +59,15 @@ const RegisterStudent = () => {
       university // Ensure university ID is an integer
     };
     
-    console.log("DataStudent: ", dataStudent);
+    console.log("DataStudent: ", dataStudent);                               // debug
     try {
       const res = await api.studentRegistration(dataStudent);
-      console.log("APPENA INVIATO");
+      console.log("APPENA INVIATO");                                         // debug
       const data = await res.json();
 
       // Save the token to localStorage
       localStorage.setItem('token', data.token);
-      console.log("data: ", dataStudent);
+      console.log("data: ", dataStudent);                                    // debug
       console.log("return studentRegistration(dataStudent): ", res);         // debug
       // Redirect to student dashboard or another protected route
       return <Link to="/dashboard/student"></Link>;
@@ -308,6 +308,7 @@ const RegisterStudent = () => {
                   ))}
                 </select>
               </div>
+              {/* Submit */}
               <button
                 type="submit"
                 className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"

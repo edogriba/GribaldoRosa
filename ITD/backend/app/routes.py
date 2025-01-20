@@ -4,6 +4,7 @@ import sqlite3
 from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
 from app.models.university import University
+from app.utils.error_handler import handle_database_error, handle_general_error
 
 def create_main_app():
 
@@ -19,22 +20,15 @@ def create_main_app():
         return conn
 
     @app.route('/universitylist', methods=['GET'])
-    def university_list():
+    def university_list():     
         try:
-            conn = get_db()
-            university_list = conn.execute("SELECT id, name FROM Universities").fetchall()
+            universities = University.get_list_dict()
 
-            # Transform the query result into a list of dictionaries
-            result = [{'id': row['id'], 'name': row['name']} for row in university_list]
-
-            return jsonify(result), 200
+            return jsonify(universities), 200
+        except sqlite3.Error as e:
+            return handle_database_error(e)
         except Exception as e:
-            return jsonify({
-                "type": "database_error",
-                "message": str(e)
-            }), 500
-        finally:
-            conn.close()
+            return handle_general_error(e)
 
 
     @app.route('/studentlist', methods=['GET'])
@@ -47,11 +41,11 @@ def create_main_app():
             result = [{'id': student['id'], 'firstName': student['name'], 'GPA': student['gpa']} for student in students]
 
             return jsonify(result), 200
+        
+        except sqlite3.Error as e:
+            return handle_database_error(e)
         except Exception as e:
-            return jsonify({
-                "type": "database_error",
-                "message": str(e)
-            }), 500
+            return handle_general_error(e)
         finally:
             conn.close()
 
@@ -96,18 +90,10 @@ def create_main_app():
                 }
             }), 201
 
-        except sqlite3.IntegrityError:
-            # Handle duplicate email errors
-            return jsonify({
-                "type": "conflict",
-                "message": "Email already exists."
-            }), 400
+        except sqlite3.Error as e:
+            return handle_database_error(e)
         except Exception as e:
-            # Handle other server-side errors
-            return jsonify({
-                "type": "server_error",
-                "message": str(e)
-            }), 500
+            return handle_general_error(e)
 
 
     @app.route('/register/student', methods=['POST'])
@@ -151,17 +137,44 @@ def create_main_app():
                 }
             }), 201
 
-        except sqlite3.IntegrityError:
-            # Handle unique constraint violations (e.g., duplicate email)
-            return jsonify({
-                "type": "conflict",
-                "message": "Email already exists."
-            }), 400
+        except sqlite3.Error as e:
+            return handle_database_error(e)
         except Exception as e:
-            # Handle other exceptions
+            return handle_general_error(e)   
+
+
+    @app.route('/userlogin', methods = ['POST'])
+    def user_login():
+        try:
+            # Get JSON data from the request
+            data = request.get_json()
+
+            # Extract fields from the JSON
+            values = {
+                'email'         : data.get('email'),
+                'password'      : hash_password(data.get('password')),
+            }
+
+            student = Student.add(**values)
+
+            # Generate a JWT token for the registered student
+            token = generate_token(student.get_id)
+
+            # Return success response
             return jsonify({
-                "type": "server_error",
-                "message": str(e)
-            }), 500      
+                'message': 'Registration successful',
+                'token': token,
+                'user': {
+                    'id': student.get_id,
+                    'email': student.get_email,
+                    'firstName': student.get_firstName,
+                    'lastName': student.get_lastName
+                }
+            }), 201
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)    
 
     return app

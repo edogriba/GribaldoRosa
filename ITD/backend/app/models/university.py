@@ -55,4 +55,36 @@ class University(User):
         
         finally:
             universityConn.close()    
-        
+    
+    @staticmethod
+    def get_list():
+        """
+        Retrieve a list of all universities from the database.
+        :return: A list of rows, where each row represents a university with all its fields.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            universityConn = UniverstityDB()
+            universities = universityConn.get_list()
+            return universities
+        except Exception as e:
+            raise e
+        finally:
+            universityConn.close()
+
+    @staticmethod
+    def get_list_dict():
+        """
+        Retrieve a simplified list of universities from the database containing only their UserId and Name.
+        :return: A list of dictionaries, where each dictionary contains 'id' (UserId) and 'name' (Name) for a university.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            universityConn = UniverstityDB()
+            universities = universityConn.get_list_dict()
+            return universities
+        except Exception as e:
+            raise e
+        finally:
+            universityConn.close()
+    

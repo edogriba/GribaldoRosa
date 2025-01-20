@@ -1,4 +1,6 @@
 from sqlite3 import connect, Row
+from app.utils.error_handler import handle_database_error
+
 DATABASE = 'app/db/SC.db'
 
 class UserDB:
@@ -34,9 +36,26 @@ class UserDB:
                 return cur.lastrowid
         except Exception as e:
             self.con.rollback()
-            raise e
+            raise handle_database_error(e)
         finally:
             cur.close()
+
+    def is_email_unique(self, email: str):
+        """
+        Check if the provided email is unique in the Users table.
+
+        :param email: The email address to check.
+        :return: True if the email is unique (not present in the Users table), otherwise False.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                query = " SELECT COUNT(*) FROM Users WHERE Email = ?"
+                row = self.con.execute(query, (email,)).fetchone()
+                return row[0] == 0 if row else True
+        except Exception as e:
+            self.con.rollback()
+            raise e
     
     def close(self):
         self.con.close()

@@ -3,3 +3,4 @@ Flask-Cors
 bcrypt
 pyjwt
 python-dotenv
+werkzeug
