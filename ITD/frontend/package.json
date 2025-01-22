@@ -5,8 +5,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/material": "^6.3.0",
-    "@mui/styled-engine-sc": "^6.3.0",
+    "@mui/material": "^6.4.1",
+    "@mui/styled-engine-sc": "^6.4.0",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "flowbite": "^2.5.2",
@@ -15,7 +15,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
-    "styled-components": "^6.1.13",
+    "styled-components": "^6.1.14",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
