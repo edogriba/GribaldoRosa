@@ -1,36 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { api } from '../../api/api'; 
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  const dataUser = {
-    email,
-    password,
-  };
+    const dataUser = {
+      email,
+      password,
+    };
 
-  try {
-    const res = await api.userLogin(dataUser);
-    console.log("APPENA INVIATO");                                         // debug
-    const data = await res.json();
+    try {
+      const res = await api.userLogin(dataUser);
+      console.log("APPENA INVIATO"); // debug
+      const data = await res.json();
 
-    // Save the token to localStorage
-    localStorage.setItem('token', data.token);
+      // Save the token to localStorage
+      localStorage.setItem('token', data.token);
 
-    // Redirect to user dashboard or another protected route
-    return <Link to="/"></Link>;
-  } catch (error) {
-    console.error('Error registering student:', error.response?.data?.message || error.message);
-    alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
-  }
+      // Redirect to user dashboard or another protected route
+      return <Link to="/"></Link>;
+    } catch (error) {
+      console.error('Error registering student:', error.response?.data?.message || error.message);
+      alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+    }
   }
 
   return(
     <div>
-      <Navbar/>
+      <Navbar currentPage="login"/>
         <section className="bg-gray-50 dark:bg-gray-900">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <Link to="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
@@ -59,6 +63,8 @@ const Login = () => {
                       type="email"
                       name="email"
                       id="email"
+                      value={email} // Bind email state
+                      onChange={(e) => setEmail(e.target.value)} // Update email state
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="name@company.com"
                       required
@@ -76,6 +82,8 @@ const Login = () => {
                       type="password"
                       name="password"
                       id="password"
+                      value={password} // Bind password state
+                      onChange={(e) => setPassword(e.target.value)} // Update password state
                       placeholder="••••••••"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required
