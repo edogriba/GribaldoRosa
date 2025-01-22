@@ -9,8 +9,10 @@ const RegisterUniversity = () => {
   const [universityPassword, setUniversityPassword] = useState('');
   const [universityName, setUniversityName] = useState('');
   const [location, setLocation] = useState('');
+  const [websiteURL, setWebsiteURL] = useState('');
   const [description, setDescription] = useState('');
-  const [logoUrl, setLogoUrl] = useState('');
+  const [logoPath, setLogoPath] = useState('');
+  const [termAccepted, setTermAccepted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +22,9 @@ const RegisterUniversity = () => {
         university_password: universityPassword,
         name: universityName,
         location: location,
+        websiteURL: websiteURL,
         description: description,
+        logoPath: logoPath
     };
 
     try {
@@ -29,7 +33,8 @@ const RegisterUniversity = () => {
         // Save the token to localStorage
         localStorage.setItem('token', response.data.token);
 
-        console.log('Registration successful:', response.data);
+        // Debug
+        console.log(response.data);
 
         // Redirect to dashboard or another protected route
         return <Link to="/"></Link>;
@@ -59,6 +64,7 @@ const RegisterUniversity = () => {
                 Create a University account
               </h1>
               <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                {/* Email */}
                 <div>
                   <label
                     htmlFor="email"
@@ -76,6 +82,7 @@ const RegisterUniversity = () => {
                     required
                   />
                 </div>
+                {/* Password */}
                 <div>
                   <label
                     htmlFor="password"
@@ -149,6 +156,25 @@ const RegisterUniversity = () => {
                   />
                 </div>
 
+                {/* WebsiteURL */}
+                <div>
+                  <label
+                    htmlFor="wensiteURL"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    WebsiteURL
+                  </label>
+                  <input
+                    type="text"
+                    name="wensiteURL"
+                    id="wensiteURL"
+                    placeholder="URL of the Company's website'"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => setWebsiteURL(e.target.value)}
+                    required
+                  />
+                </div>
+
                 {/* Logo (Optional) */}
                 <div>
                   <label
@@ -162,10 +188,11 @@ const RegisterUniversity = () => {
                     name="logo"
                     id="logo"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    onChange={(e) => setUniversityName(e.target.value)}
+                    onChange={(e) => setLogoPath(e.target.value)}
                   />
                 </div>
 
+                {/* Terms conditions */}
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
@@ -173,7 +200,7 @@ const RegisterUniversity = () => {
                       aria-describedby="terms"
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      onChange={(e) => setUniversityName(e.target.value)}
+                      onChange={(e) => setTermAccepted(!termAccepted)}
                       required
                     />
                   </div>
@@ -192,9 +219,11 @@ const RegisterUniversity = () => {
                     </label>
                   </div>
                 </div>
+
                 <button
+                  disabled={!termAccepted}
                   type="submit"
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="text-white bg-blue-600 w-full text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Create an account
                 </button>

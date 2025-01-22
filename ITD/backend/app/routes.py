@@ -2,7 +2,9 @@ from flask import jsonify, Flask, request
 from flask_cors import CORS
 import sqlite3
 from app.utils.auth import hash_password, generate_token
-
+from app.models.student import Student
+from app.models.university import University
+from app.utils.error_handler import handle_database_error, handle_general_error
 
 def create_main_app():
 
@@ -18,22 +20,15 @@ def create_main_app():
         return conn
 
     @app.route('/universitylist', methods=['GET'])
-    def university_list():
+    def university_list():     
         try:
-            conn = get_db()
-            university_list = conn.execute("SELECT id, name FROM Universities").fetchall()
+            universities = University.get_list_dict()
 
-            # Transform the query result into a list of dictionaries
-            result = [{'id': row['id'], 'name': row['name']} for row in university_list]
-
-            return jsonify(result), 200
+            return jsonify(universities), 200
+        except sqlite3.Error as e:
+            return handle_database_error(e)
         except Exception as e:
-            return jsonify({
-                "type": "database_error",
-                "message": str(e)
-            }), 500
-        finally:
-            conn.close()
+            return handle_general_error(e)
 
 
     @app.route('/studentlist', methods=['GET'])
@@ -46,146 +41,140 @@ def create_main_app():
             result = [{'id': student['id'], 'firstName': student['name'], 'GPA': student['gpa']} for student in students]
 
             return jsonify(result), 200
+        
+        except sqlite3.Error as e:
+            return handle_database_error(e)
         except Exception as e:
-            return jsonify({
-                "type": "database_error",
-                "message": str(e)
-            }), 500
+            return handle_general_error(e)
         finally:
             conn.close()
 
 
     @app.route('/register/university', methods=['POST'])
     def university_register():
-
-        data = request.get_json()
-
-        # Extract required fields
-        email = data.get('university_email')
-        password = data.get('university_password')
-        name = data.get('name')
-        location = data.get('location')
-        description = data.get('description')
-        logoPath = data.get('logoPath', '')  # Optional field
-
-        # Validate required fields
-        if not all([email, password, name, location, description]):
-            return jsonify({
-                "type": "invalid_request",
-                "message": "All fields (email, password, name, location, description) are required."
-            }), 400
-
-        # Hash the password
-        hashed_password = hash_password(password)
-
-        conn = get_db()
         try:
-            # Insert data into the database
-            cursor = conn.execute("""
-                INSERT INTO universities (email, password, name, location, description, logoPath)
-                VALUES (?, ?, ?, ?, ?, ?)
-            """, (email, hashed_password, name, location, description, logoPath))
-            conn.commit()
+            # Get JSON data from the request
+            data = request.get_json()
 
-            # Generate a JWT token
-            token = generate_token(cursor.lastrowid)
+            # Extract required fields
+            values = {
+                'email': data.get('university_email'),
+                'password': hash_password(data.get('university_password')),
+                'name': data.get('name'),
+                'address': data.get('location'),
+                'websiteURL': data.get('websiteURL'),
+                'description': data.get('description'),
+                'logoPath': data.get('logoPath', '')  # Optional field
+            }
 
-            # Success response
-            return jsonify({
-                'message': 'Registration successful',
-                'token': token,
-                'user': {
-                    'id': cursor.lastrowid,
-                    'email': email,
-                    'name': name
-                }
-            }), 201
+            # Validate required fields
+            if not all([values['email'], values['password'], values['name'], values['address'], values['websiteURL'], values['description']]):
+                return jsonify({
+                    "type": "invalid_request",
+                    "message": "All fields (email, password, name, address, websiteURL, description) are required."
+                }), 400
+            
+            university = University.add(**values)
 
-        except sqlite3.IntegrityError:
-            # Handle duplicate email errors
-            return jsonify({
-                "type": "conflict",
-                "message": "Email already exists."
-            }), 400
-        except Exception as e:
-            # Handle other server-side errors
-            return jsonify({
-                "type": "server_error",
-                "message": str(e)
-            }), 500
-        finally:
-            conn.close()
-
-
-    @app.route('/register/student', methods=['POST'])
-    def student_register():
-        # Get JSON data from the request
-        data = request.get_json()
-
-        # Extract fields from the JSON
-        email = data.get('email')
-        password = data.get('password')
-        first_name = data.get('firstName')
-        last_name = data.get('lastName')
-        phone_number = data.get('phoneNumber')
-        profile_picture_path = data.get('profilePicturePath', '')  # Optional
-        location = data.get('location')
-        degree_program = data.get('degreeProgram')
-        gpa = data.get('GPA', None)  # Optional
-        graduation_year = data.get('graduationYear', None)  # Optional
-        cv_path = data.get('CVpath')
-        skills = data.get('skills')
-        languages_spoken = data.get('languageSpoken')
-        university_id = data.get('university')
-
-        hashed_password = hash_password(password)
-
-        conn = get_db()
-        try:
-            # Insert student data into the database
-            cursor = conn.execute("""
-                INSERT INTO Students (
-                    email, password, firstName, lastName, phoneNumber, profilePicturePath, 
-                    location, degreeProgram, GPA, graduationYear, CVpath, skills, 
-                    languageSpoken, university
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                email, hashed_password, first_name, last_name, phone_number, profile_picture_path,
-                location, degree_program, gpa, graduation_year, cv_path, skills,
-                languages_spoken, university_id
-            ))
             # Generate a JWT token for the registered student
-            token = generate_token(cursor.lastrowid)
+            token = generate_token(university.get_id())
 
-            conn.commit()
             # Return success response
             return jsonify({
                 'message': 'Registration successful',
                 'token': token,
                 'user': {
-                    'id': cursor.lastrowid,
-                    'email': email,
-                    'firstName': first_name,
-                    'lastName': last_name
+                    'id': university.get_id(),
+                    'email': university.get_email(),
+                    'firstName': university.get_name(),
                 }
             }), 201
 
-        except sqlite3.IntegrityError:
-            # Handle unique constraint violations (e.g., duplicate email)
-            conn.rollback()
-            return jsonify({
-                "type": "conflict",
-                "message": "Email already exists."
-            }), 400
+        except sqlite3.Error as e:
+            return handle_database_error(e)
         except Exception as e:
-            # Handle other exceptions
-            conn.rollback()
+            return handle_general_error(e)
+
+
+    @app.route('/register/student', methods=['POST'])
+    def student_register():
+        try:
+            # Get JSON data from the request
+            data = request.get_json()
+
+            # Extract fields from the JSON
+            values = {
+                'email'         : data.get('email'),
+                'password'      : hash_password(data.get('password')),
+                'firstName'     : data.get('firstName'),
+                'lastName'      : data.get('lastName'),
+                'phoneNumber'   : data.get('phoneNumber'),
+                'profilePicturePath': data.get('profilePicturePath', ''),  # Optional
+                'location'      : data.get('location'),
+                'degreeProgram' : data.get('degreeProgram'),
+                'gpa'           : data.get('GPA', None),  # Optional
+                'graduationYear': data.get('graduationYear', None),  # Optional
+                'CVpath'        : data.get('CVpath'),
+                'skills'        : data.get('skills'),
+                'languageSpoken': data.get('languageSpoken'),
+                'universityId'  : data.get('university')
+            }
+
+            student = Student.add(**values)
+
+            # Generate a JWT token for the registered student
+            token = generate_token(student.get_id)
+
+            # Return success response
             return jsonify({
-                "type": "server_error",
-                "message": str(e)
-            }), 500
-        finally:
-            conn.close()
+                'message': 'Registration successful',
+                'token': token,
+                'user': {
+                    'id': student.get_id,
+                    'email': student.get_email,
+                    'firstName': student.get_firstName,
+                    'lastName': student.get_lastName
+                }
+            }), 201
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)   
+
+
+    @app.route('/userlogin', methods = ['POST'])
+    def user_login():
+        try:
+            # Get JSON data from the request
+            data = request.get_json()
+
+            # Extract fields from the JSON
+            values = {
+                'email'         : data.get('email'),
+                'password'      : hash_password(data.get('password')),
+            }
+
+            student = Student.add(**values)
+
+            # Generate a JWT token for the registered student
+            token = generate_token(student.get_id)
+
+            # Return success response
+            return jsonify({
+                'message': 'Registration successful',
+                'token': token,
+                'user': {
+                    'id': student.get_id,
+                    'email': student.get_email,
+                    'firstName': student.get_firstName,
+                    'lastName': student.get_lastName
+                }
+            }), 201
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)    
 
     return app
