@@ -5,6 +5,7 @@ import sqlite3
 from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
 from app.models.university import University
+from app.models.user import User
 from app.utils.error_handler import handle_database_error, handle_general_error
 
 def create_main_app():
@@ -124,31 +125,39 @@ def create_main_app():
             data = request.get_json()
 
             # Extract fields from the JSON
-            values = {
-                'email'         : data.get('email'),
-                'password'      : hash_password(data.get('password')),
-            }
+            email = data.get('email')
+            password = hash_password(data.get('password'))
 
-            student = Student.add(**values)
+            # Validate required fields
+            if not email or not password:
+                return jsonify({
+                "type": "invalid_request",
+                "message": "Email and password are required."
+                }), 400
 
-            # Generate a JWT token for the registered student
-            token = generate_token(student.get_id)
+            # Verify user credentials
+            user = User.get_by_email(email)
+            if user and user.check_password(password):
+                # Generate a JWT token for the authenticated user
+                token = generate_token(user.get_id())
 
-            # Return success response
-            return jsonify({
-                'message': 'Registration successful',
-                'token': token,
-                'user': {
-                    'id': student.get_id,
-                    'email': student.get_email,
-                    'firstName': student.get_firstName,
-                    'lastName': student.get_lastName
-                }
-            }), 201
+                # Return success response
+                return jsonify({
+                    'message': 'Login successful',
+                    'token': token,
+                    'user': {
+                    'email': user.get_email(),
+                    }
+                }), 200
+            else:
+                return jsonify({
+                    "type": "invalid_credentials",
+                    "message": "Invalid email or password."
+                }), 401
 
         except sqlite3.Error as e:
             return handle_database_error(e)
         except Exception as e:
-            return handle_general_error(e)    
+            return handle_general_error(e)
 
     return app

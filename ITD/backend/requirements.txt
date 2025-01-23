@@ -1,3 +1,4 @@
+flask
 flask_restful
 Flask-Cors
 bcrypt
