@@ -1,5 +1,6 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS
+from flask_login import LoginManager
 import sqlite3
 from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
@@ -11,15 +12,7 @@ def create_main_app():
     app = Flask(__name__)
     CORS(app)
 
-    # SQLite database setup
-    DATABASE = 'app/SC.db'
-
-    def get_db():
-        conn = sqlite3.connect(DATABASE)
-        conn.row_factory = sqlite3.Row  # Allows access by column name
-        return conn
-
-    @app.route('/universitylist', methods=['GET'])
+    @app.route('/api/universitylist', methods=['GET'])
     def university_list():     
         try:
             universities = University.get_list_dict()
@@ -31,26 +24,7 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    @app.route('/studentlist', methods=['GET'])
-    def student_list():
-        try:
-            conn = get_db()
-            students = conn.execute("SELECT id, name, gpa FROM students").fetchall()
-
-            # Transform the query result into a list of dictionaries
-            result = [{'id': student['id'], 'firstName': student['name'], 'GPA': student['gpa']} for student in students]
-
-            return jsonify(result), 200
-        
-        except sqlite3.Error as e:
-            return handle_database_error(e)
-        except Exception as e:
-            return handle_general_error(e)
-        finally:
-            conn.close()
-
-
-    @app.route('/register/university', methods=['POST'])
+    @app.route('/api/register/university', methods=['POST'])
     def university_register():
         try:
             # Get JSON data from the request
@@ -96,7 +70,7 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    @app.route('/register/student', methods=['POST'])
+    @app.route('/api/register/student', methods=['POST'])
     def student_register():
         try:
             # Get JSON data from the request
@@ -143,7 +117,7 @@ def create_main_app():
             return handle_general_error(e)   
 
 
-    @app.route('/userlogin', methods = ['POST'])
+    @app.route('/api/userlogin', methods = ['POST'])
     def user_login():
         try:
             # Get JSON data from the request

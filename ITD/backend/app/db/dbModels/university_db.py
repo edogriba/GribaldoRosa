@@ -1,6 +1,5 @@
 from sqlite3 import connect, Row
 from app.db.dbModels.user_db import UserDB
-from app.utils.error_handler import handle_database_error
 
 DATABASE = 'app/db/SC.db'
 
@@ -12,7 +11,7 @@ class UniverstityDB:
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE Student """)
+                # self.con.execute(""" DROP TABLE University """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS University (
                                         UserId INTEGER PRIMARY KEY,
                                         Name TEXT NOT NULL,

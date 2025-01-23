@@ -4,3 +4,4 @@ bcrypt
 pyjwt
 python-dotenv
 werkzeug
+flask-login

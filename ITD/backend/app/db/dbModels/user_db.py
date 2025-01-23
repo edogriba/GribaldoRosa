@@ -56,6 +56,6 @@ class UserDB:
         except Exception as e:
             self.con.rollback()
             raise e
-    
+         
     def close(self):
         self.con.close()
