@@ -3,7 +3,7 @@ from app.db.dbModels.user_db import UserDB
 
 DATABASE = 'app/db/SC.db'
 
-class UniverstityDB:
+class UniversityDB:
     def __init__(self):
         self.con = connect(DATABASE)
         self.con.row_factory = Row

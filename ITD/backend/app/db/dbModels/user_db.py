@@ -1,6 +1,7 @@
 from sqlite3 import connect, Row
 from app.utils.error_handler import handle_database_error
 
+
 DATABASE = 'app/db/SC.db'
 
 class UserDB:

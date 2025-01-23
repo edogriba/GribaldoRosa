@@ -1,5 +1,5 @@
 from app.models.user import User
-from app.db.dbModels.university_db import UniverstityDB
+from app.db.dbModels.university_db import UniversityDB
 
 
 class University(User):
@@ -56,7 +56,7 @@ class University(User):
     def add(email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: str):
         try:
             # Insert university data into the database
-            universityConn = UniverstityDB()
+            universityConn = UniversityDB()
             universityId = universityConn.insert(email, password, name, address, websiteURL, description, logoPath)
 
             return University(universityId, email, password, name, address, websiteURL, description, logoPath)
@@ -75,7 +75,7 @@ class University(User):
         :raises Exception: If an error occurs during the query execution.
         """
         try:
-            universityConn = UniverstityDB()
+            universityConn = UniversityDB()
             universities = universityConn.get_list()
             return universities
         except Exception as e:
@@ -91,7 +91,7 @@ class University(User):
         :raises Exception: If an error occurs during the query execution.
         """
         try:
-            universityConn = UniverstityDB()
+            universityConn = UniversityDB()
             universities = universityConn.get_list_dict()
             return universities
         except Exception as e:
@@ -110,7 +110,7 @@ class University(User):
         :raises Exception: If an error occurs during the query execution.
         """
         try:
-            uniConn = UniverstityDB()
+            uniConn = UniversityDB()
             uniData = uniConn.get_by_id(id)
             return University(**uniData) if uniData else None
         except Exception as e:
@@ -128,7 +128,7 @@ class University(User):
         :raises Exception: If an error occurs during the query execution.
         """
         try:
-            uniConn = UniverstityDB()
+            uniConn = UniversityDB()
             uniData = uniConn.get_by_email(email)
             return University(**uniData) if uniData else None
         except Exception as e:
