@@ -3,7 +3,7 @@ from app.db.dbModels.user_db import UserDB
 
 DATABASE = 'app/db/SC.db'
 
-class UniverstityDB:
+class UniversityDB:
     def __init__(self):
         self.con = connect(DATABASE)
         self.con.row_factory = Row
@@ -73,7 +73,7 @@ class UniverstityDB:
                         'description': university['Description'],
                         'logoPath': university['LogoPath']
                     } if university else None
-    
+
         except Exception as e:
             self.con.rollback()
             raise e  
@@ -104,7 +104,7 @@ class UniverstityDB:
                         'description': university['Description'],
                         'logoPath': university['LogoPath']
                     } if university else None 
-          
+
         except Exception as e:
             self.con.rollback()
             raise e 

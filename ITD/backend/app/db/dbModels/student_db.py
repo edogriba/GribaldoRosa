@@ -82,7 +82,7 @@ class StudentDB:
                         FROM Student AS S JOIN User AS U ON S.UserId = U.UserId
                         WHERE UserId = ? """
             student = cur.execute(query, (id,)).fetchone()
-            
+
             return {    'id': student['UserId'], 
                         'email': student['Email'],
                         'password': student['Password'],
@@ -99,7 +99,7 @@ class StudentDB:
                         'CV': student['CVpath'], 
                         'languageSpoken': student['LanguageSpoken']
                     } if student else None
-        
+
         except Exception as e:
             self.con.rollback()
             raise e  
@@ -120,7 +120,7 @@ class StudentDB:
                         FROM Student AS S JOIN User AS U ON S.UserId = U.UserId
                         WHERE Email = ? """
             student = cur.execute(query, (email,)).fetchone()
-
+            
             return {    'id': student['UserId'], 
                         'email': student['Email'],
                         'password': student['Password'],
@@ -137,7 +137,7 @@ class StudentDB:
                         'CV': student['CVpath'], 
                         'languageSpoken': student['LanguageSpoken']
                     } if student else None
-
+          
         except Exception as e:
             self.con.rollback()
             raise e 

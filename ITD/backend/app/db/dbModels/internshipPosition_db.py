@@ -56,6 +56,7 @@ class InternshipPositionDB:
     #############
     #    GET    #
     #############
+
     def get_by_id(self, internshipPositionId: int):
         """
         Retrieve an internship position by its ID.
@@ -160,3 +161,4 @@ class InternshipPositionDB:
 
     def close(self):
         self.con.close()
+
