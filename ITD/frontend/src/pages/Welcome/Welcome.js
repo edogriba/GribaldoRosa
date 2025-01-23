@@ -9,7 +9,7 @@ import { Box } from "@mui/material";
 const Welcome = () => {
   return (
     <Box>
-      <Navbar/>
+      <Navbar currentPage="home" />
       <JumboTron/>
       <SocialProof/>
       <WhoTrustUs/>

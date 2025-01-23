@@ -84,7 +84,7 @@ const RegisterStudent = () => {
     {/* Form */}
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <Link to="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        <Link to="/students/home" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
           <img className="w-20 h-20 mt-2" src="/logo.png" alt="logo" />
         </Link>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -317,8 +317,11 @@ const RegisterStudent = () => {
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{' '}
-                <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                  Login here
+                  Login{' '}
+                  <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                  <p className="text-sm text-blue-900 dark:text-gray-400">
+                  here
+                  </p>
                 </Link>
               </p>
             </form>

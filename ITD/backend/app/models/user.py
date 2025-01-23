@@ -1,5 +1,8 @@
 from flask_login import UserMixin
 from app.db.dbModels.user_db import UserDB
+from student import Student
+from company import Company
+from university import University
 
 DATABASE = 'app/SC.db'
 
@@ -22,6 +25,13 @@ class User(UserMixin):
     def get_password(self):
         return self.password
     
+    def to_dict(self):
+        return {
+            'id': int(self.id),
+            'email': self.email,
+            'type': self.type
+        }
+
     @staticmethod
     def is_email_unique(email: str):
         """
@@ -38,6 +48,40 @@ class User(UserMixin):
             raise e
         finally:
             userConn.close()
+
+    @staticmethod        
+    def get_by_email(email: str):
+        """
+        Retrieve a user record by email and return the corresponding entity.
+
+        :param email: The email address of the user.
+        :return: A Student, Company, or University object if the email exists, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            userConn = UserDB()
+            userType = userConn.get_type_by_email(email)
+            if userType == "student":
+                return Student.get_by_email(email)
+            elif userType == "company":
+                return Company.get_by_email(email)
+            elif userType == "university":
+                return University.get_by_email(email)
+            else:
+                return None
+        except Exception as e:
+            raise e
+        finally:
+            userConn.close()
+
+    def check_password(self, password: str):
+        """
+        Check if the provided password matches the user's password.
+
+        :param password: The password to check.
+        :return: True if the password matches, otherwise False.
+        """
+        return self.password == password
 
     #def __repr__(self):
     #    return f"<User: {self.id}, Email: {self.email}, Type: {self.type}>"

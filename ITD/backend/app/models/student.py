@@ -68,10 +68,47 @@ class Student(User):
     def get_languageSpoken(self):
         return self.languageSpoken
     
+    def to_dict(self):
+        user_dict = super().to_dict()
+        user_dict.update({
+            'firstName': self.firstName,
+            'lastName': self.lastName,
+            'phoneNumber': self.phoneNumber,
+            'profilePicture': self.profilePicture,
+            'location': self.location,
+            'universityId': int(self.universityId),          
+            'degreeProgram': self.degreeProgram,
+            'GPA': float(self.GPA),
+            'graduationYear': int(self.graduationYear),
+            'skills': self.skills,
+            'CV': self.CV,
+            'languageSpoken': self.languageSpoken,
+        })
+        return user_dict
 
     @staticmethod
     def add(email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: str, location: str, 
             degreeProgram: str, gpa: float, graduationYear: int, CVpath: str, skills: str, languageSpoken: str, universityId: int):
+        """
+        Add a new student record to the database and return a Student object.
+
+        :param email: The email address of the student.
+        :param password: The password for the student's account.
+        :param firstName: The first name of the student.
+        :param lastName: The last name of the student.
+        :param phoneNumber: The contact number of the student.
+        :param profilePicturePath: The file path to the student's profile picture.
+        :param location: The current location of the student.
+        :param degreeProgram: The degree program the student is enrolled in.
+        :param gpa: The grade point average of the student.
+        :param graduationYear: The expected graduation year of the student.
+        :param CVpath: The file path to the student's CV.
+        :param skills: A list of skills possessed by the student.
+        :param languageSpoken: Languages spoken by the student.
+        :param universityId: The ID of the university the student is associated with.
+        :return: A Student object containing the newly inserted student's data.
+        :raises Exception: If an error occurs during the insertion process.
+        """
         try:
             # Insert student data into the database
             studentConn = StudentDB()
@@ -84,5 +121,41 @@ class Student(User):
         except Exception as e:
             raise e
         
+        finally:
+            studentConn.close()
+
+    @staticmethod
+    def get_by_id(id: int):
+        """
+        Retrieve a student record by its unique identifier and return it as a Student object.
+
+        :param id: The unique identifier of the student.
+        :return: A Student object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            studentConn = StudentDB()
+            studentData = studentConn.get_by_id(id)
+            return Student(**studentData) if studentData else None
+        except Exception as e:
+            raise e
+        finally:
+            studentConn.close()
+
+    @staticmethod
+    def get_by_email(email: str):
+        """
+        Retrieve a student record by its email and return it as a Student object.
+
+        :param email: The email of the student.
+        :return: A Student object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            studentConn = StudentDB()
+            studentData = studentConn.get_by_email(email)
+            return Student(**studentData) if studentData else None
+        except Exception as e:
+            raise e
         finally:
             studentConn.close()

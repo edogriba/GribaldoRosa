@@ -41,6 +41,17 @@ class University(User):
     def get_logoPath(self):
         return self.logoPath
 
+    def to_dict(self):
+        user_dict = super().to_dict()
+        user_dict.update({
+            'name': self.name,
+            'address': self.address,
+            'websiteURL': self.websiteURL,
+            'description': self.description,
+            'logoPath': self.logoPath,
+        })
+        return user_dict
+    
     @staticmethod
     def add(email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: str):
         try:
@@ -88,3 +99,39 @@ class University(User):
         finally:
             universityConn.close()
     
+
+    @staticmethod
+    def get_by_id(id: int):
+        """
+        Retrieve a university record by its unique identifier and return it as a University object.
+
+        :param id: The unique identifier of the university.
+        :return: A University object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            uniConn = UniverstityDB()
+            uniData = uniConn.get_by_id(id)
+            return University(**uniData) if uniData else None
+        except Exception as e:
+            raise e
+        finally:
+            uniConn.close()
+
+    @staticmethod
+    def get_by_email(email: str):
+        """
+        Retrieve a university record by its email and return it as a University object.
+
+        :param email: The email of the university.
+        :return: A University object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            uniConn = UniverstityDB()
+            uniData = uniConn.get_by_email(email)
+            return University(**uniData) if uniData else None
+        except Exception as e:
+            raise e
+        finally:
+            uniConn.close()

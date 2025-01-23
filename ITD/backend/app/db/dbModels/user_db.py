@@ -1,5 +1,8 @@
 from sqlite3 import connect, Row
 from app.utils.error_handler import handle_database_error
+from student_db import StudentDB
+from university_db import UniverstityDB
+from company_db import CompanyDB
 
 DATABASE = 'app/db/SC.db'
 
@@ -56,6 +59,25 @@ class UserDB:
         except Exception as e:
             self.con.rollback()
             raise e
-    
+
+    def get_type_by_email(self, email: str):
+        """
+        Retrieve the user's type by its email.
+
+        :param email: The unique email of the user.
+        :return: The type representing the user if found, otherwise None.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                query = """ SELECT Type 
+                            FROM User
+                            WHERE Email = ? """
+                user = self.con.execute(query, (email,)).fetchone()
+            return user if user else None
+        except Exception as e:
+            self.con.rollback()
+            raise e 
+     
     def close(self):
         self.con.close()

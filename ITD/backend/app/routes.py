@@ -1,25 +1,21 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS
+from flask_login import LoginManager, login_user
 import sqlite3
 from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
 from app.models.university import University
+from app.models.user import User
 from app.utils.error_handler import handle_database_error, handle_general_error
 
 def create_main_app():
 
     app = Flask(__name__)
     CORS(app)
+    login_manager = LoginManager()
+    login_manager.init_app(app)
 
-    # SQLite database setup
-    DATABASE = 'app/SC.db'
-
-    def get_db():
-        conn = sqlite3.connect(DATABASE)
-        conn.row_factory = sqlite3.Row  # Allows access by column name
-        return conn
-
-    @app.route('/universitylist', methods=['GET'])
+    @app.route('/api/universitylist', methods=['GET'])
     def university_list():     
         try:
             universities = University.get_list_dict()
@@ -31,26 +27,7 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    @app.route('/studentlist', methods=['GET'])
-    def student_list():
-        try:
-            conn = get_db()
-            students = conn.execute("SELECT id, name, gpa FROM students").fetchall()
-
-            # Transform the query result into a list of dictionaries
-            result = [{'id': student['id'], 'firstName': student['name'], 'GPA': student['gpa']} for student in students]
-
-            return jsonify(result), 200
-        
-        except sqlite3.Error as e:
-            return handle_database_error(e)
-        except Exception as e:
-            return handle_general_error(e)
-        finally:
-            conn.close()
-
-
-    @app.route('/register/university', methods=['POST'])
+    @app.route('/api/register/university', methods=['POST'])
     def university_register():
         try:
             # Get JSON data from the request
@@ -83,11 +60,7 @@ def create_main_app():
             return jsonify({
                 'message': 'Registration successful',
                 'token': token,
-                'user': {
-                    'id': university.get_id(),
-                    'email': university.get_email(),
-                    'firstName': university.get_name(),
-                }
+                'user': university.to_dict()
             }), 201
 
         except sqlite3.Error as e:
@@ -96,7 +69,7 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    @app.route('/register/student', methods=['POST'])
+    @app.route('/api/register/student', methods=['POST'])
     def student_register():
         try:
             # Get JSON data from the request
@@ -129,12 +102,7 @@ def create_main_app():
             return jsonify({
                 'message': 'Registration successful',
                 'token': token,
-                'user': {
-                    'id': student.get_id,
-                    'email': student.get_email,
-                    'firstName': student.get_firstName,
-                    'lastName': student.get_lastName
-                }
+                'user': student.to_dict()
             }), 201
 
         except sqlite3.Error as e:
@@ -143,38 +111,52 @@ def create_main_app():
             return handle_general_error(e)   
 
 
-    @app.route('/userlogin', methods = ['POST'])
+    @app.route('/api/userlogin', methods = ['POST'])
     def user_login():
         try:
             # Get JSON data from the request
             data = request.get_json()
 
             # Extract fields from the JSON
-            values = {
-                'email'         : data.get('email'),
-                'password'      : hash_password(data.get('password')),
-            }
+            email = data.get('email')
+            password = hash_password(data.get('password'))
 
-            student = Student.add(**values)
+            # Validate required fields
+            if not email or not password:
+                return jsonify({
+                "type": "invalid_request",
+                "message": "Email and password are required."
+                }), 400
+            
+            # Verify user credentials
+            user = load_user(email)
 
-            # Generate a JWT token for the registered student
-            token = generate_token(student.get_id)
+            if user and user.check_password(password):
+                # Generate a JWT token for the authenticated user
+                token = generate_token(user.get_id())
 
-            # Return success response
-            return jsonify({
-                'message': 'Registration successful',
-                'token': token,
-                'user': {
-                    'id': student.get_id,
-                    'email': student.get_email,
-                    'firstName': student.get_firstName,
-                    'lastName': student.get_lastName
-                }
-            }), 201
+                login_user(user)
+                # Return success response
+                return jsonify({
+                    'message': 'Login successful',
+                    'token': token,
+                    'user': user.to_dict()
+                }), 200
+            else:
+                return jsonify({
+                    "type": "invalid_credentials",
+                    "message": "Invalid email or password."
+                }), 401
 
         except sqlite3.Error as e:
             return handle_database_error(e)
         except Exception as e:
-            return handle_general_error(e)    
+            return handle_general_error(e)
 
+
+    @login_manager.user_loader
+    def load_user(user_email):
+        return User.get_by_email(user_email)
+    
+    
     return app
