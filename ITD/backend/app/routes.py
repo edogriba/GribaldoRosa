@@ -101,8 +101,7 @@ def create_main_app():
             student = Student.add(**values)
 
             # Generate a JWT token for the registered student
-            token = generate_token(student.get_id)
-
+            token = generate_token(student.get_id())
             # Return success response
             return jsonify({
                 'message': 'Registration successful',
@@ -136,7 +135,7 @@ def create_main_app():
             company = Company.add(**values)
 
             # Generate a JWT token for the registered company
-            token = generate_token(company.get_id)
+            token = generate_token(company.get_id())
 
             # Return success response
             return jsonify({

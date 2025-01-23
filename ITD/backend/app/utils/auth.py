@@ -1,5 +1,6 @@
 import bcrypt
 import jwt
+from jwt.exceptions import PyJWTError
 from datetime import datetime, timedelta, timezone
 
 SECRET_KEY = "123456"
@@ -47,18 +48,20 @@ def generate_token(user_id):
     try:
         token = jwt.encode(
             {
-                'user_id': user_id, 
+                'user_id': int(user_id), 
                 'exp': datetime.now(timezone.utc) + timedelta(hours=24)
             },
             SECRET_KEY, 
             algorithm="HS256"
         )
         return token
-    except jwt.exceptions.PyJWTError as e:
+    except PyJWTError as e:
         # Catch specific JWT encoding errors and propagate
-        raise Exception(f"Error generating JWT token: {str(e)}")
+        print(f"Error generating JWT token: {str(e)}")              ### Debugging
+        raise e
     except Exception as e:
         # Catch any other exceptions and propagate
-        raise Exception(f"Unexpected error occurred: {str(e)}")
+        print(f"Unexpected error occurred: {str(e)}")               ### Debugging
+        raise e
 
     

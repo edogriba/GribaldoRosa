@@ -62,7 +62,8 @@ class StudentDB:
             raise e
         finally:
             userConn.close()
-            cur.close()
+            if cur:
+                cur.close()
 
     #############
     #    GET    #
@@ -100,6 +101,7 @@ class StudentDB:
                     } if student else None
         
         except Exception as e:
+            self.con.rollback()
             raise e  
         finally:
             cur.close()
@@ -113,10 +115,11 @@ class StudentDB:
         :raises Exception: If an error occurs during the query execution.
         """
         try:
+            cur = self.con.cursor()
             query = """ SELECT * 
                         FROM Student AS S JOIN User AS U ON S.UserId = U.UserId
                         WHERE Email = ? """
-            student = self.con.execute(query, (email,)).fetchone()
+            student = cur.execute(query, (email,)).fetchone()
 
             return {    'id': student['UserId'], 
                         'email': student['Email'],
@@ -136,7 +139,10 @@ class StudentDB:
                     } if student else None
 
         except Exception as e:
-            raise e  
+            self.con.rollback()
+            raise e 
+        finally:
+            cur.close() 
 
 
     ################
@@ -153,14 +159,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET PhoneNumber = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (phoneNumber, id))
+                res = cur.execute(query, (phoneNumber, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e     
+        finally:
+            cur.close()
     
     def update_profile_picture_path_by_id(self, id: int, profilePicturePath: str):
         """
@@ -173,14 +182,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET ProfilePicturePath = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (profilePicturePath, id))
+                res = cur.execute(query, (profilePicturePath, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
           
     def update_location_by_id(self, id: int, location: str):
         """
@@ -193,14 +205,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET Location = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (location, id))
+                res = cur.execute(query, (location, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
 
     def update_degree_program_by_id(self, id: int, degreeProgram: str):
         """
@@ -213,14 +228,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET DegreeProgram = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (degreeProgram, id))
+                res = cur.execute(query, (degreeProgram, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
     
     def update_gpa_by_id(self, id: int, gpa: str):
         """
@@ -233,14 +251,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET Gpa = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (gpa, id))
+                res = cur.execute(query, (gpa, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
            
     def update_graduation_year_by_id(self, id: int, graduationYear: str):
         """
@@ -253,14 +274,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET GraduationYear = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (graduationYear, id))
+                res = cur.execute(query, (graduationYear, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
         
     def update_cv_path_by_id(self, id: int, cvPath: str):
         """
@@ -273,14 +297,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET CVpath = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (cvPath, id))
+                res = cur.execute(query, (cvPath, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
     
     def update_skills_by_id(self, id: int, skills: str):
         """
@@ -293,14 +320,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET Skills = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (skills, id))
+                res = cur.execute(query, (skills, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
     
     def update_language_spoken_by_id(self, id: int, languageSpoken: str):
         """
@@ -313,14 +343,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET LanguageSpoken = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (languageSpoken, id))
+                res = cur.execute(query, (languageSpoken, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
       
     def update_university_by_id(self, id: int, universityId: str):
         """
@@ -333,15 +366,17 @@ class StudentDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ UPDATE Student
                             SET UniversityId = ?
                             WHERE UserId = ? """
-                res = self.con.execute(query, (universityId, id))
+                res = cur.execute(query, (universityId, id))
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
             raise e 
-        
+        finally:
+            cur.close()
 
     def close(self):
         self.con.close()    

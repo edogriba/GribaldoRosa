@@ -173,23 +173,33 @@ def handle_database_error(error):
 def handle_general_error(error):
     """Handles general exceptions and maps them to custom general exceptions."""
     if isinstance(error, ValueError):
+        print("ERROR: " + str(error))
         return bad_request_error_response()
     if isinstance(error, TypeError):
+        print("ERROR: " + str(error))
         return type_error_response()
     elif isinstance(error, Unauthorized):
+        print("ERROR: " + str(error))
         return unauthorized_error_response()
     elif isinstance(error, PermissionError):
+        print("ERROR: " + str(error))
         return forbidden_error_response()
     elif isinstance(error, KeyError):
+        print("ERROR: " + str(error))
         return not_found_error_response()
     elif isinstance(error, MethodNotAllowed):
+        print("ERROR: " + str(error))
         return method_not_allowed_error_response()
     elif isinstance(error, Conflict):
+        print("ERROR: " + str(error))
         return conflict_error_response()
     elif isinstance(error, ServiceUnavailable):
+        print("ERROR: " + str(error))
         return service_unavailable_error_response()
     elif isinstance(error, TimeoutError):
+        print("ERROR: " + str(error))
         return gateway_timeout_error_response()
     else:
+        print("ERROR: " + str(error))
         return internal_server_error_response(str(error))
     
