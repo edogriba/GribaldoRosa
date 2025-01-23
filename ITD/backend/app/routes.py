@@ -101,8 +101,7 @@ def create_main_app():
             student = Student.add(**values)
 
             # Generate a JWT token for the registered student
-            token = generate_token(student.get_id)
-
+            token = generate_token(student.get_id())
             # Return success response
             return jsonify({
                 'message': 'Registration successful',
@@ -150,6 +149,41 @@ def create_main_app():
             return handle_general_error(e)   
 
 
+    @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
+    @cross_origin()
+    def company_register():
+        try:
+            # Get JSON data from the request
+            data = request.get_json()
+
+            # Extract fields from the JSON
+            values = {
+                'email'         : data.get('email'),
+                'password'      : hash_password(data.get('password')),
+                'companyName'   : data.get('companyName'),
+                'logoPath'      : data.get('logoPath', ''),  # Optional
+                'description'   : data.get('description'),
+                'location'      : data.get('location'),
+            }
+
+            company = Company.add(**values)
+
+            # Generate a JWT token for the registered company
+            token = generate_token(company.get_id())
+
+            # Return success response
+            return jsonify({
+                'message': 'Registration successful',
+                'token': token,
+                'user': company.to_dict()
+            }), 201
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)   
+
+          
     @app.route('/api/userlogin', methods = ['POST', 'OPTIONS'])
     @cross_origin()
     def user_login():
@@ -167,7 +201,7 @@ def create_main_app():
                 "type": "invalid_request",
                 "message": "Email and password are required."
                 }), 400
-            
+
             # Verify user credentials
             user = load_user(email)
 

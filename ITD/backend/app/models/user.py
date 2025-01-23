@@ -29,6 +29,18 @@ class User(UserMixin):
             'email': self.email,
             'type': self.type
         }
+    
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
 
     @property
     def is_authenticated(self):
@@ -85,7 +97,7 @@ class User(UserMixin):
         """
         print("password: ", password)
         print("self.password: ", self.password)
-        
+
         return self.password == password
     
 

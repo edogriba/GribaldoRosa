@@ -55,7 +55,7 @@ class Company(User):
     @property
     def is_anonymous(self):
         return False
-    
+
     @staticmethod
     def add(email: str, password: str, companyName: str, logoPath: str, description: str, location: str):
         try:

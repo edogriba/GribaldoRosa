@@ -126,9 +126,24 @@ class Student(User):
             studentConn = StudentDB()
             studentId = studentConn.insert(email, password, firstName, lastName, phoneNumber, profilePicturePath, location, 
                 degreeProgram, gpa, graduationYear, CVpath, skills, languageSpoken, universityId)
-
-            return Student(studentId, email, password, firstName, lastName, phoneNumber, profilePicturePath, location,
-                           degreeProgram, gpa, graduationYear, CVpath, skills, languageSpoken, universityId)
+            values = {
+                'id': studentId,
+                'email': email,
+                'password': password,
+                'firstName': firstName,
+                'lastName': lastName,
+                'phoneNumber': phoneNumber,
+                'profilePicture': profilePicturePath,
+                'location': location,
+                'universityId': universityId,
+                'degreeProgram': degreeProgram,
+                'GPA': gpa,
+                'graduationYear': graduationYear,
+                'skills': skills,
+                'CV': CVpath,
+                'languageSpoken': languageSpoken
+            }
+            return Student(**values)
         
         except Exception as e:
             raise e

@@ -58,11 +58,12 @@ class UniversityDB:
         :raises Exception: If an error occurs during the query execution.
         """
         try:
+            cur = self.con.cursor()
             query = """ SELECT * 
                         FROM University AS Uni JOIN User AS U ON Uni.UserId = U.UserId
                         WHERE UserId = ? """
-            university = self.con.execute(query, (id,)).fetchone()
-            
+            university = cur.execute(query, (id,)).fetchone()
+
             return {    'id': university['UserId'], 
                         'email': university['Email'],
                         'password': university['Password'],
@@ -72,8 +73,12 @@ class UniversityDB:
                         'description': university['Description'],
                         'logoPath': university['LogoPath']
                     } if university else None
+
         except Exception as e:
+            self.con.rollback()
             raise e  
+        finally:
+            cur.close()
 
     def get_by_email(self, email: str):
         """
@@ -84,11 +89,12 @@ class UniversityDB:
         :raises Exception: If an error occurs during the query execution.
         """
         try:
+            cur = self.con.cursor()
             query = """ SELECT * 
                         FROM University AS Uni JOIN User AS U ON Uni.UserId = U.UserId
                         WHERE Email = ? """
             university = self.con.execute(query, (email,)).fetchone()
-            
+
             return {    'id': university['UserId'], 
                         'email': university['Email'],
                         'password': university['Password'],
@@ -98,9 +104,12 @@ class UniversityDB:
                         'description': university['Description'],
                         'logoPath': university['LogoPath']
                     } if university else None 
-            
+
         except Exception as e:
+            self.con.rollback()
             raise e 
+        finally:   
+            cur.close()
 
     def get_list(self):
         """
@@ -110,12 +119,15 @@ class UniversityDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ SELECT * FROM University """
-                universities = self.con.execute(query).fetchall()
+                universities = cur.execute(query).fetchall()
             return universities
         except Exception as e:
             self.con.rollback()
             raise e
+        finally:
+            cur.close()
     
     def get_list_dict(self):
         """
@@ -125,13 +137,16 @@ class UniversityDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ SELECT UserId, Name FROM University """
-                universities = self.con.execute(query).fetchall()
+                universities = cur.execute(query).fetchall()
                 result = [{'id': uni['UserId'], 'name': uni['Name']} for uni in universities]
             return result
         except Exception as e:
             self.con.rollback()
             raise e
+        finally:
+            cur.close()
 
 
     def close(self):

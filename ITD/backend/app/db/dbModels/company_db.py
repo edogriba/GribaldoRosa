@@ -35,14 +35,16 @@ class CompanyDB:
             userConn = UserDB()
             userId = userConn.insert(email, password, "company")
             with self.con:
+                cur = self.con.cursor()
                 query = """ INSERT INTO Company (UserId, CompanyName, LogoPath, Description, Location) VALUES (?, ?, ?, ?, ?) """
-                self.con.execute(query, (userId, companyName, logoPath, description, location))
+                cur.execute(query, (userId, companyName, logoPath, description, location))
             return userId
         except Exception as e:
             self.con.rollback()
             raise e
         finally:
             userConn.close()
+            cur.close()
 
 
     #############
@@ -57,11 +59,12 @@ class CompanyDB:
         :raises Exception: If an error occurs during the query execution.
         """
         try:
+            cur = self.con.cursor()
             query = """ SELECT * 
                         FROM Company AS C JOIN User AS U ON C.UserId = U.UserId
                         WHERE UserId = ? """
-            company = self.con.execute(query, (id,)).fetchone()
-            
+            company = cur.execute(query, (id,)).fetchone()
+
             return {    'id': company['UserId'], 
                         'email': company['Email'],
                         'password': company['Password'],
@@ -69,9 +72,14 @@ class CompanyDB:
                         'logoPath': company['LogoPath'], 
                         'description': company['Description'], 
                         'location': company['Location'], 
-                    } if company else None       
+                    } if company else None
+        
+
         except Exception as e:
+            self.con.rollback()
             raise e  
+        finally:
+            cur.close()
 
     def get_by_email(self, email: str):
         """
@@ -82,11 +90,12 @@ class CompanyDB:
         :raises Exception: If an error occurs during the query execution.
         """
         try:
+            cur = self.con.cursor()
             query = """ SELECT * 
                         FROM Company AS C JOIN User AS U ON C.UserId = U.UserId
                         WHERE Email = ? """
-            company = self.con.execute(query, (email,)).fetchone()
-            
+            company = cur.execute(query, (email,)).fetchone()
+
             return {    'id': company['UserId'], 
                         'email': company['Email'],
                         'password': company['Password'],
@@ -95,9 +104,12 @@ class CompanyDB:
                         'description': company['Description'], 
                         'location': company['Location'], 
                     } if company else None
-     
+
         except Exception as e:
+            self.con.rollback()
             raise e  
+        finally:
+            cur.close()
 
 
     def close(self):

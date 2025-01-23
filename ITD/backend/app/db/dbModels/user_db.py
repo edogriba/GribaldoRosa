@@ -74,7 +74,8 @@ class UserDB:
                             FROM User
                             WHERE Email = ? """
                 user = cur.execute(query, (email,)).fetchone()
-                return user['Type'] if user else None
+            return user['Type'] if user else None
+
         except Exception as e:
             self.con.rollback()
             raise e 
