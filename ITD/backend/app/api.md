@@ -6,21 +6,22 @@
   - [Table of Contents](#table-of-contents)
   - [Endpoints](#endpoints)
     - [1. Get universities List](#1-get-universities-list)
-      - [Response](#response)
-    - [2. Get students List](#2-get-students-list)
-      - [Response](#response)
-    - [3. University Registration](#3-university-registration)
-      - [Request Parameters](#request-parameters)
-      - [Response](#response)
-    - [4. Student Registration](#4-student-registration)
-      - [Request Parameters](#request-parameters)
-      - [Response](#response)
+      - [Response](#1-response)
+    - [2. University Registration](#2-university-registration)
+      - [Request Parameters](#2-request-parameters)
+      - [Response](#2-response)
+    - [3. Student Registration](#3-student-registration)
+      - [Request Parameters](#3-request-parameters)
+      - [Response](#3-response)
+    - [4. User Login](#4-user-login)
+      - [Request Parameters](#4-request-parameters)
+      - [Response](#4-response)
 
 ## Endpoints
 
 ### 1. Get universities List
 
-- **Endpoint**: `universitylist`
+- **Endpoint**: `/api/universitylist`
 - **Method**: `GET`
 - **Description**: Retrieves a list of universities with their IDs and names.
 
@@ -28,13 +29,13 @@
 
 - **200 OK**:
   - **Body (JSON)**:
-    - `id` (integer): ID of the university.
-    - `name` (string): Name of the university.
+    - `id` (int): ID of the university.
+    - `name` (str): Name of the university.
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (string): Type of error (`database_error`).
-    - `message` (string): Error message.
+    - `type` (str): Type of error (`database_error`).
+    - `message` (str): Error message.
 
 <details>
 <summary>Example Response</summary>
@@ -56,94 +57,60 @@
 
 ------------------------------------------------
 
-### 2. Get students List
+### 2. University Registration
 
-- **Endpoint**: `studentlist`
-- **Method**: `GET`
-- **Description**: Retrieves a list of students with their IDs, names, and GPAs.
-
-#### Response
-
-- **200 OK**:
-  - **Body (JSON)**:
-    - `id` (integer): ID of the student.
-    - `firstName` (string): First name of the student.
-    - `GPA` (float): GPA of the student.
-
-- **500 Internal Server Error**:
-  - **Body (JSON)**:
-    - `type` (string): Type of error (`database_error`).
-    - `message` (string): Error message.
-
-<details>
-<summary>Example Response</summary>
-
-```json
-[
-  {
-    "id": 1,
-    "firstName": "Alice",
-    "GPA": 3.9
-  },
-  {
-    "id": 2,
-    "firstName": "Bob",
-    "GPA": 3.7
-  }
-]
-```
-
-</details>
-
-------------------------------------------------
-
-### 3. University Registration
-
-- **Endpoint**: `/register/university`
+- **Endpoint**: `/api/register/university`
 - **Method**: `POST`
 - **Description**: Registers a new university with required details.
 
 #### Request Parameters
 
 - **Body (JSON)**:
-  - `university_mail` (string, required): Email of the university.
-  - `university_password` (string, required): Password of the university.
-  - `name` (string, required): Name of the university.
-  - `location` (string, required): Location of the university.
-  - `description` (string, required): Description of the university.
-  - `logoPath` (string, optional): Path of the university's logo.
+  - `university_mail` (str, required): Email of the university.
+  - `university_password` (str, required): Password of the university.
+  - `name` (str, required): Name of the university.
+  - `location` (str, required): Location of the university.
+  - `websiteURL` (str, required): URL of the university's website.
+  - `description` (str, required): Description of the university.
+  - `logoPath` (str, optional): Path of the university's logo.
 
 #### Response
 
 - **201 Created**:
   - **Body (JSON)**:
-    - `message` (string): Success message.
-    - `token` (string): JWT token for authentication.
-    - `user` (object): Registered user details.
-      - `id` (integer): User ID.
-      - `mail` (integer): User mail.
-      - `name` (integer): User name.
+    - `message` (str): Success message.
+    - `token` (str): JWT token for authentication.
+    - `user` (dict): Registered user details.
+      - `id` (int)
+      - `email` (str)
+      - `type` (str): User type (_'university'_)
+      - `name` (str)
+      - `address` (str)
+      - `websiteURL` (str)
+      - `description` (str)
+      - `logoPath` (str)
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (string): Type of the error(`invalid_request` or `conflict`).
-    - `message` (string): Error message.
+    - `type` (str): Type of the error(`invalid_request` or `conflict`).
+    - `message` (str): Error message.
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (string): Type of error (`server_error`).
-    - `message` (string): Error message.
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
     
 <details>
 <summary>Example Request</summary>
 
 ```json
-POST /register/university
+POST /api/register/university
 {
   "university_email": "admin@mit.edu",
   "university_password": "securepassword",
   "name": "MIT",
   "location": "Cambridge, MA",
+  "websiteURL": "https://www.mit.edu/",
   "description": "Leading technology university.",
   "logoPath": "/images/mit_logo.png"
 }
@@ -162,7 +129,12 @@ POST /register/university
   "user": {
     "id": 1,
     "email": "admin@mit.edu",
-    "name": "MIT"
+    "type": "university",
+    "name": "MIT",
+    "address": "Cambridge, MA",
+    "websiteURL": "https://www.mit.edu/",
+    "description": "Leading technology university.",
+    "logoPath": "/images/mit_logo.png"
   }
 }
 ```
@@ -171,57 +143,68 @@ POST /register/university
 
 ------------------------------------------------
 
-### 4. Student Registration
+### 3. Student Registration
 
-- **Endpoint**: `/register/student`
+- **Endpoint**: `/api/register/student`
 - **Method**: `POST`
 - **Description**: Registration of a student.
 
 #### Request Parameters
 
 - **Body (JSON)**:
-  - `email` (string, required): Email of the student.
-  - `password` (string, required): Password for the student.
-  - `firstName` (string, required): First name of the student.
-  - `lastName` (string, required): Last name of the student.
-  - `phoneNumber` (string, required): Phone number of the student.
-  - `profilePicturePath` (string, optional): Path to the student's profile picture.
-  - `location` (string, required): Location of the student.
-  - `degreeProgram` (string, required): Degree program the student is enrolled in.
+  - `email` (str, required): Email of the student.
+  - `password` (str, required): Password for the student.
+  - `firstName` (str, required): First name of the student.
+  - `lastName` (str, required): Last name of the student.
+  - `phoneNumber` (str, required): Phone number of the student.
+  - `profilePicturePath` (str, optional): Path to the student's profile picture.
+  - `location` (str, required): Location of the student.
+  - `degreeProgram` (str, required): Degree program the student is enrolled in.
   - `GPA` (float, optional): GPA of the student.
-  - `graduationYear` (integer, optional): Graduation year of the student.
-  - `CVpath` (string, required): Path to the student's CV.
-  - `skills` (string, required): Skills of the student.
-  - `languageSpoken` (string, required): Languages spoken by the student.
-  - `university` (integer, required): ID of the university the student is associated with.
+  - `graduationYear` (int, optional): Graduation year of the student.
+  - `CVpath` (str, required): Path to the student's CV.
+  - `skills` (str, required): Skills of the student.
+  - `languageSpoken` (str, required): Languages spoken by the student.
+  - `university` (int, required): ID of the university the student is associated with.
 
 #### Response
 
 - **201 Created**:
   - **Body (JSON)**:
-    - `message` (string): Success message.
-    - `token` (string): JWT token for authentication.
-    - `user` (object): Registered user details.
-      - `id` (integer): User ID.
-      - `mail` (integer): User mail.
-      - `firstName` (integer): User's first name.
-      - `lastName` (integer): User's last name.
+    - `message` (str): Success message.
+    - `token` (str): JWT token for authentication.
+    - `user` (dict): Registered user details.
+      - `id` (int)
+      - `email` (str)
+      - `type` (str): User type (_'student'_)
+      - `firstName` (str)
+      - `lastName` (str)
+      - `phoneNumber` (str)
+      - `profilePicture` (str)
+      - `location` (str)
+      - `universityId` (int)        
+      - `degreeProgram` (str)
+      - `GPA` (float)
+      - `graduationYear` (int)
+      - `skills` (str)
+      - `CV` (str)
+      - `languageSpoken` (str)
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (string): Type of the error(`invalid_request` or `conflict`).
-    - `message` (string): Error message.
+    - `type` (str): Type of the error(`invalid_request` or `conflict`).
+    - `message` (str): Error message.
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (string): Type of error (`server_error`).
-    - `message` (string): Error message.
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
     
 <details>
 <summary>Example Request</summary>
 
 ```json
-POST /register/student
+POST /api/register/student
 {
   "email": "student@mit.edu",
   "password": "securepassword",
@@ -253,8 +236,174 @@ POST /register/student
   "user": {
     "id": 1,
     "email": "student@mit.edu",
+    "type": "student",
     "firstName": "Alice",
-    "lastName": "Smith"
+    "lastName": "Smith",
+    "phoneNumber": "1234567890",
+    "profilePicture": "/images/alice.png",
+    "location": "Cambridge, MA",
+    "universityId": 1,
+    "degreeProgram": "Computer Science",
+    "GPA": 3.8,
+    "graduationYear": 2025,
+    "skills": "Python, Machine Learning",
+    "CV": "/cvs/alice_smith.pdf",
+    "languageSpoken": "English, Spanish"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 4. User Login
+
+- **Endpoint**: `/api/userlogin`
+- **Method**: `POST`
+- **Description**: Authenticates the user by verifying email and password.
+
+#### Request Parameters
+
+- **Body (JSON)**:
+  - `email` (str, required): Email of the user.
+  - `password` (str, required): Password of the user.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON) [Student]**:
+    - `message` (str): Success message.
+    - `token` (str): JWT token for authentication.
+    - `user` (dict): Logged-in user details.
+      - `id` (int)
+      - `email` (str)
+      - `type` (str): User type (_'student'_)
+      - `firstName` (str)
+      - `lastName` (str)
+      - `phoneNumber` (str)
+      - `profilePicture` (str)
+      - `location` (str)
+      - `universityId` (int)        
+      - `degreeProgram` (str)
+      - `GPA` (float)
+      - `graduationYear` (int)
+      - `skills` (str)
+      - `CV` (str)
+      - `languageSpoken` (str)
+
+  - **Body (JSON) [Company]**:
+    - `message` (str): Success message.
+    - `token` (str): JWT token for authentication.
+    - `user` (dict): Logged-in user details.
+      - `id` (int)
+      - `email` (str)
+      - `type` (str): User type (_'company'_)
+      - `companyName` (str)
+      - `logoPath` (str)
+      - `description` (str)
+      - `location` (str)
+
+  - **Body (JSON) [University]**:
+    - `message` (str): Success message.
+    - `token` (str): JWT token for authentication.
+    - `user` (dict): Logged-in user details.
+      - `id` (int)
+      - `email` (str)
+      - `type` (str): User type (_'university'_)
+      - `name` (str)
+      - `address` (str)
+      - `websiteURL` (str)
+      - `description` (str)
+      - `logoPath` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (invalid_request).
+    - `message` (str): Error message, such as "Email and password are required."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (invalid_credentials).
+    - `message` (str): Error message, such as "Invalid email or password."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (server_error).
+    - `message` (str): Error message.
+
+<details> 
+<summary>Example Request</summary>
+
+```json
+POST /api/userlogin
+{
+  "email": "student@mit.edu",
+  "password": "securepassword"
+}
+```
+
+</details> 
+
+<details> 
+<summary>Example Response</summary>
+
+**For a student**
+```json
+{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "user": {
+    "id": 1,
+    "email": "student@mit.edu",
+    "type": "student",
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "phoneNumber": "1234567890",
+    "profilePicture": "/images/alice.png",
+    "location": "Cambridge, MA",
+    "universityId": 1,
+    "degreeProgram": "Computer Science",
+    "GPA": 3.8,
+    "graduationYear": 2025,
+    "skills": "Python, Machine Learning",
+    "CV": "/cvs/alice_smith.pdf",
+    "languageSpoken": "English, Spanish"
+  }
+}
+```
+
+**For a company**
+```json
+{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "user": {
+    "id": 2,
+    "email": "company@xyz.com",
+    "type": "company",
+    "companyName": "XYZ Corporation",
+    "location": "New York, NY",
+    "logoPath": "/images/xyz_logo.png",
+    "description": "Leading software solutions provider.",
+  }
+}
+```
+
+**For a university**
+```json
+{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "user": {
+    "id": 3,
+    "email": "university@mit.edu",
+    "type": "university",
+    "name": "MIT",
+    "address": "Cambridge, MA",
+    "websiteURL": "https://www.mit.edu",
+    "description": "Leading technology university.",
+    "logoPath": "/images/mit_logo.png",
   }
 }
 ```

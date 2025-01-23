@@ -68,6 +68,23 @@ class Student(User):
     def get_languageSpoken(self):
         return self.languageSpoken
     
+    def to_dict(self):
+        user_dict = super().to_dict()
+        user_dict.update({
+            'firstName': self.firstName,
+            'lastName': self.lastName,
+            'phoneNumber': self.phoneNumber,
+            'profilePicture': self.profilePicture,
+            'location': self.location,
+            'universityId': int(self.universityId),          
+            'degreeProgram': self.degreeProgram,
+            'GPA': float(self.GPA),
+            'graduationYear': int(self.graduationYear),
+            'skills': self.skills,
+            'CV': self.CV,
+            'languageSpoken': self.languageSpoken,
+        })
+        return user_dict
 
     @staticmethod
     def add(email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: str, location: str, 
@@ -113,13 +130,31 @@ class Student(User):
         Retrieve a student record by its unique identifier and return it as a Student object.
 
         :param id: The unique identifier of the student.
-        :return: A Student object populated with the retrieved data if found.
+        :return: A Student object populated with the retrieved data if found, otherwise None.
         :raises Exception: If an error occurs during the query execution.
         """
         try:
             studentConn = StudentDB()
             studentData = studentConn.get_by_id(id)
-            return Student(**studentData)
+            return Student(**studentData) if studentData else None
+        except Exception as e:
+            raise e
+        finally:
+            studentConn.close()
+
+    @staticmethod
+    def get_by_email(email: str):
+        """
+        Retrieve a student record by its email and return it as a Student object.
+
+        :param email: The email of the student.
+        :return: A Student object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            studentConn = StudentDB()
+            studentData = studentConn.get_by_email(email)
+            return Student(**studentData) if studentData else None
         except Exception as e:
             raise e
         finally:

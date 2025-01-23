@@ -34,6 +34,16 @@ class Company(User):
     def get_description(self):
         return self.description
     
+    def to_dict(self):
+        user_dict = super().to_dict()
+        user_dict.update({
+            'companyName': self.companyName,
+            'logoPath': self.logoPath,
+            'description': self.description,
+            'location': self.location
+        })
+        return user_dict
+
     @staticmethod
     def add(email: str, password: str, companyName: str, logoPath: str, description: str, location: str):
         try:
@@ -48,3 +58,40 @@ class Company(User):
         
         finally:
             companyConn.close() 
+    
+    @staticmethod
+    def get_by_id(id: int):
+        """
+        Retrieve a company record by its unique identifier and return it as a Company object.
+
+        :param id: The unique identifier of the company.
+        :return: A Company object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            companyConn = CompanyDB()
+            companyData = companyConn.get_by_id(id)
+            return Company(**companyData) if companyData else None
+        except Exception as e:
+            raise e
+        finally:
+            companyConn.close()
+
+    @staticmethod
+    def get_by_email(email: str):
+        """
+        Retrieve a company record by its email and return it as a Company object.
+
+        :param email: The email of the company.
+        :return: A Company object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            companyConn = CompanyDB()
+            companyData = companyConn.get_by_email(email)
+            return Company(**companyData) if companyData else None
+        except Exception as e:
+            raise e
+        finally:
+            companyConn.close()
+

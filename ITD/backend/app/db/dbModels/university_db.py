@@ -45,6 +45,64 @@ class UniverstityDB:
         finally:
             userConn.close()
     
+    
+    #############
+    #    GET    #
+    ############# 
+    def get_by_id(self, id: int):
+        """
+        Retrieve a university record by its id and return the data as a dictionary.
+
+        :param id: The id of the university.
+        :return: A dictionary with university data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            query = """ SELECT * 
+                        FROM University AS Uni JOIN User AS U ON Uni.UserId = U.UserId
+                        WHERE UserId = ? """
+            university = self.con.execute(query, (id,)).fetchone()
+            if university:
+                return {    'id': university['UserId'], 
+                            'email': university['Email'],
+                            'password': university['Password'],
+                            'name': university['Name'], 
+                            'address': university['Address'],
+                            'websiteURL': university['WebsiteURL'],
+                            'description': university['Description'],
+                            'logoPath': university['LogoPath']
+                        }
+            return None     
+        except Exception as e:
+            raise e  
+
+    def get_by_email(self, email: str):
+        """
+        Retrieve a university record by email and return the data as a dictionary.
+
+        :param email: The email address of the university.
+        :return: A dictionary with university data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            query = """ SELECT * 
+                        FROM University AS Uni JOIN User AS U ON Uni.UserId = U.UserId
+                        WHERE Email = ? """
+            university = self.con.execute(query, (email,)).fetchone()
+            if university:
+                return {    'id': university['UserId'], 
+                            'email': university['Email'],
+                            'password': university['Password'],
+                            'name': university['Name'], 
+                            'address': university['Address'],
+                            'websiteURL': university['WebsiteURL'],
+                            'description': university['Description'],
+                            'logoPath': university['LogoPath']
+                        }
+            return None     
+        except Exception as e:
+            raise e 
+
     def get_list(self):
         """
         Retrieve a list of all universities from the database.

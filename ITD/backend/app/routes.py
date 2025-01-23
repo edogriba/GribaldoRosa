@@ -1,6 +1,6 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user
 import sqlite3
 from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
@@ -12,6 +12,8 @@ def create_main_app():
 
     app = Flask(__name__)
     CORS(app)
+    login_manager = LoginManager()
+    login_manager.init_app(app)
 
     @app.route('/api/universitylist', methods=['GET'])
     def university_list():     
@@ -58,11 +60,7 @@ def create_main_app():
             return jsonify({
                 'message': 'Registration successful',
                 'token': token,
-                'user': {
-                    'id': university.get_id(),
-                    'email': university.get_email(),
-                    'firstName': university.get_name(),
-                }
+                'user': university.to_dict()
             }), 201
 
         except sqlite3.Error as e:
@@ -104,12 +102,7 @@ def create_main_app():
             return jsonify({
                 'message': 'Registration successful',
                 'token': token,
-                'user': {
-                    'id': student.get_id,
-                    'email': student.get_email,
-                    'firstName': student.get_firstName,
-                    'lastName': student.get_lastName
-                }
+                'user': student.to_dict()
             }), 201
 
         except sqlite3.Error as e:
@@ -134,20 +127,20 @@ def create_main_app():
                 "type": "invalid_request",
                 "message": "Email and password are required."
                 }), 400
-
+            
             # Verify user credentials
-            user = User.get_by_email(email)
+            user = load_user(email)
+
             if user and user.check_password(password):
                 # Generate a JWT token for the authenticated user
                 token = generate_token(user.get_id())
 
+                login_user(user)
                 # Return success response
                 return jsonify({
                     'message': 'Login successful',
                     'token': token,
-                    'user': {
-                    'email': user.get_email(),
-                    }
+                    'user': user.to_dict()
                 }), 200
             else:
                 return jsonify({
@@ -160,4 +153,10 @@ def create_main_app():
         except Exception as e:
             return handle_general_error(e)
 
+
+    @login_manager.user_loader
+    def load_user(user_email):
+        return User.get_by_email(user_email)
+    
+    
     return app

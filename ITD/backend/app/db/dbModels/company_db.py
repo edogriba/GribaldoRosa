@@ -44,5 +44,62 @@ class CompanyDB:
         finally:
             userConn.close()
 
+
+    #############
+    #    GET    #
+    ############# 
+    def get_by_id(self, id: int):
+        """
+        Retrieve a company record by its id and return the data as a dictionary.
+
+        :param id: The id of the company.
+        :return: A dictionary with company data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            query = """ SELECT * 
+                        FROM Company AS C JOIN User AS U ON C.UserId = U.UserId
+                        WHERE UserId = ? """
+            company = self.con.execute(query, (id,)).fetchone()
+            if company:
+                return {    'id': company['UserId'], 
+                            'email': company['Email'],
+                            'password': company['Password'],
+                            'companyName': company['CompanyName'], 
+                            'logoPath': company['LogoPath'], 
+                            'description': company['Description'], 
+                            'location': company['Location'], 
+                        }
+            return None        
+        except Exception as e:
+            raise e  
+
+    def get_by_email(self, email: str):
+        """
+        Retrieve a company record by email and return the data as a dictionary.
+
+        :param email: The email address of the company.
+        :return: A dictionary with company data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            query = """ SELECT * 
+                        FROM Company AS C JOIN User AS U ON C.UserId = U.UserId
+                        WHERE Email = ? """
+            company = self.con.execute(query, (email,)).fetchone()
+            if company:
+                return {    'id': company['UserId'], 
+                            'email': company['Email'],
+                            'password': company['Password'],
+                            'companyName': company['CompanyName'], 
+                            'logoPath': company['LogoPath'], 
+                            'description': company['Description'], 
+                            'location': company['Location'], 
+                        }
+            return None        
+        except Exception as e:
+            raise e  
+
+
     def close(self):
         self.con.close()   
