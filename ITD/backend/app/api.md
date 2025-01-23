@@ -6,16 +6,19 @@
   - [Table of Contents](#table-of-contents)
   - [Endpoints](#endpoints)
     - [1. Get universities List](#1-get-universities-list)
-      - [Response](#1-response)
+      - [Response](#response-1)
     - [2. University Registration](#2-university-registration)
-      - [Request Parameters](#2-request-parameters)
-      - [Response](#2-response)
+      - [Request Parameters](#request-parameters-2)
+      - [Response](#response-2)
     - [3. Student Registration](#3-student-registration)
-      - [Request Parameters](#3-request-parameters)
-      - [Response](#3-response)
-    - [4. User Login](#4-user-login)
-      - [Request Parameters](#4-request-parameters)
-      - [Response](#4-response)
+      - [Request Parameters](#request-parameters-3)
+      - [Response](#response-3)
+    - [4. Company Registration](#4-company-registration)
+      - [Request Parameters](#request-parameters-4)
+      - [Response](#response-4)
+    - [5. User Login](#5-user-login)
+      - [Request Parameters](#request-parameters-5)
+      - [Response](#response-5)
 
 ## Endpoints
 
@@ -257,7 +260,90 @@ POST /api/register/student
 
 ------------------------------------------------
 
-### 4. User Login
+
+### 4. Company Registration
+
+- **Endpoint**: `/api/register/company`
+- **Method**: `POST`
+- **Description**: Registration of a company.
+
+#### Request Parameters
+
+- **Body (JSON)**:
+  - `email` (str, required): Email of the student.
+  - `password` (str, required): Password for the student.
+  - `companyName` (str, required): Name of the company.
+  - `logoPath` (str, optional): Path to the company's logo.
+  - `description` (str, required): Description of the company.
+  - `location` (str, required): Location of the company.
+
+#### Response
+
+- **201 Created**:
+  - **Body (JSON)**:
+    - `message` (str): Success message.
+    - `token` (str): JWT token for authentication.
+    - `user` (dict): Registered user details.
+      - `id` (int)
+      - `email` (str)
+      - `type` (str): User type (_'company'_)
+      - `companyName` (str)
+      - `logoPath` (str)
+      - `description` (str)
+      - `location` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error(`invalid_request` or `conflict`).
+    - `message` (str): Error message.
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+    
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/register/company
+{
+  "email": "company@xyz.com",
+  "password": "securepassword",
+  "companyName": "XYZ Corporation",
+  "logoPath": "/images/xyz_logo.png",
+  "description": "Leading software solutions provider.",
+  "location": "New York, NY"
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Registration successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "user": {
+    "id": 1,
+    "email": "company@xyz.com",
+    "type": "company",
+    "companyName": "XYZ Corporation",
+    "logoPath": "/images/xyz_logo.png",
+    "description": "Leading software solutions provider.",
+    "location": "New York, NY"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+
+### 5. User Login
 
 - **Endpoint**: `/api/userlogin`
 - **Method**: `POST`

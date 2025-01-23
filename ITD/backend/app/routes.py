@@ -111,6 +111,38 @@ def create_main_app():
         except Exception as e:
             return handle_general_error(e)   
 
+    @app.route('/api/register/company', methods=['POST'])
+    def company_register():
+        try:
+            # Get JSON data from the request
+            data = request.get_json()
+
+            # Extract fields from the JSON
+            values = {
+                'email'         : data.get('email'),
+                'password'      : hash_password(data.get('password')),
+                'companyName'   : data.get('companyName'),
+                'logoPath'      : data.get('logoPath', ''),  # Optional
+                'description'   : data.get('description'),
+                'location'      : data.get('location'),
+            }
+
+            company = Company.add(**values)
+
+            # Generate a JWT token for the registered company
+            token = generate_token(company.get_id)
+
+            # Return success response
+            return jsonify({
+                'message': 'Registration successful',
+                'token': token,
+                'user': company.to_dict()
+            }), 201
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)   
 
     @app.route('/api/userlogin', methods = ['POST'])
     def user_login():
