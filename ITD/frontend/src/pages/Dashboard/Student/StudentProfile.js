@@ -7,7 +7,7 @@ import StudentProfileCard from './StudentProfileCard';
 const StudentProfile = () => {
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <StudentTab activeTab='profile'/>
             <StudentProfileCard />
             <Footer />

@@ -38,6 +38,34 @@ class User(UserMixin):
             raise e
         finally:
             userConn.close()
+            
+    def get_by_email(self, email: str):
+        """
+        Retrieve a user by its email.
+
+        :param email: The unique email of the user.
+        :return: A tuple representing the user record if found, otherwise None.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                query = """ SELECT * 
+                            FROM User
+                            WHERE Email = ? """
+                user = self.con.execute(query, (email,)).fetchone()
+            return user if user else None
+        except Exception as e:
+            self.con.rollback()
+            raise e  
+
+    def check_password(self, password: str):
+        """
+        Check if the provided password matches the user's password.
+
+        :param password: The password to check.
+        :return: True if the password matches, otherwise False.
+        """
+        return self.password == password
 
     #def __repr__(self):
     #    return f"<User: {self.id}, Email: {self.email}, Type: {self.type}>"
