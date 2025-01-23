@@ -1,6 +1,4 @@
 from sqlite3 import connect, Row
-from app.utils.error_handler import handle_database_error
-
 
 DATABASE = 'app/db/SC.db'
 
@@ -37,7 +35,7 @@ class UserDB:
                 return cur.lastrowid
         except Exception as e:
             self.con.rollback()
-            raise handle_database_error(e)
+            raise e
         finally:
             cur.close()
 
@@ -51,12 +49,15 @@ class UserDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = " SELECT COUNT(*) FROM Users WHERE Email = ?"
-                row = self.con.execute(query, (email,)).fetchone()
+                row = cur.execute(query, (email,)).fetchone()
                 return row[0] == 0 if row else True
         except Exception as e:
             self.con.rollback()
             raise e
+        finally:
+            cur.close()
 
     def get_type_by_email(self, email: str):
         """
@@ -68,14 +69,17 @@ class UserDB:
         """
         try:
             with self.con:
+                cur = self.con.cursor()
                 query = """ SELECT Type 
                             FROM User
                             WHERE Email = ? """
-                user = self.con.execute(query, (email,)).fetchone()
-            return user if user else None
+                user = cur.execute(query, (email,)).fetchone()
+                return user['Type'] if user else None
         except Exception as e:
             self.con.rollback()
             raise e 
+        finally:
+            cur.close()
      
     def close(self):
         self.con.close()

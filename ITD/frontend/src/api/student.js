@@ -2,8 +2,8 @@ import { Method } from './api';
 import { request } from './request';
 
 const StudentEndPoint = {
-  GET_STUDENT_LIST: '/studentlist',
-  STUDENT_REGISTRATION: '/register/student'
+  GET_STUDENT_LIST: '/api/studentlist',
+  STUDENT_REGISTRATION: '/api/register/student'
 };
 
 

@@ -47,12 +47,13 @@ class StudentDB:
             userConn = UserDB()
             userId = userConn.insert(email, password, "student")
             with self.con:
+                cur = self.con.cursor()
                 query = """ INSERT INTO Student (
                         UserId, FirstName, LastName, PhoneNumber, ProfilePicturePath, 
                         Location, DegreeProgram, Gpa, GraduationYear, CVpath, Skills, 
                         LanguageSpoken, UniversityId
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) """
-                self.con.execute(query, (userId, firstName, lastName, phoneNumber, profilePicturePath, 
+                cur.execute(query, (userId, firstName, lastName, phoneNumber, profilePicturePath, 
                                     location, degreeProgram, gpa, graduationYear, CVpath, skills, 
                                     languageSpoken, universityId))
             return userId
@@ -61,6 +62,7 @@ class StudentDB:
             raise e
         finally:
             userConn.close()
+            cur.close()
 
     #############
     #    GET    #
@@ -74,30 +76,32 @@ class StudentDB:
         :raises Exception: If an error occurs during the query execution.
         """
         try:
+            cur = self.con.cursor()
             query = """ SELECT * 
                         FROM Student AS S JOIN User AS U ON S.UserId = U.UserId
                         WHERE UserId = ? """
-            student = self.con.execute(query, (id,)).fetchone()
-            if student:
-                return {    'id': student['UserId'], 
-                            'email': student['Email'],
-                            'password': student['Password'],
-                            'firstName': student['FirstName'], 
-                            'lastName': student['LastName'], 
-                            'phoneNumber': student['PhoneNumber'], 
-                            'profilePicture': student['ProfilePicturePath'], 
-                            'location': student['Location'], 
-                            'universityId': student['UniversityId'], 
-                            'degreeProgram': student['DegreeProgram'], 
-                            'GPA': student['Gpa'], 
-                            'graduationYear': student['GraduationYear'], 
-                            'skills': student['Skills'], 
-                            'CV': student['CVpath'], 
-                            'languageSpoken': student['LanguageSpoken']
-                        }
-            return None
+            student = cur.execute(query, (id,)).fetchone()
+
+            return {    'id': student['UserId'], 
+                        'email': student['Email'],
+                        'password': student['Password'],
+                        'firstName': student['FirstName'], 
+                        'lastName': student['LastName'], 
+                        'phoneNumber': student['PhoneNumber'], 
+                        'profilePicture': student['ProfilePicturePath'], 
+                        'location': student['Location'], 
+                        'universityId': student['UniversityId'], 
+                        'degreeProgram': student['DegreeProgram'], 
+                        'GPA': student['Gpa'], 
+                        'graduationYear': student['GraduationYear'], 
+                        'skills': student['Skills'], 
+                        'CV': student['CVpath'], 
+                        'languageSpoken': student['LanguageSpoken']
+                    } if student else None
         except Exception as e:
             raise e  
+        finally:
+            cur.close()
 
     def get_by_email(self, email: str):
         """
@@ -111,25 +115,25 @@ class StudentDB:
             query = """ SELECT * 
                         FROM Student AS S JOIN User AS U ON S.UserId = U.UserId
                         WHERE Email = ? """
-            student = self.con.execute(query, (email,)).fetchone()
-            if student:
-                return {    'id': student['UserId'], 
-                            'email': student['Email'],
-                            'password': student['Password'],
-                            'firstName': student['FirstName'], 
-                            'lastName': student['LastName'], 
-                            'phoneNumber': student['PhoneNumber'], 
-                            'profilePicture': student['ProfilePicturePath'], 
-                            'location': student['Location'], 
-                            'universityId': student['UniversityId'], 
-                            'degreeProgram': student['DegreeProgram'], 
-                            'GPA': student['Gpa'], 
-                            'graduationYear': student['GraduationYear'], 
-                            'skills': student['Skills'], 
-                            'CV': student['CVpath'], 
-                            'languageSpoken': student['LanguageSpoken']
-                        }
-            return None
+            student = self.con.execute(query, (email,)).fetchone() # DOUBT: cur instead of self.con ?
+            
+
+            return {    'id': student['UserId'], 
+                        'email': student['Email'],
+                        'password': student['Password'],
+                        'firstName': student['FirstName'], 
+                        'lastName': student['LastName'], 
+                        'phoneNumber': student['PhoneNumber'], 
+                        'profilePicture': student['ProfilePicturePath'], 
+                        'location': student['Location'], 
+                        'universityId': student['UniversityId'], 
+                        'degreeProgram': student['DegreeProgram'], 
+                        'GPA': student['Gpa'], 
+                        'graduationYear': student['GraduationYear'], 
+                        'skills': student['Skills'], 
+                        'CV': student['CVpath'], 
+                        'languageSpoken': student['LanguageSpoken']
+                    } if student else None
         except Exception as e:
             raise e  
 
