@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { api } from '../../../api/api';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 
@@ -28,7 +29,7 @@ const RegisterUniversity = () => {
     };
 
     try {
-        const response = await axios.post('http://127.0.0.1:5000/register/university', data);
+        const response = await axios.post('http://127.0.0.1:5000/api/register/university', data);
 
         // Save the token to localStorage
         localStorage.setItem('token', response.data.token);

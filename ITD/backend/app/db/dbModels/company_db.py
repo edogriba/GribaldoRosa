@@ -61,16 +61,16 @@ class CompanyDB:
                         FROM Company AS C JOIN User AS U ON C.UserId = U.UserId
                         WHERE UserId = ? """
             company = self.con.execute(query, (id,)).fetchone()
-            if company:
-                return {    'id': company['UserId'], 
-                            'email': company['Email'],
-                            'password': company['Password'],
-                            'companyName': company['CompanyName'], 
-                            'logoPath': company['LogoPath'], 
-                            'description': company['Description'], 
-                            'location': company['Location'], 
-                        }
-            return None        
+
+            return {    'id': company['UserId'], 
+                        'email': company['Email'],
+                        'password': company['Password'],
+                        'companyName': company['CompanyName'], 
+                        'logoPath': company['LogoPath'], 
+                        'description': company['Description'], 
+                        'location': company['Location'], 
+                    } if company else None
+        
         except Exception as e:
             raise e  
 
@@ -87,16 +87,16 @@ class CompanyDB:
                         FROM Company AS C JOIN User AS U ON C.UserId = U.UserId
                         WHERE Email = ? """
             company = self.con.execute(query, (email,)).fetchone()
-            if company:
-                return {    'id': company['UserId'], 
-                            'email': company['Email'],
-                            'password': company['Password'],
-                            'companyName': company['CompanyName'], 
-                            'logoPath': company['LogoPath'], 
-                            'description': company['Description'], 
-                            'location': company['Location'], 
-                        }
-            return None        
+
+            return {    'id': company['UserId'], 
+                        'email': company['Email'],
+                        'password': company['Password'],
+                        'companyName': company['CompanyName'], 
+                        'logoPath': company['LogoPath'], 
+                        'description': company['Description'], 
+                        'location': company['Location'], 
+                    } if company else None
+       
         except Exception as e:
             raise e  
 

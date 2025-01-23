@@ -2,8 +2,8 @@ import { Method } from './api';
 import { request } from './request';
 
 const UniversityEndPoint = {
-  GET_UNIVERSITY_LIST: '/universitylist',
-  UNIVERSITY_REGISTRATION: '/register/university'
+  GET_UNIVERSITY_LIST: '/api/universitylist',
+  UNIVERSITY_REGISTRATION: '/api/register/university'
 };
 
 

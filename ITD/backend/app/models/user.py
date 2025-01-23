@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from app.db.dbModels.user_db import UserDB
+from app.utils.auth import hash_password
 
 DATABASE = 'app/SC.db'
 
@@ -11,7 +12,7 @@ class User(UserMixin):
         self.type = type
         
     def get_id(self):
-        return self.id
+        return str(self.id)
     
     def get_type(self):
         return self.type
@@ -28,6 +29,18 @@ class User(UserMixin):
             'email': self.email,
             'type': self.type
         }
+    
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
 
     @staticmethod
     def is_email_unique(email: str):
@@ -71,6 +84,8 @@ class User(UserMixin):
         :param password: The password to check.
         :return: True if the password matches, otherwise False.
         """
+        print("password: ", password)
+        print("self.password: ", self.password)
         return self.password == password
 
     #def __repr__(self):

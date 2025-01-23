@@ -62,17 +62,17 @@ class UniverstityDB:
                         FROM University AS Uni JOIN User AS U ON Uni.UserId = U.UserId
                         WHERE UserId = ? """
             university = self.con.execute(query, (id,)).fetchone()
-            if university:
-                return {    'id': university['UserId'], 
-                            'email': university['Email'],
-                            'password': university['Password'],
-                            'name': university['Name'], 
-                            'address': university['Address'],
-                            'websiteURL': university['WebsiteURL'],
-                            'description': university['Description'],
-                            'logoPath': university['LogoPath']
-                        }
-            return None     
+
+            return {    'id': university['UserId'], 
+                        'email': university['Email'],
+                        'password': university['Password'],
+                        'name': university['Name'], 
+                        'address': university['Address'],
+                        'websiteURL': university['WebsiteURL'],
+                        'description': university['Description'],
+                        'logoPath': university['LogoPath']
+                    } if university else None
+    
         except Exception as e:
             raise e  
 
@@ -89,17 +89,17 @@ class UniverstityDB:
                         FROM University AS Uni JOIN User AS U ON Uni.UserId = U.UserId
                         WHERE Email = ? """
             university = self.con.execute(query, (email,)).fetchone()
-            if university:
-                return {    'id': university['UserId'], 
-                            'email': university['Email'],
-                            'password': university['Password'],
-                            'name': university['Name'], 
-                            'address': university['Address'],
-                            'websiteURL': university['WebsiteURL'],
-                            'description': university['Description'],
-                            'logoPath': university['LogoPath']
-                        }
-            return None     
+
+            return {    'id': university['UserId'], 
+                        'email': university['Email'],
+                        'password': university['Password'],
+                        'name': university['Name'], 
+                        'address': university['Address'],
+                        'websiteURL': university['WebsiteURL'],
+                        'description': university['Description'],
+                        'logoPath': university['LogoPath']
+                    } if university else None 
+          
         except Exception as e:
             raise e 
 

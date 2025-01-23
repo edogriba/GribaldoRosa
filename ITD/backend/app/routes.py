@@ -1,8 +1,8 @@
 from flask import jsonify, Flask, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_login import LoginManager, login_user
 import sqlite3
-from app.utils.auth import hash_password, generate_token
+from app.utils.auth import hash_password, verify_password, generate_token
 from app.models.student import Student
 from app.models.university import University
 from app.models.company import Company
@@ -12,11 +12,13 @@ from app.utils.error_handler import handle_database_error, handle_general_error
 def create_main_app():
 
     app = Flask(__name__)
-    CORS(app)
+    app.config['SECRET_KEY'] = 'secret'
+    CORS(app, resources={r"/*": {"origins": "*"}})
     login_manager = LoginManager()
     login_manager.init_app(app)
 
-    @app.route('/api/universitylist', methods=['GET'])
+    @app.route('/api/universitylist', methods=['GET', 'OPTIONS'])
+    @cross_origin()
     def university_list():     
         try:
             universities = University.get_list_dict()
@@ -28,7 +30,8 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    @app.route('/api/register/university', methods=['POST'])
+    @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
+    @cross_origin()
     def university_register():
         try:
             # Get JSON data from the request
@@ -70,7 +73,8 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    @app.route('/api/register/student', methods=['POST'])
+    @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
+    @cross_origin()
     def student_register():
         try:
             # Get JSON data from the request
@@ -111,7 +115,9 @@ def create_main_app():
         except Exception as e:
             return handle_general_error(e)   
 
-    @app.route('/api/register/company', methods=['POST'])
+
+    @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
+    @cross_origin()
     def company_register():
         try:
             # Get JSON data from the request
@@ -144,7 +150,9 @@ def create_main_app():
         except Exception as e:
             return handle_general_error(e)   
 
-    @app.route('/api/userlogin', methods = ['POST'])
+
+    @app.route('/api/userlogin', methods = ['POST', 'OPTIONS'])
+    @cross_origin()
     def user_login():
         try:
             # Get JSON data from the request
@@ -152,7 +160,7 @@ def create_main_app():
 
             # Extract fields from the JSON
             email = data.get('email')
-            password = hash_password(data.get('password'))
+            password = data.get('password')
 
             # Validate required fields
             if not email or not password:
@@ -160,15 +168,17 @@ def create_main_app():
                 "type": "invalid_request",
                 "message": "Email and password are required."
                 }), 400
-            
+
             # Verify user credentials
             user = load_user(email)
 
-            if user and user.check_password(password):
+            #if user and user.check_password(password):
+            if user and verify_password(password, user.get_password()):
                 # Generate a JWT token for the authenticated user
                 token = generate_token(user.get_id())
 
-                login_user(user)
+                login_user(user, True)
+
                 # Return success response
                 return jsonify({
                     'message': 'Login successful',
