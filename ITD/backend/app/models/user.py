@@ -1,8 +1,5 @@
 from flask_login import UserMixin
 from app.db.dbModels.user_db import UserDB
-from student import Student
-from company import Company
-from university import University
 
 DATABASE = 'app/SC.db'
 
@@ -50,25 +47,18 @@ class User(UserMixin):
             userConn.close()
 
     @staticmethod        
-    def get_by_email(email: str):
+    def get_type_by_email(email: str):
         """
-        Retrieve a user record by email and return the corresponding entity.
+        Retrieve a user record by email and return the corresponding type.
 
         :param email: The email address of the user.
-        :return: A Student, Company, or University object if the email exists, otherwise None.
+        :return: Type of the user, otherwise None.
         :raises Exception: If an error occurs during the query execution.
         """
         try:
             userConn = UserDB()
             userType = userConn.get_type_by_email(email)
-            if userType == "student":
-                return Student.get_by_email(email)
-            elif userType == "company":
-                return Company.get_by_email(email)
-            elif userType == "university":
-                return University.get_by_email(email)
-            else:
-                return None
+            return userType
         except Exception as e:
             raise e
         finally:

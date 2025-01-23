@@ -1,4 +1,4 @@
-from backend.app.models.user import User
+from app.models.user import User
 from app.db.dbModels.company_db import CompanyDB
 
 

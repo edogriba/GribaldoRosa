@@ -1,8 +1,5 @@
 from sqlite3 import connect, Row
 from app.utils.error_handler import handle_database_error
-from student_db import StudentDB
-from university_db import UniverstityDB
-from company_db import CompanyDB
 
 DATABASE = 'app/db/SC.db'
 

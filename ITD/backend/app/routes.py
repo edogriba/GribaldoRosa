@@ -5,6 +5,7 @@ import sqlite3
 from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
 from app.models.university import University
+from app.models.company import Company
 from app.models.user import User
 from app.utils.error_handler import handle_database_error, handle_general_error
 
@@ -156,7 +157,15 @@ def create_main_app():
 
     @login_manager.user_loader
     def load_user(user_email):
-        return User.get_by_email(user_email)
+        type = User.get_type_by_email(user_email)
+        if type == "student":
+            return Student.get_by_email(user_email)
+        elif type == "company":
+            return Company.get_by_email(user_email)
+        elif type == "university":
+            return University.get_by_email(user_email)
+        else:
+            return None
     
     
     return app
