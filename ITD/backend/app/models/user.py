@@ -1,8 +1,5 @@
 from flask_login import UserMixin
 from app.db.dbModels.user_db import UserDB
-from app.models.student import Student
-from app.models.company import Company
-from app.models.university import University
 
 DATABASE = 'app/SC.db'
 
