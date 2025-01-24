@@ -1,6 +1,5 @@
 from flask_login import UserMixin
 from app.db.dbModels.user_db import UserDB
-from app.utils.auth import hash_password
 
 DATABASE = 'app/SC.db'
 
@@ -53,6 +52,7 @@ class User(UserMixin):
     @property
     def is_anonymous(self):
         return False
+    
     @staticmethod
     def is_email_unique(email: str):
         """

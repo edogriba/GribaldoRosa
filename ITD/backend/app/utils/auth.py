@@ -1,6 +1,4 @@
 import bcrypt
-import jwt
-from datetime import datetime, timedelta, timezone
 
 SECRET_KEY = "123456"
 
@@ -32,35 +30,3 @@ def verify_password(plain_password, hashed_password):
     """
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-
-def generate_token(user_id):
-    """
-    Generates a JWT (JSON Web Token) for the given user ID.
-
-    @param {int} user_id - The unique identifier of the user.
-
-    This function creates a secure JWT with the user's ID and an expiration
-    time of 24 hours. The token is signed using the `SECRET_KEY` and the HS256
-    algorithm, ensuring that it can be used for authentication and authorization
-    purposes. The generated token is returned as a string.
-    """
-    try:
-        token = jwt.encode(
-            {
-                'user_id': int(user_id), 
-                'exp': datetime.now(timezone.utc) + timedelta(hours=24)
-            },
-            SECRET_KEY, 
-            algorithm="HS256"
-        )
-        return token
-    except jwt.exceptions.PyJWTError as e:
-        # Catch specific JWT encoding errors and propagate
-        print(f"Error generating JWT token: {str(e)}")              ### Debugging
-        raise e
-    except Exception as e:
-        # Catch any other exceptions and propagate
-        print(f"Unexpected error occurred: {str(e)}")               ### Debugging
-        raise e
-
-    
