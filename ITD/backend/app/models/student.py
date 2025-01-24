@@ -97,7 +97,7 @@ class Student(User):
     @property
     def is_anonymous(self):
         return False
-    
+
     @staticmethod
     def add(email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: str, location: str, 
             degreeProgram: str, gpa: float, graduationYear: int, CVpath: str, skills: str, languageSpoken: str, universityId: int):

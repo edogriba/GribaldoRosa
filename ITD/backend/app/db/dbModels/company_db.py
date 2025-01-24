@@ -74,6 +74,7 @@ class CompanyDB:
                         'location': company['Location'], 
                     } if company else None
         
+
         except Exception as e:
             self.con.rollback()
             raise e  
@@ -103,7 +104,7 @@ class CompanyDB:
                         'description': company['Description'], 
                         'location': company['Location'], 
                     } if company else None
-       
+
         except Exception as e:
             self.con.rollback()
             raise e  

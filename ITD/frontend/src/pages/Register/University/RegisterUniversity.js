@@ -50,8 +50,8 @@ const RegisterUniversity = () => {
     <div>
       <Navbar/>
       {/* Form */}
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <section className="pb-10 bg-gray-50 dark:bg-gray-900">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
           <Link to="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
             <img
               className="w-20 h-20 mt-2"
@@ -213,7 +213,7 @@ const RegisterUniversity = () => {
                       I accept the{' '}
                       <a
                         className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                        href="#"
+                        href="/policy" // TO DO: Add policy page
                       >
                         Terms and Conditions
                       </a>
@@ -224,7 +224,7 @@ const RegisterUniversity = () => {
                 <button
                   disabled={!termAccepted}
                   type="submit"
-                  className="text-white bg-blue-600 w-full text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="text-white bg-primary-600 w-full text-white bg-primary-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Create an account
                 </button>

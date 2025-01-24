@@ -42,6 +42,17 @@ class User(UserMixin):
     def is_anonymous(self):
         return False
 
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
     @staticmethod
     def is_email_unique(email: str):
         """
@@ -86,7 +97,9 @@ class User(UserMixin):
         """
         print("password: ", password)
         print("self.password: ", self.password)
+
         return self.password == password
+    
 
     #def __repr__(self):
     #    return f"<User: {self.id}, Email: {self.email}, Type: {self.type}>"

@@ -17,18 +17,18 @@ export const Navbar = ({ currentPage, isLoggedIn }) => {
                 <div className="w-full md:block md:w-auto" id="navbar-solid-bg">
                 <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
                     <li>
-                    <NavLink to="/" className={currentPage === "home" ? "text-blue-500" : ""}>Home</NavLink>
+                    <NavLink to="/" className={currentPage === "home" ? "text-primary-500" : ""}>Home</NavLink>
                     </li>
                     <li>
-                    <NavLink to="/about" className={currentPage === "about" ? "text-blue-500" : ""}>About</NavLink>
+                    <NavLink to="/about" className={currentPage === "about" ? "text-primary-500" : ""}>About</NavLink>
                     </li>
                     {!isLoggedIn ? (
                         <>
                             <li>
-                                <NavLink to="/login" className={currentPage === "login" ? "text-blue-500" : ""}>Login</NavLink>
+                                <NavLink to="/login" className={currentPage === "login" ? "text-primary-500" : ""}>Login</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/register" className={currentPage === "register" ? "text-blue-500" : ""}>Register</NavLink>
+                                <NavLink to="/register" className={currentPage === "register" ? "text-primary-500" : ""}>Register</NavLink>
                             </li>
                         </>
                     ) : (
