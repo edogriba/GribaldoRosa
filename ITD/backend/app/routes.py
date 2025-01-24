@@ -1,6 +1,6 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS, cross_origin
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, logout_user, login_required
 import sqlite3
 from app.utils.auth import hash_password, verify_password, generate_token
 from app.models.student import Student
@@ -192,6 +192,19 @@ def create_main_app():
 
         except sqlite3.Error as e:
             return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+
+
+    @app.route('/api/userlogout', methods=['POST', 'OPTIONS'])
+    @cross_origin() 
+    @login_required
+    def user_logout():
+        try:
+            logout_user()
+            return jsonify({
+                'message': 'Logout successful'
+            }), 200
         except Exception as e:
             return handle_general_error(e)
 

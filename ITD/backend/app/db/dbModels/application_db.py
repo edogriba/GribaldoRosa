@@ -27,6 +27,7 @@ class ApplicationDB:            # accepted refused pending
 
         :params studentId: int, internshipPositionId: int, state: str.
         :return: The ID of the inserted row.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             with self.con:
@@ -49,6 +50,7 @@ class ApplicationDB:            # accepted refused pending
 
         :param applicationId: The ID of the application.
         :return: A dictionary representing the application or None if not found.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             cur = self.con.cursor()
@@ -68,12 +70,13 @@ class ApplicationDB:            # accepted refused pending
         finally:
             cur.close()
 
-    def get_by_student_id(self, studentId: int):
+    def get_by_studentId(self, studentId: int):
         """
         Retrieve applications by their student ID.
 
         :param studentId: The ID of the student.
         :return: A list of dictionaries representing the applications or an empty list if not found.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             cur = self.con.cursor()
@@ -95,6 +98,64 @@ class ApplicationDB:            # accepted refused pending
         finally:
             cur.close()
 
+    def get_by_internshipPositionId(self, internshipPositionId: int):
+        """
+        Retrieve applications by their internship position ID.
+
+        :param internshipPositionId: The ID of the internship position.
+        :return: A list of dictionaries representing the applications or an empty list if not found.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT * FROM Application WHERE InternshipPositionId = ? """
+            rows = cur.execute(query, (internshipPositionId,)).fetchall()
+            
+            return [
+                {
+                    "applicationId": row["ApplicationId"],
+                    "studentId": row["StudentId"],
+                    "internshipPositionId": row["InternshipPositionId"],
+                    "state": row["State"]
+                } for row in rows
+            ] if rows else []
+        
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def get_by_studentId_internshipPositionId(self, studentId: int, internshipPositionId: int):
+        """
+        Retrieve an application by its student ID and internship position ID.
+
+        :param studentId: The ID of the student.
+        :param internshipPositionId: The ID of the internship position.
+        :return: A dictionary representing the application or None if not found.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT * FROM Application WHERE StudentId = ? AND InternshipPositionId = ? """
+            row = cur.execute(query, (studentId, internshipPositionId)).fetchone()
+            
+            return {
+                "applicationId": row["ApplicationId"],
+                "studentId": row["StudentId"],
+                "internshipPositionId": row["InternshipPositionId"],
+                "state": row["State"]
+            } if row else None
+        
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    ################
+    #    UPDATE    #
+    ################
     def update_state(self, applicationId: int, state: str):
         """
         Update the state of an application by its ID.
@@ -114,3 +175,7 @@ class ApplicationDB:            # accepted refused pending
             raise e
         finally:
             cur.close()
+
+
+    def close(self):
+        self.con.close()

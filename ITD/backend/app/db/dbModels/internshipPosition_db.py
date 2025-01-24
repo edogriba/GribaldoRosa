@@ -59,8 +59,10 @@ class InternshipPositionDB:
     def get_by_id(self, internshipPositionId: int):
         """
         Retrieve an internship position by its ID.
+
         :param internshipPositionId: The ID of the internship position.
         :return: A dictionary representing the internship position or None if not found.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             with self.con:
@@ -90,11 +92,13 @@ class InternshipPositionDB:
         finally:
             cur.close()
 
-    def get_by_company(self, companyId: int):
+    def get_by_companyId(self, companyId: int):
         """
         Retrieve all internship positions for a given company ID.
+
         :param companyId: The ID of the company.
         :return: A list of dictionaries representing the internship positions.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             with self.con:
@@ -125,11 +129,49 @@ class InternshipPositionDB:
         finally:
             cur.close()
 
+    def get_by_program_name(self, programName: str):
+        """
+        Retrieve all internship positions for a given program name.
+
+        :param programName: The name of the program.
+        :return: A list of dictionaries representing the internship positions.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = """ SELECT InternshipPositionId, CompanyId, ProgramName, Duration, Location, RoleTitle, SkillsRequired, 
+                            Compensation, Benefits, LanguagesRequired, Description 
+                            FROM InternshipPosition WHERE ProgramName = ? """
+                cur.execute(query, (programName,))
+                rows = cur.fetchall()
+                return [
+                    {
+                        "internshipPositionId": row["InternshipPositionId"],
+                        "companyId": row["CompanyId"],
+                        "programName": row["ProgramName"],
+                        "duration": row["Duration"],
+                        "location": row["Location"],
+                        "roleTitle": row["RoleTitle"],
+                        "skillsRequired": row["SkillsRequired"],
+                        "compensation": row["Compensation"],
+                        "benefits": row["Benefits"],
+                        "languagesRequired": row["LanguagesRequired"],
+                        "description": row["Description"]
+                    } for row in rows
+                ]
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
     def get_list(self):
         """
         Retrieve a list of all internship positions from the database.
 
         :return: A list of rows, where each row represents an internship position with all its fields.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             with self.con:

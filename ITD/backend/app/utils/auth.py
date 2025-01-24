@@ -1,6 +1,5 @@
 import bcrypt
 import jwt
-from jwt.exceptions import PyJWTError
 from datetime import datetime, timedelta, timezone
 
 SECRET_KEY = "123456"
@@ -55,7 +54,7 @@ def generate_token(user_id):
             algorithm="HS256"
         )
         return token
-    except PyJWTError as e:
+    except jwt.exceptions.PyJWTError as e:
         # Catch specific JWT encoding errors and propagate
         print(f"Error generating JWT token: {str(e)}")              ### Debugging
         raise e

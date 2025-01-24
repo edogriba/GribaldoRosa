@@ -19,6 +19,8 @@
     - [5. User Login](#5-user-login)
       - [Request Parameters](#request-parameters-5)
       - [Response](#response-5)
+    - [6. User Logout](#6-user-logout)
+      - [Response](#response-6)
 
 ## Endpoints
 
@@ -491,6 +493,43 @@ POST /api/userlogin
     "description": "Leading technology university.",
     "logoPath": "/images/mit_logo.png",
   }
+}
+```
+
+</details>
+
+### 6. User Logout
+
+- **Endpoint**: `/api/userlogout`
+- **Method**: `POST`
+- **Description**: Logs out the authenticated user.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message indicating the user has been logged out.
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/userlogout
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Logout successful"
 }
 ```
 
