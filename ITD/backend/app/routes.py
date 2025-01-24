@@ -19,7 +19,7 @@ from app.utils.error_handler import handle_database_error, handle_general_error
 from app.managers.login_manager import LoginManager as CustomLoginManager
 from app.managers.registration_manager import RegistrationManager
 from app.managers.internship_manager import InternshipManager
-from app.managers.application_manager import ApplicationManager
+#from app.managers.application_manager import ApplicationManager
 
 def create_main_app():
 
