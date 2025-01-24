@@ -1,6 +1,13 @@
 from flask import jsonify
 from flask_login import login_user, logout_user
-from app.utils.auth import verify_password, generate_token
+from flask_jwt_extended import (
+    create_access_token, 
+    create_refresh_token, 
+    set_access_cookies, 
+    set_refresh_cookies, 
+    unset_jwt_cookies
+)
+from app.utils.auth import verify_password
 from app.models.user import User
 from app.models.student import Student
 from app.models.university import University
@@ -31,15 +38,21 @@ class LoginManager:
 
             if user and verify_password(password, user.get_password()):
                 # Generate a JWT token for the authenticated user
-                token = generate_token(user.get_id())
+
+                access_token = create_access_token(identity={"id": user.get_id(), "email": user.get_email()})
+                refresh_token = create_refresh_token(identity={"id": user.get_id(), "email": user.get_email()})
 
                 login_user(user, True)
-                # Return success response
-                return jsonify({
+
+                response = jsonify({
                     'message': 'Login successful',
-                    'token': token,
                     'user': user.to_dict()
-                }), 200
+                })
+
+                set_access_cookies(response, access_token)
+                set_refresh_cookies(response, refresh_token)
+
+                return response, 200
             else:
                 return jsonify({
                     "type": "invalid_credentials",
@@ -58,9 +71,14 @@ class LoginManager:
         """
         try:
             logout_user()
-            return jsonify({
+
+            response = jsonify({
                 'message': 'Logout successful'
-            }), 200
+            })
+
+            unset_jwt_cookies(response)
+
+            return response, 200
         except Exception as e:
             return e
         
