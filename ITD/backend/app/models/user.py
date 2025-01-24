@@ -52,6 +52,7 @@ class User(UserMixin):
     @property
     def is_anonymous(self):
         return False
+    
     @staticmethod
     def is_email_unique(email: str):
         """

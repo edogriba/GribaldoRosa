@@ -35,8 +35,7 @@ class RegistrationManager:
                 'universityId'  : user_data.get('university')
             }
 
-            res = self.validate_student_data(values)
-            if not res:
+            if self.validate_student_data(values):
                 return jsonify({
                     "type": "invalid_request",
                     "message": "Invalid data"

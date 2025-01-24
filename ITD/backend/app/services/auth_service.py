@@ -284,3 +284,43 @@ def is_id_valid(id: int):
         return id and is_int_valid(id)
     except Exception as e:
         return False
+
+
+def is_duration_valid(duration: int):
+    """
+    Check if the provided input is a valid duration.
+
+    :param duration: The duration to validate.
+    :return: True if the duration is valid and not empty, False otherwise.
+    """
+    try:
+        return duration and is_int_valid(duration) and 0 <= duration <= 12
+    except Exception as e:
+        return False
+    
+
+def is_compensation_valid(compensation: int):
+    """
+    Check if the provided input is a valid compensation.
+
+    :param compensation: The compensation to validate.
+    :return: True if the compensation is valid or empty, False otherwise.
+    """
+    try:
+        return not compensation or is_int_valid(compensation) and 0 <= compensation
+    except Exception as e:
+        return False
+    
+
+def is_benefits_valid(benefits: str):
+    """
+    Check if the provided input is a valid benefits list.
+
+    :param benefits: The benefits list to validate.
+    :return: True if the benefits list is valid or empty, False otherwise.
+    """
+    try:
+        max_length = 1024
+        return not benefits or is_string_valid(benefits) and len(benefits) <= max_length
+    except Exception as e:
+        return False
