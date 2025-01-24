@@ -121,6 +121,32 @@ class InternshipDB:                 # ongoing completed
         finally:
             cur.close()
 
+    def get_by_applicationId_internshipPositionId(self, applicationId: int, internshipPositionId: int):
+        """
+        Retrieve an internship by the application ID and the internship position ID.
+
+        :param applicationId: The ID of the application.
+        :param internshipPositionId: The ID of the internship position.
+        :return: A dictionary representing the internship or None if not found.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT * FROM Internship WHERE ApplicationId = ? AND InternshipPositionId = ? """
+            row = cur.execute(query, (applicationId, internshipPositionId)).fetchone()
+            
+            return {
+                "internshipId": row["InternshipId"],
+                "internshipPositionId": row["InternshipPositionId"],
+                "applicationId": row["ApplicationId"],
+                "state": row["State"]
+            } if row else None
+        
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
 
     ################
     #    UPDATE    #

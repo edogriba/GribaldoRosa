@@ -19,6 +19,11 @@
     - [5. User Login](#5-user-login)
       - [Request Parameters](#request-parameters-5)
       - [Response](#response-5)
+    - [6. User Logout](#6-user-logout)
+      - [Response](#response-6)
+    - [7. Refresh Token](#7-refresh-token)
+      - [Request Parameters](#request-parameters-7)
+      - [Response](#response-7)
 
 ## Endpoints
 
@@ -260,7 +265,6 @@ POST /api/register/student
 
 ------------------------------------------------
 
-
 ### 4. Company Registration
 
 - **Endpoint**: `/api/register/company`
@@ -342,7 +346,6 @@ POST /api/register/company
 
 ------------------------------------------------
 
-
 ### 5. User Login
 
 - **Endpoint**: `/api/userlogin`
@@ -360,7 +363,6 @@ POST /api/register/company
 - **200 OK**:
   - **Body (JSON) [Student]**:
     - `message` (str): Success message.
-    - `token` (str): JWT token for authentication.
     - `user` (dict): Logged-in user details.
       - `id` (int)
       - `email` (str)
@@ -380,7 +382,6 @@ POST /api/register/company
 
   - **Body (JSON) [Company]**:
     - `message` (str): Success message.
-    - `token` (str): JWT token for authentication.
     - `user` (dict): Logged-in user details.
       - `id` (int)
       - `email` (str)
@@ -392,7 +393,6 @@ POST /api/register/company
 
   - **Body (JSON) [University]**:
     - `message` (str): Success message.
-    - `token` (str): JWT token for authentication.
     - `user` (dict): Logged-in user details.
       - `id` (int)
       - `email` (str)
@@ -438,7 +438,6 @@ POST /api/userlogin
 ```json
 {
   "message": "Login successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "user": {
     "id": 1,
     "email": "student@mit.edu",
@@ -463,7 +462,6 @@ POST /api/userlogin
 ```json
 {
   "message": "Login successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "user": {
     "id": 2,
     "email": "company@xyz.com",
@@ -480,7 +478,6 @@ POST /api/userlogin
 ```json
 {
   "message": "Login successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "user": {
     "id": 3,
     "email": "university@mit.edu",
@@ -491,6 +488,99 @@ POST /api/userlogin
     "description": "Leading technology university.",
     "logoPath": "/images/mit_logo.png",
   }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 6. User Logout
+
+- **Endpoint**: `/api/userlogout`
+- **Method**: `POST`
+- **Description**: Logs out the authenticated user.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message indicating the user has been logged out.
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/userlogout
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Logout successful"
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 7. Refresh Token
+
+- **Endpoint**: `/api/token/refresh`
+- **Method**: `POST`
+- **Description**: Refreshes the JWT access token using a refresh token.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token containing the refresh token.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message.
+    - `access_token` (str): New JWT access token.
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`invalid_token`).
+    - `message` (str): Error message, such as "Unauthorized".
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/token/refresh
+Headers: {
+  "Authorization": "Bearer <refresh_token>"
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Token refreshed successfully",
+  "access_token": "new_access_token"
 }
 ```
 

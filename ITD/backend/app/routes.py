@@ -1,21 +1,41 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS, cross_origin
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_required
+from flask_jwt_extended import (
+    JWTManager,
+    create_access_token,
+    get_jwt_identity,
+    jwt_required,
+    set_access_cookies,
+)
+from datetime import timedelta
 import sqlite3
-from app.utils.auth import hash_password, verify_password, generate_token
+from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
 from app.models.university import University
 from app.models.company import Company
 from app.models.user import User
 from app.utils.error_handler import handle_database_error, handle_general_error
 
+from app.managers.login_manager import LoginManager as CustomLoginManager
+
 def create_main_app():
 
     app = Flask(__name__)
+
     app.config['SECRET_KEY'] = 'secret'
     CORS(app, resources={r"/*": {"origins": "*"}})
+
+
     login_manager = LoginManager()
     login_manager.init_app(app)
+
+
+    app.config["JWT_SECRET_KEY"] = "nTXl6GKclQxRFz57pxXx"  
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=15)  # Short-lived access token
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=7)     # Long-lived refresh token
+
+    jwt = JWTManager(app)
 
     @app.route('/api/universitylist', methods=['GET', 'OPTIONS'])
     @cross_origin()
@@ -114,6 +134,7 @@ def create_main_app():
         except Exception as e:
             return handle_general_error(e)   
 
+
     @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
     @cross_origin()
     def company_register():
@@ -148,47 +169,61 @@ def create_main_app():
         except Exception as e:
             return handle_general_error(e)   
 
-          
+
     @app.route('/api/userlogin', methods = ['POST', 'OPTIONS'])
     @cross_origin()
     def user_login():
         try:
-            # Get JSON data from the request
             data = request.get_json()
+            values = {
+                'email': data.get('email'),
+                'password': data.get('password')
+            }
 
-            # Extract fields from the JSON
-            email = data.get('email')
-            password = data.get('password')
-
-            # Validate required fields
-            if not email or not password:
-                return jsonify({
-                "type": "invalid_request",
-                "message": "Email and password are required."
-                }), 400
-
-            # Verify user credentials
-            user = load_user(email)
-
-            if user and verify_password(password, user.get_password()):
-                # Generate a JWT token for the authenticated user
-                token = generate_token(user.get_id())
-
-                login_user(user, True)
-                # Return success response
-                return jsonify({
-                    'message': 'Login successful',
-                    'token': token,
-                    'user': user.to_dict()
-                }), 200
-            else:
-                return jsonify({
-                    "type": "invalid_credentials",
-                    "message": "Invalid email or password."
-                }), 401
-
+            login_manager = CustomLoginManager()
+            return login_manager.login(**values, load_user=load_user)
+            
         except sqlite3.Error as e:
             return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+
+
+    @app.route('/api/userlogout', methods=['POST', 'OPTIONS'])
+    @cross_origin() 
+    @login_required
+    def user_logout():
+        try:
+            login_manager = CustomLoginManager()
+            return login_manager.logout()
+        except Exception as e:
+            return handle_general_error(e)
+
+
+    @app.route('/api/token/refresh', methods=['POST', 'OPTIONS'])
+    @cross_origin()
+    @jwt_required(refresh=True)
+    def refresh_token():
+        try: 
+            identity = get_jwt_identity()
+
+            if not identity:
+                return jsonify({
+                    "type": "invalid_token",
+                    'message': 'Unauthorized'
+                    }), 401
+            
+            new_access_token = create_access_token(identity=identity)
+
+            response = jsonify({
+                'message': 'Token refreshed successfully',
+                'access_token': new_access_token
+            })
+
+            set_access_cookies(response, new_access_token)
+
+            return response, 200
+        
         except Exception as e:
             return handle_general_error(e)
 
