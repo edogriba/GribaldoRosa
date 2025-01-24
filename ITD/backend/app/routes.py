@@ -1,13 +1,15 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS, cross_origin
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_required
 import sqlite3
-from app.utils.auth import hash_password, verify_password, generate_token
+from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
 from app.models.university import University
 from app.models.company import Company
 from app.models.user import User
 from app.utils.error_handler import handle_database_error, handle_general_error
+
+from app.managers.login_manager import LoginManager as CustomLoginManager
 
 def create_main_app():
 
@@ -148,95 +150,31 @@ def create_main_app():
         except Exception as e:
             return handle_general_error(e)   
 
-
-    @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
-    @cross_origin()
-    def company_register():
-        try:
-            # Get JSON data from the request
-            data = request.get_json()
-
-            # Extract fields from the JSON
-            values = {
-                'email'         : data.get('email'),
-                'password'      : hash_password(data.get('password')),
-                'companyName'   : data.get('companyName'),
-                'logoPath'      : data.get('logoPath', ''),  # Optional
-                'description'   : data.get('description'),
-                'location'      : data.get('location'),
-            }
-
-            company = Company.add(**values)
-
-            # Generate a JWT token for the registered company
-            token = generate_token(company.get_id())
-
-            # Return success response
-            return jsonify({
-                'message': 'Registration successful',
-                'token': token,
-                'user': company.to_dict()
-            }), 201
-
-        except sqlite3.Error as e:
-            return handle_database_error(e)
-        except Exception as e:
-            return handle_general_error(e)   
-
-          
     @app.route('/api/userlogin', methods = ['POST', 'OPTIONS'])
     @cross_origin()
     def user_login():
         try:
-            # Get JSON data from the request
             data = request.get_json()
+            values = {
+                'email': data.get('email'),
+                'password': data.get('password')
+            }
 
-            # Extract fields from the JSON
-            email = data.get('email')
-            password = data.get('password')
-
-            # Validate required fields
-            if not email or not password:
-                return jsonify({
-                "type": "invalid_request",
-                "message": "Email and password are required."
-                }), 400
-
-            # Verify user credentials
-            user = load_user(email)
-
-            if user and verify_password(password, user.get_password()):
-                # Generate a JWT token for the authenticated user
-                token = generate_token(user.get_id())
-
-                login_user(user, True)
-                # Return success response
-                return jsonify({
-                    'message': 'Login successful',
-                    'token': token,
-                    'user': user.to_dict()
-                }), 200
-            else:
-                return jsonify({
-                    "type": "invalid_credentials",
-                    "message": "Invalid email or password."
-                }), 401
-
+            login_manager = CustomLoginManager()
+            return login_manager.login(**values, load_user=load_user)
+            
         except sqlite3.Error as e:
             return handle_database_error(e)
         except Exception as e:
             return handle_general_error(e)
-
 
     @app.route('/api/userlogout', methods=['POST', 'OPTIONS'])
     @cross_origin() 
     @login_required
     def user_logout():
         try:
-            logout_user()
-            return jsonify({
-                'message': 'Logout successful'
-            }), 200
+            login_manager = CustomLoginManager()
+            return login_manager.logout()
         except Exception as e:
             return handle_general_error(e)
 
