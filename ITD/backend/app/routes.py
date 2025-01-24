@@ -10,7 +10,6 @@ from flask_jwt_extended import (
 )
 from datetime import timedelta
 import sqlite3
-from app.utils.auth import hash_password, generate_token
 from app.models.student import Student
 from app.models.university import University
 from app.models.company import Company
@@ -18,6 +17,7 @@ from app.models.user import User
 from app.utils.error_handler import handle_database_error, handle_general_error
 
 from app.managers.login_manager import LoginManager as CustomLoginManager
+from app.managers.registration_manager import RegistrationManager
 
 def create_main_app():
 
@@ -38,7 +38,6 @@ def create_main_app():
     jwt = JWTManager(app)
 
     @app.route('/api/universitylist', methods=['GET', 'OPTIONS'])
-    @cross_origin()
     def university_list():     
         try:
             universities = University.get_list_dict()
@@ -51,42 +50,13 @@ def create_main_app():
 
 
     @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
-    @cross_origin()
     def university_register():
         try:
-            # Get JSON data from the request
             data = request.get_json()
 
-            # Extract required fields
-            values = {
-                'email': data.get('university_email'),
-                'password': hash_password(data.get('university_password')),
-                'name': data.get('name'),
-                'address': data.get('location'),
-                'websiteURL': data.get('websiteURL'),
-                'description': data.get('description'),
-                'logoPath': data.get('logoPath', '')  # Optional field
-            }
-
-            # Validate required fields
-            if not all([values['email'], values['password'], values['name'], values['address'], values['websiteURL'], values['description']]):
-                return jsonify({
-                    "type": "invalid_request",
-                    "message": "All fields (email, password, name, address, websiteURL, description) are required."
-                }), 400
-            
-            university = University.add(**values)
-
-            # Generate a JWT token for the registered student
-            token = generate_token(university.get_id())
-
-            # Return success response
-            return jsonify({
-                'message': 'Registration successful',
-                'token': token,
-                'user': university.to_dict()
-            }), 201
-
+            registrationManager = RegistrationManager()
+            return registrationManager.register_university(data)
+        
         except sqlite3.Error as e:
             return handle_database_error(e)
         except Exception as e:
@@ -94,40 +64,20 @@ def create_main_app():
 
 
     @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
-    @cross_origin()
     def student_register():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
         try:
-            # Get JSON data from the request
             data = request.get_json()
 
-            # Extract fields from the JSON
-            values = {
-                'email'         : data.get('email'),
-                'password'      : hash_password(data.get('password')),
-                'firstName'     : data.get('firstName'),
-                'lastName'      : data.get('lastName'),
-                'phoneNumber'   : data.get('phoneNumber'),
-                'profilePicturePath': data.get('profilePicturePath', ''),  # Optional
-                'location'      : data.get('location'),
-                'degreeProgram' : data.get('degreeProgram'),
-                'gpa'           : data.get('GPA', None),  # Optional
-                'graduationYear': data.get('graduationYear', None),  # Optional
-                'CVpath'        : data.get('CVpath'),
-                'skills'        : data.get('skills'),
-                'languageSpoken': data.get('languageSpoken'),
-                'universityId'  : data.get('university')
-            }
-
-            student = Student.add(**values)
-
-            # Generate a JWT token for the registered student
-            token = generate_token(student.get_id())
-            # Return success response
-            return jsonify({
-                'message': 'Registration successful',
-                'token': token,
-                'user': student.to_dict()
-            }), 201
+            registrationManager = RegistrationManager()
+            return registrationManager.register_student(data)
 
         except sqlite3.Error as e:
             return handle_database_error(e)
@@ -136,33 +86,12 @@ def create_main_app():
 
 
     @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
-    @cross_origin()
     def company_register():
         try:
-            # Get JSON data from the request
             data = request.get_json()
 
-            # Extract fields from the JSON
-            values = {
-                'email'         : data.get('email'),
-                'password'      : hash_password(data.get('password')),
-                'companyName'   : data.get('companyName'),
-                'logoPath'      : data.get('logoPath', ''),  # Optional
-                'description'   : data.get('description'),
-                'location'      : data.get('location'),
-            }
-
-            company = Company.add(**values)
-
-            # Generate a JWT token for the registered company
-            token = generate_token(company.get_id())
-
-            # Return success response
-            return jsonify({
-                'message': 'Registration successful',
-                'token': token,
-                'user': company.to_dict()
-            }), 201
+            registrationManager = RegistrationManager()
+            return registrationManager.register_company(data)
 
         except sqlite3.Error as e:
             return handle_database_error(e)
@@ -171,17 +100,12 @@ def create_main_app():
 
 
     @app.route('/api/userlogin', methods = ['POST', 'OPTIONS'])
-    @cross_origin()
     def user_login():
         try:
             data = request.get_json()
-            values = {
-                'email': data.get('email'),
-                'password': data.get('password')
-            }
 
             login_manager = CustomLoginManager()
-            return login_manager.login(**values, load_user=load_user)
+            return login_manager.login(data.get('email'), data.get('password'), load_user=load_user)
             
         except sqlite3.Error as e:
             return handle_database_error(e)
@@ -190,7 +114,6 @@ def create_main_app():
 
 
     @app.route('/api/userlogout', methods=['POST', 'OPTIONS'])
-    @cross_origin() 
     @login_required
     def user_logout():
         try:
@@ -201,7 +124,6 @@ def create_main_app():
 
 
     @app.route('/api/token/refresh', methods=['POST', 'OPTIONS'])
-    @cross_origin()
     @jwt_required(refresh=True)
     def refresh_token():
         try: 

@@ -55,7 +55,7 @@ class UserDB:
                 return row[0] == 0 if row else True
         except Exception as e:
             self.con.rollback()
-            raise e
+            return True
         finally:
             cur.close()
 
