@@ -22,6 +22,7 @@ const Login = () => {
       const res = await api.userLogin(dataUser);
       console.log("APPENA INVIATO"); // debug
       const data = await res.json();
+      console.log(data)
 
       // Save the token to localStorage
       localStorage.setItem('token', data.token);

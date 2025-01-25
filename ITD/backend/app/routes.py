@@ -104,7 +104,16 @@ def create_main_app():
             data = request.get_json()
 
             login_manager = CustomLoginManager()
-            return login_manager.login(data.get('email'), data.get('password'), load_user=load_user)
+            #return login_manager.login(data.get('email'), data.get('password'), load_user=load_user)
+            user_dict = login_manager.login(data.get('email'), data.get('password'), load_user=load_user)
+            print("response: \n" + 
+                    "message : Login successful \n" +
+                    "user : " + str(user_dict)
+                )
+            return jsonify({
+                    'message': 'Login successful',
+                    'user': user_dict
+                }), 200
             
         except sqlite3.Error as e:
             return handle_database_error(e)

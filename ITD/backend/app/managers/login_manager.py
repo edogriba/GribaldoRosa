@@ -52,7 +52,8 @@ class LoginManager:
                 set_access_cookies(response, access_token)
                 set_refresh_cookies(response, refresh_token)
 
-                return response, 200
+                #return response, 200
+                return user.to_dict()
             else:
                 return jsonify({
                     "type": "invalid_credentials",
@@ -60,7 +61,7 @@ class LoginManager:
                 }), 401
 
         except Exception as e:
-            return e
+            raise e
 
     def logout(self):
         """
@@ -80,5 +81,5 @@ class LoginManager:
 
             return response, 200
         except Exception as e:
-            return e
+            raise e
         
