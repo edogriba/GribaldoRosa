@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 const About = () => {
     return (
         <div>
-            <Navbar currentPage="about"/>
+            <Navbar />
         <div className="container mx-auto p-4">
             <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">S&C (Students & Companies)</h2>

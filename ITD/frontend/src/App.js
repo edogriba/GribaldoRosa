@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import UserProvider from "./context/UserContext"; 
+import ProtectedRoute from "./auth/ProtectedRoute"
 import Register from './pages/Register/Register';
 import RegisterStudent from './pages/Register/Student/RegisterStudent';
 import RegisterCompany from './pages/Register/Company/RegisterCompany';
@@ -22,6 +24,7 @@ import './assets/index.css';
 
 function App() {
   return (
+    <UserProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Welcome />}/>
@@ -31,19 +34,20 @@ function App() {
           <Route path="register/university" element={<RegisterUniversity />}/>
           <Route path='/about' element={<About />}/>
           <Route path="/login" element={<Login />} />
-          <Route path="/students/home" element={<HomeStudent />} />
-          <Route path="/companies/home" element={<HomeCompany />} />
-          <Route path="/universities/home" element={<HomeUniversity />} />
-          <Route path="/students/dashboard/profile" element={<StudentProfile />} />
-          <Route path="/companies/dashboard/profile" element={<CompanyProfile />} />
-          <Route path="/universities/dashboard/profile" element={<UniversityProfile />} />
-          <Route path="/students/update" element={<StudentUpdate />} />
-          <Route path="/students/search" element={<StudentSearch />} />
-          <Route path="/students/dashboard/applications" element={<StudentApplications />} />
-          <Route path="/students/dashboard/internships" element={<StudentInternships />} />
+          <Route path="/students/home" element={<ProtectedRoute><HomeStudent /></ProtectedRoute>} />
+          <Route path="/companies/home" element={<ProtectedRoute><HomeCompany /></ProtectedRoute>} />
+          <Route path="/universities/home" element={<ProtectedRoute><HomeUniversity /></ProtectedRoute>} />
+          <Route path="/students/dashboard/profile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
+          <Route path="/companies/dashboard/profile" element={<ProtectedRoute><CompanyProfile /></ProtectedRoute>} />
+          <Route path="/universities/dashboard/profile" element={<ProtectedRoute><UniversityProfile /></ProtectedRoute>} />
+          <Route path="/students/update" element={<ProtectedRoute><StudentUpdate /></ProtectedRoute>} />
+          <Route path="/students/search" element={<ProtectedRoute><StudentSearch /></ProtectedRoute>} />
+          <Route path="/students/dashboard/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
+          <Route path="/students/dashboard/internships" element={<ProtectedRoute><StudentInternships /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
+      </UserProvider>
   );
 }
 

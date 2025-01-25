@@ -1,6 +1,8 @@
-import React from "react"
+import React, {useContext} from "react"
+import { UserContext } from "../../../context/UserContext";
 
 const StudentList = () => {
+    const { user } = useContext(UserContext);
     return (
         <div>    
             <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
@@ -11,7 +13,7 @@ const StudentList = () => {
 
                         <div className="mt-6 gap-4 space-y-4 sm:flex sm:items-center sm:space-y-0 lg:mt-0 lg:justify-end">
                         <div>
-                            <label for="order-type" className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select order type</label>
+                            <label htmlFor="order-type" className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select order type</label>
                             <select id="order-type" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]">
                             <option selected>All applications</option>
                             <option value="ongoing">Ongoing</option>
@@ -23,7 +25,7 @@ const StudentList = () => {
                         <span className="inline-block text-gray-500 dark:text-gray-400"> from </span>
 
                         <div>
-                            <label for="date" className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select date</label>
+                            <label htmlFor="date" className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select date</label>
                             <select id="date" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]">
                             <option selected>this week</option>
                             <option value="this month">this month</option>
