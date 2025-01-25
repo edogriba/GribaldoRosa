@@ -60,8 +60,6 @@ def create_main_app():
                 return University.get_by_email(email)
             elif user_type == "company":
                 return Company.get_by_email(email)
-            elif user_type == "user":
-                return User.get_by_email(email)
             
             return None  # If no type matches
         except Exception as e:
