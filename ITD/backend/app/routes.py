@@ -25,22 +25,28 @@ def create_main_app():
     app.config["JWT_SECRET_KEY"] = "nTXl6GKclQxRFz57pxXx"
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=15)
     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=7)
-    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+    app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
     app.config["JWT_COOKIE_HTTPONLY"] = True
     app.config["JWT_COOKIE_SAMESITE"] = "Lax"
-
-    # Initialize JWT Manager
-    jwt = JWTManager(app)
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = True  # CSRF protection enabled
+    
 
     # Enable CORS
     CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
 
+    # Initialize JWT Manager
+    jwt = JWTManager(app)
+    
     @app.after_request
     def add_cors_headers(response):
         response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
         return response
+
+    login_manager = CustomLoginManager()
 
     # Function to load a user by email
     def load_user(email):
@@ -66,7 +72,7 @@ def create_main_app():
             raise e
 
     # Login Manager Instance
-    login_manager = CustomLoginManager()
+
 
     # Login Route
     @app.route('/api/userlogin', methods=['POST'])
@@ -75,11 +81,12 @@ def create_main_app():
             data = request.get_json()
             email = data.get('email')
             password = data.get('password')
-
+            
             # Use the LoginManager to handle login
             return login_manager.login(email, password, load_user)
         except Exception as e:
             return handle_general_error(e)
+
 
     # Logout Route
     @app.route('/api/userlogout', methods=['POST'])

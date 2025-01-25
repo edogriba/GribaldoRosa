@@ -13,9 +13,9 @@ const endpoint = process.env.REACT_APP_BACKEND_URL;
 
 // Helper function to extract a specific cookie
 const getCookie = (cookieName) => {
-  const cookies = document.cookie.split('; ');
+  const cookies = document.cookie.split("; ");
   const cookie = cookies.find((c) => c.startsWith(`${cookieName}=`));
-  return cookie ? cookie.split('=')[1] : null;
+  return cookie ? cookie.split("=")[1] : null;
 };
 
 /**
@@ -25,28 +25,27 @@ const getCookie = (cookieName) => {
  * @param {string} method - The HTTP method.
  * @param {Object} body - The request body.
  * @param {Object} params - The query parameters.
+ * @param {boolean} includeAuth - Whether to include the Authorization header.
  * @returns {Promise<Response>} - A promise with the response.
  */
-export async function request(path, method, body = null, params = {}) {
+export async function request(path, method, body, params = {}, includeAuth = false) {
+  // Get the access token from localStorage
+  const accessToken = localStorage.getItem("access_token");
+
   // Get the CSRF token from cookies
-  const csrfToken = getCookie('csrf_access_token');
-  console.log(buildURL(endpoint, path, params), {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken }), // Include CSRF token if available
-    },
-    credentials: 'include',
-    body: body ? JSON.stringify(body) : null,
-  })
-  console.log("CSRF Token:", csrfToken); 
+  const csrfToken = getCookie("csrf_access_token");
+
+  // Prepare headers
+  const headers = {
+    "Content-Type": "application/json",
+    ...(includeAuth && accessToken ? { Authorization: `Bearer ${accessToken}` } : {}), // Add Authorization header if required
+    ...(csrfToken ? { "X-CSRF-TOKEN": csrfToken } : {}), // Add CSRF token header if it exists
+  };
+
   return window.fetch(buildURL(endpoint, path, params), {
     method: method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken }), // Include CSRF token if available
-    },
-    credentials: 'include',
+    headers: headers,
+    credentials: "include", // Include cookies
     body: body ? JSON.stringify(body) : null,
   });
 }

@@ -11,7 +11,7 @@ export const userLogin = async (data) =>
   request(`${UserEndPoint.USER_LOGIN}`, Method.POST, data);
 
 export const userLogout = async () => 
-  request(`${UserEndPoint.USER_LOGOUT}`, Method.POST);
+  request(`${UserEndPoint.USER_LOGOUT}`, Method.POST, {}, {}, true);
 
 export const userAuthenticated = async () => 
-  request(`${UserEndPoint.USER_AUTHENTICATED}`, Method.GET);
+  request(`${UserEndPoint.USER_AUTHENTICATED}`, Method.GET, {}, {}, true);
