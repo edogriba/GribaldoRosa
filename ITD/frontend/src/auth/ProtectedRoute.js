@@ -1,31 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const ProtectedRoute = ({ children }) => {
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext); // Access `loading` from context
 
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (user === null && localStorage.getItem("access_token") !== null) {
-      setLoading(true);
-    }
-    else {
-      setLoading(false)
-    }
-  }, [user]);
-    //}, [user, localStorage.getItem("access_token")]);
-
+  // Show a loading spinner or message while the user state is being initialized
   if (loading) {
-    return (<div>Loading...</div>)
+    return <div>Loading...</div>;
   }
-
+  
+  // Redirect to login if no user is authenticated
   if (!user) {
     return <Navigate to="/login" />;
   }
 
-  return children; // Render the protected content if authenticated
+  // Render the protected content if authenticated
+  return children;
 };
 
-export default ProtectedRoute
+export default ProtectedRoute;

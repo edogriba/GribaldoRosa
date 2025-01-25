@@ -5,7 +5,7 @@ export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores the authenticated user's data
-
+  const [loading, setLoading] = useState(true); // Indicates if the app is loading
   // Function to log in the user
   const userLogin = async (dataUser) => {
     try {
@@ -55,6 +55,7 @@ const UserProvider = ({ children }) => {
 
         if (!accessToken) {
           console.log("No access token found. User is not logged in.");
+          setLoading(false);
           return;
         }
 
@@ -76,6 +77,7 @@ const UserProvider = ({ children }) => {
       } catch (error) {
         console.error('Error initializing user:', error.message);
       }
+      setLoading(false);
     };
 
     initializeUser();
@@ -83,7 +85,7 @@ const UserProvider = ({ children }) => {
 
   
   return (
-    <UserContext.Provider value={{ user, userLogin, userLogout }}>
+    <UserContext.Provider value={{ user, userLogin, userLogout, loading }}>
       {children}
     </UserContext.Provider>
   );

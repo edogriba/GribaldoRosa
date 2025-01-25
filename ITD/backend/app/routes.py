@@ -104,4 +104,128 @@ def create_main_app():
         mail = current_user.get('email')
         return jsonify({"user": load_user(mail).to_dict()}), 200
 
+    @app.route('/api/internship/post', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def post_internship():
+        try:
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.post_internship(data)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+        
+    
+    @app.route('/api/internship/get_by_id/<int:internshipId>', methods=['GET', 'OPTIONS'])
+    @jwt_required()
+    def get_internship_by_id(internshipId):
+        try:
+            internship_manager = InternshipManager()
+            return internship_manager.get_internship_by_id(internshipId)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+    @app.route('/api/internship/get_by_company/<int:companyId>', methods=['GET', 'OPTIONS'])
+    @jwt_required()
+    def get_internships_by_companyId(companyId):
+        try:
+            internship_manager = InternshipManager()
+            return internship_manager.get_internships_by_company(companyId)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+    """
+    @app.route('/api/application/create', methods=['POST', 'OPTIONS'])
+    @login_required
+    def create_application():
+        try:
+            data = request.get_json()
+            
+            application_manager = ApplicationManager()
+            return application_manager.create_application(data)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+    @app.route('/api/application/accept', methods=['POST', 'OPTIONS'])
+    @login_required
+    def accept_application():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
+        try:
+            data = request.get_json()
+            # Assuming ApplicationManager handles application acceptance
+            application_manager = ApplicationManager()
+            return application_manager.accept_application(data)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+    @app.route('/api/application/refuse', methods=['POST', 'OPTIONS'])
+    @login_required
+    def refuse_application():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
+        try:
+            data = request.get_json()
+            # Assuming ApplicationManager handles application refusal
+            application_manager = ApplicationManager()
+            return application_manager.refuse_application(data)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+    @app.route('/api/internship/accept', methods=['POST', 'OPTIONS'])
+    @login_required
+    def accept_internship():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
+        try:
+            data = request.get_json()
+            # Assuming InternshipManager handles internship acceptance
+            internship_manager = InternshipManager()
+            return internship_manager.accept_internship(data)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+    @app.route('/api/internship/refuse', methods=['POST', 'OPTIONS'])
+    @login_required
+    def refuse_internship():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
+        try:
+            data = request.get_json()
+            # Assuming InternshipManager handles internship refusal
+            internship_manager = InternshipManager()
+            return internship_manager.refuse_internship(data)
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+    """    
     return app
