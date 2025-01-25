@@ -14,9 +14,6 @@ import {
   userAuthenticated
 } from './user'
 
-import {
-  refreshToken
-} from './token'
 
 import { example } from './example';
 
@@ -36,6 +33,5 @@ export const api = {
   studentRegistration,
   universityRegistration,
   userLogin, 
-  userLogout,
-  refreshToken, 
+  userLogout
 };

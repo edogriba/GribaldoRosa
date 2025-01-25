@@ -81,6 +81,29 @@ class UserDB:
             raise e 
         finally:
             cur.close()
+
+    def get_type_by_id(self, id: str):
+        """
+        Retrieve the user's type by its ID.
+
+        :param id: The unique ID of the user.
+        :return: The type representing the user if found, otherwise None.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = """ SELECT Type 
+                            FROM User
+                            WHERE UserId = ? """
+                user = cur.execute(query, (id,)).fetchone()
+            return user['Type'] if user else None
+
+        except Exception as e:
+            self.con.rollback()
+            raise e 
+        finally:
+            cur.close()
      
     def close(self):
         self.con.close()

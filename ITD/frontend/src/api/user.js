@@ -8,7 +8,7 @@ const UserEndPoint = {
 };
 
 export const userLogin = async (data) => 
-  request(`${UserEndPoint.USER_LOGIN}`, Method.POST, data);
+    request(`${UserEndPoint.USER_LOGIN}`, Method.POST, data);
 
 export const userLogout = async () => 
   requestAuth(`${UserEndPoint.USER_LOGOUT}`, Method.POST);
