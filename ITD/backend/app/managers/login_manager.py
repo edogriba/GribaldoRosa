@@ -56,7 +56,8 @@ class LoginManager:
             response = jsonify({
                 "message": "Login successful",
                 "user": user.to_dict(),
-                "access_token": access_token
+                "access_token": access_token,
+                "refresh_token": refresh_token
             })
             '''
             response = make_response(redirect(url_for('protected')))

@@ -104,12 +104,9 @@ def create_main_app():
     def refresh_token():
         try:
             identity = get_jwt_identity()
-            new_access_token = create_access_token(identity=identity)
-
-            response = jsonify({"message": "Token refreshed"})
-            set_access_cookies(response, new_access_token)
-
-            return response, 200
+            user = User.get_by_email(identity)  # Fetch user details using identity
+            new_access_token = create_access_token(identity=user.email)
+            return jsonify({"message": "Token refreshed"}), 200
         except Exception as e:
             return handle_general_error(e)
 

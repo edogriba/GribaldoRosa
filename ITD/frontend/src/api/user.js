@@ -1,5 +1,5 @@
 import { Method } from './api';
-import { request } from './request';
+import { request, requestAuth } from './request';
 
 const UserEndPoint = {
   USER_LOGIN: '/api/userlogin',
@@ -11,7 +11,7 @@ export const userLogin = async (data) =>
   request(`${UserEndPoint.USER_LOGIN}`, Method.POST, data);
 
 export const userLogout = async () => 
-  request(`${UserEndPoint.USER_LOGOUT}`, Method.POST, {}, {}, true);
+  requestAuth(`${UserEndPoint.USER_LOGOUT}`, Method.POST);
 
 export const userAuthenticated = async () => 
-  request(`${UserEndPoint.USER_AUTHENTICATED}`, Method.GET, {}, {}, true);
+  requestAuth(`${UserEndPoint.USER_AUTHENTICATED}`, Method.GET);

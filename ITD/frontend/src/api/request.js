@@ -28,18 +28,26 @@ const getCookie = (cookieName) => {
  * @param {boolean} includeAuth - Whether to include the Authorization header.
  * @returns {Promise<Response>} - A promise with the response.
  */
-export async function request(path, method, body, params = {}, includeAuth = false) {
-  // Get the access token from localStorage
-  const accessToken = localStorage.getItem("access_token");
-
-  // Get the CSRF token from cookies
-  const csrfToken = getCookie("csrf_access_token");
-
-  // Prepare headers
+export async function request(path, method, body, params = {}) {
+ 
   const headers = {
     "Content-Type": "application/json",
-    ...(includeAuth && accessToken ? { Authorization: `Bearer ${accessToken}` } : {}), // Add Authorization header if required
-    ...(csrfToken ? { "X-CSRF-TOKEN": csrfToken } : {}), // Add CSRF token header if it exists
+  };
+
+  return window.fetch(buildURL(endpoint, path, params), {
+    method: method,
+    headers: headers,
+    credentials: "include", // Include cookies
+    body: body ? JSON.stringify(body) : null,
+  });
+}
+export async function requestAuth(path, method, body, params = {}) {
+
+  const accessToken = localStorage.getItem("access_token");
+
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${accessToken}` // Add Authorization header if required
   };
 
   return window.fetch(buildURL(endpoint, path, params), {

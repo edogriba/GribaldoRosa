@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { api } from "../api/api"; // Replace with your actual API utilities
+import { userAuthenticated } from "../api/user";
 
 export const UserContext = createContext();
 
@@ -16,6 +17,10 @@ const UserProvider = ({ children }) => {
         const userData = await response.json();
         console.log(userData)
         const accessToken = userData.access_token; // Ensure your backend returns this
+        const refreshToken = userData.refresh_token; // Assuming the backend returns a refresh token
+
+      // Securely store the refresh token (e.g., HttpOnly cookie)
+        localStorage.setItem('refresh_token', refreshToken);
         const tokenPayload = JSON.parse(atob(accessToken.split(".")[1])); // Decode JWT payload
         console.log("Token Payload:", tokenPayload);
         if (tokenPayload.exp * 1000 < Date.now()) {
@@ -43,6 +48,7 @@ const UserProvider = ({ children }) => {
     try {
       await api.userLogout(); // Call logout endpoint to clear cookies on the server
       localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       setUser(null);
       //fetchUser(); // Fetch the user to update the context
       console.log("Logout successful");
@@ -60,13 +66,7 @@ const UserProvider = ({ children }) => {
 
     try {
       // Validate the access token by calling a protected route
-      const response = await fetch("http://127.0.0.1:5000/api/protected", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-      });
+      const response = await api.userAuthenticated()
 
       if (response.status === 200) {
         const data = await response.json();
@@ -85,53 +85,51 @@ const UserProvider = ({ children }) => {
 
   const refreshToken = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/token/refresh", {
-        method: "POST",
-        credentials: "include", // Include cookies with the refresh token
-      });
-
+      const refreshToken = localStorage.getItem('refresh_token');
+      if (!refreshToken) {
+        console.error('Refresh token not found. Logging out...');
+        setUser(null);
+        localStorage.removeItem('access_token');
+        return;
+      }
+  
+      const response = await api.refreshToken({ refreshToken }); // Send refresh token to backend
       if (response.status === 200) {
         const data = await response.json();
         const newAccessToken = data.access_token;
-
+  
         if (newAccessToken) {
-          localStorage.setItem("access_token", newAccessToken); // Update localStorage
-          console.log("Access token refreshed.");
-          await initializeUser(); // Retry user initialization
+          localStorage.setItem('access_token', newAccessToken);
+          console.log('Access token refreshed.');
+          // Optionally, retry the original request with the new access token
         }
       } else {
-        console.error("Failed to refresh token. Logging out...");
-        localStorage.removeItem("access_token");
-        setUser(null); // Clear user state
-      }
-    } catch (error) {
-      console.error("Error refreshing token:", error.message);
-    }
-  };
-
-  // Function to fetch the authenticated user on app load
-  const fetchUser = async () => {
-    try {
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-          console.error("No access token found. User might not be logged in.");
-          return;
-      }
-      else {
-        console.log("User not authenticated");
+        console.error('Failed to refresh token. Logging out...');
+        localStorage.removeItem('access_token');
         setUser(null);
       }
     } catch (error) {
-      console.error("Failed to fetch user session:", error.message);
-      setUser(null);
-    } finally {
-      setLoading(false); // Stop the loading spinner
+      console.error('Error refreshing token:', error.message);
     }
   };
 
   // Automatically load the user on app initialization
   useEffect(() => {
-    initializeUser();
+    const initializeUserAndRefreshToken = async () => {
+      try {
+        const accessToken = localStorage.getItem('access_token');
+        if (accessToken) {
+          // Try to initialize the user
+          await initializeUser(); 
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('Error initializing user:', error.message);
+        setLoading(false); 
+      }
+    };
+
+    initializeUserAndRefreshToken();
   }, []);
 
   return (
