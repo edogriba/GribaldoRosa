@@ -125,6 +125,13 @@ def create_main_app():
 
     @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
     def university_register():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
         try:
             data = request.get_json()
 
@@ -160,6 +167,13 @@ def create_main_app():
 
     @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
     def company_register():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
         try:
             data = request.get_json()
 

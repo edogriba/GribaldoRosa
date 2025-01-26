@@ -1,9 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext }  from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState} from 'react';
 import { api } from '../../../api/api';
+import { UserContext } from '../../../context/UserContext';
 
 const RegisterCompany = () => {
     const [email, setEmail] = useState('');
@@ -13,6 +14,8 @@ const RegisterCompany = () => {
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [logo, setLogo] = useState(null);
+    const { userRegistration } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -22,22 +25,20 @@ const RegisterCompany = () => {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('password', password);
-      formData.append('companyName', companyName);
-      formData.append('description', description);
-      formData.append('location', location);
-      if (logo) {
-        formData.append('logo', logo);
-      }
+      const dataCompany = {
+        email,
+        password,
+        companyName,
+        description,
+        location,
+        logo
+      };
 
       try {
-        const res = await api.companyRegistration(formData);
-        const data = await res.json();
-        localStorage.setItem('access token', data.access_token);
+        const response = await api.companyRegistration(dataCompany);
+        await userRegistration(response);
         // Redirect to company dashboard or another protected route
-        window.location.href = '/company/home';
+        navigate("/companies/home");
       } catch (error) {
         console.error('Error registering company:', error.response?.data?.message || error.message);
         alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));

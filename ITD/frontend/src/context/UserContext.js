@@ -7,10 +7,8 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores the authenticated user's data
   const [loading, setLoading] = useState(true); // Indicates if the app is loading
   // Function to log in the user
-  const userLogin = async (dataUser) => {
+  const userLogin = async (response) => {
     try {
-      const response = await api.userLogin(dataUser); // Call backend
-      // Debug response
       if (response.status === 200) {
         const userData = await response.json();
         console.log(userData)
@@ -21,7 +19,7 @@ const UserProvider = ({ children }) => {
           localStorage.setItem("access_token", accessToken);
           setUser(userData.user); // Set user context
         } 
-      } 
+      }
       else {
         throw new Error("Login failed with status " + response.status); // Handle errors
       }
@@ -30,7 +28,27 @@ const UserProvider = ({ children }) => {
       throw new Error("Login failed");
     }
   };
+  const userRegistration = async (response) => {
+    try {
+      // Debug response
+      if (response.status === 201) {
+        const userData = await response.json();
+        console.log(userData)
+        const accessToken = userData.access_token; // Ensure your backend returns this
 
+        if (accessToken) {
+          localStorage.setItem("access_token", accessToken);
+          setUser(userData.user); // Set user context
+        } 
+      } 
+      else {
+        throw new Error("Registration failed with status " + response.status); // Handle errors
+      }
+    } catch (error) {
+      console.error("Registration failed:", error.message);
+      throw new Error("Registration failed");
+    }
+  };
 
   // Function to log out the user
   const userLogout = async () => {
@@ -51,6 +69,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const initializeUser = async () => {
       try {
+
         const accessToken = localStorage.getItem("access_token");
 
         if (!accessToken) {
@@ -73,11 +92,12 @@ const UserProvider = ({ children }) => {
         else {
           console.error("Failed to validate access token:", response.status);
         }
+        setLoading(false);
 
       } catch (error) {
         console.error('Error initializing user:', error.message);
       }
-      setLoading(false);
+      
     };
 
     initializeUser();
@@ -85,7 +105,7 @@ const UserProvider = ({ children }) => {
 
   
   return (
-    <UserContext.Provider value={{ user, userLogin, userLogout, loading }}>
+    <UserContext.Provider value={{ user, userLogin, userLogout, userRegistration, loading }}>
       {children}
     </UserContext.Provider>
   );
