@@ -37,14 +37,11 @@ class LoginManager:
             # Create tokens
             access_token = create_access_token(identity={ "email": user.get_email() })
 
-            # Set cookies and return response
-            response = jsonify({
+            return jsonify({
                 "message": "Login successful",
                 "user": user.to_dict(),
                 "access_token": access_token,
-            })
-
-            return response, 200
+            }), 200
         except Exception as e:
             raise e
 
