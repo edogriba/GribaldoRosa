@@ -80,7 +80,7 @@ class StudentDB:
             cur = self.con.cursor()
             query = """ SELECT * 
                         FROM Student AS S JOIN User AS U ON S.UserId = U.UserId
-                        WHERE UserId = ? """
+                        WHERE S.UserId = ? """
             student = cur.execute(query, (id,)).fetchone()
 
             return {    'id': student['UserId'], 

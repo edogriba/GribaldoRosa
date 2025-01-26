@@ -44,17 +44,6 @@ class Company(User):
         })
         return user_dict
 
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
 
     @staticmethod
     def add(email: str, password: str, companyName: str, logoPath: str, description: str, location: str):

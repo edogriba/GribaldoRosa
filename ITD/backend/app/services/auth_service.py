@@ -1,5 +1,5 @@
 import re
-from app.models.user import User 
+from ..models import User 
 
     
 def is_string_valid(question):
@@ -111,7 +111,7 @@ def is_url_valid(url: str):
     :return: True if the URL is valid and not empty, False otherwise.
     """
     try:
-        url_regex = r'^https?://(?:www\.)?[\w.-]+(?:\.[a-zA-Z]{2,})+$'
+        url_regex = r'^https?://(?:www\.)?[\w.-]+(?:\.[a-zA-Z]{2,})?/?$'
         return url and bool(re.match(url_regex, url))
     except Exception as e:
         return False
@@ -324,3 +324,4 @@ def is_benefits_valid(benefits: str):
         return not benefits or is_string_valid(benefits) and len(benefits) <= max_length
     except Exception as e:
         return False
+    

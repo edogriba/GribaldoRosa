@@ -62,7 +62,7 @@ class CompanyDB:
             cur = self.con.cursor()
             query = """ SELECT * 
                         FROM Company AS C JOIN User AS U ON C.UserId = U.UserId
-                        WHERE UserId = ? """
+                        WHERE C.UserId = ? """
             company = cur.execute(query, (id,)).fetchone()
 
             return {    'id': company['UserId'], 
