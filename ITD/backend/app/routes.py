@@ -46,7 +46,6 @@ def create_main_app():
     # Authentication Routes                                                  #
     ##########################################################################
 
-    # Function to load a user by email
     def load_user(email):
         """
         Load a user by email by first determining their type using `get_type_by_email`
@@ -56,7 +55,7 @@ def create_main_app():
         :return: Instance of the user (User, Student, University, or Company) or None.
         """
         try:
-            user_type = User.get_type_by_email(email)  # Determine the user type by email
+            user_type = User.get_type_by_email(email)  
             
             if user_type == "student":
                 return Student.get_by_email(email)
@@ -65,14 +64,11 @@ def create_main_app():
             elif user_type == "company":
                 return Company.get_by_email(email)
             
-            return None  # If no type matches
+            return None 
         except Exception as e:
             raise e
 
-    # Login Manager Instance
 
-
-    # Login Route
     @app.route('/api/userlogin', methods=['POST'])
     def user_login():
         try:
@@ -85,7 +81,6 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    # Logout Route
     @app.route('/api/userlogout', methods=['POST'])
     @jwt_required()
     def user_logout():
@@ -97,7 +92,6 @@ def create_main_app():
             return handle_general_error(e)
 
 
-    # Example: Protected Route
     @app.route("/api/protected", methods=["GET"])
     @jwt_required()
     def protected():
@@ -124,7 +118,6 @@ def create_main_app():
 
 
     @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
-    @jwt_required()
     def university_register():
         try:
             data = request.get_json()
@@ -139,10 +132,9 @@ def create_main_app():
 
 
     @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
-    @jwt_required()
     def student_register():
         if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+            return jsonify({'status': 'OK'}), 200  
         if request.content_type != 'application/json':
             return jsonify({
                 "type": "unsupported_media_type",
@@ -161,7 +153,6 @@ def create_main_app():
 
 
     @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
-    @jwt_required()
     def company_register():
         try:
             data = request.get_json()
