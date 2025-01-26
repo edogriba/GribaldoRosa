@@ -1,4 +1,5 @@
 from flask import jsonify
+from flask_jwt_extended import create_access_token
 
 from app.models.user import User
 from app.models.student import Student
@@ -35,7 +36,7 @@ class RegistrationManager:
                 'universityId'  : user_data.get('university')
             }
 
-            if self.validate_student_data(values):
+            if not self.validate_student_data(values):
                 return jsonify({
                     "type": "invalid_request",
                     "message": "Invalid data"
@@ -45,10 +46,14 @@ class RegistrationManager:
 
             student = Student.add(**values)
 
+            # Create tokens
+            access_token = create_access_token(identity={ "email": student.get_email() })
+
             # Return success response
             return jsonify({
                 'message': 'Registration successful',
-                'user': student.to_dict()
+                'user': student.to_dict(),
+                'access_token': access_token
             }), 201
         
         except Exception as e:
@@ -83,11 +88,15 @@ class RegistrationManager:
             values.update({'password': hash_password(values['password'])})
             
             university = University.add(**values)
+            
+            # Create tokens
+            access_token = create_access_token(identity={ "email": university.get_email() })
 
             # Return success response
             return jsonify({
                 'message': 'Registration successful',
-                'user': university.to_dict()
+                'user': university.to_dict(),
+                'access_token': access_token
             }), 201
         except Exception as e:
             return e
@@ -121,10 +130,14 @@ class RegistrationManager:
 
             company = Company.add(**values)
 
+            # Create tokens
+            access_token = create_access_token(identity={ "email": company.get_email() })
+
             # Return success response
             return jsonify({
                 'message': 'Registration successful',
-                'user': company.to_dict()
+                'user': company.to_dict(),
+                'access_token': access_token
             }), 201
         except Exception as e:
             return e
