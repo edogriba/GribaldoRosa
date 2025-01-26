@@ -1,47 +1,47 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { UserContext } from "../../context/UserContext"; 
+import { api } from "../../api/api";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { userLogin } = useContext(UserContext);
+  const {user, userLogin } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const dataUser = {
-      email,
-      password,
+        email,
+        password,
     };
 
-  try {
-    console.log(email, password); // Debug
-    await userLogin(dataUser); // Update user context
-    navigate("/students/home");
-  } 
-       // Update user context
-      /*const response = await api.userLogin(dataUser); // Call login API
-      console.log(response); // Debug
-
-      if (response.status === 200) {
-        const userData = await response.json();
-        console.log(userData);
-        console.log(userData.user); // Update user context
-        //console.log("Login successful");
-        
-      } else {
-        throw new Error("Login failed. Please check your credentials.");
-      }  */
+    try {
+      console.log(email, password); // Debug
+      const response = await api.userLogin(dataUser);
+      await userLogin(response); // Update user context
+      
+    }
     catch (error) {
       console.error('Error logging in:', error.response?.data?.message || error.message);
       alert('Login failed: ' + (error.response?.data?.message || 'Please try again.'));
     }
   }
-
+  useEffect(() => {
+    if (user) {
+      if (user.type === "student") {
+        navigate("/students/home");
+      } else if (user.type === "company") {
+        navigate("/companies/home");
+      } else if (user.type === "university") {
+        navigate("/universities/home");
+      }
+    }
+  }, [user, navigate]); // Run when `user` updates
+  
   return(
     <div>
       <Navbar  />
