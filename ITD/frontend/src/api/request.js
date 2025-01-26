@@ -37,7 +37,7 @@ export async function request(path, method, body, params = {}) {
   return window.fetch(buildURL(endpoint, path, params), {
     method: method,
     headers: headers,
-    credentials: "include", // Include cookies
+    //credentials: "include", // Include cookies
     body: body ? JSON.stringify(body) : null,
   });
 }

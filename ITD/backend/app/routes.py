@@ -1,8 +1,7 @@
 from flask import jsonify, Flask, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager,
-    create_access_token,
     get_jwt_identity,
     jwt_required,
 )
@@ -43,6 +42,9 @@ def create_main_app():
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
+    ##########################################################################
+    # Authentication Routes                                                  #
+    ##########################################################################
 
     # Function to load a user by email
     def load_user(email):
@@ -103,6 +105,79 @@ def create_main_app():
         
         mail = current_user.get('email')
         return jsonify({"user": load_user(mail).to_dict()}), 200
+    
+    
+    ##########################################################################
+    # Registration Routes                                                  #
+    #########################
+    @app.route('/api/universitylist', methods=['GET', 'OPTIONS'])
+    def university_list():     
+        try:
+            print("University List")
+            universities = University.get_list_dict()
+            print(universities)
+            return jsonify(universities), 200
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+
+
+    @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def university_register():
+        try:
+            data = request.get_json()
+
+            registrationManager = RegistrationManager()
+            return registrationManager.register_university(data)
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)
+
+
+    @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def student_register():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
+        try:
+            data = request.get_json()
+
+            registrationManager = RegistrationManager()
+            return registrationManager.register_student(data)
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)   
+
+
+    @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def company_register():
+        try:
+            data = request.get_json()
+
+            registrationManager = RegistrationManager()
+            return registrationManager.register_company(data)
+
+        except sqlite3.Error as e:
+            return handle_database_error(e)
+        except Exception as e:
+            return handle_general_error(e)   
+
+
+    ###############################################################
+    # Internship Routes
+    ###############################################################
 
     @app.route('/api/internship/post', methods=['POST', 'OPTIONS'])
     @jwt_required()
@@ -138,6 +213,8 @@ def create_main_app():
             return handle_database_error(e)
         except Exception as e:
             return handle_general_error(e)
+        
+    
     """
     @app.route('/api/application/create', methods=['POST', 'OPTIONS'])
     @login_required
