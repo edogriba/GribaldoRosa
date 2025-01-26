@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import JumboTron from './JumboTron';
 import SocialProof from './SocialProof';
 import WhoTrustUs from './WhoTrustUs';
 import { Box } from "@mui/material";  
+import { UserContext } from '../../context/UserContext';
 
 const Welcome = () => {
+  const { user, userLogout } = useContext(UserContext);
   return (
     <Box>
-      <Navbar currentPage="home" />
+      <Navbar isLoggedIn={user} onLogout={userLogout} />
       <JumboTron/>
       <SocialProof/>
       <WhoTrustUs/>

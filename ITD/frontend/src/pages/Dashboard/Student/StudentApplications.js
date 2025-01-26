@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import StudentTab from './StudentTab';
 import StudentList from './StudentList';
+import { UserContext } from '../../../context/UserContext';
+
 
 const StudentApplications = () => {
-
+    const { user, userLogout } = useContext(UserContext);
     return (
         <div>
-            <Navbar/>
+            <Navbar isLoggedIn={user} onLogout={userLogout}/>
             <StudentTab activeTab='applications'/>
             <StudentList />
             <Footer />

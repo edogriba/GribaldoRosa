@@ -9,8 +9,11 @@ import {
 } from './student'
 
 import {
-  userLogin
+  userLogin, 
+  userLogout, 
+  userAuthenticated
 } from './user'
+
 
 import { example } from './example';
 
@@ -24,9 +27,11 @@ export const Method = {
 
 export const api = {
   example,
+  userAuthenticated,
   getUniversityList,
   getStudentsList,
   studentRegistration,
   universityRegistration,
-  userLogin
+  userLogin, 
+  userLogout
 };

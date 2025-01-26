@@ -11,7 +11,7 @@ const SearchFilter = () => {
         <div>
             <div className="flex justify-center m-5">
                 <button
-                    class="block bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                     type="button"
                     onClick={toggleModal}
                 >
@@ -53,8 +53,8 @@ const SearchFilter = () => {
                                 </select>
                             </div>
                             <div className="flex justify-end">
-                                <button type="button" className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2" onClick={toggleModal}>Cancel</button>
-                                <button type="submit" className="bg-indigo-500 text-white px-4 py-2 rounded-md">Apply</button>
+                                <button type="button" className="bg-secondary-700 text-white px-4 py-2 rounded-md mr-2" onClick={toggleModal}>Cancel</button>
+                                <button type="submit" className="bg-primary-500 text-white px-4 py-2 rounded-md">Apply</button>
                             </div>
                         </div>
                     </div>

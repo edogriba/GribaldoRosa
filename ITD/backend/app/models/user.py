@@ -88,6 +88,24 @@ class User(UserMixin):
         finally:
             userConn.close()
 
+    @staticmethod        
+    def get_type_by_id(id: str):
+        """
+        Retrieve a user record by ID and return the corresponding type.
+
+        :param id: The ID of the user.
+        :return: Type of the user, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            userConn = UserDB()
+            userType = userConn.get_type_by_id(id)
+            return userType
+        except Exception as e:
+            raise e
+        finally:
+            userConn.close()
+
     def check_password(self, password: str):
         """
         Check if the provided password matches the user's password.
