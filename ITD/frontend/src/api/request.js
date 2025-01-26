@@ -11,13 +11,6 @@ const buildURL = (baseURL, path, params) => {
 
 const endpoint = process.env.REACT_APP_BACKEND_URL;
 
-// Helper function to extract a specific cookie
-const getCookie = (cookieName) => {
-  const cookies = document.cookie.split("; ");
-  const cookie = cookies.find((c) => c.startsWith(`${cookieName}=`));
-  return cookie ? cookie.split("=")[1] : null;
-};
-
 /**
  * Sends a request using fetch to the endpoint specified in the .env file.
  *
@@ -37,7 +30,6 @@ export async function request(path, method, body, params = {}) {
   return window.fetch(buildURL(endpoint, path, params), {
     method: method,
     headers: headers,
-    //credentials: "include", // Include cookies
     body: body ? JSON.stringify(body) : null,
   });
 }
@@ -47,13 +39,12 @@ export async function requestAuth(path, method, body, params = {}) {
 
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${accessToken}` // Add Authorization header if required
+    "Authorization": `Bearer ${accessToken}` // Attach the access token
   };
 
   return window.fetch(buildURL(endpoint, path, params), {
     method: method,
     headers: headers,
-    credentials: "include", // Include cookies
     body: body ? JSON.stringify(body) : null,
   });
 }

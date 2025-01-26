@@ -2,8 +2,47 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
+import { useState, useEffect } from 'react';
+import { api } from '../../../api/api';
 
 const RegisterCompany = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [description, setDescription] = useState('');
+    const [location, setLocation] = useState('');
+    const [logo, setLogo] = useState(null);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('companyName', companyName);
+      formData.append('description', description);
+      formData.append('location', location);
+      if (logo) {
+        formData.append('logo', logo);
+      }
+
+      try {
+        const res = await api.companyRegistration(formData);
+        const data = await res.json();
+        localStorage.setItem('access token', data.access_token);
+        // Redirect to company dashboard or another protected route
+        window.location.href = '/company/home';
+      } catch (error) {
+        console.error('Error registering company:', error.response?.data?.message || error.message);
+        alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+      }
+    };
   return (
     <div>
       <Navbar/>
@@ -22,7 +61,8 @@ const RegisterCompany = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create a Company account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                {/* Email */}
                 <div>
                   <label
                     htmlFor="email"
@@ -36,9 +76,11 @@ const RegisterCompany = () => {
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="name@company.com"
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
+                {/* Password */}
                 <div>
                   <label
                     htmlFor="password"
@@ -52,9 +94,11 @@ const RegisterCompany = () => {
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </div>
+                {/* Confirm Password */}
                 <div>
                   <label
                     htmlFor="confirm-password"
@@ -68,10 +112,10 @@ const RegisterCompany = () => {
                     id="confirm-password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                   />
-                </div>
-                
+                </div>              
                 {/* Company Name */}
                 <div>
                   <label
@@ -86,10 +130,10 @@ const RegisterCompany = () => {
                     id="companyName"
                     placeholder="Your company name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    onChange={(e) => setCompanyName(e.target.value)}
                     required
                   />
                 </div>
-                
                 {/* Description */}
                 <div>
                   <label
@@ -103,10 +147,10 @@ const RegisterCompany = () => {
                     id="description"
                     placeholder="Describe your company"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    onChange={(e) => setDescription(e.target.value)}
                     required
                   />
                 </div>
-                
                 {/* Location */}
                 <div>
                   <label
@@ -121,12 +165,13 @@ const RegisterCompany = () => {
                     id="location"
                     placeholder="Company location"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    onChange={(e) => setLocation(e.target.value)}
                     required
                   />
                 </div>
-
                 {/* Logo (Optional) */}
                 <div>
+                  
                   <label
                     htmlFor="logo"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -138,9 +183,9 @@ const RegisterCompany = () => {
                     name="logo"
                     id="logo"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    onChange={(e) => setLogo(e.target.value)}
                   />
                 </div>
-
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
