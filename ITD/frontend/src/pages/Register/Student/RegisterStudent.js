@@ -62,15 +62,14 @@ const RegisterStudent = () => {
     console.log("DataStudent: ", dataStudent);                               // debug
     try {
       const res = await api.studentRegistration(dataStudent);
-      console.log("APPENA INVIATO");                                         // debug
+      console.log(res)                                        // debug
       const data = await res.json();
-
+      console.log(data)                                      // debug
       // Save the token to localStorage
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('access token', res.access_token);
       console.log("data: ", dataStudent);                                    // debug
-      console.log("return studentRegistration(dataStudent): ", res);         // debug
       // Redirect to student dashboard or another protected route
-      return <Link to="/login"></Link>;
+      return <Link to="/students/home"></Link>;
     } catch (error) {
       console.error('Error registering student:', error.response?.data?.message || error.message);
       alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));

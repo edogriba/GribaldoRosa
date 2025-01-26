@@ -9,6 +9,10 @@ import {
 } from './student'
 
 import {
+  companyRegistration
+} from './company'
+
+import {
   userLogin, 
   userLogout, 
   userAuthenticated
@@ -31,6 +35,7 @@ export const api = {
   getUniversityList,
   getStudentsList,
   studentRegistration,
+  companyRegistration,
   universityRegistration,
   userLogin, 
   userLogout

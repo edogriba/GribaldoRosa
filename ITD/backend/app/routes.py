@@ -124,7 +124,6 @@ def create_main_app():
 
 
     @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
-    @jwt_required()
     def university_register():
         try:
             data = request.get_json()
@@ -139,7 +138,6 @@ def create_main_app():
 
 
     @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
-    @jwt_required()
     def student_register():
         if request.method == 'OPTIONS':
             return jsonify({'status': 'OK'}), 200  # Handle preflight request
@@ -161,7 +159,6 @@ def create_main_app():
 
 
     @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
-    @jwt_required()
     def company_register():
         try:
             data = request.get_json()
