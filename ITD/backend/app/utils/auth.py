@@ -1,8 +1,5 @@
 import bcrypt
 
-SECRET_KEY = "123456"
-
-
 def hash_password(password):
     """
     Hashes a plaintext password using bcrypt.

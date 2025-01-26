@@ -2,28 +2,40 @@
 
 ## Table of Contents
 
-- [S&C Analysis API Specification](#s&c-analysis-api-specification)
+- [S&C Analysis API Specification](#sc-analysis-api-specification)
   - [Table of Contents](#table-of-contents)
   - [Endpoints](#endpoints)
     - [1. Get universities List](#1-get-universities-list)
-      - [Response](#response-1)
+      - [Response](#response)
     - [2. University Registration](#2-university-registration)
-      - [Request Parameters](#request-parameters-2)
-      - [Response](#response-2)
+      - [Request Parameters](#request-parameters)
+      - [Response](#response-1)
     - [3. Student Registration](#3-student-registration)
-      - [Request Parameters](#request-parameters-3)
-      - [Response](#response-3)
+      - [Request Parameters](#request-parameters-1)
+      - [Response](#response-2)
     - [4. Company Registration](#4-company-registration)
-      - [Request Parameters](#request-parameters-4)
-      - [Response](#response-4)
+      - [Request Parameters](#request-parameters-2)
+      - [Response](#response-3)
     - [5. User Login](#5-user-login)
-      - [Request Parameters](#request-parameters-5)
-      - [Response](#response-5)
+      - [Request Parameters](#request-parameters-3)
+      - [Response](#response-4)
     - [6. User Logout](#6-user-logout)
+      - [Request Parameters](#request-parameters-4)
+      - [Response](#response-5)
+    - [7. Protected Endpoint](#7-protected-endpoint)
       - [Response](#response-6)
-    - [7. Refresh Token](#7-refresh-token)
-      - [Request Parameters](#request-parameters-7)
+    - [8. Post Internship Position](#8-post-internship-position)
+      - [Request Parameters](#request-parameters-5)
       - [Response](#response-7)
+    - [9. Get Internship Position by ID](#9-get-internship-position-by-id)
+      - [Request Parameters](#request-parameters-6)
+      - [Response](#response-8)
+    - [10. Get Internship Positions by Company](#10-get-internship-positions-by-company)
+      - [Request Parameters](#request-parameters-7)
+      - [Response](#response-9)
+    - [11. Close Internship Position](#11-close-internship-position)
+      - [Request Parameters](#request-parameters-8)
+      - [Response](#response-10)
 
 ## Endpoints
 
@@ -86,8 +98,7 @@
 
 - **201 Created**:
   - **Body (JSON)**:
-    - `message` (str): Success message.
-    - `token` (str): JWT token for authentication.
+    - `message` (str): Registration successful.
     - `user` (dict): Registered user details.
       - `id` (int)
       - `email` (str)
@@ -97,6 +108,7 @@
       - `websiteURL` (str)
       - `description` (str)
       - `logoPath` (str)
+    - `access_token` (str): JWT token for authentication.
 
 - **400 Bad Request**:
   - **Body (JSON)**:
@@ -133,7 +145,6 @@ POST /api/register/university
 ```json
 {
   "message": "Registration successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "user": {
     "id": 1,
     "email": "admin@mit.edu",
@@ -143,7 +154,8 @@ POST /api/register/university
     "websiteURL": "https://www.mit.edu/",
     "description": "Leading technology university.",
     "logoPath": "/images/mit_logo.png"
-  }
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
 }
 ```
 
@@ -155,7 +167,7 @@ POST /api/register/university
 
 - **Endpoint**: `/api/register/student`
 - **Method**: `POST`
-- **Description**: Registration of a student.
+- **Description**: Registers a new student with required details.
 
 #### Request Parameters
 
@@ -179,8 +191,7 @@ POST /api/register/university
 
 - **201 Created**:
   - **Body (JSON)**:
-    - `message` (str): Success message.
-    - `token` (str): JWT token for authentication.
+    - `message` (str): Registration successful.
     - `user` (dict): Registered user details.
       - `id` (int)
       - `email` (str)
@@ -190,24 +201,25 @@ POST /api/register/university
       - `phoneNumber` (str)
       - `profilePicture` (str)
       - `location` (str)
-      - `universityId` (int)        
+      - `universityId` (int)
       - `degreeProgram` (str)
       - `GPA` (float)
       - `graduationYear` (int)
       - `skills` (str)
       - `CV` (str)
       - `languageSpoken` (str)
+    - `access_token` (str): JWT token for authentication.
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error(`invalid_request` or `conflict`).
+    - `type` (str): Type of the error (`invalid_request` or `conflict`).
     - `message` (str): Error message.
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
     - `type` (str): Type of error (`server_error`).
     - `message` (str): Error message.
-    
+
 <details>
 <summary>Example Request</summary>
 
@@ -229,7 +241,6 @@ POST /api/register/student
   "languageSpoken": "English, Spanish",
   "university": 1
 }
-
 ```
 
 </details>
@@ -240,7 +251,6 @@ POST /api/register/student
 ```json
 {
   "message": "Registration successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "user": {
     "id": 1,
     "email": "student@mit.edu",
@@ -257,7 +267,8 @@ POST /api/register/student
     "skills": "Python, Machine Learning",
     "CV": "/cvs/alice_smith.pdf",
     "languageSpoken": "English, Spanish"
-  }
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
 }
 ```
 
@@ -269,13 +280,13 @@ POST /api/register/student
 
 - **Endpoint**: `/api/register/company`
 - **Method**: `POST`
-- **Description**: Registration of a company.
+- **Description**: Registers a new company with required details.
 
 #### Request Parameters
 
 - **Body (JSON)**:
-  - `email` (str, required): Email of the student.
-  - `password` (str, required): Password for the student.
+  - `email` (str, required): Email of the company.
+  - `password` (str, required): Password for the company.
   - `companyName` (str, required): Name of the company.
   - `logoPath` (str, optional): Path to the company's logo.
   - `description` (str, required): Description of the company.
@@ -285,8 +296,7 @@ POST /api/register/student
 
 - **201 Created**:
   - **Body (JSON)**:
-    - `message` (str): Success message.
-    - `token` (str): JWT token for authentication.
+    - `message` (str): Registration successful.
     - `user` (dict): Registered user details.
       - `id` (int)
       - `email` (str)
@@ -295,17 +305,18 @@ POST /api/register/student
       - `logoPath` (str)
       - `description` (str)
       - `location` (str)
+    - `access_token` (str): JWT token for authentication.
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error(`invalid_request` or `conflict`).
+    - `type` (str): Type of the error (`invalid_request` or `conflict`).
     - `message` (str): Error message.
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
     - `type` (str): Type of error (`server_error`).
     - `message` (str): Error message.
-    
+
 <details>
 <summary>Example Request</summary>
 
@@ -329,7 +340,6 @@ POST /api/register/company
 ```json
 {
   "message": "Registration successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "user": {
     "id": 1,
     "email": "company@xyz.com",
@@ -338,7 +348,8 @@ POST /api/register/company
     "logoPath": "/images/xyz_logo.png",
     "description": "Leading software solutions provider.",
     "location": "New York, NY"
-  }
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
 }
 ```
 
@@ -379,6 +390,7 @@ POST /api/register/company
       - `skills` (str)
       - `CV` (str)
       - `languageSpoken` (str)
+    - `access_token` (str): JWT token for authentication.
 
   - **Body (JSON) [Company]**:
     - `message` (str): Success message.
@@ -390,6 +402,7 @@ POST /api/register/company
       - `logoPath` (str)
       - `description` (str)
       - `location` (str)
+    - `access_token` (str): JWT token for authentication.
 
   - **Body (JSON) [University]**:
     - `message` (str): Success message.
@@ -402,6 +415,7 @@ POST /api/register/company
       - `websiteURL` (str)
       - `description` (str)
       - `logoPath` (str)
+    - `access_token` (str): JWT token for authentication.
 
 - **400 Bad Request**:
   - **Body (JSON)**:
@@ -454,7 +468,8 @@ POST /api/userlogin
     "skills": "Python, Machine Learning",
     "CV": "/cvs/alice_smith.pdf",
     "languageSpoken": "English, Spanish"
-  }
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
 }
 ```
 
@@ -469,8 +484,9 @@ POST /api/userlogin
     "companyName": "XYZ Corporation",
     "location": "New York, NY",
     "logoPath": "/images/xyz_logo.png",
-    "description": "Leading software solutions provider.",
-  }
+    "description": "Leading software solutions provider."
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
 }
 ```
 
@@ -486,8 +502,9 @@ POST /api/userlogin
     "address": "Cambridge, MA",
     "websiteURL": "https://www.mit.edu",
     "description": "Leading technology university.",
-    "logoPath": "/images/mit_logo.png",
-  }
+    "logoPath": "/images/mit_logo.png"
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
 }
 ```
 
@@ -500,6 +517,11 @@ POST /api/userlogin
 - **Endpoint**: `/api/userlogout`
 - **Method**: `POST`
 - **Description**: Logs out the authenticated user.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
 
 #### Response
 
@@ -517,6 +539,9 @@ POST /api/userlogin
 
 ```json
 POST /api/userlogout
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
 ```
 
 </details>
@@ -534,28 +559,22 @@ POST /api/userlogout
 
 ------------------------------------------------
 
-### 7. Refresh Token
+### 7. Protected Endpoint
 
-- **Endpoint**: `/api/token/refresh`
-- **Method**: `POST`
-- **Description**: Refreshes the JWT access token using a refresh token.
-
-#### Request Parameters
-
-- **Headers**:
-  - `Authorization` (str, required): Bearer token containing the refresh token.
+- **Endpoint**: `/api/protected`
+- **Method**: `GET`
+- **Description**: Retrieves the current authenticated user's details.
 
 #### Response
 
 - **200 OK**:
   - **Body (JSON)**:
-    - `message` (str): Success message.
-    - `access_token` (str): New JWT access token.
+    - `user` (dict): Authenticated user details.
 
 - **401 Unauthorized**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`invalid_token`).
-    - `message` (str): Error message, such as "Unauthorized".
+    - `type` (str): Type of error (`unauthorized`).
+    - `message` (str): Error message, such as "Missing or invalid token."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
@@ -566,9 +585,9 @@ POST /api/userlogout
 <summary>Example Request</summary>
 
 ```json
-POST /api/token/refresh
+GET /api/protected
 Headers: {
-  "Authorization": "Bearer <refresh_token>"
+  "Authorization": "Bearer <access_token>"
 }
 ```
 
@@ -579,9 +598,384 @@ Headers: {
 
 ```json
 {
-  "message": "Token refreshed successfully",
-  "access_token": "new_access_token"
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "type": "student",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phoneNumber": "1234567890",
+    "profilePicture": "/images/john_doe.png",
+    "location": "Cambridge, MA",
+    "universityId": 1,
+    "degreeProgram": "Computer Science",
+    "GPA": 3.9,
+    "graduationYear": 2024,
+    "skills": "Python, Data Science",
+    "CV": "/cvs/john_doe.pdf",
+    "languageSpoken": "English, French"
+  }
 }
 ```
 
 </details>
+
+------------------------------------------------
+
+### 8. Post Internship Position
+
+- **Endpoint**: `/api/internship/post`
+- **Method**: `POST`
+- **Description**: Posts a new internship position with required details.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `companyId` (int, required): The ID of the company.
+  - `programName` (str, required): The name of the program.
+  - `duration` (str, required): The duration of the internship.
+  - `location` (str, required): The location of the internship.
+  - `roleTitle` (str, required): The title of the role.
+  - `skillsRequired` (str, required): The skills required for the internship.
+  - `compensation` (str, required): The compensation for the internship.
+  - `benefits` (str, required): The benefits of the internship.
+  - `languagesRequired` (str, required): The languages required for the internship.
+  - `description` (str, required): The description of the internship.
+
+#### Response
+
+- **201 Created**:
+  - **Body (JSON)**:
+    - `message` (str): Internship position posted successfully.
+    - `internship_position` (dict): Posted internship details.
+      - `id` (int)
+      - `companyId` (int)
+      - `programName` (str)
+      - `duration` (str)
+      - `location` (str)
+      - `roleTitle` (str)
+      - `skillsRequired` (str)
+      - `compensation` (str)
+      - `benefits` (str)
+      - `languagesRequired` (str)
+      - `description` (str)
+      - `status` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message.
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/post
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "companyId": 1,
+  "programName": "Summer Internship",
+  "duration": "3 months",
+  "location": "New York, NY",
+  "roleTitle": "Software Engineer Intern",
+  "skillsRequired": "Python, JavaScript",
+  "compensation": "$3000/month",
+  "benefits": "Health insurance, Gym membership",
+  "languagesRequired": "English",
+  "description": "An exciting opportunity to work with our software development team."
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Internship position posted successfully",
+  "internship_position": {
+    "id": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": "3 months",
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": "$3000/month",
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "open"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 9. Get Internship Position by ID
+
+- **Endpoint**: `/api/internship/get_by_id`
+- **Method**: `POST`
+- **Description**: Retrieves the details of an internship position by its ID.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `internshipPositionId` (int, required): The ID of the internship position.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `internship_position` (dict): Internship position details.
+      - `internshipPositionId` (int)
+      - `companyId` (int)
+      - `programName` (str)
+      - `duration` (str)
+      - `location` (str)
+      - `roleTitle` (str)
+      - `skillsRequired` (str)
+      - `compensation` (str)
+      - `benefits` (str)
+      - `languagesRequired` (str)
+      - `description` (str)
+      - `status` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message.
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`not_found`).
+    - `message` (str): Error message, such as "Internship position not found."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/get_by_id
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "internship_position": {
+    "internshipPositionId": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": "3 months",
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": "$3000/month",
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "open"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 10. Get Internship Positions by Company
+
+- **Endpoint**: `/api/internship/get_by_company`
+- **Method**: `POST`
+- **Description**: Retrieves all internship positions posted by a specific company.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `companyId` (int, required): The ID of the company.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `internship_positions` (list): List of internship positions.
+      - `id` (int)
+      - `companyId` (int)
+      - `programName` (str)
+      - `duration` (str)
+      - `location` (str)
+      - `roleTitle` (str)
+      - `skillsRequired` (str)
+      - `compensation` (str)
+      - `benefits` (str)
+      - `languagesRequired` (str)
+      - `description` (str)
+      - `status` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message.
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`not_found`).
+    - `message` (str): Error message, such as "No internships found for the given company ID."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/get_by_company
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "companyId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "internship_positions": [
+    {
+      "internshipPositionId": 1,
+      "companyId": 1,
+      "programName": "Summer Internship",
+      "duration": "3 months",
+      "location": "New York, NY",
+      "roleTitle": "Software Engineer Intern",
+      "skillsRequired": "Python, JavaScript",
+      "compensation": "$3000/month",
+      "benefits": "Health insurance, Gym membership",
+      "languagesRequired": "English",
+      "description": "An exciting opportunity to work with our software development team.",
+      "status": "open"
+    },
+    {
+      "internshipPositionId": 2,
+      "companyId": 1,
+      "programName": "Winter Internship",
+      "duration": "2 months",
+      "location": "San Francisco, CA",
+      "roleTitle": "Data Analyst Intern",
+      "skillsRequired": "SQL, Python",
+      "compensation": "$2500/month",
+      "benefits": "Health insurance, Gym membership",
+      "languagesRequired": "English",
+      "description": "An exciting opportunity to work with our data analysis team.",
+      "status": "closed"
+    }
+  ]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 11. Close Internship Position
+
+- **Endpoint**: `/api/internship/close`
+- **Method**: `POST`
+- **Description**: Closes an existing internship position.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `internshipPositionId` (int, required): The ID of the internship position to be closed.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message indicating the internship position has been closed.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message.
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`not_found`).
+    - `message` (str): Error message, such as "Internship position not found."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/close
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Internship position closed successfully"
+}
+```
+
+</details>
+
+------------------------------------------------

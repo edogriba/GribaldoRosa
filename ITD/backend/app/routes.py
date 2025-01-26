@@ -1,21 +1,13 @@
 from flask import jsonify, Flask, request
 from flask_cors import CORS
-from flask_jwt_extended import (
-    JWTManager,
-    get_jwt_identity,
-    jwt_required,
-)
+from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required, get_current_user
 
 from datetime import timedelta
-import sqlite3
-from app.models.student import Student
-from app.models.university import University
-from app.models.company import Company
-from app.models.user import User
-from app.utils.error_handler import handle_database_error, handle_general_error
-from app.managers.login_manager import LoginManager as CustomLoginManager
-from app.managers.registration_manager import RegistrationManager
-from app.managers.internship_manager import InternshipManager
+
+from .utils import handle_error
+from .models import User, Student, University, Company
+from .managers import LoginManager, RegistrationManager, InternshipManager
+
 
 def create_main_app():
     app = Flask(__name__)
@@ -42,91 +34,72 @@ def create_main_app():
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
-    ##########################################################################
-    # Authentication Routes                                                  #
-    ##########################################################################
 
-    # Function to load a user by email
-    def load_user(email):
-        """
-        Load a user by email by first determining their type using `get_type_by_email`
-        and then fetching their details from the corresponding model.
+    ###########################
+    # Authentication Routes   #
+    ###########################
 
-        :param email: Email of the user.
-        :return: Instance of the user (User, Student, University, or Company) or None.
-        """
-        try:
-            user_type = User.get_type_by_email(email)  # Determine the user type by email
-            
-            if user_type == "student":
-                return Student.get_by_email(email)
-            elif user_type == "university":
-                return University.get_by_email(email)
-            elif user_type == "company":
-                return Company.get_by_email(email)
-            
-            return None  # If no type matches
-        except Exception as e:
-            raise e
-
-    # Login Manager Instance
-
-
-    # Login Route
     @app.route('/api/userlogin', methods=['POST'])
     def user_login():
         try:
             data = request.get_json()
-            email = data.get('email')
-            password = data.get('password')
-            login_manager = CustomLoginManager()
-            return login_manager.login(email, password, load_user)     
+
+            login_manager = LoginManager()
+            return login_manager.login(data)     
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
 
 
-    # Logout Route
     @app.route('/api/userlogout', methods=['POST'])
     @jwt_required()
     def user_logout():
         try:
-            # Use the LoginManager to handle logout
-            login_manager = CustomLoginManager()
+            login_manager = LoginManager()
             return login_manager.logout()
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
 
 
-    # Example: Protected Route
     @app.route("/api/protected", methods=["GET"])
     @jwt_required()
     def protected():
-        current_user = get_jwt_identity()
-        
-        mail = current_user.get('email')
-        return jsonify({"user": load_user(mail).to_dict()}), 200
+        try:     
+            return jsonify({"user": get_current_user().to_dict()}), 200
+        except Exception as e:
+            return handle_error(e)
     
     
-    ##########################################################################
-    # Registration Routes                                                  #
-    #########################
+    @jwt.user_lookup_loader
+    def user_lookup_callback(_jwt_header, jwt_data):
+        identity = jwt_data["sub"]
+
+        user_type = User.get_type_by_id(identity["id"])  
+            
+        if user_type == "student":
+            return Student.get_by_id(int(identity["id"]))
+        elif user_type == "university":
+            return  University.get_by_id(int(identity["id"]))
+        elif user_type == "company":
+            return  Company.get_by_id(int(identity["id"]))
+        else:
+            return None
+    
+    ###########################
+    #   Registration Routes   #
+    ###########################
     @app.route('/api/universitylist', methods=['GET', 'OPTIONS'])
     def university_list():     
         try:
-            print("University List")
             universities = University.get_list_dict()
-            print(universities)
             return jsonify(universities), 200
-        except sqlite3.Error as e:
-            return handle_database_error(e)
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
 
 
     @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
     def university_register():
         if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+            return jsonify({'status': 'OK'}), 200  
         if request.content_type != 'application/json':
             return jsonify({
                 "type": "unsupported_media_type",
@@ -137,17 +110,15 @@ def create_main_app():
 
             registrationManager = RegistrationManager()
             return registrationManager.register_university(data)
-
-        except sqlite3.Error as e:
-            return handle_database_error(e)
+        
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
 
 
     @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
     def student_register():
         if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+            return jsonify({'status': 'OK'}), 200  
         if request.content_type != 'application/json':
             return jsonify({
                 "type": "unsupported_media_type",
@@ -159,16 +130,14 @@ def create_main_app():
             registrationManager = RegistrationManager()
             return registrationManager.register_student(data)
 
-        except sqlite3.Error as e:
-            return handle_database_error(e)
         except Exception as e:
-            return handle_general_error(e)   
+            return handle_error(e)   
 
 
     @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
     def company_register():
         if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
+            return jsonify({'status': 'OK'}), 200  
         if request.content_type != 'application/json':
             return jsonify({
                 "type": "unsupported_media_type",
@@ -180,51 +149,67 @@ def create_main_app():
             registrationManager = RegistrationManager()
             return registrationManager.register_company(data)
 
-        except sqlite3.Error as e:
-            return handle_database_error(e)
         except Exception as e:
-            return handle_general_error(e)   
+            return handle_error(e)   
 
 
-    ###############################################################
-    # Internship Routes
-    ###############################################################
+    #########################
+    #   Internship Routes   #
+    #########################
 
     @app.route('/api/internship/post', methods=['POST', 'OPTIONS'])
     @jwt_required()
-    def post_internship():
+    def post_internship_position():
         try:
             data = request.get_json()
             
             internship_manager = InternshipManager()
-            return internship_manager.post_internship(data)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
+            return internship_manager.post_internship_position(data)
+
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
         
     
-    @app.route('/api/internship/get_by_id/<int:internshipId>', methods=['GET', 'OPTIONS'])
+    @app.route('/api/internship/get_by_id', methods=['POST', 'OPTIONS'])
     @jwt_required()
-    def get_internship_by_id(internshipId):
+    def get_internship_position_by_id():
         try:
+            data = request.get_json()
+            internship_id = data.get('internshipPositionId')
+
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_by_id(internshipId)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
+            return internship_manager.get_internship_position_by_id(internship_id)
+
         except Exception as e:
-            return handle_general_error(e)
-    @app.route('/api/internship/get_by_company/<int:companyId>', methods=['GET', 'OPTIONS'])
+            return handle_error(e)
+
+
+    @app.route('/api/internship/get_by_company', methods=['POST', 'OPTIONS'])
     @jwt_required()
-    def get_internships_by_companyId(companyId):
+    def get_internship_positions_by_company():
         try:
+            data = request.get_json()
+            company_id = data.get('companyId')
+
             internship_manager = InternshipManager()
-            return internship_manager.get_internships_by_company(companyId)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
+            return internship_manager.get_internship_positions_by_company(company_id)
+
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
         
+    
+    @app.route('/api/internship/close', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def close_internship_position():
+        try:
+            data = request.get_json()
+            internship_id = data.get('internshipPositionId')
+
+            internship_manager = InternshipManager()
+            return internship_manager.close_internship_position(internship_id)
+
+        except Exception as e:
+            return handle_error(e)
     
     """
     @app.route('/api/application/create', methods=['POST', 'OPTIONS'])
@@ -235,10 +220,8 @@ def create_main_app():
             
             application_manager = ApplicationManager()
             return application_manager.create_application(data)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
     @app.route('/api/application/accept', methods=['POST', 'OPTIONS'])
     @login_required
     def accept_application():
@@ -254,10 +237,8 @@ def create_main_app():
             # Assuming ApplicationManager handles application acceptance
             application_manager = ApplicationManager()
             return application_manager.accept_application(data)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
     @app.route('/api/application/refuse', methods=['POST', 'OPTIONS'])
     @login_required
     def refuse_application():
@@ -273,10 +254,9 @@ def create_main_app():
             # Assuming ApplicationManager handles application refusal
             application_manager = ApplicationManager()
             return application_manager.refuse_application(data)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
+
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
     @app.route('/api/internship/accept', methods=['POST', 'OPTIONS'])
     @login_required
     def accept_internship():
@@ -292,10 +272,9 @@ def create_main_app():
             # Assuming InternshipManager handles internship acceptance
             internship_manager = InternshipManager()
             return internship_manager.accept_internship(data)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
+
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
     @app.route('/api/internship/refuse', methods=['POST', 'OPTIONS'])
     @login_required
     def refuse_internship():
@@ -311,9 +290,8 @@ def create_main_app():
             # Assuming InternshipManager handles internship refusal
             internship_manager = InternshipManager()
             return internship_manager.refuse_internship(data)
-        except sqlite3.Error as e:
-            return handle_database_error(e)
+
         except Exception as e:
-            return handle_general_error(e)
+            return handle_error(e)
     """    
     return app

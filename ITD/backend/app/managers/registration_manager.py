@@ -1,12 +1,9 @@
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 
-from app.models.user import User
-from app.models.student import Student
-from app.models.university import University
-from app.models.company import Company
-from app.services.auth_service import *
-from app.utils.auth import hash_password
+from ..models import Student, University, Company
+from ..utils import hash_password
+from ..services.auth_service import *
 
 class RegistrationManager:
 
@@ -46,10 +43,8 @@ class RegistrationManager:
 
             student = Student.add(**values)
 
-            # Create tokens
-            access_token = create_access_token(identity={ "email": student.get_email() })
+            access_token = create_access_token(identity={ "id": student.get_id() })
 
-            # Return success response
             return jsonify({
                 'message': 'Registration successful',
                 'user': student.to_dict(),
@@ -88,11 +83,9 @@ class RegistrationManager:
             values.update({'password': hash_password(values['password'])})
             
             university = University.add(**values)
-            
-            # Create tokens
-            access_token = create_access_token(identity={ "email": university.get_email() })
 
-            # Return success response
+            access_token = create_access_token(identity={ "id": university.get_id() })
+
             return jsonify({
                 'message': 'Registration successful',
                 'user': university.to_dict(),
@@ -130,10 +123,8 @@ class RegistrationManager:
 
             company = Company.add(**values)
 
-            # Create tokens
-            access_token = create_access_token(identity={ "email": company.get_email() })
+            access_token = create_access_token(identity={ "id": company.get_id() })
 
-            # Return success response
             return jsonify({
                 'message': 'Registration successful',
                 'user': company.to_dict(),

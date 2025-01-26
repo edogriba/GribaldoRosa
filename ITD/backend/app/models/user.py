@@ -1,9 +1,8 @@
-from flask_login import UserMixin
 from app.db.dbModels.user_db import UserDB
 
 DATABASE = 'app/SC.db'
 
-class User(UserMixin):
+class User():
     def __init__(self, id, email, password, type):
         self.id = id
         self.email = email
@@ -29,29 +28,6 @@ class User(UserMixin):
             'type': self.type
         }
     
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
     
     @staticmethod
     def is_email_unique(email: str):

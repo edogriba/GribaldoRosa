@@ -1,5 +1,5 @@
 from flask import jsonify
-from sqlite3 import IntegrityError, OperationalError, ProgrammingError, InterfaceError, DataError
+from sqlite3 import IntegrityError, OperationalError, ProgrammingError, InterfaceError, DataError, Error
 from werkzeug.exceptions import Unauthorized, MethodNotAllowed, Conflict, ServiceUnavailable
 
 def invalid_request_error(missing_fields):
@@ -157,16 +157,22 @@ def generic_database_error_response(error: str):
 def handle_database_error(error):
     """Handles database exceptions and maps them to custom exceptions."""
     if isinstance(error, IntegrityError):
+        print("ERROR: " + str(error))
         return integrity_error_response()
     elif isinstance(error, OperationalError):
+        print("ERROR: " + str(error))
         return operation_error_response()
     elif isinstance(error, ProgrammingError):
+        print("ERROR: " + str(error))
         return programming_error_response()
     elif isinstance(error, InterfaceError):
+        print("ERROR: " + str(error))
         return interface_error_response()
     elif isinstance(error, DataError):
+        print("ERROR: " + str(error))
         return data_error_response()
     else:
+        print("ERROR: " + str(error))
         return generic_database_error_response(str(error))
 
 
@@ -203,3 +209,10 @@ def handle_general_error(error):
         print("ERROR: " + str(error))
         return internal_server_error_response(str(error))
     
+
+def handle_error(error):
+    """Handles both general and database errors."""
+    if isinstance(error, Error):
+        return handle_database_error(error)
+    else:
+        return handle_general_error(error)

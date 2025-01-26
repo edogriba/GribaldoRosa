@@ -1,7 +1,7 @@
 from app.db.dbModels.internshipPosition_db import InternshipPositionDB
 
 class InternshipPosition():
-    def __init__(self, internshipPositionId, companyId, programName, duration, location, roleTitle, skillsRequired, compensation, benefits, languagesRequired, description):
+    def __init__(self, internshipPositionId, companyId, programName, duration, location, roleTitle, skillsRequired, compensation, benefits, languagesRequired, description, status):
         self.internshipPositionId = internshipPositionId
         self.companyId = companyId
         self.programName = programName
@@ -13,6 +13,7 @@ class InternshipPosition():
         self.benefits = benefits
         self.languagesRequired = languagesRequired
         self.description = description
+        self.status = status
 
     def get_internshipPositionId(self):
         return self.internshipPositionId
@@ -46,6 +47,9 @@ class InternshipPosition():
 
     def get_description(self):
         return self.description
+    
+    def get_status(self):
+        return self.status
 
     def to_dict(self):
         return {
@@ -60,6 +64,7 @@ class InternshipPosition():
             'benefits': self.benefits,
             'languagesRequired': self.languagesRequired,
             'description': self.description,
+            'status': self.status
         }
 
     @staticmethod
@@ -93,6 +98,7 @@ class InternshipPosition():
                 'benefits': benefits,
                 'languagesRequired': languagesRequired,
                 'description': description,
+                'status': 'open'
             }
             internshipPositionConn = InternshipPositionDB()
             internshipPositionId = internshipPositionConn.insert(**values)
@@ -104,7 +110,7 @@ class InternshipPosition():
             internshipPositionConn.close()
 
     @staticmethod
-    def get_by_id(internshipPositionId: int):
+    def get_by_id(internshipPositionId):
         """
         Retrieve an internship position by its ID.
 
@@ -152,6 +158,21 @@ class InternshipPosition():
             internshipPositionConn = InternshipPositionDB()
             rows = internshipPositionConn.get_by_program_name(programName)
             return [InternshipPosition(**row) for row in rows] if rows else []
+        except Exception as e:
+            raise e
+        finally:
+            internshipPositionConn.close()
+
+    def close(self):
+        """
+        Close the internship position.
+
+        :return: True if the internship position is successfully closed, otherwise False.
+        :raises Exception: If an error occurs during the update process.
+        """
+        try:
+            internshipPositionConn = InternshipPositionDB()
+            return internshipPositionConn.update_status(self.internshipPositionId, status='closed')
         except Exception as e:
             raise e
         finally:

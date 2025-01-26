@@ -10,7 +10,7 @@ class InternshipPositionDB:
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE InternshipPosition """)
+                #self.con.execute(""" DROP TABLE IF EXISTS InternshipPosition """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS InternshipPosition (
                                         InternshipPositionId INTEGER PRIMARY KEY AUTOINCREMENT,
                                         CompanyId INTEGER NOT NULL,
@@ -22,14 +22,15 @@ class InternshipPositionDB:
                                         Compensation INTEGER,
                                         Benefits TEXT,
                                         LanguagesRequired TEXT NOT NULL,
-                                        Description TEXT NOT NULL
+                                        Description TEXT NOT NULL,
+                                        Status TEXT NOT NULL DEFAULT 'open'
                                     ); """)
         except Exception as e:
             self.con.rollback()
             raise e
 
     def insert(self, companyId: int, programName: str, duration: int, location: str, roleTitle: str, skillsRequired: str, 
-                compensation: int, benefits: str, languagesRequired: str, description: str):
+                compensation: int, benefits: str, languagesRequired: str, description: str, status: str):
         """
         Insert a new internship position into the database and return the ID of the inserted row.
 
@@ -41,10 +42,10 @@ class InternshipPositionDB:
             with self.con:
                 cur = self.con.cursor()
                 query = """ INSERT INTO InternshipPosition (CompanyId, ProgramName, Duration, Location, RoleTitle, SkillsRequired, 
-                                                            Compensation, Benefits, LanguagesRequired, Description) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) """
+                                                            Compensation, Benefits, LanguagesRequired, Description, Status) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) """
                 cur.execute(query, (companyId, programName, duration, location, roleTitle, skillsRequired, 
-                                    compensation, benefits, languagesRequired, description))
+                                    compensation, benefits, languagesRequired, description, status))
                 return cur.lastrowid
         except Exception as e:
             self.con.rollback()
@@ -57,7 +58,7 @@ class InternshipPositionDB:
     #    GET    #
     #############
 
-    def get_by_id(self, internshipPositionId: int):
+    def get_by_id(self, internshipPositionId):
         """
         Retrieve an internship position by its ID.
 
@@ -84,7 +85,8 @@ class InternshipPositionDB:
                     "compensation": row["Compensation"],
                     "benefits": row["Benefits"],
                     "languagesRequired": row["LanguagesRequired"],
-                    "description": row["Description"]
+                    "description": row["Description"],
+                    "status": row["Status"]
                 } if row else None
             
         except Exception as e:
@@ -104,9 +106,9 @@ class InternshipPositionDB:
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ SELECT InternshipPositionId, CompanyId, ProgramName, Duration, Location, RoleTitle, SkillsRequired, 
-                            Compensation, Benefits, LanguagesRequired, Description 
-                            FROM InternshipPosition WHERE CompanyId = ? """
+                query = """ SELECT *
+                            FROM InternshipPosition 
+                            WHERE CompanyId = ? """
                 cur.execute(query, (companyId,))
                 rows = cur.fetchall()
                 return [
@@ -121,7 +123,8 @@ class InternshipPositionDB:
                         "compensation": row["Compensation"],
                         "benefits": row["Benefits"],
                         "languagesRequired": row["LanguagesRequired"],
-                        "description": row["Description"]
+                        "description": row["Description"],
+                        "status": row["Status"]
                     } for row in rows
                 ]
         except Exception as e:
@@ -141,9 +144,9 @@ class InternshipPositionDB:
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ SELECT InternshipPositionId, CompanyId, ProgramName, Duration, Location, RoleTitle, SkillsRequired, 
-                            Compensation, Benefits, LanguagesRequired, Description 
-                            FROM InternshipPosition WHERE ProgramName = ? """
+                query = """ SELECT *
+                            FROM InternshipPosition 
+                            WHERE ProgramName = ? """
                 cur.execute(query, (programName,))
                 rows = cur.fetchall()
                 return [
@@ -158,7 +161,8 @@ class InternshipPositionDB:
                         "compensation": row["Compensation"],
                         "benefits": row["Benefits"],
                         "languagesRequired": row["LanguagesRequired"],
-                        "description": row["Description"]
+                        "description": row["Description"],
+                        "status": row["Status"]
                     } for row in rows
                 ]
         except Exception as e:
@@ -191,7 +195,8 @@ class InternshipPositionDB:
                         "compensation": row["Compensation"],
                         "benefits": row["Benefits"],
                         "languagesRequired": row["LanguagesRequired"],
-                        "description": row["Description"]
+                        "description": row["Description"],
+                        "status": row["Status"]
                     } for row in rows
                 ]
         except Exception as e:
@@ -200,7 +205,31 @@ class InternshipPositionDB:
         finally:
             cur.close()
         
+    ################
+    #    UPDATE    #
+    ################
+    def update_status(self, internshipPositionId: int, status: str):
+        """
+        Update the status of an internship position.
 
+        :param internshipPositionId: The ID of the internship position.
+        :param status: The new status of the internship position.
+        :return: True if the status was updated successfully, otherwise False.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = """ UPDATE InternshipPosition
+                            SET Status = ?
+                            WHERE InternshipPositionId = ? """
+                cur.execute(query, (status, internshipPositionId))
+                return True
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+    
     def close(self):
         self.con.close()
 

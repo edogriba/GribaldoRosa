@@ -61,7 +61,7 @@ class UniversityDB:
             cur = self.con.cursor()
             query = """ SELECT * 
                         FROM University AS Uni JOIN User AS U ON Uni.UserId = U.UserId
-                        WHERE UserId = ? """
+                        WHERE U.UserId = ? """
             university = cur.execute(query, (id,)).fetchone()
 
             return {    'id': university['UserId'], 
