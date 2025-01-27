@@ -32,24 +32,15 @@ class Application():
     @staticmethod
     def add(studentId: int, internshipPositionId: int):
         """
-        Adds a new application to the database.
+        Add a new application to the database with a default state of 'Pending'.
 
-        :param studentId: The ID of the student applying.
-        :param internshipPositionId: The ID of the internship position.
-        :param state: The current state of the application.
-        :return: An instance of the Application class with the new application details.
+        :param studentId: The unique identifier of the student applying.
+        :param internshipPositionId: The unique identifier of the internship position.
         :raises Exception: If an error occurs during the insertion process.
         """
         try:
-            values = {
-                'studentId': studentId,
-                'internshipPositionId': internshipPositionId,
-                'state': 'Pending',
-            }
             applicationConn = ApplicationDB()
-            applicationId = applicationConn.insert(**values)
-            values.update({'applicationId': applicationId})
-            return Application(**values)
+            applicationConn.insert(studentId, internshipPositionId, 'Pending')
         except Exception as e:
             raise e
         finally:

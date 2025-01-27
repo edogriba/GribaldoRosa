@@ -298,5 +298,53 @@ def create_main_app():
 
         except Exception as e:
             return handle_error(e)
+        
+    
+    @app.route('/api/application/get_by_id', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def get_application_by_id():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            application_manager = ApplicationManager()
+            return application_manager.get_application_by_id(data.get('applicationId'))
+        except Exception as e:
+            return handle_error(e)
+        
+
+    @app.route('/api/application/get_by_student', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def get_applications_by_student():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            application_manager = ApplicationManager()
+            return application_manager.get_applications_by_student(data.get('studentId'))
+        except Exception as e:
+            return handle_error(e)
+        
+
+    @app.route('/api/application/get_by_internship_position', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def get_applications_by_internship_position():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            application_manager = ApplicationManager()
+            return application_manager.get_applications_by_internship_position(data.get('internshipPositionId'))
+        except Exception as e:
+            return handle_error(e)
      
     return app
+
