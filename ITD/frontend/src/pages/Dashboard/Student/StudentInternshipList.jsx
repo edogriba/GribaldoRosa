@@ -1,7 +1,7 @@
 import React, {useContext} from "react"
 import { UserContext } from "../../../context/UserContext";
 
-const StudentList = () => {
+const StudentInternshipList = () => {
     const { user } = useContext(UserContext);
     return (
         <div>    
@@ -254,4 +254,4 @@ const StudentList = () => {
     )
 }
 
-export default StudentList;
+export default StudentInternshipList;

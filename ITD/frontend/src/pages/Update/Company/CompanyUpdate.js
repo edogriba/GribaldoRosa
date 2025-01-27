@@ -3,7 +3,7 @@ import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { UserContext } from '../../../context/UserContext';
 
-const StudentUpdate = () => {
+const CompanyUpdate = () => {
     const { user, userLogout } = useContext(UserContext);
 
     const handleUpdate = async (e) => {
@@ -20,37 +20,22 @@ const StudentUpdate = () => {
                         <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                             {/* First Name */}
                             <div className="w-full">
-                                <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                <label htmlFor="companyName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     First Name
                                 </label>
                                 <input
                                     type="text"
-                                    name="firstName"
-                                    id="firstName"
+                                    name="companyName"
+                                    id="companyName"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.firstName || ""}
+                                    defaultValue={user?.companyName || ""}
                                 
                                     required
                                 />
                             </div>
 
-                            {/* Last Name */}
-                            <div className="w-full">
-                                <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Last Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    id="lastName"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.lastName || ""}
-                                    required
-                                />
-                            </div>
-
                             {/* Email */}
-                            <div className="sm:col-span-2">
+                            <div className="w-full">
                                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Email
                                 </label>
@@ -64,23 +49,8 @@ const StudentUpdate = () => {
                                 />
                             </div>
 
-                            {/* Phone Number */}
-                            <div className="w-full">
-                                <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Phone Number
-                                </label>
-                                <input
-                                    type="text"
-                                    name="phoneNumber"
-                                    id="phoneNumber"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue = {user?.phoneNumber || ""}
-                                    required
-                                />
-                            </div>
-
                             {/* Location */}
-                            <div className="w-full">
+                            <div className="sm:col-span-2">
                                 <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Location
                                 </label>
@@ -92,31 +62,20 @@ const StudentUpdate = () => {
                                     defaultValue={user?.location || ""}
                                     required
                                 />
+                                
                             </div>
 
-                            {/* Skills */}
-                            <div className="sm:col-span-2">
-                                <label htmlFor="skills" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Skills
-                                </label>
-                                <textarea
-                                    id="skills"
-                                    rows="4"
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.skills || ""}
-                                ></textarea>
-                            </div>
 
-                            {/* Languages */}
+                            {/* Description */}
                             <div className="sm:col-span-2">
-                                <label htmlFor="languages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Languages Spoken
+                                <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Description
                                 </label>
                                 <textarea
-                                    id="languages"
+                                    id="description"
                                     rows="4"
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.languageSpoken || ""}
+                                    defaultValue={user?.description || ""}
                                 ></textarea>
                             </div>
                         </div>
@@ -156,4 +115,4 @@ const StudentUpdate = () => {
     );
 };
 
-export default StudentUpdate;
+export default CompanyUpdate;

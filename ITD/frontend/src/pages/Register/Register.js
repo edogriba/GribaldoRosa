@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 
 const Register = () => {
   return (
-    <div>
+    <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
       <Navbar />
       <section className="bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">

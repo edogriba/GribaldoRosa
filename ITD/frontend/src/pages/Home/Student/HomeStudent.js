@@ -8,10 +8,10 @@ import { UserContext } from '../../../context/UserContext';
 const HomeStudent = () => {
     const { user, userLogout } = useContext(UserContext);
     return (
-        <div>
-            <Navbar  isLoggedIn={!!user} onLogout={userLogout}/>
+        <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
+            <Navbar  user={user} onLogout={userLogout}/>
             <section className="bg-white dark:bg-gray-900">
-                <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+                <div className="px-4 mx-auto max-w-screen-xl lg:px-6">
                     <div className="max-w-screen-md mb-8 lg:mb-16">
                         <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Welcome to the Student Home Page</h2>
                         <p className="text-gray-500 sm:text-xl dark:text-gray-400">Ready to land your the internship of your dreams?</p>

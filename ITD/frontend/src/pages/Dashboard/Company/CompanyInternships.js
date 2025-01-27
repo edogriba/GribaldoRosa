@@ -1,21 +1,20 @@
 import React, {useContext} from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-import StudentTab from './StudentTab';
-import StudentApplicationList from './StudentApplicationList';
 import { UserContext } from '../../../context/UserContext';
+import CompanyTab from './CompanyTab';
+import CompanyInternshipList from './CompanyInternshipList';
 
-
-const StudentApplications = () => {
+const CompanyInternships = () => {
     const { user, userLogout } = useContext(UserContext);
     return (
         <div>
             <Navbar user={user} onLogout={userLogout}/>
-            <StudentTab activeTab='applications'/>
-            <StudentApplicationList />
+            <CompanyTab activeTab='internships'/>
+            <CompanyInternshipList/>
             <Footer />
         </div>
     );
 };
 
-export default StudentApplications;
+export default CompanyInternships;

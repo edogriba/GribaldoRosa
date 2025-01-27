@@ -15,16 +15,23 @@ import StudentProfile from './pages/Dashboard/Student/StudentProfile';
 import CompanyProfile from './pages/Dashboard/Company/CompanyProfile';
 import UniversityProfile from './pages/Dashboard/University/UniversityProfile';
 import StudentApplications from './pages/Dashboard/Student/StudentApplications';
+import CompanyPositions from './pages/Dashboard/Company/CompanyPositions';  
 import StudentSearch from './pages/Search/Student/StudentSearch';
+import CompanyCreatePosition from './pages/Create/Company/CompanyCreatePosition';
 import StudentUpdate from './pages/Update/Student/StudentUpdate';
+import CompanyUpdate from './pages/Update/Company/CompanyUpdate';
+import UniversityUpdate from './pages/Update/University/UniversityUpdate';
 import StudentInternships from './pages/Dashboard/Student/StudentInternships';
 import About from './pages/About/About';
 import NotFound from './pages/NotFound';
 import './assets/index.css';
+import CompanyInternships from './pages/Dashboard/Company/CompanyInternships';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <UserProvider>
+    <UserProvider> 
+      <Toaster position="top-center" />
       <Router>
         <Routes>
           <Route path="/" element={<Welcome />}/>
@@ -41,9 +48,15 @@ function App() {
           <Route path="/companies/dashboard/profile" element={<ProtectedRoute><CompanyProfile /></ProtectedRoute>} />
           <Route path="/universities/dashboard/profile" element={<ProtectedRoute><UniversityProfile /></ProtectedRoute>} />
           <Route path="/students/update" element={<ProtectedRoute><StudentUpdate /></ProtectedRoute>} />
+          <Route path="/companies/update" element={<ProtectedRoute><CompanyUpdate /></ProtectedRoute>} />
+          <Route path="/universities/update" element={<ProtectedRoute><UniversityUpdate /></ProtectedRoute>} />
           <Route path="/students/search" element={<ProtectedRoute><StudentSearch /></ProtectedRoute>} />
+          <Route path="/companies/create-position" element={<ProtectedRoute><CompanyCreatePosition /></ProtectedRoute>} />
           <Route path="/students/dashboard/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
           <Route path="/students/dashboard/internships" element={<ProtectedRoute><StudentInternships /></ProtectedRoute>} />
+          <Route path="/companies/dashboard/internships" element={<ProtectedRoute><CompanyInternships/></ProtectedRoute>} />
+          <Route path="/companies/dashboard/positions" element={<ProtectedRoute><CompanyPositions /></ProtectedRoute>} />
+          <Route path="/universities/dashboard/internships" element={<ProtectedRoute><StudentInternships /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

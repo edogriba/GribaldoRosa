@@ -1,3 +1,4 @@
+import { toast } from 'react-hot-toast';
 const buildURL = (baseURL, path, params) => {
   const url = new URL(path, baseURL);
 
@@ -33,6 +34,7 @@ export async function request(path, method, body, params = {}) {
     body: body ? JSON.stringify(body) : null,
   });
 }
+
 export async function requestAuth(path, method, body, params = {}) {
 
   const accessToken = localStorage.getItem("access_token");
@@ -47,4 +49,50 @@ export async function requestAuth(path, method, body, params = {}) {
     headers: headers,
     body: body ? JSON.stringify(body) : null,
   });
+}
+
+export async function requestAuthWithErrorToast(path, method, body, params = {}, customErrorMessage) {
+  try {
+    const response = await requestAuth(path, method, body, params);
+    console.log(response);
+
+    if (!response.ok) {
+      const message = customErrorMessage || 'An error occurred while processing your request.';
+      toast.error(message);
+    }
+
+    return response;
+  } catch (error) {
+    // Display a generic error message if the request fails,
+    // e.g., due to a network issue or a server error (most likely
+    // due to the server being down).
+    const message =
+      'An error occurred while processing your request. The server might be down or there could be a network issue.';
+    //toast.error(message);
+
+    throw error;
+  }
+}
+
+export async function requestWithErrorToast(path, method, body, params = {}, customErrorMessage) {
+  try {
+    const response = await request(path, method, body, params);
+    console.log(response);
+
+    if (!response.ok) {
+      const message = customErrorMessage || 'An error occurred while processing your request.';
+      //toast.error(message);
+    }
+
+    return response;
+  } catch (error) {
+    // Display a generic error message if the request fails,
+    // e.g., due to a network issue or a server error (most likely
+    // due to the server being down).
+    const message =
+      'An error occurred while processing your request. The server might be down or there could be a network issue.';
+    toast.error(message);
+
+    throw error;
+  }
 }

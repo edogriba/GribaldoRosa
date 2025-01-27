@@ -1,5 +1,5 @@
 import { Method } from './api';
-import { request, requestAuth } from './request';
+import { request, requestAuth, requestWithErrorToast, requestAuthWithErrorToast } from './request';
 
 const UserEndPoint = {
   USER_LOGIN: '/api/userlogin',
@@ -8,10 +8,10 @@ const UserEndPoint = {
 };
 
 export const userLogin = async (data) => 
-    request(`${UserEndPoint.USER_LOGIN}`, Method.POST, data);
+    requestAuthWithErrorToast(`${UserEndPoint.USER_LOGIN}`, Method.POST, data, {}, 'Invalid email or password');
 
 export const userLogout = async () => 
-  requestAuth(`${UserEndPoint.USER_LOGOUT}`, Method.POST);
+  requestAuthWithErrorToast(`${UserEndPoint.USER_LOGOUT}`, Method.POST, {}, {}, 'An error occurred while logging out'); 
 
 export const userAuthenticated = async () => 
   requestAuth(`${UserEndPoint.USER_AUTHENTICATED}`, Method.GET);

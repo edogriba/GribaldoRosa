@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { UserContext } from "../../context/UserContext"; 
 import { api } from "../../api/api";
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -23,11 +24,12 @@ const Login = () => {
       console.log(email, password); // Debug
       const response = await api.userLogin(dataUser);
       await userLogin(response); // Update user context
-      
+      toast.success('Login successful');
     }
     catch (error) {
       console.error('Error logging in:', error.response?.data?.message || error.message);
-      alert('Login failed: ' + (error.response?.data?.message || 'Please try again.'));
+      //alert('Login failed: ' + (error.response?.data?.message || 'Please try again.'));
+      toast.error('Login failed: ' + (error.response?.data?.message || 'Please try again.'));
     }
   }
   useEffect(() => {
@@ -43,9 +45,9 @@ const Login = () => {
   }, [user, navigate]); // Run when `user` updates
   
   return(
-    <div>
+    <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
       <Navbar  />
-        <section className="bg-gray-50 dark:bg-gray-900">
+        <section className=" dark:bg-gray-900">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
             <Link to="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
               <img

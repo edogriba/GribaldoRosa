@@ -20,6 +20,7 @@ import {
 
 
 import { example } from './example';
+import { getInternshipList, getPositionList } from './internship';
 
 export const Method = {
   GET: 'GET',
@@ -38,5 +39,7 @@ export const api = {
   companyRegistration,
   universityRegistration,
   userLogin, 
-  userLogout
+  userLogout,
+  getInternshipList,
+  getPositionList
 };

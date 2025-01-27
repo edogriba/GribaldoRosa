@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { api } from "../api/api"; // Replace with your actual API utilities
+import toast from "react-hot-toast";
 
 export const UserContext = createContext();
 
@@ -24,7 +25,7 @@ const UserProvider = ({ children }) => {
         throw new Error("Login failed with status " + response.status); // Handle errors
       }
     } catch (error) {
-      console.error("Login failed:", error.message);
+      //console.error("Login failed:", error.message);
       throw new Error("Login failed");
     }
   };
@@ -39,6 +40,7 @@ const UserProvider = ({ children }) => {
         if (accessToken) {
           localStorage.setItem("access_token", accessToken);
           setUser(userData.user); // Set user context
+          toast.success("Registration successful");
         } 
       } 
       else {
@@ -57,10 +59,11 @@ const UserProvider = ({ children }) => {
 
       localStorage.removeItem("access_token");
       setUser(null);
-
+      toast.success("Logout successful");
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout failed:", error.message);
+      toast.error("Logout failed");
     }
   };
 

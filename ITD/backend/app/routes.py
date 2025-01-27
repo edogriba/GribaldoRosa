@@ -15,7 +15,7 @@ def create_main_app():
     # App Configuration
     app.config['SECRET_KEY'] = 'secret'
     app.config["JWT_SECRET_KEY"] = "nTXl6GKclQxRFz57pxXx"
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=1)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=15)
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
     app.config["JWT_COOKIE_HTTPONLY"] = True
@@ -187,9 +187,16 @@ def create_main_app():
     @app.route('/api/internship/get_by_company', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_internship_positions_by_company():
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'OK'}), 200  
+        if request.content_type != 'application/json':
+            return jsonify({
+                "type": "unsupported_media_type",
+                "message": "Content-Type must be application/json"
+            }), 415
         try:
-            data = request.get_json()
-            company_id = data.get('companyId')
+            data = request.get_json() 
+            company_id = data.get('id')
 
             internship_manager = InternshipManager()
             return internship_manager.get_internship_positions_by_company(company_id)

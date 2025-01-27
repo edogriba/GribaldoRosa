@@ -3,7 +3,7 @@ import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { UserContext } from '../../../context/UserContext';
 
-const StudentUpdate = () => {
+const UniversityUpdate = () => {
     const { user, userLogout } = useContext(UserContext);
 
     const handleUpdate = async (e) => {
@@ -156,4 +156,4 @@ const StudentUpdate = () => {
     );
 };
 
-export default StudentUpdate;
+export default UniversityUpdate;

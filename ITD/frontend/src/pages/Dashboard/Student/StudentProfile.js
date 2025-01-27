@@ -9,10 +9,12 @@ import { UserContext } from '../../../context/UserContext';
 const StudentProfile = () => {
     const { user, userLogout } = useContext(UserContext);
     return (
-        <div>
-            <Navbar isLoggedIn={!!user} onLogout={userLogout}/>
-            <StudentTab activeTab='profile'/>
-                <div className='flex bg-gray-50'>
+        <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
+            <div>
+                <Navbar user={user} onLogout={userLogout}/>
+                <StudentTab activeTab='profile'/>
+            </div>
+                <div className='flex p-5 h-'>
                     <StudentProfileCard />
                     <StudentProfileTable />
                 </div>

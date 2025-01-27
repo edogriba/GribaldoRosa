@@ -11,7 +11,7 @@ const Welcome = () => {
   const { user, userLogout } = useContext(UserContext);
   return (
     <Box>
-      <Navbar isLoggedIn={user} onLogout={userLogout} />
+      <Navbar user={user} onLogout={userLogout} />
       <JumboTron/>
       <SocialProof/>
       <WhoTrustUs/>
