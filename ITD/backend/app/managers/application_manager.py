@@ -8,7 +8,7 @@ from ..utils import json_invalid_request, json_unauthorized, json_success, json_
 
 class ApplicationManager:
 
-    def create_application(self, internshipPositionId):
+    def create_application(self, internshipPositionId: int):
         """
         Create a new application.
 
@@ -20,8 +20,8 @@ class ApplicationManager:
             validation_response = validate_application_data_creation(internshipPositionId)
             if validation_response is not True:
                 return validation_response
-            
-            application = Application.add(get_current_user().get_id(), int(internshipPositionId), "Pending")
+    
+            application = Application.add(get_current_user().get_id(), internshipPositionId)
             internshipPosition = InternshipPosition.get_by_id(internshipPositionId)
             return json_created("Application created successfully.", 
                            application          = application.to_dict(),
@@ -32,7 +32,7 @@ class ApplicationManager:
             return e
         
 
-    def accept_application(self, applicationId, internshipPositionId):
+    def accept_application(self, applicationId: int, internshipPositionId: int):
         """
         Accept an application.
 
@@ -66,7 +66,7 @@ class ApplicationManager:
             return e
         
 
-    def reject_application(self, applicationId, internshipPositionId):
+    def reject_application(self, applicationId: int, internshipPositionId: int):
         """
         Reject an application.
 
@@ -100,7 +100,7 @@ class ApplicationManager:
             return e
     
 
-    def confirm_application(self, applicationId, internshipPositionId):
+    def confirm_application(self, applicationId: int, internshipPositionId: int):
         """
         Confirm an application.
 
@@ -134,7 +134,7 @@ class ApplicationManager:
             return e
         
     
-    def refuse_application(self, applicationId, internshipPositionId):
+    def refuse_application(self, applicationId: int, internshipPositionId: int):
         """
         Refuse an application.
 
@@ -168,7 +168,7 @@ class ApplicationManager:
             return e
         
         
-    def get_application_by_id(self, applicationId):
+    def get_application_by_id(self, applicationId: int):
         """
         Get an application by its ID.
 
@@ -196,7 +196,7 @@ class ApplicationManager:
             return e
         
     
-    def get_applications_by_student(self, studentId):
+    def get_applications_by_student(self, studentId: int):
         """
         Get all applications by a student.
 
@@ -221,7 +221,7 @@ class ApplicationManager:
             return e
 
 
-    def get_applications_by_internship_position(self, internshipPositionId):
+    def get_applications_by_internship_position(self, internshipPositionId: int):
         """
         Get all applications by an internship position.
 
@@ -245,7 +245,7 @@ class ApplicationManager:
             return e
 
 
-def validate_application_data_creation(internshipPositionId):
+def validate_application_data_creation(internshipPositionId: int):
     """
     Validate the application data for creation.
 
@@ -255,9 +255,14 @@ def validate_application_data_creation(internshipPositionId):
     try:
         if get_current_user().get_type() != "student":
             return json_unauthorized("Only students can create applications.")
+        
+        internshipPosition = InternshipPosition.get_by_id(internshipPositionId)
 
-        if not InternshipPosition.get_by_id(internshipPositionId):
+        if not internshipPosition:
             return json_invalid_request("Invalid internship position Id.")
+        
+        if internshipPosition.is_closed():
+            return json_invalid_request("Internship position is closed.")
         
         return True
     

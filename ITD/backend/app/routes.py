@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required, get_c
 
 from datetime import timedelta
 
-from .utils import handle_error, validate_request
+from .utils import handle_error, validate_request, json_success
 from .models import User, Student, University, Company
 from .managers import LoginManager, RegistrationManager, InternshipManager, ApplicationManager
 
@@ -64,7 +64,7 @@ def create_main_app():
     @jwt_required()
     def protected():
         try:     
-            return jsonify({"user": get_current_user().to_dict()}), 200
+            return json_success(message="Access granted", user = get_current_user().to_dict())
         except Exception as e:
             return handle_error(e)
     
@@ -91,7 +91,7 @@ def create_main_app():
     def university_list():     
         try:
             universities = University.get_list_dict()
-            return jsonify(universities), 200
+            return json_success(message="Universities retrieved", universities=universities)
         except Exception as e:
             return handle_error(e)
 

@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from .json_return import json_success, json_unsupported_media_type
 
 def validate_request():
     """
@@ -14,10 +15,9 @@ def validate_request():
         None: If the request is valid.
     """
     if request.method == 'OPTIONS':
-        return jsonify({'status': 'OK'}), 200
+        return json_success()
+
     if request.content_type != 'application/json':
-        return jsonify({
-            "type": "unsupported_media_type",
-            "message": "Content-Type must be application/json"
-        }), 415
+        return json_unsupported_media_type()
+
     return None

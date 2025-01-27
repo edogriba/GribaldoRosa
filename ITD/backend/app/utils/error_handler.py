@@ -1,18 +1,8 @@
 from flask import jsonify
 from sqlite3 import IntegrityError, OperationalError, ProgrammingError, InterfaceError, DataError, Error
 from werkzeug.exceptions import Unauthorized, MethodNotAllowed, Conflict, ServiceUnavailable
+from .json_return import *
 
-def invalid_request_error(missing_fields):
-    """  
-    Handles errors related to missing required fields in a request.  
-    Returns an error message specifying the missing fields.  
-    """ 
-    if isinstance(missing_fields, str):
-        missing_fields = [missing_fields]
-    return jsonify({
-        "type": "invalid_request",
-        "message": f"The following fields are required: {', '.join(missing_fields)}."
-    }), 400
 
 ###################### 
 ##  General Errors  ##
@@ -20,82 +10,52 @@ def invalid_request_error(missing_fields):
 
 def bad_request_error_response():
     """ Handles general bad request errors, such as invalid input or missing data. """
-    return jsonify({
-        "type": "bad_request",
-        "message": "Bad request. Please check the input data."
-    }), 400
+    return json_invalid_request("The request could not be processed. Please ensure all required fields are correctly filled and try again.")
 
 
 def type_error_response():
     """Handles TypeError exceptions and returns a custom response."""
-    return jsonify({
-        "type": "type_error",
-        "message": "A TypeError occurred. Please check your input types."
-    }), 400
+    return json_invalid_request("Oops! It looks like there's a type mismatch. Please check your input and try again.")
 
 
 def unauthorized_error_response():
     """ Handles unauthorized access errors. """
-    return jsonify({
-        "type": "unauthorized",
-        "message": "Unauthorized access. Please log in."
-    }), 401
+    return json_unauthorized("You are not authorized to access this resource. Please log in and try again.")
 
 
 def forbidden_error_response():
     """ Handles forbidden errors, typically for restricted resources. """
-    return jsonify({
-        "type": "forbidden",
-        "message": "Forbidden. You do not have permission to access this resource."
-    }), 403
+    return json_forbidden("Access denied. You don't have the necessary permissions to view this resource. Please contact support if you believe this is an error.")
 
 
 def not_found_error_response():
     """ Handles errors when a requested resource is not found. """
-    return jsonify({
-        "type": "not_found",
-        "message": "Resource not found."
-    }), 404
+    return json_not_found("Sorry, we couldn't find what you're looking for. Please check your input or contact support if the problem persists.")
 
 
 def method_not_allowed_error_response():
     """ Handles errors when an HTTP method is not allowed for a resource. """
-    return jsonify({
-        "type": "method_not_allowed",
-        "message": "Method not allowed."
-    }), 405
+    return json_method_not_allowed("The method you tried to use is not allowed for this resource. Please check the allowed methods and try again.")
 
 
 def conflict_error_response():
     """ Handles conflict errors, like trying to create something that already exists. """
-    return jsonify({
-        "type": "conflict",
-        "message": "Conflict. The request could not be completed due to a conflict with the current state of the target resource."
-    }), 409
+    return json_conflict("It seems there's a conflict with the current state of the resource. Please check your request and try again.")
 
 
 def service_unavailable_error_response():
     """ Handles service unavailability errors, typically during maintenance. """
-    return jsonify({
-        "type": "service_unavailable",
-        "message": "Service unavailable. Please try again later."
-    }), 503
+    return json_service_unavailable("Our service is currently undergoing maintenance. Please try again in a few minutes.")
 
 
 def gateway_timeout_error_response():
     """ Handles errors where a server did not respond in time during a proxy or gateway request. """
-    return jsonify({
-        "type": "gateway_timeout",
-        "message": "Gateway timeout. The server did not respond in time."
-    }), 504
+    return json_gateway_timeout("Our servers are taking longer than expected to respond. Please try again in a few moments.")
 
 
 def internal_server_error_response(error: str):
     """ Handles unexpected internal server errors. """
-    return jsonify({
-        "type": "internal_server_error",
-        "message": error        # "An unexpected error occurred on the server. Please try again later."
-    }), 500
+    return json_internal_server_error("Something went wrong on our end. We're working to fix it. Please try again later.")
 
 
 ####################### 
@@ -104,50 +64,32 @@ def internal_server_error_response(error: str):
 
 def integrity_error_response():
     """ Handles integrity constraint violations like duplicate or missing fields. """
-    return jsonify({
-        "type": "database_integrity_error",
-        "message": "A database integrity constraint was violated. Possible duplicate or missing required fields."
-    }), 400
+    return json_invalid_request("It seems there's an issue with the data you provided. Please check for duplicates or missing fields and try again.")
 
 
 def operation_error_response():
     """ Handles errors related to database operations, such as syntax or connection issues. """
-    return jsonify({
-        "type": "database_operation_error",
-        "message": "There was an issue with the database operation. Please check your request."
-    }), 500
+    return json_internal_server_error("We encountered an issue while processing your request. Please try again or contact support if the problem persists.")
 
 
 def programming_error_response():
     """ Handles programming errors, such as incorrect query syntax. """
-    return jsonify({
-        "type": "database_programming_error",
-        "message": "A database programming error occurred. Please contact support."
-    }), 500
+    return json_internal_server_error("We encountered a problem with our database. Please try again later or contact support if the issue persists.")
 
 
 def interface_error_response():
     """ Handles errors related to the database interface, such as a closed or invalid connection. """
-    return jsonify({
-            "type": "database_interface_error",
-            "message": "There was an issue with the database connection interface. The connection might be closed."
-        }), 500
+    return json_internal_server_error("We encountered a problem with the database connection. Please try again later.")
 
 
 def data_error_response():
     """ Handles errors when the data doesn't match the expected format or range. """
-    return jsonify({
-        "type": "database_data_error",
-        "message": "The data provided is invalid. Please check the input data."
-    }), 400
+    return json_invalid_request("The data you provided doesn't seem to be in the correct format. Please review your input and try again.")
 
 
 def generic_database_error_response(error: str):
     """ Handles unexpected database errors. """
-    return jsonify({
-        "type": "database_error",
-        "message": error        # "An unexpected database error occurred."
-    }), 500
+    return json_internal_server_error("We encountered an unexpected issue with our database. Please try again later or contact support if the problem persists.")
 
 
 ################

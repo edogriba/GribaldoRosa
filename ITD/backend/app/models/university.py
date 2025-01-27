@@ -1,15 +1,16 @@
 from app.models.user import User
 from app.db.dbModels.university_db import UniversityDB
+from typing import Optional
 
 
 class University(User):
-    def __init__(self, id, email, password, name, address, websiteURL, description, logoPath):
+    def __init__(self, id: int, email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]):
         super().__init__(id, email, password, "university")
         self.name = name
         self.address = address
         self.websiteURL = websiteURL
         self.description = description
-        self.logoPath = logoPath
+        self.logoPath = logoPath        # optional
     
     #def __repr__(self):
     #    return f"<University: ({self.id}) {self.name}, Email: {self.email}"
@@ -54,7 +55,7 @@ class University(User):
     
 
     @staticmethod
-    def add(email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: str):
+    def add(email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]):
         try:
             # Insert university data into the database
             universityConn = UniversityDB()

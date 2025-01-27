@@ -1,5 +1,6 @@
 from sqlite3 import connect, Row
 from .user_db import UserDB
+from typing import Optional
 
 DATABASE = 'app/db/SC.db'
 
@@ -33,8 +34,8 @@ class StudentDB:
             raise e
 
     
-    def insert(self, email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: str, location: str, 
-            degreeProgram: str, gpa: float, graduationYear: int, CVpath: str, skills: str, languageSpoken: str, universityId: int):
+    def insert(self, email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: Optional[str], location: str, 
+            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int):
         """
         Insert a new student into the database and return the ID of the inserted row.
         
@@ -171,7 +172,7 @@ class StudentDB:
         finally:
             cur.close()
     
-    def update_profile_picture_path_by_id(self, id: int, profilePicturePath: str):
+    def update_profile_picture_path_by_id(self, id: int, profilePicturePath: Optional[str]):
         """
         Update the profile picture path of a student based on their unique ID.
 
@@ -240,7 +241,7 @@ class StudentDB:
         finally:
             cur.close()
     
-    def update_gpa_by_id(self, id: int, gpa: str):
+    def update_gpa_by_id(self, id: int, gpa: Optional[float]):
         """
         Update the gpa of a student based on their unique ID.
 
@@ -263,7 +264,7 @@ class StudentDB:
         finally:
             cur.close()
            
-    def update_graduation_year_by_id(self, id: int, graduationYear: str):
+    def update_graduation_year_by_id(self, id: int, graduationYear: Optional[str]):
         """
         Update the graduation year of a student based on their unique ID.
 
@@ -355,7 +356,7 @@ class StudentDB:
         finally:
             cur.close()
       
-    def update_university_by_id(self, id: int, universityId: str):
+    def update_university_by_id(self, id: int, universityId: int):
         """
         Update the university of a student based on their unique ID.
 

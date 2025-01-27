@@ -28,7 +28,7 @@ const RegisterStudent = () => {
           const res = await api.getUniversityList();
           const data = await res.json();
 
-          setUniversities(data);
+          setUniversities(data.universities);
       } catch (error) {
         console.error('Error fetching universities:', error.message);
         alert('Failed to load universities. Please try again later.');

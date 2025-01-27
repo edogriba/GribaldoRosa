@@ -3,14 +3,14 @@ from app.db.dbModels.user_db import UserDB
 DATABASE = 'app/SC.db'
 
 class User():
-    def __init__(self, id, email, password, type):
+    def __init__(self, id: int, email: str, password: str, type: str):
         self.id = id
         self.email = email
         self.password = password
         self.type = type
         
     def get_id(self):
-        return str(self.id)
+        return self.id
     
     def get_type(self):
         return self.type
@@ -23,7 +23,7 @@ class User():
     
     def to_dict(self):
         return {
-            'id': int(self.id),
+            'id': self.id,
             'email': self.email,
             'type': self.type
         }

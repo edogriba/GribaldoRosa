@@ -1,8 +1,10 @@
 from ..db.dbModels import InternshipPositionDB
 from .company import Company
+from typing import Optional
 
 class InternshipPosition():
-    def __init__(self, internshipPositionId, companyId, programName, duration, location, roleTitle, skillsRequired, compensation, benefits, languagesRequired, description, status):
+    def __init__(self, internshipPositionId: int, companyId: int, programName: str, duration: int, location: str, roleTitle: str, 
+                 skillsRequired: str, compensation: Optional[int], benefits: Optional[str], languagesRequired: str, description: str, status: str):
         self.internshipPositionId = internshipPositionId
         self.companyId = companyId
         self.programName = programName
@@ -10,8 +12,8 @@ class InternshipPosition():
         self.location = location
         self.roleTitle = roleTitle
         self.skillsRequired = skillsRequired
-        self.compensation = compensation
-        self.benefits = benefits
+        self.compensation = compensation        # optional
+        self.benefits = benefits                # optional
         self.languagesRequired = languagesRequired
         self.description = description
         self.status = status
@@ -70,7 +72,7 @@ class InternshipPosition():
 
     @staticmethod
     def add(companyId: int, programName: str, duration: int, location: str, roleTitle: str, 
-            skillsRequired: str, compensation: int, benefits: str, languagesRequired: str, description: str):
+            skillsRequired: str, compensation: Optional[int], benefits: Optional[str], languagesRequired: str, description: str):
         """
         Adds a new internship position to the database.
 
@@ -99,7 +101,7 @@ class InternshipPosition():
                 'benefits': benefits,
                 'languagesRequired': languagesRequired,
                 'description': description,
-                'status': 'open'
+                'status': 'Open'
             }
             internshipPositionConn = InternshipPositionDB()
             internshipPositionId = internshipPositionConn.insert(**values)
@@ -111,7 +113,7 @@ class InternshipPosition():
             internshipPositionConn.close()
 
     @staticmethod
-    def get_by_id(internshipPositionId):
+    def get_by_id(internshipPositionId: int):
         """
         Retrieve an internship position by its ID.
 
@@ -185,8 +187,24 @@ class InternshipPosition():
         """
         try:
             internshipPositionConn = InternshipPositionDB()
-            return internshipPositionConn.update_status(self.internshipPositionId, status='closed')
+            return internshipPositionConn.update_status(self.internshipPositionId, status='Closed')
         except Exception as e:
             raise e
         finally:
             internshipPositionConn.close()
+
+    def is_open(self):
+        """
+        Check if the internship position is open.
+
+        :return: True if the internship position is open, otherwise False.
+        """
+        return self.status == 'Open'
+    
+    def is_closed(self):
+        """
+        Check if the internship position is closed.
+
+        :return: True if the internship position is closed, otherwise False.
+        """
+        return self.status == 'Closed'

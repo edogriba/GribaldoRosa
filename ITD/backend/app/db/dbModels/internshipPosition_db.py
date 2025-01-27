@@ -1,4 +1,5 @@
 from sqlite3 import connect, Row
+from typing import Optional
 
 DATABASE = 'app/db/SC.db'
 
@@ -30,7 +31,7 @@ class InternshipPositionDB:
             raise e
 
     def insert(self, companyId: int, programName: str, duration: int, location: str, roleTitle: str, skillsRequired: str, 
-                compensation: int, benefits: str, languagesRequired: str, description: str, status: str):
+                compensation: Optional[int], benefits: Optional[str], languagesRequired: str, description: str, status: str):
         """
         Insert a new internship position into the database and return the ID of the inserted row.
 
@@ -58,7 +59,7 @@ class InternshipPositionDB:
     #    GET    #
     #############
 
-    def get_by_id(self, internshipPositionId):
+    def get_by_id(self, internshipPositionId: int):
         """
         Retrieve an internship position by its ID.
 
@@ -232,4 +233,3 @@ class InternshipPositionDB:
     
     def close(self):
         self.con.close()
-

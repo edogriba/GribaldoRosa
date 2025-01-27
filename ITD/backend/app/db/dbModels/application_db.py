@@ -44,7 +44,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
     #############
     #    GET    #
     ############# 
-    def get_by_id(self, applicationId):
+    def get_by_id(self, applicationId: int):
         """
         Retrieve an application by its ID.
 
@@ -70,7 +70,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
         finally:
             cur.close()
 
-    def get_by_studentId(self, studentId):
+    def get_by_studentId(self, studentId: int):
         """
         Retrieve applications by their student ID.
 
@@ -98,7 +98,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
         finally:
             cur.close()
 
-    def get_by_internshipPositionId(self, internshipPositionId):
+    def get_by_internshipPositionId(self, internshipPositionId: int):
         """
         Retrieve applications by their internship position ID.
 
@@ -126,7 +126,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
         finally:
             cur.close()
 
-    def get_by_studentId_internshipPositionId(self, studentId, internshipPositionId):
+    def get_by_studentId_internshipPositionId(self, studentId: int, internshipPositionId: int):
         """
         Retrieve an application by its student ID and internship position ID.
 
@@ -156,7 +156,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
     ################
     #    UPDATE    #
     ################
-    def update_state(self, applicationId, state: str):
+    def update_state(self, applicationId: int, state: str):
         """
         Update the state of an application by its ID.
 

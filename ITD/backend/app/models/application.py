@@ -3,7 +3,7 @@ from .internshipPosition import InternshipPosition
 from .student import Student
 
 class Application():
-    def __init__(self, applicationId, studentId, internshipPositionId, state):
+    def __init__(self, applicationId: int, studentId: int, internshipPositionId: int, state: str):
         self.applicationId = applicationId
         self.studentId = studentId
         self.internshipPositionId = internshipPositionId
@@ -30,7 +30,7 @@ class Application():
         }
 
     @staticmethod
-    def add(studentId: int, internshipPositionId: int, state: str):
+    def add(studentId: int, internshipPositionId: int):
         """
         Adds a new application to the database.
 
@@ -44,7 +44,7 @@ class Application():
             values = {
                 'studentId': studentId,
                 'internshipPositionId': internshipPositionId,
-                'state': state,
+                'state': 'Pending',
             }
             applicationConn = ApplicationDB()
             applicationId = applicationConn.insert(**values)
@@ -59,7 +59,7 @@ class Application():
     #    GET    #
     ############# 
     @staticmethod
-    def get_by_id(applicationId):
+    def get_by_id(applicationId: int):
         """
         Retrieve an application record by its unique identifier and return it as an Application object.
 
@@ -77,7 +77,7 @@ class Application():
             applicationConn.close()
 
     @staticmethod
-    def get_by_studentId(studentId):
+    def get_by_studentId(studentId: int):
         """
         Retrieve a list of application records by the student's unique identifier.
 

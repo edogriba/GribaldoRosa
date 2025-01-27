@@ -1,12 +1,13 @@
 from app.models.user import User
 from app.db.dbModels.company_db import CompanyDB
+from typing import Optional
 
 
 class Company(User):
-    def __init__(self, id, email, password, companyName, logoPath, description, location):
+    def __init__(self, id: int, email: str, password: str, companyName: str, logoPath: Optional[str], description: str, location: str):
         super().__init__(id, email, password, "company")
         self.companyName = companyName
-        self.logoPath = logoPath
+        self.logoPath = logoPath        # optional
         self.description = description
         self.location = location
     
@@ -46,7 +47,7 @@ class Company(User):
 
 
     @staticmethod
-    def add(email: str, password: str, companyName: str, logoPath: str, description: str, location: str):
+    def add(email: str, password: str, companyName: str, logoPath: Optional[str], description: str, location: str):
         try:
             # Insert company data into the database
             companyConn = CompanyDB()
