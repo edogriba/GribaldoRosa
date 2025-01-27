@@ -1,8 +1,8 @@
 from sqlite3 import connect, Row
 
 DATABASE = 'app/db/SC.db'
-
-class ApplicationDB:            # accepted refused pending
+                                # pending -> rejected / accepted -> refused (if accepted) / confirmed (if accepted)
+class ApplicationDB:            # confirmed (student), refused (student), pending, rejected (company), accepted (company)
     def __init__(self):
         self.con = connect(DATABASE)
         self.con.row_factory = Row

@@ -2,7 +2,7 @@ from flask import jsonify
 from flask_jwt_extended import create_access_token
 
 from ..models import Student, University, Company
-from ..utils import hash_password
+from ..utils import hash_password, json_created, json_invalid_request
 from ..services.auth_service import *
 
 class RegistrationManager:
@@ -33,11 +33,9 @@ class RegistrationManager:
                 'universityId'  : user_data.get('university')
             }
 
-            if not self.validate_student_data(values):
-                return jsonify({
-                    "type": "invalid_request",
-                    "message": "Invalid data"
-                }), 400
+            validation_result = validate_student_data(values)
+            if validation_result is not True:
+                return validation_result
             
             values.update({'password': hash_password(values['password'])})
 
@@ -45,11 +43,7 @@ class RegistrationManager:
 
             access_token = create_access_token(identity={ "id": student.get_id() })
 
-            return jsonify({
-                'message': 'Registration successful',
-                'user': student.to_dict(),
-                'access_token': access_token
-            }), 201
+            return json_created( "Registration successful", user = student.to_dict(), access_token = access_token )
         
         except Exception as e:
             return e
@@ -74,11 +68,9 @@ class RegistrationManager:
                 'logoPath'      : user_data.get('logoPath', '')  # Optional field
             }
             
-            if not self.validate_university_data(values):
-                return jsonify({
-                    "type": "invalid_request",
-                    "message": "Invalid data"
-                }), 400
+            validation_result = validate_university_data(values)
+            if validation_result is not True:
+                return validation_result
             
             values.update({'password': hash_password(values['password'])})
             
@@ -86,11 +78,8 @@ class RegistrationManager:
 
             access_token = create_access_token(identity={ "id": university.get_id() })
 
-            return jsonify({
-                'message': 'Registration successful',
-                'user': university.to_dict(),
-                'access_token': access_token
-            }), 201
+            return json_created( "Registration successful", user = university.to_dict(), access_token = access_token )
+
         except Exception as e:
             return e
 
@@ -113,11 +102,9 @@ class RegistrationManager:
                 'location'      : user_data.get('location'),
             }
 
-            if not self.validate_company_data(values):
-                return jsonify({
-                    "type": "invalid_request",
-                    "message": "Invalid data"
-                }), 400
+            validation_result = validate_company_data(values)
+            if validation_result is not True:
+                return validation_result
             
             values.update({'password': hash_password(values['password'])})
 
@@ -125,143 +112,139 @@ class RegistrationManager:
 
             access_token = create_access_token(identity={ "id": company.get_id() })
 
-            return jsonify({
-                'message': 'Registration successful',
-                'user': company.to_dict(),
-                'access_token': access_token
-            }), 201
+            return json_created( "Registration successful", user = company.to_dict(), access_token = access_token )
+
         except Exception as e:
             return e
 
 
-    def validate_student_data(self, user_data):
-        """
-        Validate the student data.
+def validate_student_data(user_data):
+    """
+    Validate the student data.
 
-        :param user_data: Dictionary containing student data
-        :return: True if the student data is valid, otherwise False
-        """
-        try:
-            if not is_email_valid(user_data["email"]):
-                print("Invalid email")
-                return False
-            if not is_email_unique(user_data["email"]):
-                print("Email not unique")
-                return False
-            if not is_password_valid(user_data["password"]):
-                print("Invalid password")
-                return False
-            if not is_name_valid(user_data["firstName"]):
-                print("Invalid first name")
-                return False
-            if not is_name_valid(user_data["lastName"]):
-                print("Invalid last name")
-                return False
-            if not is_phoneNumber_valid(user_data["phoneNumber"]):
-                print("Invalid phone number")
-                return False
-            if not is_optional_path_valid(user_data["profilePicturePath"]):
-                print("Invalid profile picture path")
-                return False
-            if not is_location_valid(user_data["location"]):
-                print("Invalid location")
-                return False
-            if not is_degreeProgram_valid(user_data["degreeProgram"]):
-                print("Invalid degree program")
-                return False
-            if not is_gpa_valid(user_data["gpa"]):
-                print("Invalid GPA")
-                return False
-            if not is_graduationYear_valid(user_data["graduationYear"]):
-                print("Invalid graduation year")
-                return False
-            if not is_path_valid(user_data["CVpath"]):
-                print("Invalid CV path")
-                return False
-            if not is_skills_valid(user_data["skills"]):
-                print("Invalid skills")
-                return False
-            if not is_languageSpoken_valid(user_data["languageSpoken"]):
-                print("Invalid language spoken")
-                return False
-            if not is_id_valid(user_data["universityId"]):
-                print("Invalid university ID")
-                return False
-            return True
-        except Exception as e:
-            print(f"Exception in validate_student_data: {e}")
-            return False
+    :param user_data: Dictionary containing student data
+    :return: True if the student data is valid, otherwise JSON response with error message
+    """
+    try:
+        if not is_email_valid(user_data["email"]):
+            return json_invalid_request("Invalid email")
         
+        if not is_email_unique(user_data["email"]):
+            return json_invalid_request("Email not unique")
 
-    def validate_university_data(self, user_data):
-        """
-        Validate the university data.
+        if not is_password_valid(user_data["password"]):
+            return json_invalid_request("Invalid password")
 
-        :param user_data: Dictionary containing university data
-        :return: True if the university data is valid, otherwise False
-        """
-        try:
-            if not is_email_valid(user_data["email"]):
-                print("Invalid email")
-                return False
-            if not is_email_unique(user_data["email"]):
-                print("Email not unique")
-                return False
-            if not is_password_valid(user_data["password"]):
-                print("Invalid password")
-                return False
-            if not is_name_valid(user_data["name"]):
-                print("Invalid name")
-                return False
-            if not is_location_valid(user_data["address"]):
-                print("Invalid address")
-                return False
-            if not is_url_valid(user_data["websiteURL"]):
-                print("Invalid website URL")
-                return False
-            if not is_description_valid(user_data["description"]):
-                print("Invalid description")
-                return False
-            if not is_optional_path_valid(user_data["logoPath"]):
-                print("Invalid logo path")
-                return False
-            return True
-        except Exception as e:
-            print(f"Exception in validate_student_data: {e}")
-            return e
+        if not is_name_valid(user_data["firstName"]):
+            return json_invalid_request("Invalid first name")
 
+        if not is_name_valid(user_data["lastName"]):
+            return json_invalid_request("Invalid last name")
 
-    def validate_company_data(self, user_data):
-        """
-        Validate the company data.
+        if not is_phoneNumber_valid(user_data["phoneNumber"]):
+            return json_invalid_request("Invalid phone number")
 
-        :param user_data: Dictionary containing company data
-        :return: True if the company data is valid, otherwise False
-        """
-        try:
-            if not is_email_valid(user_data["email"]):
-                print("Invalid email")
-                return False
-            if not is_email_unique(user_data["email"]):
-                print("Email not unique")
-                return False
-            if not is_password_valid(user_data["password"]):
-                print("Invalid password")
-                return False
-            if not is_name_valid(user_data["companyName"]):
-                print("Invalid company name")
-                return False
-            if not is_location_valid(user_data["location"]):
-                print("Invalid location")
-                return False
-            if not is_description_valid(user_data["description"]):
-                print("Invalid description")
-                return False
-            if not is_optional_path_valid(user_data["logoPath"]):
-                print("Invalid logo path")
-                return False
-            return True
-        except Exception as e:
-            print(f"Exception in validate_company_data: {e}")
-            return False
+        if not is_optional_path_valid(user_data["profilePicturePath"]):
+            return json_invalid_request("Invalid profile picture path")
+
+        if not is_location_valid(user_data["location"]):
+            return json_invalid_request("Invalid location")
+
+        if not is_degreeProgram_valid(user_data["degreeProgram"]):
+            return json_invalid_request("Invalid degree program")
+
+        if not is_gpa_valid(user_data["gpa"]):
+            return json_invalid_request("Invalid GPA")
+
+        if not is_graduationYear_valid(user_data["graduationYear"]):
+            return json_invalid_request("Invalid graduation year")
+
+        if not is_path_valid(user_data["CVpath"]):
+            return json_invalid_request("Invalid CV path")
+
+        if not is_skills_valid(user_data["skills"]):
+            return json_invalid_request("Invalid skills")
+
+        if not is_languageSpoken_valid(user_data["languageSpoken"]):
+            return json_invalid_request("Invalid language spoken")
+
+        if not is_id_valid(user_data["universityId"]):
+            return json_invalid_request("Invalid university")
+
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return json_invalid_request("Invalid data")
+    
+    
+def validate_university_data(user_data):
+    """
+    Validate the university data.
+
+    :param user_data: Dictionary containing university data
+    :return: True if the university data is valid, otherwise JSON response with error message
+    """
+    try:
+        if not is_email_valid(user_data["email"]):
+            return json_invalid_request("Invalid email")
         
+        if not is_email_unique(user_data["email"]):
+            return json_invalid_request("Email not unique")
+        
+        if not is_password_valid(user_data["password"]):
+            return json_invalid_request("Invalid password")
+        
+        if not is_name_valid(user_data["name"]):
+            return json_invalid_request("Invalid name")
+        
+        if not is_location_valid(user_data["address"]):
+            return json_invalid_request("Invalid address")
+        
+        if not is_url_valid(user_data["websiteURL"]):
+            return json_invalid_request("Invalid website URL")
+        
+        if not is_description_valid(user_data["description"]):
+            return json_invalid_request("Invalid description")
+        
+        if not is_optional_path_valid(user_data["logoPath"]):
+            return json_invalid_request("Invalid logo path")
+        
+        return True
+    except Exception as e:
+        print(f"Exception in validate_university_data: {e}")
+        return json_invalid_request("Invalid data")
+
+
+def validate_company_data(user_data):
+    """
+    Validate the company data.
+
+    :param user_data: Dictionary containing company data
+    :return: True if the company data is valid, otherwise JSON response with error message
+    """
+    try:
+        if not is_email_valid(user_data["email"]):
+            return json_invalid_request("Invalid email")
+        
+        if not is_email_unique(user_data["email"]):
+            return json_invalid_request("Email not unique")
+        
+        if not is_password_valid(user_data["password"]):
+            return json_invalid_request("Invalid password")
+        
+        if not is_name_valid(user_data["companyName"]):
+            return json_invalid_request("Invalid company name")
+        
+        if not is_location_valid(user_data["location"]):
+            return json_invalid_request("Invalid location")
+        
+        if not is_description_valid(user_data["description"]):
+            return json_invalid_request("Invalid description")
+        
+        if not is_optional_path_valid(user_data["logoPath"]):
+            return json_invalid_request("Invalid logo path")
+        
+        return True
+    except Exception as e:
+        print(f"Exception in validate_company_data: {e}")
+        return json_invalid_request("Invalid data")

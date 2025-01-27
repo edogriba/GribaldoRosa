@@ -1,5 +1,6 @@
 from sqlite3 import connect, Row
-from app.db.dbModels.user_db import UserDB
+from .user_db import UserDB
+from typing import Optional
 
 DATABASE = 'app/db/SC.db'
 
@@ -25,7 +26,7 @@ class UniversityDB:
             self.con.rollback()
             raise e
     
-    def insert(self, email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: str):
+    def insert(self, email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]):
         """
         Insert a new university into the database and return the ID of the inserted row.
         :param item: A tuple containing (email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: str).

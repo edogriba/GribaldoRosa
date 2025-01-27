@@ -1,7 +1,7 @@
 from app.db.dbModels.internship_db import InternshipDB
 
 class Internship():
-    def __init__(self, internshipId, internshipPositionId, applicationId, state):
+    def __init__(self, internshipId: int, internshipPositionId: int, applicationId: int, state: str):
         self.internshipId = internshipId
         self.internshipPositionId = internshipPositionId
         self.applicationId = applicationId
@@ -28,7 +28,7 @@ class Internship():
         }
 
     @staticmethod
-    def add(internshipPositionId: int, applicationId: int, state: str):
+    def add(internshipPositionId: int, applicationId: int):
         """
         Adds a new internship to the database.
 
@@ -42,7 +42,7 @@ class Internship():
             values = {
                 'internshipPositionId': internshipPositionId,
                 'applicationId': applicationId,
-                'state': state,
+                'state': 'Ongoing',
             }
             internshipConn = InternshipDB()
             internshipId = internshipConn.insert(**values)
@@ -158,7 +158,7 @@ class Internship():
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state('ongoing')
+            self.update_state('Ongoing')
         except Exception as e:
             raise e
         
@@ -169,7 +169,7 @@ class Internship():
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state('completed')
+            self.update_state('Completed')
         except Exception as e:
             raise e
         
@@ -182,7 +182,7 @@ class Internship():
 
         :return: True if the internship is ongoing, otherwise False.
         """
-        return self.state == 'ongoing'
+        return self.state == 'Ongoing'
     
     def is_completed(self):
         """
@@ -190,5 +190,5 @@ class Internship():
 
         :return: True if the internship is completed, otherwise False.
         """
-        return self.state == 'completed'
+        return self.state == 'Completed'
     

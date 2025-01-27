@@ -1,18 +1,20 @@
 from app.models.user import User
 from app.db.dbModels.student_db import StudentDB
+from typing import Optional
 
 class Student(User):
-    def __init__(self, id, email, password, firstName, lastName, phoneNumber, profilePicture, location, universityId, degreeProgram, GPA, graduationYear, skills, CV, languageSpoken):
+    def __init__(self, id: int, email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicture: Optional[str], location: str, 
+                 universityId: int, degreeProgram: str, GPA: Optional[float], graduationYear: Optional[int], skills: str, CV: str, languageSpoken: str):
         super().__init__(id, email, password, "student")
         self.firstName = firstName
         self.lastName = lastName
         self.phoneNumber = phoneNumber
-        self.profilePicture = profilePicture
+        self.profilePicture = profilePicture    # optional
         self.location = location
         self.universityId = universityId          
         self.degreeProgram = degreeProgram
-        self.GPA = GPA
-        self.graduationYear = graduationYear
+        self.GPA = GPA                          # optional
+        self.graduationYear = graduationYear    # optional
         self.skills = skills
         self.CV = CV
         self.languageSpoken = languageSpoken
@@ -76,10 +78,10 @@ class Student(User):
             'phoneNumber': self.phoneNumber,
             'profilePicture': self.profilePicture,
             'location': self.location,
-            'universityId': int(self.universityId),          
+            'universityId': self.universityId,          
             'degreeProgram': self.degreeProgram,
-            'GPA': float(self.GPA),
-            'graduationYear': int(self.graduationYear),
+            'GPA': self.GPA,
+            'graduationYear': self.graduationYear,
             'skills': self.skills,
             'CV': self.CV,
             'languageSpoken': self.languageSpoken,
@@ -88,8 +90,8 @@ class Student(User):
 
 
     @staticmethod
-    def add(email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: str, location: str, 
-            degreeProgram: str, gpa: float, graduationYear: int, CVpath: str, skills: str, languageSpoken: str, universityId: int):
+    def add(email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: Optional[str], location: str, 
+            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int):
         """
         Add a new student record to the database and return a Student object.
 
@@ -98,11 +100,11 @@ class Student(User):
         :param firstName: The first name of the student.
         :param lastName: The last name of the student.
         :param phoneNumber: The contact number of the student.
-        :param profilePicturePath: The file path to the student's profile picture.
+        :param profilePicturePath: The file path to the student's profile picture. [Optional]
         :param location: The current location of the student.
         :param degreeProgram: The degree program the student is enrolled in.
-        :param gpa: The grade point average of the student.
-        :param graduationYear: The expected graduation year of the student.
+        :param gpa: The grade point average of the student. [Optional]
+        :param graduationYear: The expected graduation year of the student. [Optional]
         :param CVpath: The file path to the student's CV.
         :param skills: A list of skills possessed by the student.
         :param languageSpoken: Languages spoken by the student.

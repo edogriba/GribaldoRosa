@@ -1,5 +1,6 @@
 from sqlite3 import connect, Row
-from app.db.dbModels.user_db import UserDB
+from .user_db import UserDB
+from typing import Optional
 
 DATABASE = 'app/db/SC.db'
 
@@ -24,7 +25,7 @@ class CompanyDB:
             self.con.rollback()
             raise e
     
-    def insert(self, email: str, password: str, companyName: str, logoPath: str, description: str, location: str):
+    def insert(self, email: str, password: str, companyName: str, logoPath: Optional[str], description: str, location: str):
         """
         Insert a new company into the database and return the ID of the inserted row.
         :param item: A tuple containing (email: str, password: str, companyName: str, logoPath: str, description: str, location: str).

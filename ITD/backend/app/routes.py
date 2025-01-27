@@ -4,9 +4,9 @@ from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required, get_c
 
 from datetime import timedelta
 
-from .utils import handle_error
+from .utils import handle_error, validate_request, json_success
 from .models import User, Student, University, Company
-from .managers import LoginManager, RegistrationManager, InternshipManager
+from .managers import LoginManager, RegistrationManager, InternshipManager, ApplicationManager
 
 
 def create_main_app():
@@ -64,7 +64,7 @@ def create_main_app():
     @jwt_required()
     def protected():
         try:     
-            return jsonify({"user": get_current_user().to_dict()}), 200
+            return json_success(message="Access granted", user = get_current_user().to_dict())
         except Exception as e:
             return handle_error(e)
     
@@ -91,21 +91,18 @@ def create_main_app():
     def university_list():     
         try:
             universities = University.get_list_dict()
-            return jsonify(universities), 200
+            return json_success(message="Universities retrieved", universities=universities)
         except Exception as e:
             return handle_error(e)
 
 
     @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
     def university_register():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
 
             registrationManager = RegistrationManager()
@@ -117,14 +114,11 @@ def create_main_app():
 
     @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
     def student_register():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
 
             registrationManager = RegistrationManager()
@@ -136,14 +130,11 @@ def create_main_app():
 
     @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
     def company_register():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
 
             registrationManager = RegistrationManager()
@@ -155,12 +146,16 @@ def create_main_app():
 
     #########################
     #   Internship Routes   #
-    #########################
+    ######################### 
 
     @app.route('/api/internship/post', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def post_internship_position():
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
             
             internship_manager = InternshipManager()
@@ -174,11 +169,14 @@ def create_main_app():
     @jwt_required()
     def get_internship_position_by_id():
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
-            internship_id = data.get('internshipPositionId')
 
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_position_by_id(internship_id)
+            return internship_manager.get_internship_position_by_id(data.get('internshipPositionId'))
 
         except Exception as e:
             return handle_error(e)
@@ -187,19 +185,15 @@ def create_main_app():
     @app.route('/api/internship/get_by_company', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_internship_positions_by_company():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json() 
-            company_id = data.get('id')
 
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_positions_by_company(company_id)
+            return internship_manager.get_internship_positions_by_company(data.get('id'))
 
         except Exception as e:
             return handle_error(e)
@@ -209,96 +203,100 @@ def create_main_app():
     @jwt_required()
     def close_internship_position():
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
-            internship_id = data.get('internshipPositionId')
 
             internship_manager = InternshipManager()
-            return internship_manager.close_internship_position(internship_id)
+            return internship_manager.close_internship_position(data.get('internshipPositionId'))
 
         except Exception as e:
             return handle_error(e)
     
-    """
+    
+    ##########################
+    #   Application Routes   #
+    ##########################
+     
     @app.route('/api/application/create', methods=['POST', 'OPTIONS'])
-    @login_required
+    @jwt_required()
     def create_application():
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
             
             application_manager = ApplicationManager()
-            return application_manager.create_application(data)
+            return application_manager.create_application(data.get('internshipPositionId'))
         except Exception as e:
             return handle_error(e)
+        
     @app.route('/api/application/accept', methods=['POST', 'OPTIONS'])
-    @login_required
-    def accept_application():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
+    @jwt_required()
+    def accept_application():    
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
-            # Assuming ApplicationManager handles application acceptance
+            
             application_manager = ApplicationManager()
-            return application_manager.accept_application(data)
+            return application_manager.accept_application(**data)
         except Exception as e:
             return handle_error(e)
+    
+
+    @app.route('/api/application/reject', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def reject_application():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            application_manager = ApplicationManager()
+            return application_manager.reject_application(**data)
+        except Exception as e:
+            return handle_error(e)
+    
+
+    @app.route('/api/application/confirm', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def confirm_application():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            application_manager = ApplicationManager()
+            return application_manager.confirm_application(**data)
+        except Exception as e:
+            return handle_error(e)
+
+
     @app.route('/api/application/refuse', methods=['POST', 'OPTIONS'])
-    @login_required
+    @jwt_required()
     def refuse_application():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
         try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
             data = request.get_json()
-            # Assuming ApplicationManager handles application refusal
+
             application_manager = ApplicationManager()
-            return application_manager.refuse_application(data)
+            return application_manager.refuse_application(**data)
 
         except Exception as e:
             return handle_error(e)
-    @app.route('/api/internship/accept', methods=['POST', 'OPTIONS'])
-    @login_required
-    def accept_internship():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
-        try:
-            data = request.get_json()
-            # Assuming InternshipManager handles internship acceptance
-            internship_manager = InternshipManager()
-            return internship_manager.accept_internship(data)
-
-        except Exception as e:
-            return handle_error(e)
-    @app.route('/api/internship/refuse', methods=['POST', 'OPTIONS'])
-    @login_required
-    def refuse_internship():
-        if request.method == 'OPTIONS':
-            return jsonify({'status': 'OK'}), 200  # Handle preflight request
-        if request.content_type != 'application/json':
-            return jsonify({
-                "type": "unsupported_media_type",
-                "message": "Content-Type must be application/json"
-            }), 415
-        try:
-            data = request.get_json()
-            # Assuming InternshipManager handles internship refusal
-            internship_manager = InternshipManager()
-            return internship_manager.refuse_internship(data)
-
-        except Exception as e:
-            return handle_error(e)
-    """    
+     
     return app

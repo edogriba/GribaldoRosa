@@ -2,7 +2,7 @@ from sqlite3 import connect, Row
 
 DATABASE = 'app/db/SC.db'
 
-class InternshipDB:                 # ongoing completed
+class InternshipDB:                 # Ongoing Completed
     def __init__(self):
         self.con = connect(DATABASE)
         self.con.row_factory = Row

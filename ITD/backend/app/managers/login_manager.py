@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 
-from ..utils import verify_password
+from ..utils import verify_password, json_success, json_invalid_request, json_unauthorized
 from ..models import User, Student, University, Company
 
 class LoginManager:
@@ -18,25 +18,16 @@ class LoginManager:
             password = user_data.get('password')
 
             if not email or not password:
-                return jsonify({
-                    "type": "invalid_request",
-                    "message": "Email and password are required."
-                }), 400
+                return json_invalid_request("Email and password are required.")
 
             user = self.get_user_by_email(email)
             if not user or not verify_password(password, user.get_password()):
-                return jsonify({
-                    "type": "invalid_credentials",
-                    "message": "Invalid email or password."
-                }), 401
+                return json_unauthorized("Invalid email or password.")
 
             access_token = create_access_token(identity={ "id": user.get_id() })
 
-            return jsonify({
-                "message": "Login successful",
-                "user": user.to_dict(),
-                "access_token": access_token,
-            }), 200
+            return json_success("Login successful", user = user.to_dict(), access_token = access_token)
+
         except Exception as e:
             raise e
 
@@ -48,11 +39,10 @@ class LoginManager:
              or an error message if logout fails
         """
         try:
-            response = jsonify({'logout': True})
-            
-            return response, 200
+            return json_success("Logout successful", logout = True)
+        
         except Exception as e:
-            return jsonify({"type": "server_error", "message": str(e)}), 500
+            raise e
 
         
     @staticmethod
