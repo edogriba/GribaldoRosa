@@ -1,5 +1,5 @@
 from sqlite3 import connect, Row
-from app.db.dbModels.user_db import UserDB
+from .user_db import UserDB
 
 DATABASE = 'app/db/SC.db'
 

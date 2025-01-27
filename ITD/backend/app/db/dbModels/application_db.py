@@ -1,8 +1,8 @@
 from sqlite3 import connect, Row
 
 DATABASE = 'app/db/SC.db'
-
-class ApplicationDB:            # accepted refused pending
+                                # pending -> rejected / accepted -> refused (if accepted) / confirmed (if accepted)
+class ApplicationDB:            # confirmed (student), refused (student), pending, rejected (company), accepted (company)
     def __init__(self):
         self.con = connect(DATABASE)
         self.con.row_factory = Row
@@ -44,7 +44,7 @@ class ApplicationDB:            # accepted refused pending
     #############
     #    GET    #
     ############# 
-    def get_by_id(self, applicationId: int):
+    def get_by_id(self, applicationId):
         """
         Retrieve an application by its ID.
 
@@ -70,7 +70,7 @@ class ApplicationDB:            # accepted refused pending
         finally:
             cur.close()
 
-    def get_by_studentId(self, studentId: int):
+    def get_by_studentId(self, studentId):
         """
         Retrieve applications by their student ID.
 
@@ -98,7 +98,7 @@ class ApplicationDB:            # accepted refused pending
         finally:
             cur.close()
 
-    def get_by_internshipPositionId(self, internshipPositionId: int):
+    def get_by_internshipPositionId(self, internshipPositionId):
         """
         Retrieve applications by their internship position ID.
 
@@ -126,7 +126,7 @@ class ApplicationDB:            # accepted refused pending
         finally:
             cur.close()
 
-    def get_by_studentId_internshipPositionId(self, studentId: int, internshipPositionId: int):
+    def get_by_studentId_internshipPositionId(self, studentId, internshipPositionId):
         """
         Retrieve an application by its student ID and internship position ID.
 
@@ -156,7 +156,7 @@ class ApplicationDB:            # accepted refused pending
     ################
     #    UPDATE    #
     ################
-    def update_state(self, applicationId: int, state: str):
+    def update_state(self, applicationId, state: str):
         """
         Update the state of an application by its ID.
 

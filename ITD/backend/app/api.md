@@ -36,6 +36,21 @@
     - [11. Close Internship Position](#11-close-internship-position)
       - [Request Parameters](#request-parameters-8)
       - [Response](#response-10)
+    - [12. Create Application](#12-create-application)
+      - [Request Parameters](#request-parameters-9)
+      - [Response](#response-11)
+    - [13. Accept Application](#13-accept-application)
+      - [Request Parameters](#request-parameters-10)
+      - [Response](#response-12)
+    - [14. Reject Application](#14-reject-application)
+      - [Request Parameters](#request-parameters-11)
+      - [Response](#response-13)
+    - [15. Confirm Application](#15-confirm-application)
+      - [Request Parameters](#request-parameters-12)
+      - [Response](#response-14)
+    - [16. Refuse Application](#16-refuse-application)
+      - [Request Parameters](#request-parameters-13)
+      - [Response](#response-15)
 
 ## Endpoints
 
@@ -979,3 +994,520 @@ Headers: {
 </details>
 
 ------------------------------------------------
+
+### 12. Create Application
+
+- **Endpoint**: `/api/application/create`
+- **Method**: `POST`
+- **Description**: Creates a new application for an internship position.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `internshipPositionId` (int, required): The ID of the internship position to apply for.
+
+#### Response
+
+- **201 Created**:
+  - **Body (JSON)**:
+    - `message` (str): Application created successfully.
+    - `application` (dict): Created application details.
+      - `applicationId` (int)
+      - `internshipPositionId` (int)
+      - `studentId` (int)
+      - `status` (str)
+    - `internshipPosition` (dict): Internship position details.
+      - `internshipPositionId` (int)
+      - `companyId` (int)
+      - `programName` (str)
+      - `duration` (str)
+      - `location` (str)
+      - `roleTitle` (str)
+      - `skillsRequired` (str)
+      - `compensation` (str)
+      - `benefits` (str)
+      - `languagesRequired` (str)
+      - `description` (str)
+      - `status` (str)
+    - `company` (dict): Company details.
+      - `userId` (int)
+      - `email` (str)
+      - `type` (str): User type (_'company'_)
+      - `companyName` (str)
+      - `logoPath` (str)
+      - `description` (str)
+      - `location` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message.
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/application/create
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Application created successfully",
+  "application": {
+    "applicationId": 1,
+    "internshipPositionId": 1,
+    "studentId": 1,
+    "status": "pending"
+  },
+  "internshipPosition": {
+    "internshipPositionId": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": "3 months",
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": "$3000/month",
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "open"
+  },
+  "company": {
+    "userId": 1,
+    "email": "company@xyz.com",
+    "type": "company",
+    "companyName": "XYZ Corporation",
+    "logoPath": "/images/xyz_logo.png",
+    "description": "Leading software solutions provider.",
+    "location": "New York, NY"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+
+### 13. Accept Application
+
+- **Endpoint**: `/api/application/accept`
+- **Method**: `POST`
+- **Description**: Accepts an application.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `applicationId` (int, required): The ID of the application to be accepted.
+  - `internshipPositionId` (int, required): The ID of the internship position.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message indicating the application has been accepted.
+    - `application` (dict): Accepted application details.
+    - `internshipPosition` (dict): Internship position details.
+    - `student` (dict): Student details.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message, such as "Invalid application Id." or "Invalid internship position Id." or "Invalid application state."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`unauthorized`).
+    - `message` (str): Error message, such as "Only the company that posted the internship can accept applications."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/application/accept
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "applicationId": 1,
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Application accepted successfully",
+  "application": {
+    "applicationId": 1,
+    "internshipPositionId": 1,
+    "studentId": 1,
+    "status": "accepted"
+  },
+  "internshipPosition": {
+    "internshipPositionId": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": "3 months",
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": "$3000/month",
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "open"
+  },
+  "student": {
+    "id": 1,
+    "email": "student@mit.edu",
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "phoneNumber": "1234567890",
+    "profilePicture": "/images/alice.png",
+    "location": "Cambridge, MA",
+    "universityId": 1,
+    "degreeProgram": "Computer Science",
+    "GPA": 3.8,
+    "graduationYear": 2025,
+    "skills": "Python, Machine Learning",
+    "CV": "/cvs/alice_smith.pdf",
+    "languageSpoken": "English, Spanish"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 14. Reject Application
+
+- **Endpoint**: `/api/application/reject`
+- **Method**: `POST`
+- **Description**: Rejects an application.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `applicationId` (int, required): The ID of the application to be rejected.
+  - `internshipPositionId` (int, required): The ID of the internship position.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message indicating the application has been rejected.
+    - `application` (dict): Rejected application details.
+    - `internshipPosition` (dict): Internship position details.
+    - `student` (dict): Student details.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message, such as "Invalid application Id." or "Invalid internship position Id." or "Invalid application state."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`unauthorized`).
+    - `message` (str): Error message, such as "Only the company that posted the internship can reject applications."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/application/reject
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "applicationId": 1,
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Application rejected successfully",
+  "application": {
+    "applicationId": 1,
+    "internshipPositionId": 1,
+    "studentId": 1,
+    "status": "rejected"
+  },
+  "internshipPosition": {
+    "internshipPositionId": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": "3 months",
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": "$3000/month",
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "open"
+  },
+  "student": {
+    "id": 1,
+    "email": "student@mit.edu",
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "phoneNumber": "1234567890",
+    "profilePicture": "/images/alice.png",
+    "location": "Cambridge, MA",
+    "universityId": 1,
+    "degreeProgram": "Computer Science",
+    "GPA": 3.8,
+    "graduationYear": 2025,
+    "skills": "Python, Machine Learning",
+    "CV": "/cvs/alice_smith.pdf",
+    "languageSpoken": "English, Spanish"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 15. Confirm Application
+
+- **Endpoint**: `/api/application/confirm`
+- **Method**: `POST`
+- **Description**: Confirms an application.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `applicationId` (int, required): The ID of the application to be confirmed.
+  - `internshipPositionId` (int, required): The ID of the internship position.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message indicating the application has been confirmed.
+    - `application` (dict): Confirmed application details.
+    - `internshipPosition` (dict): Internship position details.
+    - `company` (dict): Company details.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message, such as "Invalid application Id." or "Invalid internship position Id." or "Invalid application state."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`unauthorized`).
+    - `message` (str): Error message, such as "Only the student that applied can confirm applications."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/application/confirm
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "applicationId": 1,
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Application confirmed successfully",
+  "application": {
+    "applicationId": 1,
+    "internshipPositionId": 1,
+    "studentId": 1,
+    "status": "confirmed"
+  },
+  "internshipPosition": {
+    "internshipPositionId": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": "3 months",
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": "$3000/month",
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "open"
+  },
+  "company": {
+    "userId": 1,
+    "email": "company@xyz.com",
+    "type": "company",
+    "companyName": "XYZ Corporation",
+    "logoPath": "/images/xyz_logo.png",
+    "description": "Leading software solutions provider.",
+    "location": "New York, NY"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 16. Refuse Application
+
+- **Endpoint**: `/api/application/refuse`
+- **Method**: `POST`
+- **Description**: Refuses an application.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `applicationId` (int, required): The ID of the application to be refused.
+  - `internshipPositionId` (int, required): The ID of the internship position.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `message` (str): Success message indicating the application has been refused.
+    - `application` (dict): Refused application details.
+    - `internshipPosition` (dict): Internship position details.
+    - `company` (dict): Company details.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): Type of the error (`invalid_request`).
+    - `message` (str): Error message, such as "Invalid application Id." or "Invalid internship position Id." or "Invalid application state."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`unauthorized`).
+    - `message` (str): Error message, such as "Only the student that applied can refuse applications."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): Type of error (`server_error`).
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/application/refuse
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "applicationId": 1,
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "message": "Application refused successfully",
+  "application": {
+    "applicationId": 1,
+    "internshipPositionId": 1,
+    "studentId": 1,
+    "status": "refused"
+  },
+  "internshipPosition": {
+    "internshipPositionId": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": "3 months",
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": "$3000/month",
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "open"
+  },
+  "company": {
+    "userId": 1,
+    "email": "company@xyz.com",
+    "type": "company",
+    "companyName": "XYZ Corporation",
+    "logoPath": "/images/xyz_logo.png",
+    "description": "Leading software solutions provider.",
+    "location": "New York, NY"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+

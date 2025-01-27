@@ -1,4 +1,6 @@
 from app.db.dbModels.application_db import ApplicationDB
+from .internshipPosition import InternshipPosition
+from .student import Student
 
 class Application():
     def __init__(self, applicationId, studentId, internshipPositionId, state):
@@ -57,7 +59,7 @@ class Application():
     #    GET    #
     ############# 
     @staticmethod
-    def get_by_id(applicationId: int):
+    def get_by_id(applicationId):
         """
         Retrieve an application record by its unique identifier and return it as an Application object.
 
@@ -75,7 +77,7 @@ class Application():
             applicationConn.close()
 
     @staticmethod
-    def get_by_studentId(studentId: int):
+    def get_by_studentId(studentId):
         """
         Retrieve a list of application records by the student's unique identifier.
 
@@ -129,9 +131,34 @@ class Application():
         finally:
             applicationConn.close()
 
+    def get_internshipPosition(self):
+        """
+        Retrieve the internship position associated with the application.
+
+        :return: An instance of the InternshipPosition class with the internship position details if found or None.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            return InternshipPosition.get_by_id(self.internshipPositionId)
+        except Exception as e:
+            raise e
+
+    def get_student(self):
+        """
+        Retrieve the student associated with the application.
+
+        :return: An instance of the Student class with the student details if found or None.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            return Student.get_by_id(self.studentId)
+        except Exception as e:  
+            raise e
+          
     ################
     #    UPDATE    #
     ################
+
     def update_state(self, state: str):
         """
         Update the state of the application.
@@ -148,59 +175,101 @@ class Application():
         finally:
             applicationConn.close()
     
+    def pending(self):
+        """
+        Set the application state to "Pending".
+        This method changes the state of the application to "Pending", indicating that the application is under review.
+
+        :raises Exception: If an error occurs during the update process.
+        """
+        self.update_state("Pending")
+
     def accept(self):
         """
-        Accept the application by updating its state to "accepted".
-        This method changes the state of the application to "accepted", indicating that the application has been approved.
+        Accept the application by updating its state to "Accepted".
+        This method changes the state of the application to "Accepted", indicating that the application has been approved.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state("accepted")
+            self.update_state("Accepted")
+        except Exception as e:
+            raise e
+        
+    def reject(self):
+        """
+        Reject the application by updating its state to "Rejected".
+        This method changes the state of the application to "Rejected", indicating that the application has been denied.
+
+        :raises Exception: If an error occurs during the update process.
+        """
+        try:
+            self.update_state("Rejected")
         except Exception as e:
             raise e
     
+    def confirm(self):
+        """
+        Confirm the application by updating its state to "Confirmed".
+        This method changes the state of the application to "Confirmed", indicating that the application has been approved and confirmed.
+
+        :raises Exception: If an error occurs during the update process.
+        """
+        try:
+            self.update_state("Confirmed")
+        except Exception as e:
+            raise e
+        
     def refuse(self):
         """
-        Refuse the application by updating its state to "refused".
-        This method changes the state of the application to "refused", indicating that the application has been rejected.
+        Refuse the application by updating its state to "Refused".
+        This method changes the state of the application to "Refused", indicating that the application has been rejected.
 
         :raises Exception: If an error occurs during the update process.
         """
-        self.update_state("refused")
+        self.update_state("Refused")
 
-    def pending(self):
-        """
-        Set the application state to "pending".
-        This method changes the state of the application to "pending", indicating that the application is under review.
-
-        :raises Exception: If an error occurs during the update process.
-        """
-        self.update_state("pending")
 
     ################
     #   CHECKERS   #
     ################
+
+    def is_pending(self):
+        """
+        Check if the application is pending review.
+
+        :return: True if the application state is "Pending", otherwise False.
+        """
+        return self.state == "Pending"
+    
     def is_accepted(self):
         """
         Check if the application has been accepted.
         
-        :return: True if the application state is "accepted", otherwise False.
+        :return: True if the application state is "Accepted", otherwise False.
         """
-        return self.state == "accepted"
+        return self.state == "Accepted"
+    
+    def is_rejected(self):
+        """
+        Check if the application has been rejected.
+
+        :return: True if the application state is "Rejected", otherwise False.
+        """
+        return self.state == "Rejected"
+    
+    def is_confirmed(self):
+        """
+        Check if the application has been confirmed.
+
+        :return: True if the application state is "Confirmed", otherwise False.
+        """
+        return self.state == "Confirmed"
     
     def is_refused(self):
         """
         Check if the application has been refused.
 
-        :return: True if the application state is "refused", otherwise False.
+        :return: True if the application state is "Refused", otherwise False.
         """
-        return self.state == "refused"
-    
-    def is_pending(self):
-        """
-        Check if the application is pending review.
-
-        :return: True if the application state is "pending", otherwise False.
-        """
-        return self.state == "pending"
+        return self.state == "Refused"

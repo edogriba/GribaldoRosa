@@ -1,4 +1,5 @@
-from app.db.dbModels.internshipPosition_db import InternshipPositionDB
+from ..db.dbModels import InternshipPositionDB
+from .company import Company
 
 class InternshipPosition():
     def __init__(self, internshipPositionId, companyId, programName, duration, location, roleTitle, skillsRequired, compensation, benefits, languagesRequired, description, status):
@@ -163,6 +164,18 @@ class InternshipPosition():
         finally:
             internshipPositionConn.close()
 
+    def get_company(self):
+        """
+        Retrieve the company that posted the internship position.
+
+        :return: An instance of the Company class with the company details, or None if no company is found.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            return Company.get_by_id(self.companyId)
+        except Exception as e:
+            raise e
+        
     def close(self):
         """
         Close the internship position.
