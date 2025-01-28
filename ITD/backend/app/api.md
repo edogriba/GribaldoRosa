@@ -1101,7 +1101,7 @@ Headers: {
     - `message` (str): Error message, such as:
       - "Invalid application Id." 
       - "Invalid internship position Id." 
-      - "Invalid application state."
+      - "Invalid application status."
 
 - **401 Unauthorized**:
   - **Body (JSON)**:
@@ -1171,7 +1171,7 @@ Headers: {
     - `message` (str): Error message, such as:
       - "Invalid application Id." 
       - "Invalid internship position Id." 
-      - "Invalid application state."
+      - "Invalid application status."
 
 - **401 Unauthorized**:
   - **Body (JSON)**:
@@ -1241,7 +1241,7 @@ Headers: {
     - `message` (str): Error message, such as:
       - "Invalid application Id." 
       - "Invalid internship position Id." 
-      - "Invalid application state."
+      - "Invalid application status."
 
 - **401 Unauthorized**:
   - **Body (JSON)**:
@@ -1315,7 +1315,7 @@ Headers: {
     - `message` (str): Error message, such as 
       - "Invalid application Id." 
       - "Invalid internship position Id." 
-      - "Invalid application state."
+      - "Invalid application status."
 
 - **401 Unauthorized**:
   - **Body (JSON)**:

@@ -1,38 +1,42 @@
 from sqlite3 import connect, Row
+from os import getenv
+from typing import Union
+from dotenv import load_dotenv
 
-DATABASE = 'app/db/SC.db'
 
 class InternshipDB:                 # Ongoing Completed
     def __init__(self):
-        self.con = connect(DATABASE)
+        load_dotenv()
+        self.con = connect(getenv("DATABASE"))
         self.con.row_factory = Row
 
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE Internship """)
+                self.con.execute(""" DROP TABLE IF EXISTS Internship """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS Internship (
                                         InternshipId INTEGER PRIMARY KEY AUTOINCREMENT,
                                         InternshipPositionId INTEGER NOT NULL,
                                         ApplicationId INTEGER NOT NULL,
-                                        State TEXT NOT NULL
+                                        Status TEXT NOT NULL
                                     ); """)
         except Exception as e:
             self.con.rollback()
             raise e
 
-    def insert(self, internshipPositionId: int, applicationId: int, state: str):
+    def insert(self, internshipPositionId: int, applicationId: int, status: str) -> Union[int, None, Exception]:
         """
         Insert a new internship into the database and return the ID of the inserted row.
 
-        :params internshipPositionId: int, applicationId: int, state: str.
+        :params internshipPositionId: int, applicationId: int, status: str.
         :return: The ID of the inserted row.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ INSERT INTO Internship (InternshipPositionId, ApplicationId, State) VALUES (?, ?, ?) """
-                cur.execute(query, (internshipPositionId, applicationId, state))
+                query = """ INSERT INTO Internship (InternshipPositionId, ApplicationId, Status) VALUES (?, ?, ?) """
+                cur.execute(query, (internshipPositionId, applicationId, status))
                 return cur.lastrowid
         except Exception as e:
             self.con.rollback()
@@ -44,12 +48,13 @@ class InternshipDB:                 # Ongoing Completed
     #############
     #    GET    #
     ############# 
-    def get_by_id(self, internshipId: int):
+    def get_by_id(self, internshipId: int) -> Union[dict, None, Exception]:
         """
         Retrieve an internship by its ID.
 
         :param internshipId: The ID of the internship.
         :return: A dictionary representing the internship or None if not found.
+        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             cur = self.con.cursor()
@@ -60,7 +65,7 @@ class InternshipDB:                 # Ongoing Completed
                 "internshipId": row["InternshipId"],
                 "internshipPositionId": row["InternshipPositionId"],
                 "applicationId": row["ApplicationId"],
-                "state": row["State"]
+                "status": row["Status"]
             } if row else None
         
         except Exception as e:
@@ -69,7 +74,7 @@ class InternshipDB:                 # Ongoing Completed
         finally:
             cur.close()
         
-    def get_by_application_id(self, applicationId: int):
+    def get_by_application_id(self, applicationId: int) -> Union[dict, None, Exception]:
         """
         Retrieve an internship by its application ID.
 
@@ -85,7 +90,7 @@ class InternshipDB:                 # Ongoing Completed
                 "internshipId": row["InternshipId"],
                 "internshipPositionId": row["InternshipPositionId"],
                 "applicationId": row["ApplicationId"],
-                "state": row["State"]
+                "status": row["Status"]
             } if row else None
         
         except Exception as e:
@@ -94,7 +99,7 @@ class InternshipDB:                 # Ongoing Completed
         finally:
             cur.close()
 
-    def get_by_internshipPosition_id(self, internshipPositionId: int):
+    def get_by_internshipPosition_id(self, internshipPositionId: int) -> Union[list, Exception]:
         """
         Retrieve internships by their position ID.
 
@@ -111,7 +116,7 @@ class InternshipDB:                 # Ongoing Completed
                     "internshipId": row["InternshipId"],
                     "internshipPositionId": row["InternshipPositionId"],
                     "applicationId": row["ApplicationId"],
-                    "state": row["State"]
+                    "status": row["Status"]
                 } for row in rows
             ] if rows else []
         
@@ -121,7 +126,7 @@ class InternshipDB:                 # Ongoing Completed
         finally:
             cur.close()
 
-    def get_by_applicationId_internshipPositionId(self, applicationId: int, internshipPositionId: int):
+    def get_by_applicationId_internshipPositionId(self, applicationId: int, internshipPositionId: int) -> Union[dict, None, Exception]:
         """
         Retrieve an internship by the application ID and the internship position ID.
 
@@ -139,7 +144,7 @@ class InternshipDB:                 # Ongoing Completed
                 "internshipId": row["InternshipId"],
                 "internshipPositionId": row["InternshipPositionId"],
                 "applicationId": row["ApplicationId"],
-                "state": row["State"]
+                "status": row["Status"]
             } if row else None
         
         except Exception as e:
@@ -151,23 +156,23 @@ class InternshipDB:                 # Ongoing Completed
     ################
     #    UPDATE    #
     ################ 
-    def update_state(self, internshipId: int, state: str):
+    def update_status(self, internshipId: int, status: str) -> bool:
         """
-        Update the state of an internship by its ID.
+        Update the status of an internship by its ID.
 
         :param internshipId: The ID of the internship.
-        :param state: The new state of the internship.
+        :param status: The new status of the internship.
         :return: True if the update was successful, otherwise False.
         """
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ UPDATE Internship SET State = ? WHERE InternshipId = ? """
-                cur.execute(query, (state, internshipId))
-                return True
+                query = """ UPDATE Internship SET Status = ? WHERE InternshipId = ? """
+                res = cur.execute(query, (status, internshipId))
+                return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e
+            return False
         finally:
             cur.close()
 

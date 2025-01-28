@@ -1,11 +1,11 @@
 from app.db.dbModels.internship_db import InternshipDB
 
 class Internship():
-    def __init__(self, internshipId: int, internshipPositionId: int, applicationId: int, state: str):
+    def __init__(self, internshipId: int, internshipPositionId: int, applicationId: int, status: str):
         self.internshipId = internshipId
         self.internshipPositionId = internshipPositionId
         self.applicationId = applicationId
-        self.state = state
+        self.status = status
 
     def get_internshipId(self):
         return self.internshipId
@@ -16,15 +16,15 @@ class Internship():
     def get_applicationId(self):
         return self.applicationId
 
-    def get_state(self):
-        return self.state
+    def get_status(self):
+        return self.status
 
     def to_dict(self):
         return {
             'internshipId': self.internshipId,
             'internshipPositionId': self.internshipPositionId,
             'applicationId': self.applicationId,
-            'state': self.state,
+            'status': self.status,
         }
 
     @staticmethod
@@ -34,7 +34,7 @@ class Internship():
 
         :param internshipPositionId: The ID of the internship position.
         :param applicationId: The ID of the application.
-        :param state: The current state of the internship.
+        :param status: The current status of the internship.
         :return: An instance of the Internship class with the new internship details.
         :raises Exception: If an error occurs during the insertion process.
         """
@@ -42,7 +42,7 @@ class Internship():
             values = {
                 'internshipPositionId': internshipPositionId,
                 'applicationId': applicationId,
-                'state': 'Ongoing',
+                'status': 'Ongoing',
             }
             internshipConn = InternshipDB()
             internshipId = internshipConn.insert(**values)
@@ -133,18 +133,18 @@ class Internship():
     #############
     #   UPDATE  #
     #############
-    def update_state(self, state: str):
+    def update_status(self, status: str):
         """
-        Update the state of the internship.
+        Update the status of the internship.
 
-        :param state: The new state of the internship.
-        :return: An instance of the Internship class with the updated state.
+        :param status: The new status of the internship.
+        :return: An instance of the Internship class with the updated status.
         :raises Exception: If an error occurs during the update process.
         """
         try:
             internshipConn = InternshipDB()
-            internshipConn.update_state(self.internshipId, state)
-            self.state = state
+            internshipConn.update_status(self.internshipId, status)
+            self.status = status
             return self
         except Exception as e:
             raise e
@@ -153,23 +153,23 @@ class Internship():
 
     def make_ongoing(self):
         """
-        Update the state of the internship to ongoing.
+        Update the status of the internship to ongoing.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state('Ongoing')
+            self.update_status('Ongoing')
         except Exception as e:
             raise e
         
     def make_completed(self):
         """
-        Update the state of the internship to completed.
+        Update the status of the internship to completed.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state('Completed')
+            self.update_status('Completed')
         except Exception as e:
             raise e
         
@@ -182,7 +182,7 @@ class Internship():
 
         :return: True if the internship is ongoing, otherwise False.
         """
-        return self.state == 'Ongoing'
+        return self.status == 'Ongoing'
     
     def is_completed(self):
         """
@@ -190,5 +190,5 @@ class Internship():
 
         :return: True if the internship is completed, otherwise False.
         """
-        return self.state == 'Completed'
+        return self.status == 'Completed'
     

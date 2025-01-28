@@ -51,7 +51,7 @@ class ApplicationManager:
                 application.accept()
                 return json_success("Application accepted successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e
@@ -81,7 +81,7 @@ class ApplicationManager:
                 application.reject()
                 return json_success("Application rejected successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e
@@ -110,7 +110,7 @@ class ApplicationManager:
                 application.confirm()
                 return json_success("Application confirmed successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e
@@ -141,7 +141,7 @@ class ApplicationManager:
                 application.refuse()
                 return json_success("Application refused successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e

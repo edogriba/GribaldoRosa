@@ -1,10 +1,4 @@
-from app.db.dbModels.user_db import UserDB
-from app.db.dbModels.student_db import StudentDB
-from app.db.dbModels.university_db import UniversityDB
-from app.db.dbModels.company_db import CompanyDB
-from app.db.dbModels.internshipPosition_db import InternshipPositionDB
-from app.db.dbModels.application_db import ApplicationDB
-from app.db.dbModels.internship_db import InternshipDB
+from app.db.dbModels import UserDB, StudentDB, UniversityDB, CompanyDB, InternshipPositionDB, ApplicationDB, InternshipDB
 
 """"
 user_conn = UserDB()

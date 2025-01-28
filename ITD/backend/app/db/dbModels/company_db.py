@@ -1,18 +1,19 @@
 from sqlite3 import connect, Row
 from .user_db import UserDB
-from typing import Optional
-
-DATABASE = 'app/db/SC.db'
+from typing import Optional, Union
+from os import getenv
+from dotenv import load_dotenv
 
 class CompanyDB:
     def __init__(self):
-        self.con = connect(DATABASE)
+        load_dotenv()
+        self.con = connect(getenv("DATABASE"))
         self.con.row_factory = Row
 
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE Company """)
+                self.con.execute(""" DROP TABLE IF EXISTS Company """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS Company (
                                         UserId INTEGER PRIMARY KEY,
                                         CompanyName TEXT NOT NULL,
@@ -25,7 +26,7 @@ class CompanyDB:
             self.con.rollback()
             raise e
     
-    def insert(self, email: str, password: str, companyName: str, logoPath: Optional[str], description: str, location: str):
+    def insert(self, email: str, password: str, companyName: str, logoPath: Optional[str], description: str, location: str) -> Union[int, None, Exception]:
         """
         Insert a new company into the database and return the ID of the inserted row.
         :param item: A tuple containing (email: str, password: str, companyName: str, logoPath: str, description: str, location: str).
@@ -39,19 +40,22 @@ class CompanyDB:
                 cur = self.con.cursor()
                 query = """ INSERT INTO Company (UserId, CompanyName, LogoPath, Description, Location) VALUES (?, ?, ?, ?, ?) """
                 cur.execute(query, (userId, companyName, logoPath, description, location))
+                cur.close()
             return userId
         except Exception as e:
+            if str(e) != "UNIQUE constraint failed: User.Email":
+                userConn.remove(userId)
+
             self.con.rollback()
             raise e
         finally:
             userConn.close()
-            cur.close()
 
 
     #############
     #    GET    #
     ############# 
-    def get_by_id(self, id: int):
+    def get_by_id(self, id: int) -> Union[dict, None, Exception]:
         """
         Retrieve a company record by its id and return the data as a dictionary.
 
@@ -82,7 +86,7 @@ class CompanyDB:
         finally:
             cur.close()
 
-    def get_by_email(self, email: str):
+    def get_by_email(self, email: str) -> Union[dict, None, Exception]:
         """
         Retrieve a company record by email and return the data as a dictionary.
 

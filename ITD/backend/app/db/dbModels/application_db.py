@@ -1,38 +1,40 @@
 from sqlite3 import connect, Row
-
-DATABASE = 'app/db/SC.db'
+from typing import Union
+from os import getenv
+from dotenv import load_dotenv
                                 # pending -> rejected / accepted -> refused (if accepted) / confirmed (if accepted)
 class ApplicationDB:            # confirmed (student), refused (student), pending, rejected (company), accepted (company)
     def __init__(self):
-        self.con = connect(DATABASE)
+        load_dotenv()
+        self.con = connect(getenv("DATABASE"))
         self.con.row_factory = Row
 
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE Application """)
+                self.con.execute(""" DROP TABLE IF EXISTS Application """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS Application (
                                         ApplicationId INTEGER PRIMARY KEY AUTOINCREMENT,
                                         StudentId INTEGER NOT NULL,
                                         InternshipPositionId INTEGER NOT NULL,
-                                        State TEXT NOT NULL
+                                        Status TEXT NOT NULL
                                     ); """)
         except Exception as e:
             self.con.rollback()
             raise e
 
-    def insert(self, studentId: int, internshipPositionId: int, state: str):
+    def insert(self, studentId: int, internshipPositionId: int, status: str) -> Union[int, None, Exception]:
         """
         Insert a new application into the database and return the ID of the inserted row.
 
-        :params studentId: int, internshipPositionId: int, state: str.
+        :params studentId: int, internshipPositionId: int, status: str.
         :raises Exception: If an error occurs during the database query execution.
         """
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ INSERT INTO Application (StudentId, InternshipPositionId, State) VALUES (?, ?, ?) """
-                cur.execute(query, (studentId, internshipPositionId, state))
+                query = """ INSERT INTO Application (StudentId, InternshipPositionId, Status) VALUES (?, ?, ?) """
+                cur.execute(query, (studentId, internshipPositionId, status))
         except Exception as e:
             self.con.rollback()
             raise e
@@ -42,7 +44,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
     #############
     #    GET    #
     ############# 
-    def get_by_id(self, applicationId: int):
+    def get_by_id(self, applicationId: int) -> Union[dict, None, Exception]:
         """
         Retrieve an application by its ID.
 
@@ -59,7 +61,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
                 "applicationId": row["ApplicationId"],
                 "studentId": row["StudentId"],
                 "internshipPositionId": row["InternshipPositionId"],
-                "state": row["State"]
+                "status": row["Status"]
             } if row else None
         
         except Exception as e:
@@ -68,7 +70,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
         finally:
             cur.close()
 
-    def get_by_studentId(self, studentId: int):
+    def get_by_studentId(self, studentId: int) -> Union[list, Exception]:
         """
         Retrieve applications by their student ID.
 
@@ -86,7 +88,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
                     "applicationId": row["ApplicationId"],
                     "studentId": row["StudentId"],
                     "internshipPositionId": row["InternshipPositionId"],
-                    "state": row["State"]
+                    "status": row["Status"]
                 } for row in rows
             ] if rows else []
         
@@ -96,7 +98,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
         finally:
             cur.close()
 
-    def get_by_internshipPositionId(self, internshipPositionId: int):
+    def get_by_internshipPositionId(self, internshipPositionId: int) -> Union[list, Exception]:
         """
         Retrieve applications by their internship position ID.
 
@@ -114,7 +116,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
                     "applicationId": row["ApplicationId"],
                     "studentId": row["StudentId"],
                     "internshipPositionId": row["InternshipPositionId"],
-                    "state": row["State"]
+                    "status": row["Status"]
                 } for row in rows
             ] if rows else []
         
@@ -142,7 +144,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
                 "applicationId": row["ApplicationId"],
                 "studentId": row["StudentId"],
                 "internshipPositionId": row["InternshipPositionId"],
-                "state": row["State"]
+                "status": row["Status"]
             } if row else None
         
         except Exception as e:
@@ -154,23 +156,23 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
     ################
     #    UPDATE    #
     ################
-    def update_state(self, applicationId: int, state: str):
+    def update_status(self, applicationId: int, status: str):
         """
-        Update the state of an application by its ID.
+        Update the status of an application by its ID.
 
         :param applicationId: The ID of the application.
-        :param state: The new state of the application.
+        :param status: The new status of the application.
         :return: True if the update was successful, otherwise False.
         """
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ UPDATE Application SET State = ? WHERE ApplicationId = ? """
-                cur.execute(query, (state, applicationId))
-                return True
+                query = """ UPDATE Application SET Status = ? WHERE ApplicationId = ? """
+                res = cur.execute(query, (status, applicationId))
+                return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e
+            return False
         finally:
             cur.close()
 

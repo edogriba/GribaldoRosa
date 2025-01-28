@@ -1,17 +1,18 @@
 from sqlite3 import connect, Row
-from typing import Optional
-
-DATABASE = 'app/db/SC.db'
+from typing import Optional, Union
+from os import getenv
+from dotenv import load_dotenv
 
 class InternshipPositionDB:
     def __init__(self):
-        self.con = connect(DATABASE)
+        load_dotenv()
+        self.con = connect(getenv("DATABASE"))
         self.con.row_factory = Row
 
     def create_table(self):
         try:
             with self.con:
-                #self.con.execute(""" DROP TABLE IF EXISTS InternshipPosition """)
+                self.con.execute(""" DROP TABLE IF EXISTS InternshipPosition """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS InternshipPosition (
                                         InternshipPositionId INTEGER PRIMARY KEY AUTOINCREMENT,
                                         CompanyId INTEGER NOT NULL,
@@ -24,14 +25,14 @@ class InternshipPositionDB:
                                         Benefits TEXT,
                                         LanguagesRequired TEXT NOT NULL,
                                         Description TEXT NOT NULL,
-                                        Status TEXT NOT NULL DEFAULT 'open'
+                                        Status TEXT NOT NULL DEFAULT 'Open'
                                     ); """)
         except Exception as e:
             self.con.rollback()
             raise e
 
     def insert(self, companyId: int, programName: str, duration: int, location: str, roleTitle: str, skillsRequired: str, 
-                compensation: Optional[int], benefits: Optional[str], languagesRequired: str, description: str, status: str):
+                compensation: Optional[int], benefits: Optional[str], languagesRequired: str, description: str, status: str) -> Union[int, None, Exception]:
         """
         Insert a new internship position into the database and return the ID of the inserted row.
 
@@ -59,7 +60,7 @@ class InternshipPositionDB:
     #    GET    #
     #############
 
-    def get_by_id(self, internshipPositionId: int):
+    def get_by_id(self, internshipPositionId: int) -> Union[dict, None, Exception]:
         """
         Retrieve an internship position by its ID.
 
@@ -96,7 +97,7 @@ class InternshipPositionDB:
         finally:
             cur.close()
 
-    def get_by_companyId(self, companyId: int):
+    def get_by_companyId(self, companyId: int) -> Union[list, Exception]:
         """
         Retrieve all internship positions for a given company ID.
 
@@ -134,7 +135,7 @@ class InternshipPositionDB:
         finally:
             cur.close()
 
-    def get_by_program_name(self, programName: str):
+    def get_by_program_name(self, programName: str) -> Union[list, Exception]:
         """
         Retrieve all internship positions for a given program name.
 
@@ -223,11 +224,11 @@ class InternshipPositionDB:
                 query = """ UPDATE InternshipPosition
                             SET Status = ?
                             WHERE InternshipPositionId = ? """
-                cur.execute(query, (status, internshipPositionId))
-                return True
+                res = cur.execute(query, (status, internshipPositionId))
+                return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e
+            return False
         finally:
             cur.close()
     

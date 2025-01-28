@@ -1,16 +1,17 @@
 from sqlite3 import connect, Row
-
-DATABASE = 'app/db/SC.db'
+from os import getenv
+from dotenv import load_dotenv
 
 class UserDB:
     def __init__(self):
-        self.con = connect(DATABASE)
+        load_dotenv()
+        self.con = connect(getenv("DATABASE"))
         self.con.row_factory = Row
 
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE User """)
+                self.con.execute(""" DROP TABLE IF EXISTS User """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS User (
                                             UserId INTEGER PRIMARY KEY AUTOINCREMENT,
                                             Email TEXT NOT NULL UNIQUE,
@@ -26,13 +27,34 @@ class UserDB:
         Insert a new user into the database and return the ID of the inserted row.
         :param items: email: str, password: str, type: str).
         :return: The ID of the inserted row.
+        :raises Exception: If an error occurs during the query execution.
         """
+        if not self.is_email_unique(email):
+            raise ValueError("UNIQUE constraint failed: User.Email")
         try:
             with self.con:
                 cur = self.con.cursor()
                 query = """ INSERT INTO User (Email, Password, Type) VALUES (?, ?, ?) """
                 cur.execute(query, (email, password, type))
                 return cur.lastrowid
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def remove(self, id: int):
+        """
+        Remove a user from the database by its ID.
+
+        :param id: The ID of the user to remove.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = " DELETE FROM User WHERE UserId = ? "
+                cur.execute(query, (id,))
         except Exception as e:
             self.con.rollback()
             raise e
@@ -50,7 +72,7 @@ class UserDB:
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = " SELECT COUNT(*) FROM Users WHERE Email = ?"
+                query = " SELECT * FROM User WHERE Email = ?"
                 row = cur.execute(query, (email,)).fetchone()
                 return row[0] == 0 if row else True
         except Exception as e:
