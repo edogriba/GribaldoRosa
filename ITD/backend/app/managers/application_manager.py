@@ -1,4 +1,3 @@
-from flask import jsonify
 from flask_jwt_extended import get_current_user
 from ..models import Application, InternshipPosition
 from ..utils import json_invalid_request, json_unauthorized, json_success, json_created, json_not_found
@@ -12,21 +11,17 @@ class ApplicationManager:
         """
         Create a new application.
 
-        :param data: Dictionary containing the application data.
-        :return: JSON response containing the newly added application if post is successful, 
-             or an error message if registration fails
+        :param internshipPositionId: The ID of the internship position.
+        :return: JSON response indicating the success or failure of the application creation.
         """
         try:
             validation_response = validate_application_data_creation(internshipPositionId)
             if validation_response is not True:
                 return validation_response
     
-            application = Application.add(get_current_user().get_id(), internshipPositionId)
-            internshipPosition = InternshipPosition.get_by_id(internshipPositionId)
-            return json_created("Application created successfully.", 
-                           application          = application.to_dict(),
-                           internshipPosition   = internshipPosition.to_dict(),
-                           company              = internshipPosition.get_company().to_dict())
+            Application.add(get_current_user().get_id(), internshipPositionId)
+
+            return json_created("Application created successfully.")
         
         except Exception as e:
             return e
@@ -38,8 +33,7 @@ class ApplicationManager:
 
         :param applicationId: The ID of the application.
         :param internshipPositionId: The ID of the internship position.
-        :return: JSON response containing the updated application if the request is successful, 
-             or an error message if the request fails
+        :return: JSON response indicating the success or failure of the application acceptance.
         """
         try:
             application = Application.get_by_id(applicationId)
@@ -55,12 +49,9 @@ class ApplicationManager:
             
             if application.is_pending():
                 application.accept()
-                return json_success("Application accepted successfully.", 
-                               application          = application.to_dict(),
-                               internshipPosition   = internshipPosition.to_dict(),
-                               student              = application.get_student().to_dict())
+                return json_success("Application accepted successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e
@@ -72,8 +63,7 @@ class ApplicationManager:
 
         :param applicationId: The ID of the application.
         :param internshipPositionId: The ID of the internship position.
-        :return: JSON response containing the updated application if the request is successful, 
-             or an error message if the request fails
+        :return: JSON response indicating the success or failure of the application rejection.
         """
         try:
             application = Application.get_by_id(applicationId)
@@ -89,12 +79,9 @@ class ApplicationManager:
             
             if application.is_pending():
                 application.reject()
-                return json_success("Application rejected successfully.", 
-                               application          = application.to_dict(),
-                               internshipPosition   = internshipPosition.to_dict(),
-                               student              = application.get_student().to_dict())
+                return json_success("Application rejected successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e
@@ -106,12 +93,10 @@ class ApplicationManager:
 
         :param applicationId: The ID of the application.
         :param internshipPositionId: The ID of the internship position.
-        :return: JSON response containing the updated application if the request is successful, 
-             or an error message if the request fails
+        :return: JSON response indicating the success or failure of the application confirmation.
         """
         try:
             application = Application.get_by_id(applicationId)
-            internshipPosition = InternshipPosition.get_by_id(internshipPositionId)
             if not application:
                 return json_invalid_request("Invalid application Id.")
 
@@ -123,12 +108,9 @@ class ApplicationManager:
             
             if application.is_accepted():
                 application.confirm()
-                return json_success("Application confirmed successfully.", 
-                               application          = application.to_dict(), 
-                               internshipPosition   = internshipPosition.to_dict(),
-                               company              = internshipPosition.get_company().to_dict())
+                return json_success("Application confirmed successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e
@@ -145,7 +127,7 @@ class ApplicationManager:
         """
         try:
             application = Application.get_by_id(applicationId)
-            internshipPosition = InternshipPosition.get_by_id(internshipPositionId)
+
             if not application:
                 return json_invalid_request("Invalid application Id.")
 
@@ -157,12 +139,9 @@ class ApplicationManager:
             
             if application.is_accepted():
                 application.refuse()
-                return json_success("Application refused successfully.", 
-                               application=application.to_dict(), 
-                               internshipPosition=internshipPosition.to_dict(),
-                               company=internshipPosition.get_company().to_dict())
+                return json_success("Application refused successfully.")
             else:
-                return json_invalid_request("Invalid application state.")
+                return json_invalid_request("Invalid application status.")
         
         except Exception as e:
             return e
@@ -178,20 +157,24 @@ class ApplicationManager:
         """
         try:
             application = Application.get_by_id(applicationId)
+
+            if not application:
+                return json_not_found("Application not found.")
+            
             internshipPosition = application.get_internshipPosition()
+
+            if not internshipPosition:
+                return json_not_found("Internship position not found.")
 
             if get_current_user().get_id() != application.get_studentId() and get_current_user().get_id() != internshipPosition.get_companyId():
                 return json_unauthorized("You can only view your own applications.")
             
-            if application:
-                return json_success("Application found successfully.", 
-                               application          = application.to_dict(),
-                               internshipPosition   = internshipPosition.to_dict(),
-                               student              = application.get_student().to_dict(),
-                               company              = internshipPosition.get_company().to_dict())
-            else:
-                return json_not_found("Application not found.")
-        
+            return json_success("Application found successfully.", 
+                            application          = application.to_dict(),
+                            internshipPosition   = internshipPosition.to_dict(),
+                            student              = application.get_student().to_dict(),
+                            company              = internshipPosition.get_company().to_dict())
+            
         except Exception as e:
             return e
         

@@ -1,18 +1,19 @@
 from sqlite3 import connect, Row
 from .user_db import UserDB
-from typing import Optional
-
-DATABASE = 'app/db/SC.db'
+from typing import Optional, Union
+from os import getenv
+from dotenv import load_dotenv
 
 class UniversityDB:
     def __init__(self):
-        self.con = connect(DATABASE)
+        load_dotenv()
+        self.con = connect(getenv("DATABASE"))
         self.con.row_factory = Row
 
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE University """)
+                self.con.execute(""" DROP TABLE IF EXISTS University """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS University (
                                         UserId INTEGER PRIMARY KEY,
                                         Name TEXT NOT NULL,
@@ -26,7 +27,7 @@ class UniversityDB:
             self.con.rollback()
             raise e
     
-    def insert(self, email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]):
+    def insert(self, email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]) -> Union[int, Exception]:
         """
         Insert a new university into the database and return the ID of the inserted row.
         :param item: A tuple containing (email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: str).
@@ -41,6 +42,8 @@ class UniversityDB:
                 self.con.execute(query, (userId, name, address, websiteURL, description, logoPath))
             return userId
         except Exception as e:
+            if str(e) != "UNIQUE constraint failed: User.Email":
+                userConn.remove(userId)
             self.con.rollback()
             raise e
         finally:
@@ -50,7 +53,7 @@ class UniversityDB:
     #############
     #    GET    #
     ############# 
-    def get_by_id(self, id: int):
+    def get_by_id(self, id: int) -> Union[dict, None, Exception]:
         """
         Retrieve a university record by its id and return the data as a dictionary.
 
@@ -81,7 +84,7 @@ class UniversityDB:
         finally:
             cur.close()
 
-    def get_by_email(self, email: str):
+    def get_by_email(self, email: str) -> Union[dict, None, Exception]:
         """
         Retrieve a university record by email and return the data as a dictionary.
 
@@ -111,26 +114,8 @@ class UniversityDB:
             raise e 
         finally:   
             cur.close()
-
-    def get_list(self):
-        """
-        Retrieve a list of all universities from the database.
-        :return: A list of rows, where each row represents a university with all its fields.
-        :raises Exception: If an error occurs during the query execution.
-        """
-        try:
-            with self.con:
-                cur = self.con.cursor()
-                query = """ SELECT * FROM University """
-                universities = cur.execute(query).fetchall()
-            return universities
-        except Exception as e:
-            self.con.rollback()
-            raise e
-        finally:
-            cur.close()
     
-    def get_list_dict(self):
+    def get_list_dict(self) -> Union[list, None, Exception]:
         """
         Retrieve a simplified list of universities from the database containing only their UserId and Name.
         :return: A list of dictionaries, where each dictionary contains 'id' (UserId) and 'name' (Name) for a university.

@@ -5,5 +5,7 @@ bcrypt
 pyjwt==2.9.0
 python-dotenv
 werkzeug
-flask-login
 flask-jwt-extended==4.6.0
+pyyaml
+requests
+python-dotenv

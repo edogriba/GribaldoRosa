@@ -1,18 +1,19 @@
 from sqlite3 import connect, Row
 from .user_db import UserDB
-from typing import Optional
-
-DATABASE = 'app/db/SC.db'
+from typing import Optional, Union
+from os import getenv
+from dotenv import load_dotenv
 
 class StudentDB:
     def __init__(self):
-        self.con = connect(DATABASE)
+        load_dotenv()
+        self.con = connect(getenv("DATABASE"))
         self.con.row_factory = Row
 
     def create_table(self):
         try:
             with self.con:
-                # self.con.execute(""" DROP TABLE Student """)
+                self.con.execute(""" DROP TABLE IF EXISTS Student """)
                 self.con.execute(""" CREATE TABLE IF NOT EXISTS Student (
                                         UserId INTEGER PRIMARY KEY,
                                         FirstName TEXT NOT NULL,
@@ -35,7 +36,7 @@ class StudentDB:
 
     
     def insert(self, email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: Optional[str], location: str, 
-            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int):
+            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int) -> Union[int, Exception]:
         """
         Insert a new student into the database and return the ID of the inserted row.
         
@@ -57,19 +58,20 @@ class StudentDB:
                 cur.execute(query, (userId, firstName, lastName, phoneNumber, profilePicturePath, 
                                     location, degreeProgram, gpa, graduationYear, CVpath, skills, 
                                     languageSpoken, universityId))
+                cur.close()
             return userId
         except Exception as e:
+            if str(e) != "UNIQUE constraint failed: User.Email":
+                userConn.remove(userId)
             self.con.rollback()
             raise e
         finally:
             userConn.close()
-            if cur:
-                cur.close()
 
     #############
     #    GET    #
     ############# 
-    def get_by_id(self, id: int):
+    def get_by_id(self, id: int) -> Union[dict, None, Exception]:
         """
         Retrieve a student record by its id and return the data as a dictionary.
 
@@ -107,7 +109,7 @@ class StudentDB:
         finally:
             cur.close()
 
-    def get_by_email(self, email: str):
+    def get_by_email(self, email: str) -> Union[dict, None, Exception]:
         """
         Retrieve a student record by email and return the data as a dictionary.
 
@@ -149,15 +151,16 @@ class StudentDB:
     ################
     #    UPDATE    #
     ################ 
-    def update_phone_number_by_id(self, id: int, phoneNumber: str):
+    def update_phone_number_by_id(self, id: int, phoneNumber: str) -> bool:
         """
         Update the phone number of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param phoneNumber: The new phone number to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if phoneNumber == "":
+                return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -168,18 +171,17 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e     
+            return False     
         finally:
             cur.close()
     
-    def update_profile_picture_path_by_id(self, id: int, profilePicturePath: Optional[str]):
+    def update_profile_picture_path_by_id(self, id: int, profilePicturePath: Optional[str]) -> bool:
         """
         Update the profile picture path of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param profilePicturePath: The new profile picture path to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
         try:
             with self.con:
@@ -191,19 +193,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
           
-    def update_location_by_id(self, id: int, location: str):
+    def update_location_by_id(self, id: int, location: str) -> bool:
         """
         Update the location of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param location: The new location to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if location == "":
+                return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -214,19 +217,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            False
         finally:
             cur.close()
 
-    def update_degree_program_by_id(self, id: int, degreeProgram: str):
+    def update_degree_program_by_id(self, id: int, degreeProgram: str) -> bool:
         """
         Update the degree program of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param degreeProgram: The new degree program to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if degreeProgram == "":
+                return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -237,19 +241,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
     
-    def update_gpa_by_id(self, id: int, gpa: Optional[float]):
+    def update_gpa_by_id(self, id: int, gpa: Optional[float]) -> bool:
         """
         Update the gpa of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param gpa: The new gpa to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if gpa is not None and not isinstance(gpa, (float, int)):
+            return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -260,19 +265,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
            
-    def update_graduation_year_by_id(self, id: int, graduationYear: Optional[str]):
+    def update_graduation_year_by_id(self, id: int, graduationYear: Optional[str]) -> bool:
         """
         Update the graduation year of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param graduationYear: The new graduation year to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if graduationYear is not None and not isinstance(graduationYear, int):
+            return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -283,19 +289,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
         
-    def update_cv_path_by_id(self, id: int, cvPath: str):
+    def update_cv_path_by_id(self, id: int, cvPath: str) -> bool:
         """
         Update the CV path of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param cvPath: The new CV path to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if cvPath == "":
+            return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -306,19 +313,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
     
-    def update_skills_by_id(self, id: int, skills: str):
+    def update_skills_by_id(self, id: int, skills: str) -> bool:
         """
         Update the skills of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param skills: The new skills to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if skills == "":
+            return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -329,19 +337,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
     
-    def update_language_spoken_by_id(self, id: int, languageSpoken: str):
+    def update_language_spoken_by_id(self, id: int, languageSpoken: str) -> bool:
         """
         Update the languages spoken by a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param languageSpoken: The new languages spoken to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if languageSpoken == "":
+            return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -352,19 +361,20 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
       
-    def update_university_by_id(self, id: int, universityId: int):
+    def update_university_by_id(self, id: int, universityId: int) -> bool:
         """
         Update the university of a student based on their unique ID.
 
         :param id: The unique ID of the student.
         :param universityId: The new university to update.
         :return: True if the update is successful, otherwise False.
-        :raises Exception: If an error occurs during the database query execution.
         """
+        if not isinstance(universityId, int):
+            return False
         try:
             with self.con:
                 cur = self.con.cursor()
@@ -375,7 +385,7 @@ class StudentDB:
             return True if res.rowcount > 0 else False
         except Exception as e:
             self.con.rollback()
-            raise e 
+            return False
         finally:
             cur.close()
 

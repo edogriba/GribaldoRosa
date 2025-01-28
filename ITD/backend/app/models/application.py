@@ -3,11 +3,11 @@ from .internshipPosition import InternshipPosition
 from .student import Student
 
 class Application():
-    def __init__(self, applicationId: int, studentId: int, internshipPositionId: int, state: str):
+    def __init__(self, applicationId: int, studentId: int, internshipPositionId: int, status: str):
         self.applicationId = applicationId
         self.studentId = studentId
         self.internshipPositionId = internshipPositionId
-        self.state = state
+        self.status = status
 
     def get_applicationId(self):
         return self.applicationId
@@ -18,38 +18,29 @@ class Application():
     def get_internshipPositionId(self):
         return self.internshipPositionId
 
-    def get_state(self):
-        return self.state
+    def get_status(self):
+        return self.status
 
     def to_dict(self):
         return {
             'applicationId': self.applicationId,
             'studentId': self.studentId,
             'internshipPositionId': self.internshipPositionId,
-            'state': self.state,
+            'status': self.status,
         }
 
     @staticmethod
     def add(studentId: int, internshipPositionId: int):
         """
-        Adds a new application to the database.
+        Add a new application to the database with a default status of 'Pending'.
 
-        :param studentId: The ID of the student applying.
-        :param internshipPositionId: The ID of the internship position.
-        :param state: The current state of the application.
-        :return: An instance of the Application class with the new application details.
+        :param studentId: The unique identifier of the student applying.
+        :param internshipPositionId: The unique identifier of the internship position.
         :raises Exception: If an error occurs during the insertion process.
         """
         try:
-            values = {
-                'studentId': studentId,
-                'internshipPositionId': internshipPositionId,
-                'state': 'Pending',
-            }
             applicationConn = ApplicationDB()
-            applicationId = applicationConn.insert(**values)
-            values.update({'applicationId': applicationId})
-            return Application(**values)
+            applicationConn.insert(studentId, internshipPositionId, 'Pending')
         except Exception as e:
             raise e
         finally:
@@ -159,17 +150,17 @@ class Application():
     #    UPDATE    #
     ################
 
-    def update_state(self, state: str):
+    def update_status(self, status: str):
         """
-        Update the state of the application.
+        Update the status of the application.
 
-        :param state: The new state of the application.
+        :param status: The new status of the application.
         :raises Exception: If an error occurs during the update process.
         """
         try:
             applicationConn = ApplicationDB()
-            applicationConn.update_state(self.applicationId, state)
-            self.state = state
+            applicationConn.update_status(self.applicationId, status)
+            self.status = status
         except Exception as e:
             raise e
         finally:
@@ -177,57 +168,57 @@ class Application():
     
     def pending(self):
         """
-        Set the application state to "Pending".
-        This method changes the state of the application to "Pending", indicating that the application is under review.
+        Set the application status to "Pending".
+        This method changes the status of the application to "Pending", indicating that the application is under review.
 
         :raises Exception: If an error occurs during the update process.
         """
-        self.update_state("Pending")
+        self.update_status("Pending")
 
     def accept(self):
         """
-        Accept the application by updating its state to "Accepted".
-        This method changes the state of the application to "Accepted", indicating that the application has been approved.
+        Accept the application by updating its status to "Accepted".
+        This method changes the status of the application to "Accepted", indicating that the application has been approved.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state("Accepted")
+            self.update_status("Accepted")
         except Exception as e:
             raise e
         
     def reject(self):
         """
-        Reject the application by updating its state to "Rejected".
-        This method changes the state of the application to "Rejected", indicating that the application has been denied.
+        Reject the application by updating its status to "Rejected".
+        This method changes the status of the application to "Rejected", indicating that the application has been denied.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state("Rejected")
+            self.update_status("Rejected")
         except Exception as e:
             raise e
     
     def confirm(self):
         """
-        Confirm the application by updating its state to "Confirmed".
-        This method changes the state of the application to "Confirmed", indicating that the application has been approved and confirmed.
+        Confirm the application by updating its status to "Confirmed".
+        This method changes the status of the application to "Confirmed", indicating that the application has been approved and confirmed.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_state("Confirmed")
+            self.update_status("Confirmed")
         except Exception as e:
             raise e
         
     def refuse(self):
         """
-        Refuse the application by updating its state to "Refused".
-        This method changes the state of the application to "Refused", indicating that the application has been rejected.
+        Refuse the application by updating its status to "Refused".
+        This method changes the status of the application to "Refused", indicating that the application has been rejected.
 
         :raises Exception: If an error occurs during the update process.
         """
-        self.update_state("Refused")
+        self.update_status("Refused")
 
 
     ################
@@ -238,38 +229,38 @@ class Application():
         """
         Check if the application is pending review.
 
-        :return: True if the application state is "Pending", otherwise False.
+        :return: True if the application status is "Pending", otherwise False.
         """
-        return self.state == "Pending"
+        return self.status == "Pending"
     
     def is_accepted(self):
         """
         Check if the application has been accepted.
         
-        :return: True if the application state is "Accepted", otherwise False.
+        :return: True if the application status is "Accepted", otherwise False.
         """
-        return self.state == "Accepted"
+        return self.status == "Accepted"
     
     def is_rejected(self):
         """
         Check if the application has been rejected.
 
-        :return: True if the application state is "Rejected", otherwise False.
+        :return: True if the application status is "Rejected", otherwise False.
         """
-        return self.state == "Rejected"
+        return self.status == "Rejected"
     
     def is_confirmed(self):
         """
         Check if the application has been confirmed.
 
-        :return: True if the application state is "Confirmed", otherwise False.
+        :return: True if the application status is "Confirmed", otherwise False.
         """
-        return self.state == "Confirmed"
+        return self.status == "Confirmed"
     
     def is_refused(self):
         """
         Check if the application has been refused.
 
-        :return: True if the application state is "Refused", otherwise False.
+        :return: True if the application status is "Refused", otherwise False.
         """
-        return self.state == "Refused"
+        return self.status == "Refused"
