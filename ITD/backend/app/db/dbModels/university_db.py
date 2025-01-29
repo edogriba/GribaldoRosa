@@ -27,7 +27,7 @@ class UniversityDB:
             self.con.rollback()
             raise e
     
-    def insert(self, email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]) -> Union[int, Exception]:
+    def insert(self, email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]) -> Union[int, Exception, None]:
         """
         Insert a new university into the database and return the ID of the inserted row.
         :param item: A tuple containing (email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: str).

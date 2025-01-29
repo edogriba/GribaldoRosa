@@ -28,6 +28,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
         Insert a new application into the database and return the ID of the inserted row.
 
         :params studentId: int, internshipPositionId: int, status: str.
+        :return: The ID of the inserted row.
         :raises Exception: If an error occurs during the database query execution.
         """
         try:
@@ -35,6 +36,7 @@ class ApplicationDB:            # confirmed (student), refused (student), pendin
                 cur = self.con.cursor()
                 query = """ INSERT INTO Application (StudentId, InternshipPositionId, Status) VALUES (?, ?, ?) """
                 cur.execute(query, (studentId, internshipPositionId, status))
+                return cur.lastrowid
         except Exception as e:
             self.con.rollback()
             raise e

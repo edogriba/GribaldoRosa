@@ -36,7 +36,7 @@ class StudentDB:
 
     
     def insert(self, email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: Optional[str], location: str, 
-            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int) -> Union[int, Exception]:
+            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int) -> Union[int, Exception, None]:
         """
         Insert a new student into the database and return the ID of the inserted row.
         

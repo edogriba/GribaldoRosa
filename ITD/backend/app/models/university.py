@@ -1,6 +1,6 @@
 from app.models.user import User
 from app.db.dbModels.university_db import UniversityDB
-from typing import Optional
+from typing import Optional, Union
 
 
 class University(User):
@@ -15,34 +15,34 @@ class University(User):
     #def __repr__(self):
     #    return f"<University: ({self.id}) {self.name}, Email: {self.email}"
 
-    def get_id(self):
+    def get_id(self) -> int:
         return super().get_id()
     
-    def get_email(self):
+    def get_email(self) -> str:
         return super().get_email()
     
-    def get_password(self):
+    def get_password(self) -> str:
         return super().get_password()
     
-    def get_type(self):
+    def get_type(self) -> str:
         return super().get_type()
     
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
     
-    def get_address(self):
+    def get_address(self) -> str:
         return self.address
     
-    def get_websiteURL(self):
+    def get_websiteURL(self) -> str:
         return self.websiteURL
     
-    def get_description(self):
+    def get_description(self) -> str:
         return self.description
     
-    def get_logoPath(self):
+    def get_logoPath(self) -> Union[str, None]:
         return self.logoPath
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         user_dict = super().to_dict()
         user_dict.update({
             'name': self.name,
@@ -55,12 +55,13 @@ class University(User):
     
 
     @staticmethod
-    def add(email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]):
+    def add(email: str, password: str, name: str, address: str, websiteURL: str, description: str, logoPath: Optional[str]) -> Union['University', Exception, None]:
         try:
             # Insert university data into the database
             universityConn = UniversityDB()
             universityId = universityConn.insert(email, password, name, address, websiteURL, description, logoPath)
-
+            if universityId is None:
+                return None
             return University(universityId, email, password, name, address, websiteURL, description, logoPath)
         
         except Exception as e:
@@ -71,7 +72,7 @@ class University(User):
     
 
     @staticmethod
-    def get_list_dict():
+    def get_list_dict() -> Union[list, Exception, None]:
         """
         Retrieve a simplified list of universities from the database containing only their UserId and Name.
         :return: A list of dictionaries, where each dictionary contains 'id' (UserId) and 'name' (Name) for a university.
@@ -88,7 +89,7 @@ class University(User):
     
 
     @staticmethod
-    def get_by_id(id: int):
+    def get_by_id(id: int) -> Union['University', Exception, None]:
         """
         Retrieve a university record by its unique identifier and return it as a University object.
 
@@ -105,8 +106,9 @@ class University(User):
         finally:
             uniConn.close()
 
+
     @staticmethod
-    def get_by_email(email: str):
+    def get_by_email(email: str) -> Union['University', Exception, None]:
         """
         Retrieve a university record by its email and return it as a University object.
 

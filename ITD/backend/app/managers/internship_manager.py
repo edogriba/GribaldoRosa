@@ -1,9 +1,10 @@
-from flask import jsonify
 from flask_jwt_extended import get_current_user
+from typing import Union
 
 from ..services.auth_service import *
 from ..models import InternshipPosition
 from ..utils import json_unauthorized, json_invalid_request, json_not_found, json_created, json_success
+from ..services.auth_service import is_id_valid
 
 class InternshipManager:
 
@@ -23,9 +24,9 @@ class InternshipManager:
             if validation_result is not True:
                 return validation_result
             
-            internship_position = InternshipPosition.add(**internship_position_data)
+            InternshipPosition.add(**internship_position_data)
 
-            return json_created("Internship position added successfully.", internship_position = internship_position.to_dict())
+            return json_created("Internship position added successfully.")
         
         except Exception as e:
             return e
@@ -40,9 +41,11 @@ class InternshipManager:
              or an error message if the request fails
         """
         try:
+            if not is_id_valid(internshipPositionId):
+                return json_invalid_request("Invalid internship position ID.")
             internship_position = InternshipPosition.get_by_id(internshipPositionId)
             if internship_position:
-                return json_success(internship_position = internship_position.to_dict())
+                return json_success("Internship position retrieved successfully.", internship_position = internship_position.to_dict())
             else:
                 return json_not_found("Internship not found.")
         
@@ -59,14 +62,17 @@ class InternshipManager:
             if the request is successful, or an error message if the request fails
         """
         try:
+            if not is_id_valid(companyId):
+                return json_invalid_request("Invalid company ID.")
             internship_positions = InternshipPosition.get_by_companyId(companyId)
-            return json_success(internship_positions = [internship_position.to_dict() for internship_position in internship_positions])
+            return json_success("Internship positions retrieved successfully.", 
+                                internship_positions = [internship_position.to_dict() for internship_position in internship_positions])
         
         except Exception as e:
             return e
         
 
-    def close_internship_position(self, internshipId: int):
+    def close_internship_position(self, internshipPositionId: int):
         """
         Close an internship position.
 
@@ -75,10 +81,13 @@ class InternshipManager:
                  or an error message if the request fails
         """
         try:
+            if not is_id_valid(internshipPositionId):
+                return json_invalid_request("Invalid internship ID.")
+            
             if get_current_user().get_type() != "company":
                 return json_unauthorized("Only companies can close internships.")
             
-            internship = InternshipPosition.get_by_id(internshipId)
+            internship = InternshipPosition.get_by_id(internshipPositionId)
             if internship:
                 if internship.get_companyId() == get_current_user().get_id():
                     internship.close()
@@ -86,7 +95,7 @@ class InternshipManager:
                 else:
                     return json_unauthorized("You are not authorized to close this internship.")
             else:
-                return json_not_found("Internship not found.")
+                return json_not_found("Internship position not found.")
         
         except Exception as e:
             return e

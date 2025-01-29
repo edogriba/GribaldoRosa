@@ -1,4 +1,5 @@
 from app.db.dbModels.internship_db import InternshipDB
+from typing import Union
 
 class Internship():
     def __init__(self, internshipId: int, internshipPositionId: int, applicationId: int, status: str):
@@ -7,16 +8,16 @@ class Internship():
         self.applicationId = applicationId
         self.status = status
 
-    def get_internshipId(self):
+    def get_internshipId(self) -> int:
         return self.internshipId
 
-    def get_internshipPositionId(self):
+    def get_internshipPositionId(self) -> int:
         return self.internshipPositionId
 
-    def get_applicationId(self):
+    def get_applicationId(self) -> int:
         return self.applicationId
 
-    def get_status(self):
+    def get_status(self) -> str:
         return self.status
 
     def to_dict(self):
@@ -28,7 +29,7 @@ class Internship():
         }
 
     @staticmethod
-    def add(internshipPositionId: int, applicationId: int):
+    def add(internshipPositionId: int, applicationId: int) -> Union['Internship', Exception, None]:
         """
         Adds a new internship to the database.
 
@@ -47,7 +48,7 @@ class Internship():
             internshipConn = InternshipDB()
             internshipId = internshipConn.insert(**values)
             values.update({'internshipId': internshipId})
-            return Internship(**values)
+            return Internship(**values) if internshipId else None
         except Exception as e:
             raise e
         finally:
@@ -58,7 +59,7 @@ class Internship():
     #############
 
     @staticmethod
-    def get_by_id(internshipId: int):
+    def get_by_id(internshipId: int) -> Union['Internship', None, Exception]:
         """
         Retrieve an internship by its ID.
 
@@ -76,25 +77,25 @@ class Internship():
             internshipConn.close()
 
     @staticmethod
-    def get_by_applicationId(applicationId: int):
+    def get_by_applicationId(applicationId: int) -> Union['Internship', None, Exception]:
         """
         Retrieve internships by their application ID.
 
         :param applicationId: The ID of the application.
-        :return: A list of Internship instances with the internship details.
+        :return: An instance of the Internship class with the internship details, otherwise None.
         :raises Exception: If an error occurs during the retrieval process.
         """
         try:
             internshipConn = InternshipDB()
-            rows = internshipConn.get_by_application_id(applicationId)
-            return [Internship(**row) for row in rows] if rows else []
+            row = internshipConn.get_by_application_id(applicationId)
+            return Internship(**row) if row else None
         except Exception as e:
             raise e
         finally:
             internshipConn.close()
 
     @staticmethod
-    def get_by_internshipPositionId(internshipPositionId: int):
+    def get_by_internshipPositionId(internshipPositionId: int) -> Union[list, Exception]:
         """
         Retrieve internships by their position ID.
 
@@ -112,7 +113,7 @@ class Internship():
             internshipConn.close()
 
     @staticmethod
-    def get_by_applicationId_internshipPositionId(applicationId: int, internshipPositionId: int):
+    def get_by_applicationId_internshipPositionId(applicationId: int, internshipPositionId: int) -> Union['Internship', None, Exception]:
         """
         Retrieve an internship by its application ID and internship position ID.
 
@@ -133,7 +134,7 @@ class Internship():
     #############
     #   UPDATE  #
     #############
-    def update_status(self, status: str):
+    def update_status(self, status: str) -> Union['Internship', Exception]:
         """
         Update the status of the internship.
 
@@ -151,7 +152,7 @@ class Internship():
         finally:
             internshipConn.close()
 
-    def make_ongoing(self):
+    def make_ongoing(self) -> Union[None, Exception]:
         """
         Update the status of the internship to ongoing.
 
@@ -162,7 +163,7 @@ class Internship():
         except Exception as e:
             raise e
         
-    def make_completed(self):
+    def make_completed(self) -> Union[None, Exception]:
         """
         Update the status of the internship to completed.
 
@@ -176,7 +177,7 @@ class Internship():
     ################
     #   CHECKERS   #
     ################
-    def is_ongoing(self):
+    def is_ongoing(self) -> bool:
         """
         Check if the internship is ongoing.
 
@@ -184,7 +185,7 @@ class Internship():
         """
         return self.status == 'Ongoing'
     
-    def is_completed(self):
+    def is_completed(self) -> bool:
         """
         Check if the internship is completed.
 

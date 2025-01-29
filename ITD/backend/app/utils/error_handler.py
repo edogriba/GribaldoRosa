@@ -1,7 +1,9 @@
-from flask import jsonify
 from sqlite3 import IntegrityError, OperationalError, ProgrammingError, InterfaceError, DataError, Error
 from werkzeug.exceptions import Unauthorized, MethodNotAllowed, Conflict, ServiceUnavailable
 from .json_return import *
+import logging
+
+logging.basicConfig(level=logging.ERROR)
 
 
 ###################### 
@@ -99,56 +101,56 @@ def generic_database_error_response(error: str):
 def handle_database_error(error):
     """Handles database exceptions and maps them to custom exceptions."""
     if isinstance(error, IntegrityError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return integrity_error_response()
     elif isinstance(error, OperationalError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return operation_error_response()
     elif isinstance(error, ProgrammingError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return programming_error_response()
     elif isinstance(error, InterfaceError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return interface_error_response()
     elif isinstance(error, DataError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return data_error_response()
     else:
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return generic_database_error_response(str(error))
 
 
 def handle_general_error(error):
     """Handles general exceptions and maps them to custom general exceptions."""
     if isinstance(error, ValueError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return bad_request_error_response()
     if isinstance(error, TypeError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return type_error_response()
     elif isinstance(error, Unauthorized):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return unauthorized_error_response()
     elif isinstance(error, PermissionError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return forbidden_error_response()
     elif isinstance(error, KeyError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return not_found_error_response()
     elif isinstance(error, MethodNotAllowed):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return method_not_allowed_error_response()
     elif isinstance(error, Conflict):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return conflict_error_response()
     elif isinstance(error, ServiceUnavailable):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return service_unavailable_error_response()
     elif isinstance(error, TimeoutError):
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return gateway_timeout_error_response()
     else:
-        print("ERROR: " + str(error))
+        logging.exception(error)
         return internal_server_error_response(str(error))
     
 

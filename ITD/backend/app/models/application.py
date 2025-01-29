@@ -1,6 +1,7 @@
 from app.db.dbModels.application_db import ApplicationDB
 from .internshipPosition import InternshipPosition
 from .student import Student
+from typing import Union
 
 class Application():
     def __init__(self, applicationId: int, studentId: int, internshipPositionId: int, status: str):
@@ -9,19 +10,19 @@ class Application():
         self.internshipPositionId = internshipPositionId
         self.status = status
 
-    def get_applicationId(self):
+    def get_applicationId(self) -> int:
         return self.applicationId
 
-    def get_studentId(self):
+    def get_studentId(self) -> int:
         return self.studentId
 
-    def get_internshipPositionId(self):
+    def get_internshipPositionId(self) -> int:
         return self.internshipPositionId
 
-    def get_status(self):
+    def get_status(self) -> str:
         return self.status
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'applicationId': self.applicationId,
             'studentId': self.studentId,
@@ -30,17 +31,19 @@ class Application():
         }
 
     @staticmethod
-    def add(studentId: int, internshipPositionId: int):
+    def add(studentId: int, internshipPositionId: int) -> Union['Application', Exception, None]:
         """
         Add a new application to the database with a default status of 'Pending'.
 
         :param studentId: The unique identifier of the student applying.
         :param internshipPositionId: The unique identifier of the internship position.
+        :return: An Application object populated with the inserted data.
         :raises Exception: If an error occurs during the insertion process.
         """
         try:
             applicationConn = ApplicationDB()
-            applicationConn.insert(studentId, internshipPositionId, 'Pending')
+            applicationId = applicationConn.insert(studentId, internshipPositionId, 'Pending')
+            return Application(applicationId, studentId, internshipPositionId, 'Pending') if applicationId else None
         except Exception as e:
             raise e
         finally:
@@ -50,7 +53,7 @@ class Application():
     #    GET    #
     ############# 
     @staticmethod
-    def get_by_id(applicationId: int):
+    def get_by_id(applicationId: int) -> Union['Application', None, Exception]:
         """
         Retrieve an application record by its unique identifier and return it as an Application object.
 
@@ -68,7 +71,7 @@ class Application():
             applicationConn.close()
 
     @staticmethod
-    def get_by_studentId(studentId: int):
+    def get_by_studentId(studentId: int) -> Union[list, Exception]:
         """
         Retrieve a list of application records by the student's unique identifier.
 
@@ -86,7 +89,7 @@ class Application():
             applicationConn.close()
 
     @staticmethod
-    def get_by_internshipPositionId(internshipPositionId: int):
+    def get_by_internshipPositionId(internshipPositionId: int) -> Union[list, Exception]:
         """
         Retrieve a list of application records by the internship position's unique identifier.
 
@@ -104,7 +107,7 @@ class Application():
             applicationConn.close()
 
     @staticmethod
-    def get_by_studentId_internshipPositionId(studentId: int, internshipPositionId: int):
+    def get_by_studentId_internshipPositionId(studentId: int, internshipPositionId: int) -> Union['Application', None, Exception]:
         """
         Retrieve an application record by the student's unique identifier and the internship position's unique identifier.
 
@@ -122,7 +125,7 @@ class Application():
         finally:
             applicationConn.close()
 
-    def get_internshipPosition(self):
+    def get_internshipPosition(self) -> Union['InternshipPosition', None, Exception]:
         """
         Retrieve the internship position associated with the application.
 
@@ -134,7 +137,7 @@ class Application():
         except Exception as e:
             raise e
 
-    def get_student(self):
+    def get_student(self) -> Union['Student', None, Exception]:
         """
         Retrieve the student associated with the application.
 
@@ -150,7 +153,7 @@ class Application():
     #    UPDATE    #
     ################
 
-    def update_status(self, status: str):
+    def update_status(self, status: str) -> Union[None, Exception]:
         """
         Update the status of the application.
 
@@ -166,16 +169,19 @@ class Application():
         finally:
             applicationConn.close()
     
-    def pending(self):
+    def pending(self) -> Union[None, Exception]:
         """
         Set the application status to "Pending".
         This method changes the status of the application to "Pending", indicating that the application is under review.
 
         :raises Exception: If an error occurs during the update process.
         """
-        self.update_status("Pending")
+        try:
+            self.update_status("Pending")
+        except Exception as e:
+            raise e
 
-    def accept(self):
+    def accept(self) -> Union[None, Exception]:
         """
         Accept the application by updating its status to "Accepted".
         This method changes the status of the application to "Accepted", indicating that the application has been approved.
@@ -187,7 +193,7 @@ class Application():
         except Exception as e:
             raise e
         
-    def reject(self):
+    def reject(self) -> Union[None, Exception]:
         """
         Reject the application by updating its status to "Rejected".
         This method changes the status of the application to "Rejected", indicating that the application has been denied.
@@ -199,7 +205,7 @@ class Application():
         except Exception as e:
             raise e
     
-    def confirm(self):
+    def confirm(self) -> Union[None, Exception]:
         """
         Confirm the application by updating its status to "Confirmed".
         This method changes the status of the application to "Confirmed", indicating that the application has been approved and confirmed.
@@ -211,21 +217,24 @@ class Application():
         except Exception as e:
             raise e
         
-    def refuse(self):
+    def refuse(self) -> Union[None, Exception]:
         """
         Refuse the application by updating its status to "Refused".
         This method changes the status of the application to "Refused", indicating that the application has been rejected.
 
         :raises Exception: If an error occurs during the update process.
         """
-        self.update_status("Refused")
+        try:
+            self.update_status("Refused")
+        except Exception as e:
+            raise e
 
 
     ################
     #   CHECKERS   #
     ################
 
-    def is_pending(self):
+    def is_pending(self) -> bool:
         """
         Check if the application is pending review.
 
@@ -233,7 +242,7 @@ class Application():
         """
         return self.status == "Pending"
     
-    def is_accepted(self):
+    def is_accepted(self) -> bool:
         """
         Check if the application has been accepted.
         
@@ -241,7 +250,7 @@ class Application():
         """
         return self.status == "Accepted"
     
-    def is_rejected(self):
+    def is_rejected(self) -> bool:
         """
         Check if the application has been rejected.
 
@@ -249,7 +258,7 @@ class Application():
         """
         return self.status == "Rejected"
     
-    def is_confirmed(self):
+    def is_confirmed(self) -> bool:
         """
         Check if the application has been confirmed.
 
@@ -257,7 +266,7 @@ class Application():
         """
         return self.status == "Confirmed"
     
-    def is_refused(self):
+    def is_refused(self) -> bool:
         """
         Check if the application has been refused.
 

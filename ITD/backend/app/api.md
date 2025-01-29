@@ -73,8 +73,11 @@
 
 - **200 OK**:
   - **Body (JSON)**:
-    - `id` (int): ID of the university.
-    - `name` (str): Name of the university.
+    - `type` (str): `success`
+    - `message` (str): "Universities retrieved"
+    - `universities` (list): List of universities.
+      - `id` (int): ID of the university.
+      - `name` (str): Name of the university.
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
@@ -122,6 +125,7 @@
 
 - **201 Created**:
   - **Body (JSON)**:
+    - `type` (str): `created`
     - `message` (str): Registration successful.
     - `user` (dict): Registered user details.
       - `id` (int)
@@ -131,7 +135,7 @@
       - `address` (str)
       - `websiteURL` (str)
       - `description` (str)
-      - `logoPath` (str)
+      - `logoPath` (str | None)
     - `access_token` (str): JWT token for authentication.
 
 - **400 Bad Request**:
@@ -168,6 +172,7 @@ POST /api/register/university
 
 ```json
 {
+  "type": "created",
   "message": "Registration successful",
   "user": {
     "id": 1,
@@ -215,6 +220,7 @@ POST /api/register/university
 
 - **201 Created**:
   - **Body (JSON)**:
+    - `type` (str): `created`
     - `message` (str): Registration successful.
     - `user` (dict): Registered user details.
       - `id` (int)
@@ -241,7 +247,7 @@ POST /api/register/university
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`server_error`).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details>
@@ -274,6 +280,7 @@ POST /api/register/student
 
 ```json
 {
+  "type": "created",
   "message": "Registration successful",
   "user": {
     "id": 1,
@@ -320,13 +327,14 @@ POST /api/register/student
 
 - **201 Created**:
   - **Body (JSON)**:
+    - `type` (str): `created`
     - `message` (str): Registration successful.
     - `user` (dict): Registered user details.
       - `id` (int)
       - `email` (str)
       - `type` (str): User type (_'company'_)
       - `companyName` (str)
-      - `logoPath` (str)
+      - `logoPath` (str | None)
       - `description` (str)
       - `location` (str)
     - `access_token` (str): JWT token for authentication.
@@ -363,6 +371,7 @@ POST /api/register/company
 
 ```json
 {
+  "type": "created",
   "message": "Registration successful",
   "user": {
     "id": 1,
@@ -397,7 +406,8 @@ POST /api/register/company
 
 - **200 OK**:
   - **Body (JSON) [Student]**:
-    - `message` (str): Success message.
+    - `type` (str): `success`
+    - `message` (str): Login successful.
     - `user` (dict): Logged-in user details.
       - `id` (int)
       - `email` (str)
@@ -405,31 +415,33 @@ POST /api/register/company
       - `firstName` (str)
       - `lastName` (str)
       - `phoneNumber` (str)
-      - `profilePicture` (str)
+      - `profilePicture` (str | None)
       - `location` (str)
       - `universityId` (int)        
       - `degreeProgram` (str)
-      - `GPA` (float)
-      - `graduationYear` (int)
+      - `GPA` (float | None)
+      - `graduationYear` (int | None)
       - `skills` (str)
       - `CV` (str)
       - `languageSpoken` (str)
     - `access_token` (str): JWT token for authentication.
 
   - **Body (JSON) [Company]**:
-    - `message` (str): Success message.
+    - `type` (str): `success`
+    - `message` (str): Login successful.
     - `user` (dict): Logged-in user details.
       - `id` (int)
       - `email` (str)
       - `type` (str): User type (_'company'_)
       - `companyName` (str)
-      - `logoPath` (str)
+      - `logoPath` (str | None)
       - `description` (str)
       - `location` (str)
     - `access_token` (str): JWT token for authentication.
 
   - **Body (JSON) [University]**:
-    - `message` (str): Success message.
+    - `type` (str): `success`
+    - `message` (str): Login successful.
     - `user` (dict): Logged-in user details.
       - `id` (int)
       - `email` (str)
@@ -438,22 +450,22 @@ POST /api/register/company
       - `address` (str)
       - `websiteURL` (str)
       - `description` (str)
-      - `logoPath` (str)
+      - `logoPath` (str | None)
     - `access_token` (str): JWT token for authentication.
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (invalid_request).
+    - `type` (str): `invalid_request`
     - `message` (str): Error message, such as "Email and password are required."
 
 - **401 Unauthorized**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (invalid_credentials).
+    - `type` (str): `invalid_credentials`
     - `message` (str): Error message, such as "Invalid email or password."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (server_error).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details> 
@@ -475,6 +487,7 @@ POST /api/userlogin
 **For a student**
 ```json
 {
+  "type": "success",
   "message": "Login successful",
   "user": {
     "id": 1,
@@ -500,6 +513,7 @@ POST /api/userlogin
 **For a company**
 ```json
 {
+  "type": "success",
   "message": "Login successful",
   "user": {
     "id": 2,
@@ -517,6 +531,7 @@ POST /api/userlogin
 **For a university**
 ```json
 {
+  "type": "success",
   "message": "Login successful",
   "user": {
     "id": 3,
@@ -551,11 +566,12 @@ POST /api/userlogin
 
 - **200 OK**:
   - **Body (JSON)**:
+    - `type` (str): `success`
     - `message` (str): Success message indicating the user has been logged out.
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`server_error`).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details>
@@ -593,16 +609,18 @@ Headers: {
 
 - **200 OK**:
   - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Access granted."
     - `user` (dict): Authenticated user details.
 
 - **401 Unauthorized**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`unauthorized`).
+    - `type` (str): `unauthorized`
     - `message` (str): Error message, such as "Missing or invalid token."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`server_error`).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details>
@@ -622,6 +640,8 @@ Headers: {
 
 ```json
 {
+  "type": "success",
+  "message": "Access granted",
   "user": {
     "id": 1,
     "email": "user@example.com",
@@ -660,12 +680,12 @@ Headers: {
 - **Body (JSON)**:
   - `companyId` (int, required): The ID of the company.
   - `programName` (str, required): The name of the program.
-  - `duration` (str, required): The duration of the internship.
+  - `duration` (int, required): The duration of the internship.
   - `location` (str, required): The location of the internship.
   - `roleTitle` (str, required): The title of the role.
   - `skillsRequired` (str, required): The skills required for the internship.
-  - `compensation` (str, required): The compensation for the internship.
-  - `benefits` (str, required): The benefits of the internship.
+  - `compensation` (int, optional): The compensation for the internship.
+  - `benefits` (str, optional): The benefits of the internship.
   - `languagesRequired` (str, required): The languages required for the internship.
   - `description` (str, required): The description of the internship.
 
@@ -673,29 +693,22 @@ Headers: {
 
 - **201 Created**:
   - **Body (JSON)**:
+    - `type` (str): `created`
     - `message` (str): Internship position posted successfully.
-    - `internship_position` (dict): Posted internship details.
-      - `id` (int)
-      - `companyId` (int)
-      - `programName` (str)
-      - `duration` (str)
-      - `location` (str)
-      - `roleTitle` (str)
-      - `skillsRequired` (str)
-      - `compensation` (str)
-      - `benefits` (str)
-      - `languagesRequired` (str)
-      - `description` (str)
-      - `status` (str)
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (`invalid_request`).
+    - `type` (str): `invalid_request`
     - `message` (str): Error message.
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "Only companies can post internships."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`server_error`).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details>
@@ -709,11 +722,11 @@ Headers: {
 {
   "companyId": 1,
   "programName": "Summer Internship",
-  "duration": "3 months",
+  "duration": 3,
   "location": "New York, NY",
   "roleTitle": "Software Engineer Intern",
   "skillsRequired": "Python, JavaScript",
-  "compensation": "$3000/month",
+  "compensation": 3000,
   "benefits": "Health insurance, Gym membership",
   "languagesRequired": "English",
   "description": "An exciting opportunity to work with our software development team."
@@ -727,21 +740,8 @@ Headers: {
 
 ```json
 {
+  "type": "created",
   "message": "Internship position posted successfully",
-  "internship_position": {
-    "id": 1,
-    "companyId": 1,
-    "programName": "Summer Internship",
-    "duration": "3 months",
-    "location": "New York, NY",
-    "roleTitle": "Software Engineer Intern",
-    "skillsRequired": "Python, JavaScript",
-    "compensation": "$3000/month",
-    "benefits": "Health insurance, Gym membership",
-    "languagesRequired": "English",
-    "description": "An exciting opportunity to work with our software development team.",
-    "status": "open"
-  }
 }
 ```
 
@@ -767,33 +767,35 @@ Headers: {
 
 - **200 OK**:
   - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internship position retrieved successfully."
     - `internship_position` (dict): Internship position details.
       - `internshipPositionId` (int)
       - `companyId` (int)
       - `programName` (str)
-      - `duration` (str)
+      - `duration` (int)
       - `location` (str)
       - `roleTitle` (str)
       - `skillsRequired` (str)
-      - `compensation` (str)
-      - `benefits` (str)
+      - `compensation` (int | None)
+      - `benefits` (str | None)
       - `languagesRequired` (str)
       - `description` (str)
       - `status` (str)
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (`invalid_request`).
+    - `type` (str): `invalid_request`
     - `message` (str): Error message.
 
 - **404 Not Found**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (`not_found`).
+    - `type` (str): `not_found`
     - `message` (str): Error message, such as "Internship position not found."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`server_error`).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details>
@@ -816,15 +818,17 @@ Headers: {
 
 ```json
 {
+  "type": "success",
+  "message": "Internship position retrieved successfully.",
   "internship_position": {
     "internshipPositionId": 1,
     "companyId": 1,
     "programName": "Summer Internship",
-    "duration": "3 months",
+    "duration": 3,
     "location": "New York, NY",
     "roleTitle": "Software Engineer Intern",
     "skillsRequired": "Python, JavaScript",
-    "compensation": "$3000/month",
+    "compensation": 3000,
     "benefits": "Health insurance, Gym membership",
     "languagesRequired": "English",
     "description": "An exciting opportunity to work with our software development team.",
@@ -855,33 +859,35 @@ Headers: {
 
 - **200 OK**:
   - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internship positions retrieved successfully."
     - `internship_positions` (list): List of internship positions.
-      - `id` (int)
+      - `internshipPositionId` (int)
       - `companyId` (int)
       - `programName` (str)
-      - `duration` (str)
+      - `duration` (int)
       - `location` (str)
       - `roleTitle` (str)
       - `skillsRequired` (str)
-      - `compensation` (str)
-      - `benefits` (str)
+      - `compensation` (int | None)
+      - `benefits` (str | None)
       - `languagesRequired` (str)
       - `description` (str)
       - `status` (str)
 
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (`invalid_request`).
-    - `message` (str): Error message.
+    - `type` (str): `invalid_request`
+    - `message` (str): "Invalid company ID."
 
 - **404 Not Found**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (`not_found`).
+    - `type` (str): `not_found`
     - `message` (str): Error message, such as "No internships found for the given company ID."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`server_error`).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details>
@@ -904,16 +910,18 @@ Headers: {
 
 ```json
 {
+  "type": "success",
+  "message": "Internship positions retrieved successfully.",
   "internship_positions": [
     {
       "internshipPositionId": 1,
       "companyId": 1,
       "programName": "Summer Internship",
-      "duration": "3 months",
+      "duration": 3,
       "location": "New York, NY",
       "roleTitle": "Software Engineer Intern",
       "skillsRequired": "Python, JavaScript",
-      "compensation": "$3000/month",
+      "compensation": 3000,
       "benefits": "Health insurance, Gym membership",
       "languagesRequired": "English",
       "description": "An exciting opportunity to work with our software development team.",
@@ -923,11 +931,11 @@ Headers: {
       "internshipPositionId": 2,
       "companyId": 1,
       "programName": "Winter Internship",
-      "duration": "2 months",
+      "duration": 2,
       "location": "San Francisco, CA",
       "roleTitle": "Data Analyst Intern",
       "skillsRequired": "SQL, Python",
-      "compensation": "$2500/month",
+      "compensation": 2500,
       "benefits": "Health insurance, Gym membership",
       "languagesRequired": "English",
       "description": "An exciting opportunity to work with our data analysis team.",
@@ -959,21 +967,26 @@ Headers: {
 
 - **200 OK**:
   - **Body (JSON)**:
-    - `message` (str): Success message indicating the internship position has been closed.
-
+    - `type` (str): `success`
+    - `message` (str): "Internship position closed successfully."
 - **400 Bad Request**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (`invalid_request`).
-    - `message` (str): Error message.
+    - `type` (str): `invalid_request`
+    - `message` (str): "Invalid internship ID."
+  
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "Only companies can close internships." or "You are not authorized to close this internship."
 
 - **404 Not Found**:
   - **Body (JSON)**:
-    - `type` (str): Type of the error (`not_found`).
+    - `type` (str): `not_found`
     - `message` (str): Error message, such as "Internship position not found."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
-    - `type` (str): Type of error (`server_error`).
+    - `type` (str): `server_error`
     - `message` (str): Error message.
 
 <details>
@@ -996,6 +1009,7 @@ Headers: {
 
 ```json
 {
+  "type": "success",
   "message": "Internship position closed successfully"
 }
 ```

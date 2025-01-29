@@ -1,6 +1,6 @@
 from app.models.user import User
 from app.db.dbModels.company_db import CompanyDB
-from typing import Optional
+from typing import Optional, Union
 
 
 class Company(User):
@@ -14,28 +14,31 @@ class Company(User):
     #def __repr__(self):
     #    return f"<Company: ({self.id}) {self.companyName}, Email: {self.email}"
 
-    def get_id(self):
+    def get_id(self) -> int:
         return super().get_id()
     
-    def get_email(self):
+    def get_email(self) -> str:
         return super().get_email()
     
-    def get_password(self):
+    def get_password(self) -> str:
         return super().get_password()
     
-    def get_type(self):
+    def get_type(self) -> str:
         return super().get_type()
     
-    def get_companyName(self):
+    def get_companyName(self) -> str:
         return self.companyName
     
-    def get_logoPath(self):
+    def get_logoPath(self) -> Union[str, None]:
         return self.logoPath
     
-    def get_description(self):
+    def get_description(self) -> str:
         return self.description
     
-    def to_dict(self):
+    def get_location(self) -> str:
+        return self.location
+    
+    def to_dict(self) -> dict:
         user_dict = super().to_dict()
         user_dict.update({
             'companyName': self.companyName,
@@ -47,13 +50,12 @@ class Company(User):
 
 
     @staticmethod
-    def add(email: str, password: str, companyName: str, logoPath: Optional[str], description: str, location: str):
+    def add(email: str, password: str, companyName: str, logoPath: Optional[str], description: str, location: str) -> Union['Company', Exception, None]:
         try:
             # Insert company data into the database
             companyConn = CompanyDB()
             companyId = companyConn.insert(email, password, companyName, logoPath, description, location)
-
-            return Company(companyId, email, password, companyName, logoPath, description, location)
+            return Company(companyId, email, password, companyName, logoPath, description, location) if companyId else None
         
         except Exception as e:
             raise e
@@ -61,8 +63,9 @@ class Company(User):
         finally:
             companyConn.close() 
     
+
     @staticmethod
-    def get_by_id(id: int):
+    def get_by_id(id: int) -> Union['Company', None, Exception]:
         """
         Retrieve a company record by its unique identifier and return it as a Company object.
 
@@ -79,8 +82,9 @@ class Company(User):
         finally:
             companyConn.close()
 
+
     @staticmethod
-    def get_by_email(email: str):
+    def get_by_email(email: str) -> Union['Company', None, Exception]:
         """
         Retrieve a company record by its email and return it as a Company object.
 

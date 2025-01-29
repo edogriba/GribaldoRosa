@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request
 from .json_return import json_success, json_unsupported_media_type
 
 def validate_request():

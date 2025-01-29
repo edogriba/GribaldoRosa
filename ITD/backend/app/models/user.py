@@ -1,4 +1,5 @@
 from app.db.dbModels.user_db import UserDB
+from typing import Union
 
 DATABASE = 'app/SC.db'
 
@@ -9,19 +10,19 @@ class User():
         self.password = password
         self.type = type
         
-    def get_id(self):
+    def get_id(self) -> int:
         return self.id
     
-    def get_type(self):
+    def get_type(self) -> str:
         return self.type
 
-    def get_email(self):
+    def get_email(self) -> str:
         return self.email
     
-    def get_password(self):
+    def get_password(self) -> str:
         return self.password
     
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'id': self.id,
             'email': self.email,
@@ -30,7 +31,7 @@ class User():
     
     
     @staticmethod
-    def is_email_unique(email: str):
+    def is_email_unique(email: str) -> Union[bool, Exception]:
         """
         Check if the provided email is unique in the Users table.
 
@@ -47,7 +48,7 @@ class User():
             userConn.close()
 
     @staticmethod        
-    def get_type_by_email(email: str):
+    def get_type_by_email(email: str) -> Union[str, None, Exception]:
         """
         Retrieve a user record by email and return the corresponding type.
 
@@ -65,7 +66,7 @@ class User():
             userConn.close()
 
     @staticmethod        
-    def get_type_by_id(id: str):
+    def get_type_by_id(id: str) -> Union[str, None, Exception]:
         """
         Retrieve a user record by ID and return the corresponding type.
 
@@ -82,16 +83,13 @@ class User():
         finally:
             userConn.close()
 
-    def check_password(self, password: str):
+    def check_password(self, password: str) -> bool:
         """
         Check if the provided password matches the user's password.
 
         :param password: The password to check.
         :return: True if the password matches, otherwise False.
         """
-        print("password: ", password)
-        print("self.password: ", self.password)
-
         return self.password == password
     
 

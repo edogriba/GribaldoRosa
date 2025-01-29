@@ -59,6 +59,26 @@ class TestUniversityDB(unittest.TestCase):
         self.assertEqual(university['logoPath'], "path/to/logo.jpg")
 
 
+    def test_insert_university_no_logo(self):
+        university_id = self.db.insert(
+            email="university@example.com", password="password", name="Test University", address="123 University St",
+            websiteURL="http://www.testuniversity.com", description="A test university",
+            logoPath=None
+        )
+        self.assertIsNotNone(university_id)
+        
+        university = self.db.get_by_id(university_id)
+        self.assertIsNotNone(university)
+        self.assertEqual(university['id'], university_id)
+        self.assertEqual(university['email'], "university@example.com")
+        self.assertEqual(university['password'], "password")
+        self.assertEqual(university['name'], "Test University")
+        self.assertEqual(university['address'], "123 University St")
+        self.assertEqual(university['websiteURL'], "http://www.testuniversity.com")
+        self.assertEqual(university['description'], "A test university")
+        self.assertIsNone(university['logoPath'])
+
+
     def test_insert_invalid_university(self):
         with self.assertRaises(Exception):
             self.db.insert(

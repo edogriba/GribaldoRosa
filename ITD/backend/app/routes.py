@@ -45,7 +45,7 @@ def create_main_app():
             data = request.get_json()
 
             login_manager = LoginManager()
-            return login_manager.login(data)     
+            return login_manager.login(**data)     
         except Exception as e:
             return handle_error(e)
 
@@ -176,7 +176,7 @@ def create_main_app():
             data = request.get_json()
 
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_position_by_id(data.get('internshipPositionId'))
+            return internship_manager.get_internship_position_by_id(**data)
 
         except Exception as e:
             return handle_error(e)
@@ -193,7 +193,7 @@ def create_main_app():
             data = request.get_json() 
 
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_positions_by_company(data.get('id'))
+            return internship_manager.get_internship_positions_by_company(**data)
 
         except Exception as e:
             return handle_error(e)
@@ -210,7 +210,7 @@ def create_main_app():
             data = request.get_json()
 
             internship_manager = InternshipManager()
-            return internship_manager.close_internship_position(data.get('internshipPositionId'))
+            return internship_manager.close_internship_position(**data)
 
         except Exception as e:
             return handle_error(e)
