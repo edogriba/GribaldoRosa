@@ -25,7 +25,7 @@ const HomeCompany = () => {
                                 </svg>
                                 </div>
                                 <h3 className="mb-2 text-xl font-bold dark:text-white">Update Your Information</h3>
-                                <p className="text-gray-500 dark:text-gray-400">Keep your profile information up to defaultValue</p>
+                                <p className="text-gray-500 dark:text-gray-400">Keep your profile information up to date</p>
                             </div>
                         </Link>
                         <Link to="/companies/create-position">

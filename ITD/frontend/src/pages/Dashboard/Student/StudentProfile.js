@@ -14,7 +14,7 @@ const StudentProfile = () => {
                 <Navbar user={user} onLogout={userLogout}/>
                 <StudentTab activeTab='profile'/>
             </div>
-                <div className='flex p-5 h-'>
+                <div className='flex p-5 justify-evenly'>
                     <StudentProfileCard />
                     <StudentProfileTable />
                 </div>

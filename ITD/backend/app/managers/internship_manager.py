@@ -79,8 +79,11 @@ class InternshipManager:
                 return json_unauthorized("Only companies can close internships.")
             
             internship = InternshipPosition.get_by_id(internshipId)
+            print("Internship : ", internship.to_dict())
+            print("Company ID : ", get_current_user().get_id())
+            print("Internship Company ID : ", internship.get_companyId())
             if internship:
-                if internship.get_companyId() == get_current_user().get_id():
+                if str(internship.get_companyId()) == str(get_current_user().get_id()):
                     internship.close()
                     return json_success("Internship position closed successfully.")
                 else:

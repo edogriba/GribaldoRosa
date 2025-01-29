@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState} from 'react';
 import { api } from '../../../api/api';
 import { UserContext } from '../../../context/UserContext';
+import { toast } from 'react-hot-toast';
 
 const RegisterCompany = () => {
     const [email, setEmail] = useState('');
@@ -41,7 +42,7 @@ const RegisterCompany = () => {
         navigate("/companies/home");
       } catch (error) {
         console.error('Error registering company:', error.response?.data?.message || error.message);
-        alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+        toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
       }
     };
   return (

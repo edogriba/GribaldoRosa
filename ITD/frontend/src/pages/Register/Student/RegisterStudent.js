@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { api } from '../../../api/api';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-
+import { toast } from 'react-hot-toast';
 const RegisterStudent = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -72,7 +72,7 @@ const RegisterStudent = () => {
       return <Link to="/students/home"></Link>;
     } catch (error) {
       console.error('Error registering student:', error.response?.data?.message || error.message);
-      alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+      toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
     }
   };
   

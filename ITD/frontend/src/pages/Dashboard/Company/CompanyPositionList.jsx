@@ -1,34 +1,64 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../../context/UserContext";
 import { api } from "../../../api/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const CompanyPositionList = () => {
     const { user } = useContext(UserContext);
     const [positions, setPositions] = useState([]); 
-
-    
+    const [filteredPositions, setFilteredPositions] = useState([]); 
+    const [positionType, setPositionType] = useState("All"); 
+    const [positionAvailability, setPositionAvailability] = useState("All"); 
+    const [possiblePositions, setPossiblePositions] = useState([]);
+    const { navigate } = useNavigate(); 
     useEffect(() => {
         const fetchPositions = async () => {
         try {
-            console.log(user.id);
             const res = await api.getPositionList(user);
-            console.log(res);
             const data = await res.json();
-            console.log(data);
 
             setPositions(data.internship_positions);
+            setFilteredPositions(data.internship_positions);
+            let roles = [];
+            if (data.internship_positions) {
+                roles = [...new Set(data.internship_positions.map((pos) => pos.roleTitle))];
 
+            }
+            setPossiblePositions(roles);
         } catch (error) {
             console.error('Error fetching positions:', error.message);
+            console.log(error);
+            if (error.status === 404) {
+                toast.error("Session expired please login again");
+                navigate("/login");
+            }
             alert('Failed to load positions. Please try again later.');
         }
         };
 
         fetchPositions();
-        console.log(positions);
-    }, []);
+    }, [user]);
 
+    useEffect(() => {
+        const filterResults = () => {
+            let filtered = positions;
+
+            if (positionAvailability !== "All") {
+                filtered = filtered.filter((position) => position.status === positionAvailability);
+            }
+
+            if (positionType !== "All") {
+                filtered = filtered.filter((position) => position.roleTitle === positionType);
+            }
+            
+            setFilteredPositions(filtered);
+        };
+
+        filterResults();
+    }, [positionType, positionAvailability, positions]);
+
+    
     return (
         <div>
             <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
@@ -37,43 +67,45 @@ const CompanyPositionList = () => {
                         <div className="gap-4 lg:flex lg:items-center lg:justify-between">
                             <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">My Positions</h2>
 
-                            <div className="mt-6 gap-4 space-y-4 sm:flex sm:items-center sm:space-y-0 lg:mt-0 lg:justify-end">
-                                <div>
+                                <div className="mt-6 gap-4 space-y-4 sm:flex sm:items-center sm:space-y-0 lg:mt-0 lg:justify-end">
+                                <div >
                                     <label
-                                        htmlFor="order-type"
+                                        htmlFor="positionAvailability"
                                         className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                                     >
-                                        Select order type
+                                        Select positionAvailability
                                     </label>
                                     <select
-                                        id="order-type"
+                                        id="positionAvailability"
                                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]"
+                                        value={positionAvailability}
+                                        onChange={(e) => setPositionAvailability(e.target.value)}
                                     >
-                                        <option selected>All applications</option>
-                                        <option value="ongoing">Ongoing</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="denied">Denied</option>
+                                        <option key="All" value="All">All</option>
+                                        <option key="Open" value="Open">Open</option>
+                                        <option key="Closed" value="Closed">Closed</option>
                                     </select>
                                 </div>
 
-                                <span className="inline-block text-gray-500 dark:text-gray-400">from</span>
-
+                                <span className="inline-block text-gray-500 dark:text-gray-400">for</span>
+                                
                                 <div>
                                     <label
-                                        htmlFor="date"
+                                        htmlFor="position-type"
                                         className="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                                     >
-                                        Select date
+                                        Select position type
                                     </label>
                                     <select
-                                        id="date"
+                                        id="position-type"
                                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]"
+                                        value={positionType}
+                                        onChange={(e) => setPositionType(e.target.value)}
                                     >
-                                        <option selected>this week</option>
-                                        <option value="this month">this month</option>
-                                        <option value="last 3 months">the last 3 months</option>
-                                        <option value="last 6 months">the last 6 months</option>
-                                        <option value="this year">this year</option>
+                                        <option key="All" value="All">All roles</option>
+                                        {Array.isArray(possiblePositions) && possiblePositions.map((type) => (
+                                            <option key={type} value={type}>{type}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <Link to="/companies/create-position">
@@ -90,13 +122,13 @@ const CompanyPositionList = () => {
                         {/* Position list */}
                         <div className="mt-6 flow-root sm:mt-8">
                             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                            { Array.isArray(positions) ? (positions.map((position) => (
+                            { Array.isArray(filteredPositions) ? (filteredPositions.map((position) => (
                                 <div
-                                    key={position.id}
+                                    key={position.internshipPositionId}
                                     className="relative bg-gray-50 p-5 rounded shadow grid grid-cols-2 gap-4 py-6 sm:grid-cols-4 lg:grid-cols-5"
                                 >
-                                    {/* Position ID */}
-                                    <div className="col-span-2 flex justify-center items-center sm:col-span-4 lg:col-span-1">
+                                    {/* Position Name */}
+                                    <div className="col-span-2 flex items-center sm:col-span-4 lg:col-span-1">
                                         <span className="text-base font-semibold text-gray-900 hover:underline dark:text-white">
                                             {position.programName}
                                         </span>
@@ -129,7 +161,7 @@ const CompanyPositionList = () => {
                                     </div>
 
                                     {/* Position Role */}
-                                    <div className="flex justify-center items-center">
+                                    <div className="flex items-center">
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                             <span className="font-medium text-gray-900 dark:text-white">
                                                 Role
@@ -155,12 +187,14 @@ const CompanyPositionList = () => {
 
                                     {/* View Details Button */}
                                     <div className="col-span-2 flex justify-center items-center sm:col-span-1">
-                                        <button
-                                            type="button"
-                                            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto"
-                                        >
-                                            View details
-                                        </button>
+                                        <Link to={`/companies/dashboard/positions/${position.internshipPositionId}`}>
+                                            <button
+                                                type="button"
+                                                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto"
+                                            >
+                                                View details
+                                            </button>
+                                        </Link>
                                     </div>
                                 </div>
 
