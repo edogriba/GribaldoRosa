@@ -1,5 +1,5 @@
 from flask_jwt_extended import get_current_user
-from ..models import Application, InternshipPosition
+from ..models import Application, InternshipPosition, Internship
 from ..utils import json_invalid_request, json_unauthorized, json_success, json_created, json_not_found
 
     # pending -> rejected / accepted -> refused (if accepted) / confirmed (if accepted)
@@ -106,11 +106,16 @@ class ApplicationManager:
             if get_current_user().get_id() != application.get_studentId():
                 return json_unauthorized("Only the student that applied can confirm applications.")
             
-            if application.is_accepted():
-                application.confirm()
-                return json_success("Application confirmed successfully.")
-            else:
+            if not application.is_accepted():
                 return json_invalid_request("Invalid application status.")
+            
+            application.confirm()
+            
+            if not  Internship.add(application.get_internshipPositionId(), application.get_studentId()):
+                application.accept()
+                return json_invalid_request("Internship could not be added.")
+            
+            return json_success("Application confirmed successfully.")
         
         except Exception as e:
             return e

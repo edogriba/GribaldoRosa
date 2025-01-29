@@ -60,6 +60,21 @@
     - [19. Get Applications by Internship Position](#19-get-applications-by-internship-position)
       - [Request Parameters](#request-parameters-16)
       - [Response](#response-18)
+    - [20. Get Internship Previews by Company](#20-get-internship-previews-by-company)
+      - [Request Parameters](#request-parameters-17)
+      - [Response](#response-19)
+    - [21. Get Internship Previews by Student](#21-get-internship-previews-by-student)
+      - [Request Parameters](#request-parameters-18)
+      - [Response](#response-20)
+    - [22. Get Internship Previews by University](#22-get-internship-previews-by-university)
+      - [Request Parameters](#request-parameters-19)
+      - [Response](#response-21)
+    - [23. Get Full Internship Data by ID](#23-get-full-internship-data-by-id)
+      - [Request Parameters](#request-parameters-20)
+      - [Response](#response-22)
+    - [24. Finish Internship](#24-finish-internship)
+      - [Request Parameters](#request-parameters-21)
+      - [Response](#response-23)
 
 ## Endpoints
 
@@ -668,7 +683,7 @@ Headers: {
 
 ### 8. Post Internship Position
 
-- **Endpoint**: `/api/internship/post`
+- **Endpoint**: `/api/internship_position/post`
 - **Method**: `POST`
 - **Description**: Posts a new internship position with required details.
 
@@ -751,7 +766,7 @@ Headers: {
 
 ### 9. Get Internship Position by ID
 
-- **Endpoint**: `/api/internship/get_by_id`
+- **Endpoint**: `/api/internship_position/get_by_id`
 - **Method**: `POST`
 - **Description**: Retrieves the details of an internship position by its ID.
 
@@ -843,7 +858,7 @@ Headers: {
 
 ### 10. Get Internship Positions by Company
 
-- **Endpoint**: `/api/internship/get_by_company`
+- **Endpoint**: `/api/internship_position/get_by_company`
 - **Method**: `POST`
 - **Description**: Retrieves all internship positions posted by a specific company.
 
@@ -951,7 +966,7 @@ Headers: {
 
 ### 11. Close Internship Position
 
-- **Endpoint**: `/api/internship/close`
+- **Endpoint**: `/api/internship_position/close`
 - **Method**: `POST`
 - **Description**: Closes an existing internship position.
 
@@ -1686,6 +1701,475 @@ Headers: {
       }
     }
   ]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 20. Get Internship Previews by Company
+
+- **Endpoint**: `/api/internship/get_by_company`
+- **Method**: `POST`
+- **Description**: Retrieves a preview of all internship positions posted by a specific company.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `companyId` (int, required): The ID of the company.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internships retrieved successfully."
+    - `internshipsPreview` (list): List of internship previews.
+      - `student_name` (str)
+      - `student_photoPath` (str | None)
+      - `internshipId` (int)
+      - `roleTitle` (str)
+      - `status` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): "Invalid company ID."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "You are not authorized to view internships posted by this company."
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): `not_found`
+    - `message` (str): "No internship previews found for the given company ID."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/get_by_company
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "companyId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Internships retrieved successfully.",
+  "internshipsPreview": [
+    {
+      "student_name": "Alice Smith",
+      "student_photoPath": "/images/alice.png",
+      "internshipId": 1,
+      "roleTitle": "Software Engineer Intern",
+      "status": "open"
+    },
+    {
+      "student_name": "Bob Johnson",
+      "student_photoPath": "/images/bob.png",
+      "internshipId": 2,
+      "roleTitle": "Data Analyst Intern",
+      "status": "closed"
+    }
+  ]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 21. Get Internship Previews by Student
+
+- **Endpoint**: `/api/internship/get_by_student`
+- **Method**: `POST`
+- **Description**: Retrieves a preview of all internship positions applied for by a specific student.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `studentId` (int, required): The ID of the student.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internships retrieved successfully."
+    - `internshipsPreview` (list): List of internship previews.
+      - `company_name` (str)
+      - `company_photoPath` (str | None)
+      - `internshipId` (int)
+      - `roleTitle` (str)
+      - `status` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): "Invalid student ID."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "You are not authorized to view internships for this student."
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): `not_found`
+    - `message` (str): "No internship previews found for the given student ID."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/get_by_student
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "studentId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Internships retrieved successfully.",
+  "internshipsPreview": [
+    {
+      "company_name": "XYZ Corporation",
+      "company_photoPath": "/images/xyz_logo.png",
+      "internshipId": 1,
+      "roleTitle": "Software Engineer Intern",
+      "status": "open"
+    },
+    {
+      "company_name": "ABC Inc.",
+      "company_photoPath": "/images/abc_logo.png",
+      "internshipId": 2,
+      "roleTitle": "Data Analyst Intern",
+      "status": "closed"
+    }
+  ]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 22. Get Internship Previews by University
+
+- **Endpoint**: `/api/internship/get_by_university`
+- **Method**: `POST`
+- **Description**: Retrieves a preview of all internship positions associated with a specific university.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `universityId` (int, required): The ID of the university.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internships retrieved successfully."
+    - `internshipsPreview` (list): List of internship previews.
+      - `student_name` (str)
+      - `company_name` (str)
+      - `internshipId` (int)
+      - `roleTitle` (str)
+      - `status` (str)
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): "Invalid university ID."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "You are not authorized to view internships for this university."
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): `not_found`
+    - `message` (str): "No internship previews found for the given university ID."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/get_by_university
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "universityId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Internships retrieved successfully.",
+  "internshipsPreview": [
+    {
+      "student_name": "Alice Smith",
+      "company_name": "XYZ Corporation",
+      "internshipId": 1,
+      "roleTitle": "Software Engineer Intern",
+      "status": "open"
+    },
+    {
+      "student_name": "Bob Johnson",
+      "company_name": "ABC Inc.",
+      "internshipId": 2,
+      "roleTitle": "Data Analyst Intern",
+      "status": "closed"
+    }
+  ]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 23. Get Full Internship Data by ID
+
+- **Endpoint**: `/api/internship/get_by_id`
+- **Method**: `POST`
+- **Description**: Retrieves the full details of an internship position by its ID.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `internshipPositionId` (int, required): The ID of the internship position.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internship position retrieved successfully."
+    - `internship` (dict): Internship details.
+    - `internshipPosition` (dict): Internship position details.
+    - `application` (dict): Application details.
+    - `student` (dict): Student details.
+    - `company` (dict): Company details.
+
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message.
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): `not_found`
+    - `message` (str): Error message, such as "Internship position not found."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/get_by_id
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "internshipPositionId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Internship position retrieved successfully.",
+  "internship": {
+    "internshipId": 3,
+    "internshipPositionId": 1,
+    "applicationId": 2,
+    "status": "Ongoing"
+  },
+  "internshipPosition": {
+    "internshipPositionId": 1,
+    "companyId": 1,
+    "programName": "Summer Internship",
+    "duration": 3,
+    "location": "New York, NY",
+    "roleTitle": "Software Engineer Intern",
+    "skillsRequired": "Python, JavaScript",
+    "compensation": 4000,
+    "benefits": "Health insurance, Gym membership",
+    "languagesRequired": "English",
+    "description": "An exciting opportunity to work with our software development team.",
+    "status": "Open"
+  },
+  "application": {
+    "applicationId": 1,
+    "studentId": 1,
+    "internshipPositionId": 1,
+    "status": "Pending"
+  },
+  "student": {
+    "id": 1,
+    "email": "student@mit.edu",
+    "type": "student",
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "phoneNumber": "1234567890",
+    "profilePicture": "/images/alice.png",
+    "location": "Cambridge, MA",
+    "universityId": 1,
+    "degreeProgram": "Computer Science",
+    "GPA": 3.8,
+    "graduationYear": 2025,
+    "skills": "Python, Machine Learning",
+    "CV": "/cvs/alice_smith.pdf",
+    "languageSpoken": "English, Spanish"
+  },
+  "company": {
+    "id": 1,
+    "email": "company@xyz.com",
+    "type": "company",
+    "companyName": "XYZ Corporation",
+    "logoPath": "/images/xyz_logo.png",
+    "description": "Leading software solutions provider.",
+    "location": "New York, NY"
+    }
+  }
+```
+
+</details>
+
+------------------------------------------------
+
+### 24. Finish Internship
+
+- **Endpoint**: `/api/internship/finish`
+- **Method**: `POST`
+- **Description**: Marks an internship as finished.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `internshipId` (int, required): The ID of the internship.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internship finished successfully."
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message, such as "Invalid internship ID." or "Invalid student ID."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "You are not authorized to finish this internship."
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): `not_found`
+    - `message` (str): Error message, such as "Internship not found."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/internship/finish
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "internshipId": 1,
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Internship finished successfully"
 }
 ```
 

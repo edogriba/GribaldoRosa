@@ -2,7 +2,7 @@ from flask_jwt_extended import get_current_user
 from typing import Union
 
 from ..services.auth_service import *
-from ..models import InternshipPosition
+from ..models import InternshipPosition, Internship, Student, Company, Application
 from ..utils import json_unauthorized, json_invalid_request, json_not_found, json_created, json_success
 from ..services.auth_service import is_id_valid
 
@@ -88,18 +88,157 @@ class InternshipManager:
                 return json_unauthorized("Only companies can close internships.")
             
             internship = InternshipPosition.get_by_id(internshipPositionId)
-            if internship:
-                if internship.get_companyId() == get_current_user().get_id():
-                    internship.close()
-                    return json_success("Internship position closed successfully.")
-                else:
-                    return json_unauthorized("You are not authorized to close this internship.")
-            else:
+            if not internship:
                 return json_not_found("Internship position not found.")
+            
+            if internship.get_companyId() != get_current_user().get_id():
+                return json_unauthorized("You are not authorized to close this internship position.")
+            
+            internship.close()
+            applications = Application.get_by_internshipPositionId(internshipPositionId)
+            for application in applications:
+                if application.is_pending() or application.is_accepted():
+                    application.reject()
+            return json_success("Internship position closed successfully.")
+        
+        except Exception as e:
+            return e
+    
+    
+    def get_internships_preview_by_company(self, companyId: int):
+        """
+        Get a preview of all internships posted by a company.
+
+        :param companyId: The ID of the company.
+        :return: JSON response containing the preview of internships posted by the company if the request is successful, 
+                 or an error message if the request fails
+        """
+        try:
+            if not is_id_valid(companyId):
+                return json_invalid_request("Invalid company ID.")
+            if get_current_user().get_id() != companyId:
+                return json_unauthorized("You are not authorized to view internships posted by this company.")
+            
+            internshipsPreview = Internship.get_preview_by_companyId(companyId)
+            return json_success("Internships retrieved successfully.", internshipsPreview = internshipsPreview)
         
         except Exception as e:
             return e
         
+    
+    def get_internships_preview_by_student(self, studentId: int):
+        """
+        Get a preview of all internships applied to by a student.
+
+        :param studentId: The ID of the student.
+        :return: JSON response containing the preview of internships applied to by the student if the request is successful, 
+                 or an error message if the request fails
+        """
+        try:
+            if not is_id_valid(studentId):
+                return json_invalid_request("Invalid student ID.")
+            if get_current_user().get_id() != studentId:
+                return json_unauthorized("You are not authorized to view internships applied to by this student.")
+            
+            internshipsPreview = Internship.get_preview_by_studentId(studentId)
+            return json_success("Internships retrieved successfully.", internshipsPreview = internshipsPreview)
+        
+        except Exception as e:
+            return e
+        
+    
+    def get_internships_preview_by_university(self, universityId: int):
+        """
+        Get a preview of all internships posted by companies that are affiliated with a university.
+
+        :param universityId: The ID of the university.
+        :return: JSON response containing the preview of internships posted by companies affiliated with the university 
+                 if the request is successful, or an error message if the request fails
+        """
+        try:
+            if not is_id_valid(universityId):
+                return json_invalid_request("Invalid university ID.")
+            if get_current_user().get_id() != universityId:
+                return json_unauthorized("You are not authorized to view internships posted by companies affiliated with this university.")
+            
+            internshipsPreview = Internship.get_preview_by_universityId(universityId)
+            return json_success("Internships retrieved successfully.", internshipsPreview = internshipsPreview)
+        
+        except Exception as e:
+            return e
+        
+    
+    def get_full_internship_data_by_id(self, internshipId: int):
+        """
+        Get an internship by its ID.
+
+        :param internshipId: The ID of the internship.
+        :return: JSON response containing the full internship details if the request is successful, 
+                 or an error message if the request fails
+        """
+        try:
+            if not is_id_valid(internshipId):
+                return json_invalid_request("Invalid internship ID.")
+            
+            internship = Internship.get_by_id(internshipId)
+            if not internship:
+                return json_not_found("Internship not found.")
+            
+            internshipPosition = InternshipPosition.get_by_id(internship.get_internshipPositionId())
+            if not internshipPosition:
+                return json_not_found("Internship position not found.")
+            
+            application = Application.get_by_id(internship.get_applicationId())
+            if not application:
+                return json_not_found("Application not found.")
+            
+            student = Student.get_by_id(application.get_studentId())
+            if not student:
+                return json_not_found("Student not found.")
+            
+            company = Company.get_by_id(internshipPosition.get_companyId())
+            if not company:
+                return json_not_found("Company not found.")
+            
+            # mancano complaints
+            return json_success("Internship retrieved successfully.", 
+                                internship = internship.to_dict(),
+                                internshipPosition = internshipPosition.to_dict(),
+                                application = application.to_dict(),
+                                student = student.to_dict(),
+                                company = company.to_dict())
+        
+        except Exception as e:
+            return e
+        
+    
+    def finish_internship(self, internshipId: int):
+        """
+        Finish an internship.
+
+        :param internshipId: The ID of the internship.
+        :return: JSON response containing the status of the internship if the request is successful, 
+                 or an error message if the request fails
+        """
+        try:
+            if not is_id_valid(internshipId):
+                return json_invalid_request("Invalid internship ID.")
+            
+            if get_current_user().get_type() != "company":
+                return json_unauthorized("Only companies can finish internships.")
+            
+            internship = Internship.get_by_id(internshipId)
+            if internship:
+                if internship.get_companyId() == get_current_user().get_id():
+                    internship.make_finished()
+                    return json_success("Internship finished successfully.")
+                else:
+                    return json_unauthorized("You are not authorized to finish this internship.")
+            else:
+                return json_not_found("Internship not found.")
+        
+        except Exception as e:
+            return e
 
 
 def validate_internship_position_data(internship_data):

@@ -131,6 +131,81 @@ class Internship():
         finally:
             internshipConn.close()
 
+    
+    @staticmethod
+    def get_preview_by_companyId(companyId: int) -> Union[list, Exception]:
+        """
+        Retrieve internships by their company ID.
+
+        :param companyId: The ID of the company.
+        :return: A list of dictionaries with the internship details.
+            Each dictionary contains:
+            - student_name (str): The full name of the student.
+            - student_photoPath (str | None): The path to the student's photo.
+            - internshipId (int): The ID of the internship.
+            - roleTitle (str): The title of the role.
+            - status (str): The status of the internship.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            internshipConn = InternshipDB()
+            rows = internshipConn.get_preview_by_company_id(companyId)
+            return [row for row in rows] if rows else []
+        except Exception as e:
+            raise e
+        finally:
+            internshipConn.close()
+
+
+    @staticmethod
+    def get_preview_by_studentId(studentId: int) -> Union[list, Exception]:
+        """
+        Retrieve internships by their student ID.
+
+        :param studentId: The ID of the student.
+        :return: A list of dictionaries with the internship details.
+            Each dictionary contains:
+            - company_name (str): The name of the company.
+            - company_photoPath (str | None): The path to the company's photo.
+            - internshipId (int): The ID of the internship.
+            - roleTitle (str): The title of the role.
+            - status (str): The status of the internship.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            internshipConn = InternshipDB()
+            rows = internshipConn.get_preview_by_student_id(studentId)
+            return [row for row in rows] if rows else []
+        except Exception as e:
+            raise e
+        finally:
+            internshipConn.close()
+
+
+    @staticmethod
+    def get_preview_by_universityId(universityId: int) -> Union[list, Exception]:
+        """
+        Retrieve internships by their university ID.
+
+        :param universityId: The ID of the university.
+        :return: A list of dictionaries with the internship details.
+            Each dictionary contains:
+            - student_name (str): The full name of the student.
+            - company_name (str): The name of the company.
+            - internshipId (int): The ID of the internship.
+            - roleTitle (str): The title of the role.
+            - status (str): The status of the internship.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            internshipConn = InternshipDB()
+            rows = internshipConn.get_preview_by_university_id(universityId)
+            return [row for row in rows] if rows else []
+        except Exception as e:
+            raise e
+        finally:
+            internshipConn.close()
+
     #############
     #   UPDATE  #
     #############
@@ -163,14 +238,14 @@ class Internship():
         except Exception as e:
             raise e
         
-    def make_completed(self) -> Union[None, Exception]:
+    def finish(self) -> Union[None, Exception]:
         """
-        Update the status of the internship to completed.
+        Update the status of the internship to finish.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_status('Completed')
+            self.update_status('Finished')
         except Exception as e:
             raise e
         
@@ -185,11 +260,11 @@ class Internship():
         """
         return self.status == 'Ongoing'
     
-    def is_completed(self) -> bool:
+    def is_finished(self) -> bool:
         """
-        Check if the internship is completed.
+        Check if the internship is finished.
 
-        :return: True if the internship is completed, otherwise False.
+        :return: True if the internship is finished, otherwise False.
         """
-        return self.status == 'Completed'
+        return self.status == 'Finished'
     

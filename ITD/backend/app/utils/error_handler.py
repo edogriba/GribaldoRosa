@@ -2,6 +2,8 @@ from sqlite3 import IntegrityError, OperationalError, ProgrammingError, Interfac
 from werkzeug.exceptions import Unauthorized, MethodNotAllowed, Conflict, ServiceUnavailable
 from .json_return import *
 import logging
+from os import getenv
+from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -100,57 +102,61 @@ def generic_database_error_response(error: str):
 
 def handle_database_error(error):
     """Handles database exceptions and maps them to custom exceptions."""
+    load_dotenv()
+    debug = getenv("DEBUG")
     if isinstance(error, IntegrityError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return integrity_error_response()
     elif isinstance(error, OperationalError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return operation_error_response()
     elif isinstance(error, ProgrammingError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return programming_error_response()
     elif isinstance(error, InterfaceError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return interface_error_response()
     elif isinstance(error, DataError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return data_error_response()
     else:
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return generic_database_error_response(str(error))
 
 
 def handle_general_error(error):
     """Handles general exceptions and maps them to custom general exceptions."""
+    load_dotenv()
+    debug = getenv("DEBUG")
     if isinstance(error, ValueError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return bad_request_error_response()
     if isinstance(error, TypeError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return type_error_response()
     elif isinstance(error, Unauthorized):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return unauthorized_error_response()
     elif isinstance(error, PermissionError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return forbidden_error_response()
     elif isinstance(error, KeyError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return not_found_error_response()
     elif isinstance(error, MethodNotAllowed):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return method_not_allowed_error_response()
     elif isinstance(error, Conflict):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return conflict_error_response()
     elif isinstance(error, ServiceUnavailable):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return service_unavailable_error_response()
     elif isinstance(error, TimeoutError):
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return gateway_timeout_error_response()
     else:
-        logging.exception(error)
+        logging.exception(error) if debug == "True" else None
         return internal_server_error_response(str(error))
     
 
