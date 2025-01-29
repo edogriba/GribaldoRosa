@@ -15,7 +15,7 @@ def create_main_app():
     # App Configuration
     app.config['SECRET_KEY'] = 'secret'
     app.config["JWT_SECRET_KEY"] = "nTXl6GKclQxRFz57pxXx"
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=100)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=10)
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
     app.config["JWT_COOKIE_HTTPONLY"] = True
@@ -120,7 +120,6 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            data['graduationYear'] = str(data['graduationYear'])
 
             registrationManager = RegistrationManager()
             return registrationManager.register_student(data)
@@ -180,7 +179,7 @@ def create_main_app():
             data = request.get_json()
 
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_position_by_id(data)
+            return internship_manager.get_internship_position_by_id(data.get('internshipPositionId'))
 
         except Exception as e:
             return handle_error(e)
@@ -214,7 +213,7 @@ def create_main_app():
             data = request.get_json()
 
             internship_manager = InternshipManager()
-            return internship_manager.close_internship_position(data)
+            return internship_manager.close_internship_position(data.get('internshipPositionId'))
 
         except Exception as e:
             return handle_error(e)
@@ -304,52 +303,6 @@ def create_main_app():
             return handle_error(e)
         
     
-    @app.route('/api/application/get_by_id', methods=['POST', 'OPTIONS'])
-    @jwt_required()
-    def get_application_by_id():
-        try:
-            validation_error = validate_request()
-            if validation_error:
-                return validation_error
-            
-            data = request.get_json()
-            application_manager = ApplicationManager()
-            return application_manager.get_application_by_id(data.get('applicationId'))
-        except Exception as e:
-            return handle_error(e)
-        
-
-    @app.route('/api/application/get_by_student', methods=['POST', 'OPTIONS'])
-    @jwt_required()
-    def get_applications_by_student():
-        try:
-            validation_error = validate_request()
-            if validation_error:
-                return validation_error
-            
-            data = request.get_json()
-            
-            application_manager = ApplicationManager()
-            return application_manager.get_applications_by_student(data.get('studentId'))
-        except Exception as e:
-            return handle_error(e)
-        
-
-    @app.route('/api/application/get_by_internship_position', methods=['POST', 'OPTIONS'])
-    @jwt_required()
-    def get_applications_by_internship_position():
-        try:
-            validation_error = validate_request()
-            if validation_error:
-                return validation_error
-            
-            data = request.get_json()
-            
-            application_manager = ApplicationManager()
-            return application_manager.get_applications_by_internship_position(data.get('internshipPositionId'))
-        except Exception as e:
-            return handle_error(e)
-        
     
     @app.route('/api/application/get_by_id', methods=['POST', 'OPTIONS'])
     @jwt_required()
@@ -375,7 +328,7 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            
+            print("Ecco cos vedo", data)
             application_manager = ApplicationManager()
             return application_manager.get_applications_by_student(data.get('studentId'))
         except Exception as e:
@@ -391,6 +344,7 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
+            print(data)
             
             application_manager = ApplicationManager()
             return application_manager.get_applications_by_internship_position(data.get('internshipPositionId'))

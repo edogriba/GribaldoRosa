@@ -9,10 +9,12 @@ import { UserContext } from '../../../context/UserContext';
 const StudentInternships = () => {
     const { user, userLogout } = useContext(UserContext);
     return (
-        <div>
-            <Navbar user={user} onLogout={userLogout}/>
-            <StudentTab activeTab='internships'/>
-            <StudentInternshipList />
+        <div className="flex flex-col justify-between min-h-screen">
+            <div>
+                <Navbar user={user} onLogout={userLogout}/>
+                <StudentTab activeTab='internships'/>
+                <StudentInternshipList />
+            </div>
             <Footer />
         </div>
     );

@@ -29,7 +29,6 @@ import CompanyInternships from './pages/Dashboard/Company/CompanyInternships';
 import { Toaster } from 'react-hot-toast';
 import UniversityInternships from './pages/Dashboard/University/UniversityInternships';
 import CompanyPositionView from './pages/Dashboard/Company/CompanyPositionView';
-import CompanyPositionApplicationsView from './pages/Dashboard/Company/CompanyPositionApplicationsView';
 import StudentApplicationView from './pages/Dashboard/Student/StudentApplicationView';
 import CompanyApplicationView from './pages/Dashboard/Company/CompanyApplicationView';
 function App() {
@@ -67,7 +66,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-      </UserProvider>
+    </UserProvider>
   );
 }
 

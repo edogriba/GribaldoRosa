@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from "react"
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
-import{api}from "../../../api/api";
-
+import { api } from "../../../api/api";
+import Status from "../../../components/Status";
 const StudentApplicationList = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const StudentApplicationList = () => {
             let filtered = applications;
 
             if (applicationStatus !== "All") {
-                filtered = filtered.filter((application) => application.application.state === applicationStatus);
+                filtered = filtered.filter((application) => application.application.status === applicationStatus);
             }
             
             setFilteredApplications(filtered);
@@ -27,7 +27,8 @@ const StudentApplicationList = () => {
     useEffect( () => {   
         const fetchApplications = async () => {
             try {
-                const res = await api.getApplicationListStudent(user.id);
+                console.log("WEEE", user.id);
+                const res = await api.getApplicationListStudent({'studentId': user.id});
                 const data = await res.json();
                 console.log("data", data);
                 console.log("app", data.applications);
@@ -45,7 +46,7 @@ const StudentApplicationList = () => {
             navigate('/login');
         }
         fetchApplications();
-    }, []);
+    }, [user]);
     return (
         <div>    
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -106,28 +107,6 @@ const StudentApplicationList = () => {
                     </thead>
                     <tbody>
                     {filteredApplications.map((application) => {
-                        let statusColor;
-                        switch(application.application.state) {
-                            case 'Rejected':
-                                statusColor = 'red';
-                                break;
-                            case 'Pending':
-                                statusColor = 'gray';
-                                break;
-                            case 'Accepted':
-                                statusColor = 'blue';
-                                break;
-                            case 'Confirmed':
-                                statusColor = 'green';
-                                break;
-                            case 'Assessment':
-                                statusColor = 'yellow';
-                                break;
-                            case 'Refused':
-                                statusColor = 'orange';
-                                break;
-
-                        }
                         return (
                             <tr key={application.application.applicationId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td className="w-4 p-4">
@@ -151,9 +130,7 @@ const StudentApplicationList = () => {
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center">
-                                        <span className={`inline-flex items-center rounded bg-${statusColor}-100 text-${statusColor}-800 px-2.5 py-0.5 text-xs font-medium dark:bg-primary-900 dark:text-primary-300`}>
-                                            {application.application.state}
-                                        </span>
+                                        <Status status={application.application.status} />
                                     </div>
                                 </td>
                                 <td className="px-6 py-4">

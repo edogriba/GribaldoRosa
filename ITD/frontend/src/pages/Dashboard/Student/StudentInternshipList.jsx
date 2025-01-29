@@ -12,7 +12,7 @@ const StudentInternshipList = () => {
     useEffect( () => {   
         const fetchInternships = async () => {
             try {
-                const res = await api.getInternshipListStudent(user.id);
+                const res = await api.getInternshipListStudent({"id": user.id});
                 const data = await res.json();
                 console.log("data", data);
                 console.log("app", data.internships);
@@ -111,8 +111,8 @@ const StudentInternshipList = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center">
-                                            <span className={`inline-flex items-center rounded bg-${internship.internship.state === "Ongoing" ? "green" : "red" }-100 text-${internship.internship.state === "Ongoing" ? "green" : "red" }-800 px-2.5 py-0.5 text-xs font-medium dark:bg-primary-900 dark:text-primary-300`}>
-                                                {internship.internship.state}
+                                            <span className={`inline-flex items-center rounded bg-${internship.internship.status === "Ongoing" ? "green" : "red" }-100 text-${internship.internship.status === "Ongoing" ? "green" : "red" }-800 px-2.5 py-0.5 text-xs font-medium dark:bg-primary-900 dark:text-primary-300`}>
+                                                {internship.internship.status}
                                             </span>
                                         </div>
                                     </td>
