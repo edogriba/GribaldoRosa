@@ -98,7 +98,7 @@ const SearchFilter = () => {
                     <select
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-3/4 p-2.5"
+                        className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-3/4 p-2.5"
                     >
                         <option value="" disabled>Select your location</option>
                         {locations.map((loc) => (
@@ -120,12 +120,17 @@ const SearchFilter = () => {
                 </div>
                 <div className="mb-4 flex flex-col items-center">
                     <label className="block text-sm font-medium text-gray-700">Duration (months)</label>
-                    <input 
-                        type="number" 
+                    <select 
                         value={duration} 
                         onChange={(e) => setDuration(e.target.value)}
                         className="mt-1 block w-3/4 rounded-md border-gray-300 p-2"
-                    />
+                    >
+                        <option value="" disabled>Select duration</option>
+                        <option value="0-3">0-3 months</option>
+                        <option value="3-6">3-6 months</option>
+                        <option value="6-12">6-12 months</option>
+                        <option value="12+">12+ months</option>
+                    </select>
                 </div>
                 <div className="mb-4 flex flex-col items-center">
                     <label className="block text-sm font-medium text-gray-700">Minimum Compensation</label>
@@ -134,7 +139,7 @@ const SearchFilter = () => {
                         min="0" max="3000" step="100" 
                         value={minCompensation} 
                         onChange={(e) => setMinCompensation(e.target.value)}
-                        className="w-3/4 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        className="w-3/4 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mt-5"
                     />
                     <p className="mt-2 text-sm text-gray-500">Selected: ${minCompensation}</p>
                 </div>
