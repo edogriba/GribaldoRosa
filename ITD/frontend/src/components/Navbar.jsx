@@ -178,7 +178,7 @@ export const Navbar = ({ user, onLogout }) => {
                       <NavLink
                         to="/universities/dashboard/profile"
                         className={() =>
-                          location.pathname.startsWith("/students/dashboard/")
+                          location.pathname.startsWith("/universities/dashboard/")
                             ? "text-primary-500"
                             : "text-gray-900 dark:text-white"
                         }

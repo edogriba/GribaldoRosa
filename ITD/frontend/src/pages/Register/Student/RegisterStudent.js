@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-
+import { toast } from 'react-hot-toast';
 const RegisterStudent = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,6 +21,8 @@ const RegisterStudent = () => {
 
   const [universities, setUniversities] = useState([]); // Array to hold universities
   const [university, setUniversity] = useState(''); // Selected university ID
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -69,10 +71,11 @@ const RegisterStudent = () => {
       localStorage.setItem('access token', res.access_token);
       console.log("data: ", dataStudent);                                    // debug
       // Redirect to student dashboard or another protected route
-      return <Link to="/students/home"></Link>;
+      toast.success('Registration successful! Please log in with your credentials!');
+      navigate('/students/home')
     } catch (error) {
       console.error('Error registering student:', error.response?.data?.message || error.message);
-      alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+      toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
     }
   };
   

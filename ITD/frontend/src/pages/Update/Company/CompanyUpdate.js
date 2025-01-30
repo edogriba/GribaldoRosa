@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { UserContext } from '../../../context/UserContext';
+import GoBack from '../../../components/GoBack';
 
 const CompanyUpdate = () => {
     const { user, userLogout } = useContext(UserContext);
@@ -14,6 +15,7 @@ const CompanyUpdate = () => {
         <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
             <Navbar user={user} onLogout={userLogout}/>
             <section className="bg-white dark:bg-gray-900">
+            <GoBack />
                 <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update Profile</h2>
                     <form action="#">
@@ -80,7 +82,7 @@ const CompanyUpdate = () => {
                             </div>
                         </div>
 
-                        <div className="flex items-center space-x-4">
+                        <div className="flex justify-end items-center space-x-4">
                             <button
                                 type="submit"
                                 className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"

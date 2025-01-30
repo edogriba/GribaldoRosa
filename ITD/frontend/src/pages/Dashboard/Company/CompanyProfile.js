@@ -15,7 +15,7 @@ const CompanyProfile = () => {
                 <Navbar user={user} onLogout={userLogout}/>
                 <CompanyTab activeTab='profile'/>
             </div>
-                <div className='flex bg-gray-50'>
+                <div className='flex p-5 justify-evenly'>
                     <CompanyProfileCard />
                     <CompanyProfileTable />
                 </div>

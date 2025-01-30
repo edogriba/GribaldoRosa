@@ -17,7 +17,7 @@ import UniversityProfile from './pages/Dashboard/University/UniversityProfile';
 import StudentApplications from './pages/Dashboard/Student/StudentApplications';
 import CompanyPositions from './pages/Dashboard/Company/CompanyPositions';  
 import StudentSearch from './pages/Search/Student/StudentSearch';
-import CompanyCreatePosition from './pages/Create/Company/CompanyCreatePosition';
+import CompanyCreatePositionView from './pages/Create/Company/CompanyCreatePositionView';
 import StudentUpdate from './pages/Update/Student/StudentUpdate';
 import CompanyUpdate from './pages/Update/Company/CompanyUpdate';
 import UniversityUpdate from './pages/Update/University/UniversityUpdate';
@@ -27,7 +27,10 @@ import NotFound from './pages/NotFound';
 import './assets/index.css';
 import CompanyInternships from './pages/Dashboard/Company/CompanyInternships';
 import { Toaster } from 'react-hot-toast';
-
+import UniversityInternships from './pages/Dashboard/University/UniversityInternships';
+import CompanyPositionView from './pages/Dashboard/Company/CompanyPositionView';
+import StudentApplicationView from './pages/Dashboard/Student/StudentApplicationView';
+import CompanyApplicationView from './pages/Dashboard/Company/CompanyApplicationView';
 function App() {
   return (
     <UserProvider> 
@@ -51,16 +54,19 @@ function App() {
           <Route path="/companies/update" element={<ProtectedRoute><CompanyUpdate /></ProtectedRoute>} />
           <Route path="/universities/update" element={<ProtectedRoute><UniversityUpdate /></ProtectedRoute>} />
           <Route path="/students/search" element={<ProtectedRoute><StudentSearch /></ProtectedRoute>} />
-          <Route path="/companies/create-position" element={<ProtectedRoute><CompanyCreatePosition /></ProtectedRoute>} />
+          <Route path="/companies/create-position" element={<ProtectedRoute><CompanyCreatePositionView /></ProtectedRoute>} />
           <Route path="/students/dashboard/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
+          <Route path="/students/dashboard/applications/:applicationId" element={<ProtectedRoute><StudentApplicationView /></ProtectedRoute>} />
           <Route path="/students/dashboard/internships" element={<ProtectedRoute><StudentInternships /></ProtectedRoute>} />
           <Route path="/companies/dashboard/internships" element={<ProtectedRoute><CompanyInternships/></ProtectedRoute>} />
           <Route path="/companies/dashboard/positions" element={<ProtectedRoute><CompanyPositions /></ProtectedRoute>} />
-          <Route path="/universities/dashboard/internships" element={<ProtectedRoute><StudentInternships /></ProtectedRoute>} />
+          <Route path="/universities/dashboard/internships" element={<ProtectedRoute><UniversityInternships /></ProtectedRoute>} />
+          <Route path="/companies/dashboard/positions/:positionId" element={<ProtectedRoute><CompanyPositionView /></ProtectedRoute>} />
+          <Route path="/companies/dashboard/positions/:positionId/applications/:applicationId" element={<ProtectedRoute><CompanyApplicationView /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-      </UserProvider>
+    </UserProvider>
   );
 }
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { api } from '../../../api/api';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
+import { toast } from 'react-hot-toast';
 
 const RegisterUniversity = () => {
   const [universityEmail, setUniversityEmail] = useState('');
@@ -42,7 +42,7 @@ const RegisterUniversity = () => {
     } 
     catch (error) {
         console.error('Error registering university:', error.response?.data?.message || error.message);
-        alert('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+        toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
         }
     };
 

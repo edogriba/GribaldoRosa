@@ -5,11 +5,12 @@ import {
 
 import {
   getStudentsList,
-  studentRegistration
+  studentRegistration,
+  getInternshipListStudent
 } from './student'
 
 import {
-  companyRegistration
+  companyRegistration,
 } from './company'
 
 import {
@@ -18,9 +19,26 @@ import {
   userAuthenticated
 } from './user'
 
+import { 
+  getApplicationListCompany, 
+  getApplicationListStudent,
+  getApplicationStudent,
+  getApplicationCompany,
+  acceptApplication,
+  rejectApplication,
+  assessApplication
+} from './application';
+
 
 import { example } from './example';
-import { getInternshipList, getPositionList } from './internship';
+
+import { 
+  getPositionListCompany,
+  getPositionListStudent,
+  getPosition,
+  createPosition, 
+  closePosition 
+} from './internship';
 
 export const Method = {
   GET: 'GET',
@@ -40,6 +58,17 @@ export const api = {
   universityRegistration,
   userLogin, 
   userLogout,
-  getInternshipList,
-  getPositionList
+  getPositionListCompany,
+  getPositionListStudent,
+  getPosition,
+  createPosition, 
+  closePosition,
+  getApplicationListCompany,
+  getApplicationListStudent,
+  getInternshipListStudent, 
+  getApplicationStudent,
+  getApplicationCompany,
+  acceptApplication,
+  rejectApplication,
+  assessApplication
 };

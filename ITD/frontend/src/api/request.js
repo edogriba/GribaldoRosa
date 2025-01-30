@@ -51,15 +51,16 @@ export async function requestAuth(path, method, body, params = {}) {
   });
 }
 
-export async function requestAuthWithErrorToast(path, method, body, params = {}, customErrorMessage) {
+export async function requestAuthWithErrorToast(path, method, body, params = {}, customErrorMessage={}) {
   try {
     const response = await requestAuth(path, method, body, params);
     console.log(response);
 
-    if (!response.ok) {
+    /*if (!response.ok ) {
       const message = customErrorMessage || 'An error occurred while processing your request.';
       toast.error(message);
-    }
+    }*/
+
 
     return response;
   } catch (error) {

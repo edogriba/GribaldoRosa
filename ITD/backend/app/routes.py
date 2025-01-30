@@ -15,7 +15,7 @@ def create_main_app():
     # App Configuration
     app.config['SECRET_KEY'] = 'secret'
     app.config["JWT_SECRET_KEY"] = "nTXl6GKclQxRFz57pxXx"
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=15)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=10)
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
     app.config["JWT_COOKIE_HTTPONLY"] = True
@@ -157,7 +157,10 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            
+            print(data)
+            data['duration'] = int(data['duration'])
+            data['compensation'] = int(data['compensation'])
+            print(data)
             internship_manager = InternshipManager()
             return internship_manager.post_internship_position(data)
 
@@ -210,6 +213,22 @@ def create_main_app():
             data = request.get_json()
             internship_manager = InternshipManager()
             return internship_manager.close_internship_position(**data)
+
+        except Exception as e:
+            return handle_error(e)
+        
+    @app.route('/api/internship/get_by_student', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def get_internship_positions_by_student():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.get_internship_positions_by_student(data.get('studentId'))
 
         except Exception as e:
             return handle_error(e)
@@ -299,6 +318,7 @@ def create_main_app():
             return handle_error(e)
         
     
+    
     @app.route('/api/application/get_by_id', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_application_by_id():
@@ -323,7 +343,7 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            
+            print("Ecco cos vedo", data)
             application_manager = ApplicationManager()
             return application_manager.get_applications_by_student(**data)
         except Exception as e:
@@ -339,6 +359,7 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
+            print(data)
             
             application_manager = ApplicationManager()
             return application_manager.get_applications_by_internship_position(**data)
@@ -428,3 +449,4 @@ def create_main_app():
     
     return app
 
+    
