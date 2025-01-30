@@ -9,11 +9,13 @@ const StudentSearch = () => {
     const { user, userLogout } = useContext(UserContext);
     return (
         <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
-            <Navbar  user={user} onLogout={userLogout}/>
             <div>
-                <GoBack />
+                <Navbar  user={user} onLogout={userLogout}/>
+                <div>
+                    <GoBack />
+                </div>
+                <SearchFilter />
             </div>
-            <SearchFilter />
             <Footer />
         </div>
 

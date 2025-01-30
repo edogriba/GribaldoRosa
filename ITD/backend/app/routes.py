@@ -217,6 +217,22 @@ def create_main_app():
 
         except Exception as e:
             return handle_error(e)
+        
+    @app.route('/api/internship/get_by_student', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def get_internship_positions_by_student():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.get_internship_positions_by_student(data.get('studentId'))
+
+        except Exception as e:
+            return handle_error(e)
     
     
     ##########################

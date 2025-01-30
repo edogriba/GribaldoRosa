@@ -33,7 +33,8 @@ import {
 import { example } from './example';
 
 import { 
-  getPositionList,
+  getPositionListCompany,
+  getPositionListStudent,
   getPosition,
   createPosition, 
   closePosition 
@@ -57,7 +58,8 @@ export const api = {
   universityRegistration,
   userLogin, 
   userLogout,
-  getPositionList,
+  getPositionListCompany,
+  getPositionListStudent,
   getPosition,
   createPosition, 
   closePosition,

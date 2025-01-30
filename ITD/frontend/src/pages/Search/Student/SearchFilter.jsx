@@ -10,11 +10,30 @@ const SearchFilter = () => {
     const [roleTitles, setRoleTitles] = useState([]);
 
     const noFilterRequest = () => {
-        console.log("No filter request");
-    };
+        try {
+            console.log("No filter request");
+            //const res = await api.getPositionListStudent();
+        }
+        catch (error) {
+            console.error('Error fetching applications:', error.message);
+            alert('Failed to fetch applications. Please try again later.');
+        };
+    }
 
     const filterRequest = () => {
-        console.log("Filter request");
+        try {
+            const data = {
+                location,
+                companies,
+                minCompensation,
+                duration,
+            };
+            console.log(data);
+        }
+        catch (error) {
+            console.error('Error fetching applications:', error.message);
+            alert('Failed to filter applications. Please try again later.');
+        }   
     };
 
     useEffect(() => {
@@ -59,7 +78,7 @@ const SearchFilter = () => {
     }, []);
 
     return (
-        <div className="p-6 max-w-3xl mx-auto">
+        <div className="p-6">
             <div className="flex justify-start items-center mb-6">
                 <h2 className="text-2xl font-semibold">Search Filters</h2>
             </div>
@@ -90,7 +109,8 @@ const SearchFilter = () => {
                 <div className="mb-4 flex flex-col items-center">
                     <label className="block text-sm font-medium text-gray-700">Companies</label>
                     <select 
-                        multiple 
+                        multiple
+                        onChange={(e) => setMinCompensation(e.target.value)}
                         className="mt-1 block w-3/4 rounded-md border-gray-300 p-2"
                     >
                         {companies.map((company) => (
