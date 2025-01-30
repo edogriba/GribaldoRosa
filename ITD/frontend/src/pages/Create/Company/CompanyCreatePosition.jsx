@@ -114,7 +114,7 @@ const CreateInternshipPosition = () => {
                                     Compensation ($)
                                 </label>
                                 <input
-                                    type="integer"
+                                    type="number"
                                     name="compensation"
                                     id="compensation"
                                     onChange={(e) => setCompensation(e.target.value)}
@@ -129,7 +129,7 @@ const CreateInternshipPosition = () => {
                                     Duration (Months)
                                 </label>
                                 <input
-                                    type="integer"
+                                    type="number"
                                     name="duration"
                                     id="duration"
                                     onChange={(e) => setDuration(e.target.value)}

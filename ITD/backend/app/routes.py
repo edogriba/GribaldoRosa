@@ -217,7 +217,7 @@ def create_main_app():
         except Exception as e:
             return handle_error(e)
         
-    @app.route('/api/internship/get_by_student', methods=['POST', 'OPTIONS'])
+    @app.route('/api/internship_position/get_by_student', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_internship_positions_by_student():
         try:

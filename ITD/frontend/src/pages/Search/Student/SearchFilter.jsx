@@ -12,7 +12,7 @@ const SearchFilter = () => {
     const noFilterRequest = () => {
         try {
             console.log("No filter request");
-            //const res = await api.getPositionListStudent();
+            //const res = await api.getPositionStudentListStudent();
         }
         catch (error) {
             console.error('Error fetching applications:', error.message);
