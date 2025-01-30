@@ -1,7 +1,11 @@
-from flask import jsonify
 from sqlite3 import IntegrityError, OperationalError, ProgrammingError, InterfaceError, DataError, Error
 from werkzeug.exceptions import Unauthorized, MethodNotAllowed, Conflict, ServiceUnavailable
 from .json_return import *
+import logging
+from os import getenv
+from dotenv import load_dotenv
+
+logging.basicConfig(level=logging.ERROR)
 
 
 ###################### 
@@ -98,57 +102,61 @@ def generic_database_error_response(error: str):
 
 def handle_database_error(error):
     """Handles database exceptions and maps them to custom exceptions."""
+    load_dotenv()
+    debug = getenv("DEBUG")
     if isinstance(error, IntegrityError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return integrity_error_response()
     elif isinstance(error, OperationalError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return operation_error_response()
     elif isinstance(error, ProgrammingError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return programming_error_response()
     elif isinstance(error, InterfaceError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return interface_error_response()
     elif isinstance(error, DataError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return data_error_response()
     else:
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return generic_database_error_response(str(error))
 
 
 def handle_general_error(error):
     """Handles general exceptions and maps them to custom general exceptions."""
+    load_dotenv()
+    debug = getenv("DEBUG")
     if isinstance(error, ValueError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return bad_request_error_response()
     if isinstance(error, TypeError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return type_error_response()
     elif isinstance(error, Unauthorized):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return unauthorized_error_response()
     elif isinstance(error, PermissionError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return forbidden_error_response()
     elif isinstance(error, KeyError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return not_found_error_response()
     elif isinstance(error, MethodNotAllowed):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return method_not_allowed_error_response()
     elif isinstance(error, Conflict):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return conflict_error_response()
     elif isinstance(error, ServiceUnavailable):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return service_unavailable_error_response()
     elif isinstance(error, TimeoutError):
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return gateway_timeout_error_response()
     else:
-        print("ERROR: " + str(error))
+        logging.exception(error) if debug == "True" else None
         return internal_server_error_response(str(error))
     
 

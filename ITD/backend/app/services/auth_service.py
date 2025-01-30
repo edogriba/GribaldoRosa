@@ -2,7 +2,7 @@ import re
 from ..models import User 
 
     
-def is_string_valid(question):
+def is_string_valid(question) -> bool:
     """
     Check if the provided input is a valid string.
 
@@ -12,7 +12,7 @@ def is_string_valid(question):
     return isinstance(question, str)
 
 
-def is_int_valid(question):
+def is_int_valid(question) -> bool:
     """
     Check if the provided input is a valid integer number.
 
@@ -21,19 +21,17 @@ def is_int_valid(question):
     """
     if isinstance(question, int):
         return True
-    if isinstance(question, str):
-        return all(char.isdigit() for char in question)
     return False
 
 
-def is_float_valid(question):
+def is_float_valid(question) -> bool:
     """
     Check if the provided input is a valid float number.
 
     :param question: The input to validate.
     :return: True if the input is a float, otherwise False.
     """
-    return isinstance(question, float) or isinstance(question, int)
+    return isinstance(question, float)
 
 
 def is_email_unique(email: str):
@@ -53,7 +51,7 @@ def is_email_unique(email: str):
 ################################
 #    CREDENTIALS VALIDATION    #
 ################################
-def is_email_valid(email: str):
+def is_email_valid(email: str) -> bool:
     """
     Check if the provided input is a valid email address.
 
@@ -62,12 +60,12 @@ def is_email_valid(email: str):
     """
     try:
         email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        return email and bool(re.match(email_regex, email))
+        return bool(re.match(email_regex, email))
     except Exception as e:
         return False
 
 
-def is_phoneNumber_valid(phoneNumber):
+def is_phoneNumber_valid(phoneNumber) -> bool:
     """
     Check if the provided input is a valid phone number.
 
@@ -75,13 +73,15 @@ def is_phoneNumber_valid(phoneNumber):
     :return: True if the phone number is valid and not empty, False otherwise.
     """
     try:
-        phone_regex = r'^\+?[1-9]\d{1,14}$'  # E.164 format
-        return phoneNumber and bool(re.match(phone_regex, phoneNumber))
-    except Exception as e:
+        phone_regex = r'^\+?[1-9]\d{1,14}$|^\d{3}[-.\s]?\d{3}[-.\s]?\d{4}$'
+        if len(phoneNumber) < 10:
+            return False
+        return bool(re.match(phone_regex, phoneNumber))
+    except Exception:
         return False
 
 
-def is_password_valid(password: str):
+def is_password_valid(password: str) -> bool:
     """
     A valid password must meet the following criteria:
     - At least 8 characters long
@@ -94,7 +94,7 @@ def is_password_valid(password: str):
     :return: True if the password is valid and not empty, False otherwise.
     """
     try:
-        return password and (len(password) >= 8 and 
+        return (len(password) >= 8 and 
                 any(char.isdigit() for char in password) and 
                 any(char.isalpha() for char in password) and 
                 any(char.isupper() for char in password) and 
@@ -103,7 +103,7 @@ def is_password_valid(password: str):
         return False
 
 
-def is_url_valid(url: str):
+def is_url_valid(url: str) -> bool:
     """
     Check if the provided input is a valid URL.
 
@@ -111,13 +111,13 @@ def is_url_valid(url: str):
     :return: True if the URL is valid and not empty, False otherwise.
     """
     try:
-        url_regex = r'^https?://(?:www\.)?[\w.-]+(?:\.[a-zA-Z]{2,})?/?$'
-        return url and bool(re.match(url_regex, url))
+        url_regex = r'^https?://(?:www\.)?[\w.-]+(?:\.[a-zA-Z]{2,})?(?:/[\w./-]*)?$'
+        return bool(re.match(url_regex, url))
     except Exception as e:
         return False
 
 
-def is_location_valid(location: str):
+def is_location_valid(location: str) -> bool:
     """
     Check if the provided input is a valid location.
 
@@ -127,12 +127,12 @@ def is_location_valid(location: str):
     try:
         location_regex = r'^[a-zA-Z0-9\s,.-]+$'
         max_length = 255
-        return location and bool(re.match(location_regex, location)) and len(location) <= max_length
+        return bool(re.match(location_regex, location)) and len(location) <= max_length
     except Exception as e:
         return False
 
 
-def is_description_valid(description: str):
+def is_description_valid(description: str) -> bool:
     """
     Check if the provided input is a valid description.
 
@@ -140,13 +140,13 @@ def is_description_valid(description: str):
     :return: True if the description is valid and not empty, False otherwise.
     """
     try:
-        max_length = 1024
+        max_length = 2048
         return description and is_string_valid(description) and len(description) <= max_length
     except Exception as e:
         return False
 
 
-def is_name_valid(name: str):
+def is_name_valid(name: str) -> bool:
     """
     Check if the provided input is a valid name.
 
@@ -156,12 +156,12 @@ def is_name_valid(name: str):
     try:
         name_regex = r'^[a-zA-Z\s]+$'
         max_length = 100  
-        return name and bool(re.match(name_regex, name)) and len(name) <= max_length
+        return bool(re.match(name_regex, name)) and len(name) <= max_length
     except Exception as e:
         return False
 
 
-def is_degreeProgram_valid(degreeProgram: str):
+def is_degreeProgram_valid(degreeProgram: str) -> bool:
     """
     Check if the provided input is a valid degree program.
 
@@ -171,12 +171,12 @@ def is_degreeProgram_valid(degreeProgram: str):
     try:
         regex = r'^[a-zA-Z\s]+$'
         max_length = 255  
-        return degreeProgram and bool(re.match(regex, degreeProgram)) and len(degreeProgram) <= max_length
+        return bool(re.match(regex, degreeProgram)) and len(degreeProgram) <= max_length
     except Exception as e:
         return False
 
 
-def is_gpa_valid(gpa: float):
+def is_gpa_valid(gpa) -> bool:
     """
     Check if the provided input is a valid GPA.
 
@@ -184,12 +184,14 @@ def is_gpa_valid(gpa: float):
     :return: True if the GPA is valid or None, False otherwise.
     """
     try:
-        return not gpa or is_float_valid(gpa) and 0.0 <= gpa <= 4.0
-    except Exception as e:
+        if gpa == "":
+            return False
+        return gpa is None or (is_float_valid(gpa) and 0.0 <= gpa <= 4.0)
+    except Exception:
         return False
 
 
-def is_graduationYear_valid(graduationYear: int):
+def is_graduationYear_valid(graduationYear: int) -> bool:
     """
     Check if the provided input is a valid graduation year.
 
@@ -197,12 +199,14 @@ def is_graduationYear_valid(graduationYear: int):
     :return: True if the graduation year is valid or None, False otherwise.
     """
     try:
+        if graduationYear == "":
+            return False
         return not graduationYear or is_int_valid(graduationYear) and 1900 <= graduationYear <= 2025
     except Exception as e:
         return False
     
 
-def is_path_valid(path: str):
+def is_path_valid(path: str) -> bool:
     """
     Check if the provided input is a valid path.
 
@@ -211,12 +215,14 @@ def is_path_valid(path: str):
     """
     try:
         max_length = 1024
-        return path and is_string_valid(path) and len(path) <= max_length
-    except Exception as e:
+        if not path or not isinstance(path, str) or len(path) > max_length:
+            return False
+        return path.startswith("/") and not any(char in path for char in [" ", "\\", ":", "*", "?", "\"", "<", ">", "|"])
+    except Exception:
         return False
 
 
-def is_optional_path_valid(path: str):
+def is_optional_path_valid(path: str) -> bool:
     """
     Check if the provided input is a valid optional path.
 
@@ -225,12 +231,16 @@ def is_optional_path_valid(path: str):
     """
     try:
         max_length = 1024
-        return not path or is_string_valid(path) and len(path) <= max_length
-    except Exception as e:
+        if not path:
+            return True
+        if not isinstance(path, str) or len(path) > max_length:
+            return False
+        return path.startswith("/") and not any(char in path for char in [" ", "\\", ":", "*", "?", "\"", "<", ">", "|"])
+    except Exception:
         return False
 
 
-def is_skills_valid(skills: str):
+def is_skills_valid(skills: str) -> bool:
     """
     Check if the provided input is a valid skills list.
 
@@ -238,14 +248,14 @@ def is_skills_valid(skills: str):
     :return: True if the skills list is valid and not empty, False otherwise.
     """
     try:
-        skills_regex = r'^[a-zA-Z\s,.-]+$'
+        skills_regex = r'^([\w\+\#\.]+)(,\s*[\w\+\#\.]+)*$'
         max_length = 1024
-        return skills and bool(re.match(skills_regex, skills)) and len(skills) <= max_length
-    except Exception as e:
+        return bool(skills and re.match(skills_regex, skills) and len(skills) <= max_length)
+    except Exception:
         return False
 
 
-def is_userType_valid(userType: str):
+def is_userType_valid(userType: str) -> bool:
     """
     Check if the provided input is a valid user type.
 
@@ -253,12 +263,12 @@ def is_userType_valid(userType: str):
     :return: True if the user type is valid and not empty, False otherwise.
     """
     try:
-        return userType and userType in ['student', 'university', 'company']
-    except Exception as e:
+        return userType in ['student', 'university', 'company']
+    except Exception:
         return False
 
 
-def is_languageSpoken_valid(languageSpoken: str):
+def is_languageSpoken_valid(languageSpoken: str) -> bool:
     """
     Check if the provided input is a valid language spoken.
 
@@ -268,12 +278,12 @@ def is_languageSpoken_valid(languageSpoken: str):
     try:
         languages_regex = r'^[a-zA-Z\s,.-]+$'
         max_length = 1024
-        return languageSpoken and bool(re.match(languages_regex, languageSpoken)) and len(languageSpoken) <= max_length
-    except Exception as e:
+        return bool(re.match(languages_regex, languageSpoken)) and len(languageSpoken) <= max_length
+    except Exception:
         return False
 
 
-def is_id_valid(id: int):
+def is_id_valid(id: int) -> bool:
     """
     Check if the provided input is a valid ID.
 
@@ -281,12 +291,14 @@ def is_id_valid(id: int):
     :return: True if the ID is valid and not empty, False otherwise.
     """
     try:
-        return id and is_int_valid(id)
-    except Exception as e:
+        if id < 0:
+            return False
+        return is_int_valid(id)
+    except Exception:
         return False
 
 
-def is_duration_valid(duration: int):
+def is_duration_valid(duration: int) -> bool:
     """
     Check if the provided input is a valid duration.
 
@@ -294,12 +306,12 @@ def is_duration_valid(duration: int):
     :return: True if the duration is valid and not empty, False otherwise.
     """
     try:
-        return duration and is_int_valid(duration) and 0 <= duration <= 12
-    except Exception as e:
+        return is_int_valid(duration) and 0 < duration <= 12
+    except Exception:
         return False
     
 
-def is_compensation_valid(compensation: int):
+def is_compensation_valid(compensation: int) -> bool:
     """
     Check if the provided input is a valid compensation.
 
@@ -307,12 +319,14 @@ def is_compensation_valid(compensation: int):
     :return: True if the compensation is valid or empty, False otherwise.
     """
     try:
+        if compensation == "":
+            return False
         return not compensation or is_int_valid(compensation) and 0 <= compensation
-    except Exception as e:
+    except Exception:
         return False
     
 
-def is_benefits_valid(benefits: str):
+def is_benefits_valid(benefits: str) -> bool:
     """
     Check if the provided input is a valid benefits list.
 
@@ -321,7 +335,11 @@ def is_benefits_valid(benefits: str):
     """
     try:
         max_length = 1024
-        return not benefits or is_string_valid(benefits) and len(benefits) <= max_length
-    except Exception as e:
+        if benefits == "":
+            return False
+        if not benefits:
+            return True
+        return is_string_valid(benefits) and 1 < len(benefits.strip()) <= max_length
+    except Exception:
         return False
     

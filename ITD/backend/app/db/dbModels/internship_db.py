@@ -4,7 +4,7 @@ from typing import Union
 from dotenv import load_dotenv
 
 
-class InternshipDB:                 # Ongoing Completed
+class InternshipDB:                 # Ongoing Finished
     def __init__(self):
         load_dotenv()
         self.con = connect(getenv("DATABASE"))
@@ -152,6 +152,164 @@ class InternshipDB:                 # Ongoing Completed
             raise e
         finally:
             cur.close()
+
+    
+    def get_by_company_id(self, companyId: int) -> Union[list, Exception]:
+        """
+        Retrieve internships by their company ID.
+
+        :param companyId: The ID of the company.
+        :return: A list of dictionaries representing the internships or an empty list if not found.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT InternshipId, InternshipPositionId, ApplicationId, Status 
+                        FROM Internship 
+                        WHERE InternshipPositionId IN (SELECT InternshipPositionId 
+                                                       FROM InternshipPosition 
+                                                       WHERE CompanyId = ?) """
+            rows = cur.execute(query, (companyId,)).fetchall()
+            
+            return [
+                {
+                    "internshipId": row["InternshipId"],
+                    "internshipPositionId": row["InternshipPositionId"],
+                    "applicationId": row["ApplicationId"],
+                    "status": row["Status"]
+                } for row in rows
+            ] if rows else []
+        
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    
+    def get_preview_by_company_id(self, companyId: int) -> Union[list, Exception]:
+        """
+        Retrieve internships by their company ID.
+
+        :param companyId: The ID of the company.
+        :return: A list of dictionaries representing the internships or an empty list if not found. Each dictionary contains:
+            - student_name (str): The full name of the student.
+            - student_photoPath (str | None): The path to the student's photo.
+            - internshipId (int): The ID of the internship.
+            - roleTitle (str): The title of the role.
+            - status (str): The status of the internship.
+
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT S.FirstName, S.LastName, S.ProfilePicturePath, I.InternshipId, I.Status, IP.RoleTitle
+                        FROM Internship AS I, Application AS A, Student AS S, InternshipPosition AS IP
+                        WHERE I.ApplicationId = A.ApplicationId AND 
+                              A.StudentId = S.UserId AND 
+                              I.InternshipPositionId = IP.InternshipPositionId AND 
+                              IP.CompanyId = ?"""
+            rows = cur.execute(query, (companyId,)).fetchall()
+            
+            return [
+                {
+                    "student_name": row["FirstName"] + " " + row["LastName"],
+                    "student_photoPath": row["ProfilePicturePath"],
+                    "internshipId": row["InternshipId"],
+                    "roleTitle": row["RoleTitle"],
+                    "status": row["Status"]
+                } for row in rows
+            ] if rows else []
+        
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+
+    def get_preview_by_student_id(self, studentId: int) -> Union[list, Exception]:
+        """
+        Retrieve internships by their student ID.
+
+        :param studentId: The ID of the student.
+        :return: A list of dictionaries representing the internships or an empty list if not found. Each dictionary contains:
+            - company_name (str): The name of the company.
+            - company_photoPath (str | None): The path to the company's photo.
+            - internshipId (int): The ID of the internship.
+            - roleTitle (str): The title of the role.
+            - status (str): The status of the internship.
+
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT C.CompanyName, C.LogoPath, I.InternshipId, I.Status, IP.RoleTitle
+                        FROM Internship AS I, Application AS A, Company AS C, InternshipPosition AS IP
+                        WHERE I.ApplicationId = A.ApplicationId AND 
+                              A.InternshipPositionId = IP.InternshipPositionId AND 
+                              IP.CompanyId = C.UserId AND 
+                              A.StudentId = ?"""
+            rows = cur.execute(query, (studentId,)).fetchall()
+            
+            return [
+                {
+                    "company_name": row["CompanyName"],
+                    "company_photoPath": row["LogoPath"],
+                    "internshipId": row["InternshipId"],
+                    "roleTitle": row["RoleTitle"],
+                    "status": row["Status"]
+                } for row in rows
+            ] if rows else []
+        
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close
+
+
+    def get_preview_by_university_id(self, universityId: int) -> Union[list, Exception]:
+        """
+        Retrieve internships by their university ID.
+
+        :param universityId: The ID of the university.
+        :return: A list of dictionaries representing the internships or an empty list if not found. Each dictionary contains:
+            - student_name (str): The full name of the student.
+            - company_name (str): The name of the company.
+            - internshipId (int): The ID of the internship.
+            - roleTitle (str): The title of the role.
+            - status (str): The status of the internship.
+
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT S.FirstName, S.LastName, C.CompanyName, I.InternshipId, I.Status, IP.RoleTitle
+                        FROM Internship AS I, Application AS A, Student AS S, InternshipPosition AS IP, Company AS C
+                        WHERE I.ApplicationId = A.ApplicationId AND 
+                              A.StudentId = S.UserId AND 
+                              A.InternshipPositionId = IP.InternshipPositionId AND 
+                              IP.CompanyId = C.UserId AND 
+                              S.UniversityId = ?"""
+            rows = cur.execute(query, (universityId,)).fetchall()
+            
+            return [
+                {
+                    "student_name": row["FirstName"] + " " + row["LastName"],
+                    "company_name": row["CompanyName"],
+                    "internshipId": row["InternshipId"],
+                    "roleTitle": row["RoleTitle"],
+                    "status": row["Status"]
+                } for row in rows
+            ] if rows else []
+        
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
 
     ################
     #    UPDATE    #

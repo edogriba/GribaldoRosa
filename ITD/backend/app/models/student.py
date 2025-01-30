@@ -1,6 +1,6 @@
 from app.models.user import User
 from app.db.dbModels.student_db import StudentDB
-from typing import Optional
+from typing import Optional, Union
 
 class Student(User):
     def __init__(self, id: int, email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicture: Optional[str], location: str, 
@@ -22,55 +22,55 @@ class Student(User):
     #def __repr__(self):
     #    return f"<Student: ({self.id}) {self.firstName} {self.lastName}, Email: {self.email}"
     
-    def get_id(self):
+    def get_id(self) -> int:
         return super().get_id()
     
-    def get_email(self):
+    def get_email(self) -> str:
         return super().get_email()
     
-    def get_password(self):
+    def get_password(self) -> str:
         return super().get_password()
     
-    def get_type(self):
+    def get_type(self) -> str:
         return super().get_type()
     
-    def get_firstName(self):
+    def get_firstName(self) -> str:
         return self.firstName
     
-    def get_lastName(self):
+    def get_lastName(self) -> str:
         return self.lastName
 
-    def get_phoneNumber(self):
+    def get_phoneNumber(self) -> str:
         return self.phoneNumber
     
-    def get_profilePicture(self):
+    def get_profilePicture(self) -> Union[str, None]:
         return self.profilePicture
     
-    def get_location(self):
+    def get_location(self) -> str:
         return self.location
     
-    def get_universityId(self):
+    def get_universityId(self) -> int:
         return self.universityId
     
-    def get_degreeProgram(self):
+    def get_degreeProgram(self) -> str:
         return self.degreeProgram
     
-    def get_gpa(self):
+    def get_gpa(self) -> Union[float, None]:
         return self.GPA
     
-    def get_graduationYear(self):
+    def get_graduationYear(self) -> Union[int, None]:
         return self.graduationYear
     
-    def get_skills(self):
+    def get_skills(self) -> str:
         return self.skills
     
-    def get_cv(self):
+    def get_cv(self) -> str:
         return self.CV
     
-    def get_languageSpoken(self):
+    def get_languageSpoken(self) -> str:
         return self.languageSpoken
     
-    def to_dict(self):
+    def to_dict(self) -> dict:
         user_dict = super().to_dict()
         user_dict.update({
             'firstName': self.firstName,
@@ -91,7 +91,7 @@ class Student(User):
 
     @staticmethod
     def add(email: str, password: str, firstName: str, lastName: str, phoneNumber: str, profilePicturePath: Optional[str], location: str, 
-            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int):
+            degreeProgram: str, gpa: Optional[float], graduationYear: Optional[int], CVpath: str, skills: str, languageSpoken: str, universityId: int)  -> Union['Student', Exception, None]:
         """
         Add a new student record to the database and return a Student object.
 
@@ -117,6 +117,8 @@ class Student(User):
             studentConn = StudentDB()
             studentId = studentConn.insert(email, password, firstName, lastName, phoneNumber, profilePicturePath, location, 
                 degreeProgram, gpa, graduationYear, CVpath, skills, languageSpoken, universityId)
+            if studentId is None:
+                return None
             values = {
                 'id': studentId,
                 'email': email,
@@ -143,7 +145,7 @@ class Student(User):
             studentConn.close()
 
     @staticmethod
-    def get_by_id(id: int):
+    def get_by_id(id: int) -> Union['Student', None, Exception]:
         """
         Retrieve a student record by its unique identifier and return it as a Student object.
 
@@ -161,7 +163,7 @@ class Student(User):
             studentConn.close()
 
     @staticmethod
-    def get_by_email(email: str):
+    def get_by_email(email: str) -> Union['Student', None, Exception]:
         """
         Retrieve a student record by its email and return it as a Student object.
 

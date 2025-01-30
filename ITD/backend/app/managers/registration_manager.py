@@ -1,5 +1,5 @@
-from flask import jsonify
 from flask_jwt_extended import create_access_token
+from typing import Union
 
 from ..models import Student, University, Company
 from ..utils import hash_password, json_created, json_invalid_request
@@ -22,7 +22,7 @@ class RegistrationManager:
                 'firstName'     : user_data.get('firstName'),
                 'lastName'      : user_data.get('lastName'),
                 'phoneNumber'   : user_data.get('phoneNumber'),
-                'profilePicturePath': user_data.get('profilePicturePath', ''),  # Optional
+                'profilePicturePath': user_data.get('profilePicturePath', None),  # Optional
                 'location'      : user_data.get('location'),
                 'degreeProgram' : user_data.get('degreeProgram'),
                 'gpa'           : user_data.get('GPA', None),                   # Optional
@@ -65,7 +65,7 @@ class RegistrationManager:
                 'address'       : user_data.get('location'),
                 'websiteURL'    : user_data.get('websiteURL'),
                 'description'   : user_data.get('description'),
-                'logoPath'      : user_data.get('logoPath', '')  # Optional field
+                'logoPath'      : user_data.get('logoPath', None)  # Optional field
             }
             
             validation_result = validate_university_data(values)
@@ -97,7 +97,7 @@ class RegistrationManager:
                 'email'         : user_data.get('email'),
                 'password'      : user_data.get('password'),
                 'companyName'   : user_data.get('companyName'),
-                'logoPath'      : user_data.get('logoPath', ''),  # Optional
+                'logoPath'      : user_data.get('logoPath', None),  # Optional
                 'description'   : user_data.get('description'),
                 'location'      : user_data.get('location'),
             }
@@ -118,7 +118,7 @@ class RegistrationManager:
             return e
 
 
-def validate_student_data(user_data):
+def validate_student_data(user_data) -> Union[tuple, bool]:
     """
     Validate the student data.
 
@@ -177,7 +177,7 @@ def validate_student_data(user_data):
         return json_invalid_request("Invalid data")
     
     
-def validate_university_data(user_data):
+def validate_university_data(user_data) -> Union[tuple, bool]:
     """
     Validate the university data.
 
@@ -215,7 +215,7 @@ def validate_university_data(user_data):
         return json_invalid_request("Invalid data")
 
 
-def validate_company_data(user_data):
+def validate_company_data(user_data) -> Union[tuple, bool]:
     """
     Validate the company data.
 

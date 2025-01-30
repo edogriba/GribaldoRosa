@@ -1,6 +1,6 @@
 from ..db.dbModels import InternshipPositionDB
 from .company import Company
-from typing import Optional
+from typing import Optional, Union
 
 class InternshipPosition():
     def __init__(self, internshipPositionId: int, companyId: int, programName: str, duration: int, location: str, roleTitle: str, 
@@ -18,43 +18,43 @@ class InternshipPosition():
         self.description = description
         self.status = status
 
-    def get_internshipPositionId(self):
+    def get_internshipPositionId(self) -> int:
         return self.internshipPositionId
 
-    def get_companyId(self):
+    def get_companyId(self) -> int:
         return self.companyId
 
-    def get_programName(self):
+    def get_programName(self) -> str:
         return self.programName
 
-    def get_duration(self):
+    def get_duration(self) -> int:
         return self.duration
 
-    def get_location(self):
+    def get_location(self) -> str:
         return self.location
 
-    def get_roleTitle(self):
+    def get_roleTitle(self) -> str:
         return self.roleTitle
 
-    def get_skillsRequired(self):
+    def get_skillsRequired(self) -> str:
         return self.skillsRequired
 
-    def get_compensation(self):
+    def get_compensation(self) -> Union[int, None]:
         return self.compensation
 
-    def get_benefits(self):
+    def get_benefits(self) -> Union[str, None]:
         return self.benefits
 
-    def get_languagesRequired(self):
+    def get_languagesRequired(self) -> str:
         return self.languagesRequired
 
-    def get_description(self):
+    def get_description(self) -> str:
         return self.description
     
-    def get_status(self):
+    def get_status(self) -> str:
         return self.status
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'internshipPositionId': self.internshipPositionId,
             'companyId': self.companyId,
@@ -72,7 +72,7 @@ class InternshipPosition():
 
     @staticmethod
     def add(companyId: int, programName: str, duration: int, location: str, roleTitle: str, 
-            skillsRequired: str, compensation: Optional[int], benefits: Optional[str], languagesRequired: str, description: str):
+            skillsRequired: str, compensation: Optional[int], benefits: Optional[str], languagesRequired: str, description: str) -> Union['InternshipPosition', None, Exception]:
         """
         Adds a new internship position to the database.
 
@@ -106,14 +106,14 @@ class InternshipPosition():
             internshipPositionConn = InternshipPositionDB()
             internshipPositionId = internshipPositionConn.insert(**values)
             values.update({'internshipPositionId': internshipPositionId})
-            return InternshipPosition(**values)
+            return InternshipPosition(**values) if internshipPositionId else None
         except Exception as e:
             raise e
         finally:
             internshipPositionConn.close()
 
     @staticmethod
-    def get_by_id(internshipPositionId: int):
+    def get_by_id(internshipPositionId: int) -> Union['InternshipPosition', None, Exception]:
         """
         Retrieve an internship position by its ID.
 
@@ -131,7 +131,7 @@ class InternshipPosition():
             internshipPositionConn.close()
 
     @staticmethod
-    def get_by_companyId(companyId: int):
+    def get_by_companyId(companyId: int) -> Union[list, Exception]:
         """
         Retrieve internship positions by their company ID.
 
@@ -149,7 +149,7 @@ class InternshipPosition():
             internshipPositionConn.close()
 
     @staticmethod
-    def get_by_programName(programName: str):
+    def get_by_programName(programName: str) -> Union[list, Exception]:
         """
         Retrieve internship positions by their program name.
 
@@ -166,7 +166,7 @@ class InternshipPosition():
         finally:
             internshipPositionConn.close()
 
-    def get_company(self):
+    def get_company(self) -> Union[Company, None, Exception]:
         """
         Retrieve the company that posted the internship position.
 
@@ -178,7 +178,7 @@ class InternshipPosition():
         except Exception as e:
             raise e
         
-    def close(self):
+    def close(self) -> Union[bool, Exception]:
         """
         Close the internship position.
 
@@ -193,7 +193,7 @@ class InternshipPosition():
         finally:
             internshipPositionConn.close()
 
-    def is_open(self):
+    def is_open(self) -> bool:
         """
         Check if the internship position is open.
 
@@ -201,7 +201,7 @@ class InternshipPosition():
         """
         return self.status == 'Open'
     
-    def is_closed(self):
+    def is_closed(self) -> bool:
         """
         Check if the internship position is closed.
 

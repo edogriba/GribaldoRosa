@@ -45,7 +45,7 @@ def create_main_app():
             data = request.get_json()
 
             login_manager = LoginManager()
-            return login_manager.login(data)     
+            return login_manager.login(**data)     
         except Exception as e:
             return handle_error(e)
 
@@ -148,7 +148,7 @@ def create_main_app():
     #   Internship Routes   #
     ######################### 
 
-    @app.route('/api/internship/post', methods=['POST', 'OPTIONS'])
+    @app.route('/api/internship_position/post', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def post_internship_position():
         try:
@@ -168,7 +168,7 @@ def create_main_app():
             return handle_error(e)
         
     
-    @app.route('/api/internship/get_by_id', methods=['POST', 'OPTIONS'])
+    @app.route('/api/internship_position/get_by_id', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_internship_position_by_id():
         try:
@@ -179,13 +179,13 @@ def create_main_app():
             data = request.get_json()
 
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_position_by_id(data.get('internshipPositionId'))
+            return internship_manager.get_internship_position_by_id(**data)
 
         except Exception as e:
             return handle_error(e)
 
 
-    @app.route('/api/internship/get_by_company', methods=['POST', 'OPTIONS'])
+    @app.route('/api/internship_position/get_by_company', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_internship_positions_by_company():
         try:
@@ -196,13 +196,13 @@ def create_main_app():
             data = request.get_json() 
 
             internship_manager = InternshipManager()
-            return internship_manager.get_internship_positions_by_company(data.get('id'))
+            return internship_manager.get_internship_positions_by_company(**data)
 
         except Exception as e:
             return handle_error(e)
         
     
-    @app.route('/api/internship/close', methods=['POST', 'OPTIONS'])
+    @app.route('/api/internship_position/close', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def close_internship_position():
         try:
@@ -211,9 +211,8 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-
             internship_manager = InternshipManager()
-            return internship_manager.close_internship_position(data.get('internshipPositionId'))
+            return internship_manager.close_internship_position(**data)
 
         except Exception as e:
             return handle_error(e)
@@ -330,7 +329,7 @@ def create_main_app():
             
             data = request.get_json()
             application_manager = ApplicationManager()
-            return application_manager.get_application_by_id(data.get('applicationId'))
+            return application_manager.get_application_by_id(**data)
         except Exception as e:
             return handle_error(e)
         
@@ -346,7 +345,7 @@ def create_main_app():
             data = request.get_json()
             print("Ecco cos vedo", data)
             application_manager = ApplicationManager()
-            return application_manager.get_applications_by_student(data.get('studentId'))
+            return application_manager.get_applications_by_student(**data)
         except Exception as e:
             return handle_error(e)
         
@@ -363,10 +362,91 @@ def create_main_app():
             print(data)
             
             application_manager = ApplicationManager()
-            return application_manager.get_applications_by_internship_position(data.get('internshipPositionId'))
+            return application_manager.get_applications_by_internship_position(**data)
         except Exception as e:
             return handle_error(e)
      
+    
+    @app.route('/api/internship/get_by_company', methods=['POST', 'OPTIONS']) 
+    @jwt_required()        
+    def get_internships_preview_by_company():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.get_internships_preview_by_company(**data)
+        except Exception as e:
+            return handle_error(e)
+        
+    
+    @app.route('/api/internship/get_by_student', methods=['POST', 'OPTIONS']) 
+    @jwt_required()        
+    def get_internships_preview_by_student():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.get_internships_preview_by_student(**data)
+        except Exception as e:
+            return handle_error(e)
+        
+    
+    @app.route('/api/internship/get_by_university', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def get_internships_preview_by_university():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.get_internships_preview_by_university(**data)
+        except Exception as e:
+            return handle_error(e)
+
+    
+
+    @app.route('/api/internship/get_by_id', methods=['POST', 'OPTIONS'])     
+    @jwt_required()          
+    def get_full_internship_data_by_id():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.get_full_internship_data_by_id(**data)
+        except Exception as e:
+            return handle_error(e)
+        
+
+    @app.route('/api/internship/finish', methods=['POST', 'OPTIONS'])   
+    @jwt_required()            
+    def finish_internship():
+        try:
+            validation_error = validate_request()
+            if validation_error:
+                return validation_error
+            
+            data = request.get_json()
+            
+            internship_manager = InternshipManager()
+            return internship_manager.finish_internship(**data)
+        except Exception as e:
+            return handle_error(e)
+    
     return app
 
     

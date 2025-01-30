@@ -1,12 +1,12 @@
-from flask import jsonify
 from flask_jwt_extended import create_access_token
 
 from ..utils import verify_password, json_success, json_invalid_request, json_unauthorized
 from ..models import User, Student, University, Company
+from typing import Union
 
 class LoginManager:
 
-    def login(self, user_data):
+    def login(self, email: str, password: str):
         """
         Login a user with the given email and password using JWT.
         :param user_data: Dictionary containing 'email' and 'password' of the user
@@ -14,9 +14,6 @@ class LoginManager:
              or an error message if login fails
         """
         try:
-            email = user_data.get('email')
-            password = user_data.get('password')
-
             if not email or not password:
                 return json_invalid_request("Email and password are required.")
 
@@ -46,7 +43,7 @@ class LoginManager:
 
         
     @staticmethod
-    def get_user_by_email(email):
+    def get_user_by_email(email: str) -> Union['Student', 'University', 'Company', None, Exception]:
         """
         Load a user by email by first determining their type using `get_type_by_email`
         and then fetching their details from the corresponding model.

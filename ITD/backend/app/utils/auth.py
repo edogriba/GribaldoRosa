@@ -1,6 +1,7 @@
 import bcrypt
+from typing import Union
 
-def hash_password(password):
+def hash_password(password) -> Union[str, Exception]:
     """
     Hashes a plaintext password using bcrypt.
 
@@ -11,10 +12,13 @@ def hash_password(password):
     information such as passwords are stored in a secure, non-reversible format.
     The resulting hash is returned as a UTF-8 decoded string.
     """
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    try:
+        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    except Exception as e:
+        raise e
 
 
-def verify_password(plain_password, hashed_password):
+def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verifies a plaintext password against a hashed password using bcrypt.
 
@@ -25,5 +29,7 @@ def verify_password(plain_password, hashed_password):
     bcrypt's `checkpw` function to compare it with the stored hashed password.
     It returns True if the passwords match, and False otherwise.
     """
-    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
-
+    try:
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+    except Exception as e:
+        return False
