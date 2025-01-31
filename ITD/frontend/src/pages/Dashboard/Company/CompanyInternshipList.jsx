@@ -17,7 +17,7 @@ const CompanyInternshipList = () => {
                 const data = await res.json();
                 console.log("data", data);
                 console.log("app", data.internships);
-                setInternships(data.internships);
+                setInternships(data.internshipsPreview);
                 console.log(res);
             }
             catch(error) {
@@ -91,40 +91,19 @@ const CompanyInternshipList = () => {
                             { Array.isArray(internships) ? (internships.map((position) => (
                                     <div
                                         key={position.id}
-                                        className="relative grid grid-cols-2 gap-4 py-6 sm:grid-cols-4 lg:grid-cols-5">
+                                        className="relative bg-gray-50 p-5 rounded shadow grid grid-cols-2 gap-4 py-6 sm:grid-cols-4 lg:grid-cols-5">
                                         {/* Position ID */}
                                         <div className="col-span-2 content-center sm:col-span-4 lg:col-span-1">
                                             <span className="text-base font-semibold text-gray-900 hover:underline dark:text-white">
-                                                #{position.id}
+                                                #{position.internshipId}
                                             </span>
                                         </div>
-
-                                        {/* Position Duration */}
+                                        {/* Name Surname */}
                                         <div className="content-center">
-                                            <div className="flex items-center gap-2">
-                                                <svg
-                                                    className="h-4 w-4 text-gray-400"
-                                                    aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="24"
-                                                    height="24"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        stroke="currentColor"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
-                                                    />
-                                                </svg>
-                                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {position.duration}
-                                                </p>
+                                            <div className="flex items-center justify-end gap-2 sm:justify-start">
+                                                {position.student_name}
                                             </div>
                                         </div>
-
                                         {/* Position Role  */}
                                         <div className="content-center">
                                             <div className="flex items-center justify-end gap-2 sm:justify-start">
@@ -132,7 +111,7 @@ const CompanyInternshipList = () => {
                                                     <span className="font-medium text-gray-900 dark:text-white">
                                                         Role
                                                     </span>
-                                                    : {position.role}
+                                                    : {position.roleTitle}
                                                 </p>
                                             </div>
                                         </div>
