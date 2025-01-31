@@ -205,5 +205,42 @@ class TestCompany(unittest.TestCase):
         mock_close.assert_called_once()
 
 
+    @patch.object(CompanyDB, 'update')
+    @patch.object(CompanyDB, 'get_by_id', return_value={
+        'id': 1, 'email': 'test@example.com', 'password': 'password123', 'companyName': 'Test Company', 'logoPath': None, 'description': 'Updated description', 'location': 'Updated Location'
+    })
+    @patch.object(CompanyDB, 'close')
+    def test_update_company(self, mock_close, mock_get_by_id, mock_update):
+        company = Company.update(1, None, 'Updated description', 'Updated Location')
+        self.assertIsInstance(company, Company)
+        self.assertEqual(company.id, 1)
+        self.assertEqual(company.description, 'Updated description')
+        self.assertEqual(company.location, 'Updated Location')
+        mock_update.assert_called_once_with(1, None, 'Updated description', 'Updated Location')
+        mock_get_by_id.assert_called_once_with(1)
+        mock_close.assert_called_once()
+
+    
+    @patch.object(CompanyDB, 'update')
+    @patch.object(CompanyDB, 'get_by_id', return_value=None)
+    @patch.object(CompanyDB, 'close')
+    def test_update_company_not_found(self, mock_close, mock_get_by_id, mock_update):
+        company = Company.update(999, None, 'Updated description', 'Updated Location')
+        self.assertIsNone(company)
+        mock_update.assert_called_once_with(999, None, 'Updated description', 'Updated Location')
+        mock_get_by_id.assert_called_once_with(999)
+        mock_close.assert_called_once()
+
+    
+    @patch.object(CompanyDB, 'update', side_effect=Exception("Database error"))
+    @patch.object(CompanyDB, 'close')
+    def test_update_company_with_exception(self, mock_close, mock_update):
+        with self.assertRaises(Exception) as context:
+            Company.update(1, None, 'Updated description', 'Updated Location')
+        self.assertTrue('Database error' in str(context.exception))
+        mock_update.assert_called_once_with(1, None, 'Updated description', 'Updated Location')
+        mock_close.assert_called_once()
+
+        
 if __name__ == '__main__':
     unittest.main()

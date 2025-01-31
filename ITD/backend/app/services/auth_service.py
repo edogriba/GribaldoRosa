@@ -233,9 +233,10 @@ def is_optional_path_valid(path: str) -> bool:
         max_length = 1024
         if not path:
             return True
-        if not isinstance(path, str) or len(path) > max_length:
+        if not isinstance(path, str) or len(path) > max_length or path.strip() == "":
             return False
-        return path.startswith("/") and not any(char in path for char in [" ", "\\", ":", "*", "?", "\"", "<", ">", "|"])
+        filename_regex = r'^[\w\-. ]+$'
+        return bool(re.match(filename_regex, path))
     except Exception:
         return False
 

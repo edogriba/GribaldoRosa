@@ -179,3 +179,34 @@ class Student(User):
             raise e
         finally:
             studentConn.close()
+
+    @staticmethod
+    def update(id: int, phoneNumber: str, profilePicture: Optional[str], location: str, degreeProgram: str, GPA: Optional[float], 
+               graduationYear: Optional[int], CV: str, skills: str, languageSpoken: str, universityId: int) -> Union['Student', None, Exception]:
+        """
+        Update an existing student record in the database and return the updated Student object.
+
+        :param id: The unique identifier of the student.
+        :param phoneNumber: The contact number of the student.
+        :param profilePicturePath: The file path to the student's profile picture. [Optional]
+        :param location: The current location of the student.
+        :param degreeProgram: The degree program the student is enrolled in. 
+        :param gpa: The grade point average of the student. [Optional]
+        :param graduationYear: The expected graduation year of the student. [Optional]
+        :param CV: The file path to the student's CV. 
+        :param skills: A list of skills possessed by the student. 
+        :param languageSpoken: Languages spoken by the student. 
+        :param universityId: The ID of the university the student is associated with. 
+        :return: A Student object containing the updated student's data.
+        :raises Exception: If an error occurs during the update process.
+        """
+        try:
+            studentConn = StudentDB()
+
+            studentConn.update(id, phoneNumber, profilePicture, location, degreeProgram, GPA, graduationYear, CV, skills, languageSpoken, universityId)
+            studentData = studentConn.get_by_id(id)
+            return Student(**studentData) if studentData else None
+        except Exception as e:
+            raise e
+        finally:
+            studentConn.close()

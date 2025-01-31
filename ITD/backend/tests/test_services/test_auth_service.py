@@ -243,19 +243,26 @@ class TestAuthService(unittest.TestCase):
 
 
     def test_is_optional_path_valid(self):
-        self.assertTrue(is_optional_path_valid("/valid/path"))
-        self.assertTrue(is_optional_path_valid("/valid/path/"))
-        self.assertTrue(is_optional_path_valid("/valid/path/to"))
-        self.assertTrue(is_optional_path_valid("/valid/path/to/"))
-        self.assertTrue(is_optional_path_valid("/valid/path/to/file"))
-        self.assertTrue(is_optional_path_valid("/valid/path/to/file/"))
+        self.assertTrue(is_optional_path_valid(""))
         self.assertTrue(is_optional_path_valid(None))
-        self.assertFalse(is_optional_path_valid("invalid/path"))
-        self.assertFalse(is_optional_path_valid("invalid/path/"))
-        self.assertFalse(is_optional_path_valid("invalid/path/to"))
-        self.assertFalse(is_optional_path_valid("invalid/path/to/"))
+        self.assertTrue(is_optional_path_valid("valid_filename.txt"))
+        self.assertTrue(is_optional_path_valid("valid-file_name.txt"))
+        self.assertTrue(is_optional_path_valid("valid file name.txt"))
+        self.assertTrue(is_optional_path_valid("valid-file-name-123.txt"))
+        self.assertTrue(is_optional_path_valid("valid.file.name.txt"))
+        self.assertTrue(is_optional_path_valid("valid_filename" * 50 + ".txt"))
+        self.assertFalse(is_optional_path_valid("invalid/filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid\\filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid:filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid*filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid?filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid\"filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid<filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid>filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid|filename.txt"))
+        self.assertFalse(is_optional_path_valid("invalid filename" * 100 + ".txt"))
         self.assertFalse(is_optional_path_valid(1234567890))
-        self.assertFalse(is_optional_path_valid("abc"))
+        self.assertFalse(is_optional_path_valid(" "))
 
 
     def test_is_skills_valid(self):

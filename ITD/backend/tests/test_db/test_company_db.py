@@ -159,5 +159,75 @@ class TestUniversityDB(unittest.TestCase):
         self.assertIsNone(company)
 
 
+    def test_update_company(self):
+        email = "update@example.com"
+        password = "password123"
+        companyName = "Update Company"
+        logoPath = "/path/to/logo.png"
+        description = "A company to be updated"
+        location = "Initial Location"
+
+        user_id = self.db.insert(email, password, companyName, logoPath, description, location)
+
+        new_logoPath = "/new/path/to/logo.png"
+        new_description = "An updated company"
+        new_location = "Updated Location"
+
+        self.db.update(user_id, new_logoPath, new_description, new_location)
+        company = self.db.get_by_id(user_id)
+
+        self.assertIsNotNone(company)
+        self.assertEqual(company["logoPath"], new_logoPath)
+        self.assertEqual(company["description"], new_description)
+        self.assertEqual(company["location"], new_location)
+
+
+    def test_update_company_not_found(self):
+        with self.assertRaises(Exception) as context:
+            self.db.update(9999, "/new/path/to/logo.png", "Non-existent company", "Non-existent location")
+        self.assertEqual(str(context.exception), "Company not found")
+
+
+    def test_update_company_invalid(self):
+        email = "invalid_update@example.com"
+        password = "password123"
+        companyName = "Invalid Update Company"
+        logoPath = "/path/to/logo.png"
+        description = "A company to be updated"
+        location = "Initial Location"
+
+        user_id = self.db.insert(email, password, companyName, logoPath, description, location)
+
+        with self.assertRaises(Exception):
+            self.db.update(user_id, None, None, None)
+
+        with self.assertRaises(Exception):
+            self.db.update(user_id, "/new/path/to/logo.png", None, "Updated Location")
+
+        with self.assertRaises(Exception):
+            self.db.update(user_id, "/new/path/to/logo.png", "An updated company", None)
+
+
+    def test_update_company_partial(self):
+        email = "partial_update@example.com"
+        password = "password123"
+        companyName = "Partial Update Company"
+        logoPath = "/path/to/logo.png"
+        description = "A company to be updated"
+        location = "Initial Location"
+
+        user_id = self.db.insert(email, password, companyName, logoPath, description, location)
+
+        new_description = "An updated company"
+
+        self.db.update(user_id, None, new_description, location)
+        company = self.db.get_by_id(user_id)
+
+        self.assertIsNotNone(company)
+        self.assertEqual(company["logoPath"], None)
+        self.assertEqual(company["description"], new_description)
+        self.assertEqual(company["location"], location)
+
+
 if __name__ == '__main__':
     unittest.main()
