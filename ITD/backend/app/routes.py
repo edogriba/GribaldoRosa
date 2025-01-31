@@ -158,7 +158,7 @@ def create_main_app():
         try:           
             data = request.form.to_dict()
             logo = request.files['logo'] if 'logo' in request.files else None
-
+            
             registrationManager = RegistrationManager()
             return registrationManager.update_company(data, logo)
 
@@ -172,6 +172,9 @@ def create_main_app():
         try:
             data = request.form.to_dict()
             logo = request.files['logo'] if 'logo' in request.files else None
+
+            if not data:
+                raise Exception("No data provided")
 
             registrationManager = RegistrationManager()
             return registrationManager.update_university(data, logo)

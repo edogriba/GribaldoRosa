@@ -199,14 +199,14 @@ class RegistrationManager:
                 'description'   : user_data.get('description'),
                 'logoPath'      : user_data.get('logoPath', None)             # Optional field
             }
-
+            print("\nvalues: ", values, "\n")
             if values['id'] != get_current_user().get_id() or get_current_user().get_type() != "university":
                 return json_invalid_request("Unauthorized access")
-            
+            print("\nvalues: ", values, "\n")
             validation_result = validate_university_data(values, False)
             if validation_result is not True:
                 return validation_result
-            
+            print("\nValidation successful\n")
             if logo:
                 update_file_user(values['id'], values['logoPath'], logo)
                 values.update({'logoPath': secure_filename(logo.filename)})
@@ -214,7 +214,7 @@ class RegistrationManager:
             university = University.update(**values)
 
             if not university:
-                return json_internal_server_error("Update failed")
+                return json_invalid_request("Update failed")
 
             return json_created( "Update successful", user = university.to_dict() )
 

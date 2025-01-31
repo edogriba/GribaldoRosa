@@ -52,22 +52,25 @@ export async function requestAuth(path, method, body, params = {}, file = false)
 
   if (file === true) {
     headers = {
-      "Content-Type": "multipart/form-data",
       "Authorization": `Bearer ${accessToken}` // Attach the access token
     };
+    return window.fetch(buildURL(endpoint, path, params), {
+      method: method,
+      headers: headers,
+      body: body ? body : null,
+    });
   }
   else {
     headers = {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${accessToken}` // Attach the access token
     };
+    return window.fetch(buildURL(endpoint, path, params), {
+      method: method,
+      headers: headers,
+      body: body ? JSON.stringify(body) : null,
+    });
   }
-
-  return window.fetch(buildURL(endpoint, path, params), {
-    method: method,
-    headers: headers,
-    body: body ? JSON.stringify(body) : null,
-  });
 }
 
 export async function requestAuthWithErrorToast(path, method, body, params = {}, file = false) {

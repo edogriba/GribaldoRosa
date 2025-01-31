@@ -34,7 +34,7 @@ const UniversityUpdate = () => {
         formData.append('description', description);
         formData.append('websiteURL', websiteURL);
         formData.append('id', user.id);
-        formData.append('address', user.address);
+        formData.append('location', user.address);
         formData.append('logoPath', user.logoPath? user.logoPath : null);
         if (logo) {
             formData.append('logo', logo);
