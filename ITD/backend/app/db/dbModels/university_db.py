@@ -134,6 +134,27 @@ class UniversityDB:
         finally:
             cur.close()
 
+    def update(self, id: int, address: str, websiteURL: str, description: str, logoPath: Optional[str]) -> Union[None, Exception]:
+        """
+        Update a university record in the database.
+        :param id: The id of the university.
+        :param item: A tuple containing (name: str, address: str, websiteURL: str, description: str, logoPath: str).
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = """ UPDATE University 
+                            SET Address = ?, WebsiteURL = ?, Description = ?, LogoPath = ? 
+                            WHERE UserId = ? """
+                cur.execute(query, (address, websiteURL, description, logoPath, id))
+                if not cur.rowcount > 0:
+                    raise Exception("University not found")
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
 
     def close(self):
         self.con.close()    

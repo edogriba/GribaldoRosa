@@ -219,5 +219,56 @@ class TestUniversityDB(unittest.TestCase):
         self.assertEqual(len(universities), 0)
 
     
+    def test_update_university(self):
+        university_id = self.db.insert(
+            email="university@example.com", password="password", name="Test University", address="123 University St",
+            websiteURL="http://www.testuniversity.com", description="A test university",
+            logoPath="path/to/logo.jpg"
+        )
+        self.assertIsNotNone(university_id)
+        
+        self.db.update(
+            id=university_id, address="456 University Ave", websiteURL="http://www.updateduniversity.com",
+            description="An updated test university", logoPath="path/to/updated_logo.jpg"
+        )
+        
+        university = self.db.get_by_id(university_id)
+        self.assertIsNotNone(university)
+        self.assertEqual(university['id'], university_id)
+        self.assertEqual(university['address'], "456 University Ave")
+        self.assertEqual(university['websiteURL'], "http://www.updateduniversity.com")
+        self.assertEqual(university['description'], "An updated test university")
+        self.assertEqual(university['logoPath'], "path/to/updated_logo.jpg")
+
+
+    def test_update_university_no_logo(self):
+        university_id = self.db.insert(
+            email="university@example.com", password="password", name="Test University", address="123 University St",
+            websiteURL="http://www.testuniversity.com", description="A test university",
+            logoPath="path/to/logo.jpg"
+        )
+        self.assertIsNotNone(university_id)
+        
+        self.db.update(
+            id=university_id, address="456 University Ave", websiteURL="http://www.updateduniversity.com",
+            description="An updated test university", logoPath=None
+        )
+        
+        university = self.db.get_by_id(university_id)
+        self.assertIsNotNone(university)
+        self.assertEqual(university['id'], university_id)
+        self.assertEqual(university['address'], "456 University Ave")
+        self.assertEqual(university['websiteURL'], "http://www.updateduniversity.com")
+        self.assertEqual(university['description'], "An updated test university")
+        self.assertIsNone(university['logoPath'])
+
+
+    def test_update_university_not_found(self):
+        with self.assertRaises(Exception):
+            self.db.update(
+                id=9999, address="456 University Ave", websiteURL="http://www.updateduniversity.com",
+                description="An updated test university", logoPath="path/to/updated_logo.jpg"
+            )
+        
 if __name__ == '__main__':
     unittest.main()

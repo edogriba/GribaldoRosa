@@ -111,7 +111,7 @@ class ApplicationManager:
             
             application.confirm()
             
-            if not  Internship.add(application.get_internshipPositionId(), application.get_studentId()):
+            if not  Internship.add(application.get_internshipPositionId(), application.get_applicationId()):
                 application.accept()
                 return json_invalid_request("Internship could not be added.")
             

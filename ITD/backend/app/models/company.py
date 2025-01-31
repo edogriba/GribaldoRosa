@@ -101,3 +101,26 @@ class Company(User):
         finally:
             companyConn.close()
 
+
+    @staticmethod
+    def update(id: int, logoPath: Optional[str], description: str, location: str) -> Union['Company', None, Exception]:
+        """
+        Update an existing company record in the database and return the updated company data as a dictionary.
+
+        :param id: The unique identifier of the company.
+        :param companyName: The name of the company.
+        :param logoPath: The path to the company's logo.
+        :param description: A description of the company.
+        :param location: The location of the company.
+        :return: None if the update was successful.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            companyConn = CompanyDB()
+            companyConn.update(id, logoPath, description, location)
+            companyData = companyConn.get_by_id(id)
+            return Company(**companyData) if companyData else None
+        except Exception as e:
+            raise e
+        finally:
+            companyConn.close()

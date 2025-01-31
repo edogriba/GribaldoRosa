@@ -662,5 +662,89 @@ class TestStudentModel(unittest.TestCase):
         mock_close.assert_called_once()
 
 
+    @patch.object(StudentDB, 'update', return_value=None)
+    @patch.object(StudentDB, 'get_by_id', return_value={
+        'id': 1,
+        'email': "test@student.com",
+        'password': "password123",
+        'firstName': "Test",
+        'lastName': "Student",
+        'phoneNumber': "1234567890",
+        'profilePicture': None,
+        'location': "Updated Location",
+        'universityId': 1,
+        'degreeProgram': "Computer Science",
+        'GPA': 3.5,
+        'graduationYear': 2023,
+        'skills': "Python, Java",
+        'CV': "path/to/cv",
+        'languageSpoken': "English"
+    })
+    @patch.object(StudentDB, 'close')
+    def test_update_student(self, mock_close, mock_get_by_id, mock_update):
+        student = Student.update(
+            id=1,
+            phoneNumber="1234567890",
+            profilePicture=None,
+            location="Updated Location",
+            degreeProgram="Computer Science",
+            GPA=3.5,
+            graduationYear=2023,
+            CV="path/to/cv",
+            skills="Python, Java",
+            languageSpoken="English",
+            universityId=1
+        )
+        self.assertIsInstance(student, Student)
+        self.assertEqual(student.location, "Updated Location")
+        mock_update.assert_called_once_with(1, "1234567890", None, "Updated Location", "Computer Science", 3.5, 2023, "path/to/cv", "Python, Java", "English", 1)
+        mock_get_by_id.assert_called_once_with(1)
+        mock_close.assert_called_once()
+
+
+    @patch.object(StudentDB, 'update', side_effect=Exception("Student not found"))
+    @patch.object(StudentDB, 'close')
+    def test_update_student_not_found(self, mock_close, mock_update):
+        with self.assertRaises(Exception) as context:
+            Student.update(
+                id=999,
+                phoneNumber="1234567890",
+                profilePicture=None,
+                location="Updated Location",
+                degreeProgram="Computer Science",
+                GPA=3.5,
+                graduationYear=2023,
+                CV="path/to/cv",
+                skills="Python, Java",
+                languageSpoken="English",
+                universityId=1
+            )
+        self.assertTrue("Student not found" in str(context.exception))
+        mock_update.assert_called_once_with(999, "1234567890", None, "Updated Location", "Computer Science", 3.5, 2023, "path/to/cv", "Python, Java", "English", 1)
+        mock_close.assert_called_once()
+
+
+    @patch.object(StudentDB, 'update', side_effect=Exception("Database error"))
+    @patch.object(StudentDB, 'close')
+    def test_update_student_exception(self, mock_close, mock_update):
+        with self.assertRaises(Exception) as context:
+            Student.update(
+                id=1,
+                phoneNumber="1234567890",
+                profilePicture=None,
+                location="Updated Location",
+                degreeProgram="Computer Science",
+                GPA=3.5,
+                graduationYear=2023,
+                CV="path/to/cv",
+                skills="Python, Java",
+                languageSpoken="English",
+                universityId=1
+            )
+        self.assertTrue("Database error" in str(context.exception))
+        mock_update.assert_called_once_with(1, "1234567890", None, "Updated Location", "Computer Science", 3.5, 2023, "path/to/cv", "Python, Java", "English", 1)
+        mock_close.assert_called_once()
+
+
 if __name__ == '__main__':
     unittest.main()

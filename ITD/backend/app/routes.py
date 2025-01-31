@@ -1,6 +1,6 @@
-from flask import jsonify, Flask, request
+from flask import Flask, request
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required, get_current_user
+from flask_jwt_extended import JWTManager, jwt_required, get_current_user
 
 from datetime import timedelta
 
@@ -15,7 +15,7 @@ def create_main_app():
     # App Configuration
     app.config['SECRET_KEY'] = 'secret'
     app.config["JWT_SECRET_KEY"] = "nTXl6GKclQxRFz57pxXx"
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=10)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=60)
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
     app.config["JWT_COOKIE_HTTPONLY"] = True
@@ -87,7 +87,7 @@ def create_main_app():
     ###########################
     #   Registration Routes   #
     ###########################
-    @app.route('/api/universitylist', methods=['GET', 'OPTIONS'])
+    @app.route('/api/universitylist', methods=['GET'])
     def university_list():     
         try:
             universities = University.get_list_dict()
@@ -96,57 +96,93 @@ def create_main_app():
             return handle_error(e)
 
 
-    @app.route('/api/register/university', methods=['POST', 'OPTIONS'])
+    @app.route('/api/register/university', methods=['POST'])
     def university_register():
-        try:
-            validation_error = validate_request()
-            if validation_error:
-                return validation_error
-            
-            data = request.get_json()
+        try:            
+            data = request.form.to_dict()
+            logo = request.files['logo'] if 'logo' in request.files else None
 
             registrationManager = RegistrationManager()
-            return registrationManager.register_university(data)
+            return registrationManager.register_university(data, logo)
         
         except Exception as e:
             return handle_error(e)
 
 
-    @app.route('/api/register/student', methods=['POST', 'OPTIONS'])
+    @app.route('/api/register/student', methods=['POST'])
     def student_register():
-        try:
-            validation_error = validate_request()
-            if validation_error:
-                return validation_error
-            
-            data = request.get_json()
+        try:            
+            data = request.form.to_dict()
+            profilePicture = request.files['profilePicture'] if 'profilePicture' in request.files else None
+            cv = request.files['cv'] if 'cv' in request.files else None
 
             registrationManager = RegistrationManager()
-            return registrationManager.register_student(data)
+            return registrationManager.register_student(data, profilePicture, cv)
 
         except Exception as e:
             return handle_error(e)   
 
 
-    @app.route('/api/register/company', methods=['POST', 'OPTIONS'])
+    @app.route('/api/register/company', methods=['POST'])
     def company_register():
         try:
-            validation_error = validate_request()
-            if validation_error:
-                return validation_error
+            data = request.form.to_dict()
             
-            data = request.get_json()
+            logo = request.files['logo'] if 'logo' in request.files else None
 
             registrationManager = RegistrationManager()
-            return registrationManager.register_company(data)
+            return registrationManager.register_company(data, logo)
 
         except Exception as e:
             return handle_error(e)   
 
 
-    #########################
-    #   Internship Routes   #
-    ######################### 
+    @app.route('/api/update/student', methods=['POST'])
+    @jwt_required()
+    def update_student():
+        try:            
+            data = request.form.to_dict()
+            profilePicture = request.files['profilePicture'] if 'profilePicture' in request.files else None
+            cv = request.files['cv'] if 'cv' in request.files else None
+
+            registrationManager = RegistrationManager()
+            return registrationManager.update_student(data, profilePicture, cv)
+
+        except Exception as e:
+            return handle_error(e)
+        
+    
+    @app.route('/api/update/company', methods=['POST', 'OPTIONS'])
+    @jwt_required()
+    def update_company():
+        try:           
+            data = request.form.to_dict()
+            logo = request.files['logo'] if 'logo' in request.files else None
+
+            registrationManager = RegistrationManager()
+            return registrationManager.update_company(data, logo)
+
+        except Exception as e:
+            return handle_error(e)
+        
+    
+    @app.route('/api/update/university', methods=['POST'])
+    @jwt_required()
+    def update_university():
+        try:
+            data = request.form.to_dict()
+            logo = request.files['logo'] if 'logo' in request.files else None
+
+            registrationManager = RegistrationManager()
+            return registrationManager.update_university(data, logo)
+
+        except Exception as e:
+            return handle_error(e)
+        
+
+    ##################################
+    #   Internship Position Routes   #
+    ##################################
 
     @app.route('/api/internship_position/post', methods=['POST', 'OPTIONS'])
     @jwt_required()
@@ -157,10 +193,7 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            print(data)
-            data['duration'] = int(data['duration'])
-            data['compensation'] = int(data['compensation'])
-            print(data)
+
             internship_manager = InternshipManager()
             return internship_manager.post_internship_position(data)
 
@@ -217,7 +250,8 @@ def create_main_app():
         except Exception as e:
             return handle_error(e)
         
-    @app.route('/api/internship/get_by_student', methods=['POST', 'OPTIONS'])
+
+    @app.route('/api/internship_position/get_by_student', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_internship_positions_by_student():
         try:
@@ -249,10 +283,11 @@ def create_main_app():
             data = request.get_json()
             
             application_manager = ApplicationManager()
-            return application_manager.create_application(data.get('internshipPositionId'))
+            return application_manager.create_application(**data)
         except Exception as e:
             return handle_error(e)
-        
+
+
     @app.route('/api/application/accept', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def accept_application():    
@@ -317,8 +352,7 @@ def create_main_app():
         except Exception as e:
             return handle_error(e)
         
-    
-    
+     
     @app.route('/api/application/get_by_id', methods=['POST', 'OPTIONS'])
     @jwt_required()
     def get_application_by_id():
@@ -343,7 +377,6 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            print("Ecco cos vedo", data)
             application_manager = ApplicationManager()
             return application_manager.get_applications_by_student(**data)
         except Exception as e:
@@ -359,7 +392,6 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            print(data)
             
             application_manager = ApplicationManager()
             return application_manager.get_applications_by_internship_position(**data)
@@ -367,6 +399,10 @@ def create_main_app():
             return handle_error(e)
      
     
+    #########################
+    #   Internship Routes   #
+    #########################
+
     @app.route('/api/internship/get_by_company', methods=['POST', 'OPTIONS']) 
     @jwt_required()        
     def get_internships_preview_by_company():
@@ -414,7 +450,6 @@ def create_main_app():
         except Exception as e:
             return handle_error(e)
 
-    
 
     @app.route('/api/internship/get_by_id', methods=['POST', 'OPTIONS'])     
     @jwt_required()          
@@ -447,6 +482,8 @@ def create_main_app():
         except Exception as e:
             return handle_error(e)
     
+    # access control (valutare studente by company)     (data e link, e idApplications) -> cambio stato (guardo rasd)
+    # get_last_assesment_by_application_id(application_id) -> data e link       -> questo è da aggiungere a get_application_by_id() ma aggiungo link e data solo se l'application è ancora in fase di assesment
+    # search
+    # complaints    (idInternship, data, content) -> ritorno nulla
     return app
-
-    

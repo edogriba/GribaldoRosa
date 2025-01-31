@@ -116,6 +116,29 @@ class CompanyDB:
         finally:
             cur.close()
 
+    
+    def update(self, id: int, logoPath: Optional[str], description: str, location: str) -> Union[None, Exception]:
+        """
+        Update a company record in the database.
+        :param id: The id of the company.
+        :param item: A tuple containing (logoPath: str, description: str, location: str).
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = """ UPDATE Company 
+                            SET LogoPath = ?, Description = ?, Location = ?
+                            WHERE UserId = ? """
+                cur.execute(query, (logoPath, description, location, id))
+                if not cur.rowcount > 0:
+                    raise Exception("Company not found")
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
 
     def close(self):
         self.con.close()   
