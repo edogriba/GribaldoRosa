@@ -10,7 +10,7 @@ const StudentProfileTable = () => {
                 <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div className="overflow-x-auto">
                         {/* Table 1 */}
-                        <table className="w-full border-t text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
+                        <table className="border-t w-full text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th className="w-1/4 px-4 py-3">Name</th>
@@ -30,7 +30,7 @@ const StudentProfileTable = () => {
                         </table>
 
                         {/* Table 2 */}
-                        <table className="w-full border-t text-sm text-left text-gray-500 dark:text-gray-400 table-fixed mt-5">
+                        <table className="border-t w-full text-sm text-left text-gray-500 dark:text-gray-400 table-fixed mt-5">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th className="w-1/4 px-4 py-3">Degree Program</th>
@@ -40,7 +40,7 @@ const StudentProfileTable = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="border dark:border-gray-700">
+                                <tr className="border-y dark:border-gray-700">
                                     <td className="px-4 py-3">{user.degreeProgram}</td>
                                     <td className="px-4 py-3">{user.GPA}</td>
                                     <td className="px-4 py-3">{user.graduationYear}</td>
