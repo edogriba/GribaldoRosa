@@ -58,7 +58,7 @@ const CreateInternshipPosition = () => {
 
   return (
     <section className="bg-white dark:bg-gray-900">
-        <GoBack />
+        <GoBack location="companies/home"/>
                 <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Create Internship Position</h2>
                     <form onSubmit={handleSubmit}>

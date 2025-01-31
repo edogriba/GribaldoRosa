@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import GoBack from "../../../components/GoBack";
 import CompanyPositionApplications from "./CompanyPositionApplications";
 import { UserContext } from "../../../context/UserContext";
+
 const CompanyPosition = () => {
     const { user } = useContext(UserContext);
     const [position, setPosition] = useState({});
@@ -96,7 +97,7 @@ const CompanyPosition = () => {
     return (
         <div>
             {/* Go Back Button */}
-            <GoBack location="companies/dashboard/positions"/>
+            <GoBack location="companies/dashboard/internships"/>
             <div className="max-w-4xl mx-auto p-6 bg-white  dark:bg-gray-800 dark:border-gray-700">
       
                 {/* Header Section */}

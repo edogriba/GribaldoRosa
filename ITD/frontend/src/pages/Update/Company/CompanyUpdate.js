@@ -1,16 +1,44 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { UserContext } from '../../../context/UserContext';
 import GoBack from '../../../components/GoBack';
 import { useNavigate } from 'react-router-dom';
-
+import { api } from '../../../api/api';
 
 const CompanyUpdate = () => {
     const { user, userLogout } = useContext(UserContext);
+    const [location, setLocation] = useState(user?.location || '');
+    const [description, setDescription] = useState(user?.description || '');
+    const [logo, setLogo] = useState(null);
     const navigate = useNavigate();
+
     const handleUpdate = async (e) => {
-        console.log("Update Profile");
+    try {
+            const formData = new FormData();
+            formData.append('description', description);
+            formData.append('location', location);
+            formData.append('id', user.id);
+            formData.append('logoPath', user.logoPath? user.logoPath : null);
+            if (logo) {
+                formData.append('logo', logo);
+            }
+            else {
+                formData.append('logo', null);
+            }
+
+            // Make the API call
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+            const res = await api.updateCompany(formData);
+            console.log('Updated profile:', res);
+            // Optionally navigate or show a success message after update
+            navigate('companies/profile');
+            }
+        catch (error) {
+            console.error('Error updating profile:', error);
+        }
     }
 
     useEffect(() => {
@@ -22,7 +50,7 @@ const CompanyUpdate = () => {
         <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
             <Navbar user={user} onLogout={userLogout}/>
             <section className="bg-white dark:bg-gray-900">
-            <GoBack />
+            <GoBack location="companies/home"/>
                 <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update Profile</h2>
                     <form action="#">
@@ -37,8 +65,8 @@ const CompanyUpdate = () => {
                                     name="location"
                                     id="location"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.location || ""}
-                                    required
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
                                 />
                                 
                             </div>
@@ -53,7 +81,8 @@ const CompanyUpdate = () => {
                                     id="description"
                                     rows="4"
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.description || ""}
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
                                 ></textarea>
                             </div>
                         </div>

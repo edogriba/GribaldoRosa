@@ -60,7 +60,7 @@ const UniversityUpdate = () => {
     <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
       <Navbar user={user} onLogout={userLogout} />
       <section className="bg-white dark:bg-gray-900">
-        <GoBack />
+        <GoBack location="universities/home"/>
         <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
           <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
             Update Profile

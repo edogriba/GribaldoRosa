@@ -73,7 +73,7 @@ const CompanyApplication = () => {
     return (
         <div>
             {/* Go Back Button */}
-            <GoBack />
+            <GoBack location="companies/dashboard/applications/"/>
             <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 dark:border-gray-700 rounded-lg shadow-lg">
                 {/* Header Section */}
                 <div className="mb-6 border-b pb-4">
