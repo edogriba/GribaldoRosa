@@ -35,10 +35,16 @@ const RegisterCompany = () => {
         logo
       };
 
-      try {
-        const response = await api.companyRegistration(dataCompany);
-        await userRegistration(response);
-        // Redirect to company dashboard or another protected route
+      try {      
+        const res = await api.companyRegistration(dataCompany, (!!logo));
+        console.log(res)                                        // debug
+        const data = await res.json();
+        console.log(data)                                      // debug
+        // Save the token to localStorage
+        localStorage.setItem('access token', res.access_token);
+        console.log("data: ", dataCompany);                                    // debug
+        // Redirect to student dashboard or another protected route
+        toast.success('Registration successful!');
         navigate("/companies/home");
       } catch (error) {
         console.error('Error registering company:', error.response?.data?.message || error.message);
@@ -221,9 +227,11 @@ const RegisterCompany = () => {
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{' '}
-                  <Link to="/login">
-                    Login here
-                  </Link>
+                  <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                  <span className="text-sm text-primary-900 dark:text-gray-400">
+                  here
+                  </span>
+                </Link>
                 </p>
               </form>
             </div>

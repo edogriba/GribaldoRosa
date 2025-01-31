@@ -1,10 +1,34 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
+import { api } from "../../../api/api";
 
 const CompanyInternshipList = () => {
     const { user } = useContext(UserContext);
-    const [internships, setInternships] = useState([]); 
+    const navigate = useNavigate();
+    const [internships, setInternships] = useState([]);
+    const [internshipStatus, setInternshipStatus] = useState('All');
 
+    useEffect( () => {   
+        const fetchInternships = async () => {
+            try {
+                console.log("WEEE", user.id);
+                const res = await api.getInternshipListCompany({"companyId": user.id});
+                const data = await res.json();
+                console.log("data", data);
+                console.log("app", data.internships);
+                setInternships(data.internships);
+                console.log(res);
+            }
+            catch(error) {
+                console.log(error);
+            }
+        }
+        if(user.type !== 'company') {
+            navigate('/login');
+        }
+        fetchInternships();
+    }, []);
     return (
         <div>
             <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
@@ -27,8 +51,7 @@ const CompanyInternshipList = () => {
                                     >
                                         <option selected>All applications</option>
                                         <option value="ongoing">Ongoing</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="denied">Denied</option>
+                                        <option value="completed">Finished</option>
                                     </select>
                                 </div>
 

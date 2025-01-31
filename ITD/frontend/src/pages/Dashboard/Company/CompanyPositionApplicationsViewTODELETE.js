@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import GoBack from '../../../components/GoBack';
 import { toast } from 'react-hot-toast';
 import { api } from '../../../api/api';
+import { useContext } from 'react';
+import { UserContext } from '../../../context/UserContext';
 
 const CompanyPositionApplicationsView = (positionId) => {
+    const user = useContext(UserContext);
     const navigate = useNavigate();
     const fetchApplications = async () => {
         try {
@@ -24,8 +27,11 @@ const CompanyPositionApplicationsView = (positionId) => {
         }
     }
     useEffect(() => {
+        if(user.type !== 'company') {
+                navigate('/login');
+        }
         fetchApplications();
-    }, []);
+    }, [user]);
     return (
         <div>
             <h1>Company Position Applications</h1>

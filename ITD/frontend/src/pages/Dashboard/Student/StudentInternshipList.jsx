@@ -12,7 +12,8 @@ const StudentInternshipList = () => {
     useEffect( () => {   
         const fetchInternships = async () => {
             try {
-                const res = await api.getInternshipListStudent({"id": user.id});
+                console.log("WEEE", user.id);
+                const res = await api.getInternshipListStudent({"studentId": user.id});
                 const data = await res.json();
                 console.log("data", data);
                 console.log("app", data.internships);
@@ -32,7 +33,6 @@ const StudentInternshipList = () => {
     }, []);
     return (
         <div>    
-            <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
             <div>    
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <div className="p-10 gap-4 lg:flex lg:items-center lg:justify-between">
@@ -128,7 +128,6 @@ const StudentInternshipList = () => {
                     </div>
                 </div>
             </div>  
-            </section>
         </div>
     )
 }

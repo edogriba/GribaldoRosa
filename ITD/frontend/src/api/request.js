@@ -22,12 +22,21 @@ const endpoint = process.env.REACT_APP_BACKEND_URL;
  * @param {boolean} includeAuth - Whether to include the Authorization header.
  * @returns {Promise<Response>} - A promise with the response.
  */
-export async function request(path, method, body, params = {}) {
- 
-  const headers = {
-    "Content-Type": "application/json",
-  };
+export async function request(path, method, body, params = {}, file = false) {
 
+  let headers = {}
+
+  if (file === true) {
+    headers = {
+      "Content-Type": "multipart/form-data",
+    };
+  }
+  else {
+    headers = {
+      "Content-Type": "application/json",
+    };
+  }
+  console.log(headers);
   return window.fetch(buildURL(endpoint, path, params), {
     method: method,
     headers: headers,
@@ -35,14 +44,24 @@ export async function request(path, method, body, params = {}) {
   });
 }
 
-export async function requestAuth(path, method, body, params = {}) {
+export async function requestAuth(path, method, body, params = {}, file = false) {
 
   const accessToken = localStorage.getItem("access_token");
 
-  const headers = {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${accessToken}` // Attach the access token
-  };
+  let headers = {}
+
+  if (file === true) {
+    headers = {
+      "Content-Type": "multipart/form-data",
+      "Authorization": `Bearer ${accessToken}` // Attach the access token
+    };
+  }
+  else {
+    headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}` // Attach the access token
+    };
+  }
 
   return window.fetch(buildURL(endpoint, path, params), {
     method: method,
@@ -51,45 +70,30 @@ export async function requestAuth(path, method, body, params = {}) {
   });
 }
 
-export async function requestAuthWithErrorToast(path, method, body, params = {}, customErrorMessage={}) {
+export async function requestAuthWithErrorToast(path, method, body, params = {}, file = false) {
   try {
-    const response = await requestAuth(path, method, body, params);
+    const response = await requestAuth(path, method, body, params, file);
     console.log(response);
 
-    /*if (!response.ok ) {
-      const message = customErrorMessage || 'An error occurred while processing your request.';
-      toast.error(message);
-    }*/
-
-
     return response;
+
   } catch (error) {
-    // Display a generic error message if the request fails,
-    // e.g., due to a network issue or a server error (most likely
-    // due to the server being down).
     const message =
       'An error occurred while processing your request. The server might be down or there could be a network issue.';
-    //toast.error(message);
+    toast.error(message);
 
     throw error;
   }
 }
 
-export async function requestWithErrorToast(path, method, body, params = {}, customErrorMessage) {
+export async function requestWithErrorToast(path, method, body, params = {}, file = false) {
   try {
-    const response = await request(path, method, body, params);
+    const response = await request(path, method, body, params, file);
     console.log(response);
-
-    if (!response.ok) {
-      const message = customErrorMessage || 'An error occurred while processing your request.';
-      //toast.error(message);
-    }
 
     return response;
   } catch (error) {
-    // Display a generic error message if the request fails,
-    // e.g., due to a network issue or a server error (most likely
-    // due to the server being down).
+
     const message =
       'An error occurred while processing your request. The server might be down or there could be a network issue.';
     toast.error(message);

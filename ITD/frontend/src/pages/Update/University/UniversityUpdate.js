@@ -1,162 +1,181 @@
-import React, {useContext} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { UserContext } from '../../../context/UserContext';
 import GoBack from '../../../components/GoBack';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../../../api/api';
 
 const UniversityUpdate = () => {
-    const { user, userLogout } = useContext(UserContext);
+  const { user, userLogout } = useContext(UserContext);
+  const navigate = useNavigate();
+  
+  // Correctly using array destructuring for useState
+  const [description, setDescription] = useState(user?.description || '');
+  const [logo, setLogo] = useState(null);
+  const [websiteURL, setWebsiteURL] = useState(user?.websiteURL || '');
 
-    const handleUpdate = async (e) => {
-        console.log("Update Profile");
+  useEffect(() => {
+    if (user.type !== 'university') {
+      navigate('/login');
     }
+  }, [user, navigate]);
 
-    return (
-        <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
-            <Navbar user={user} onLogout={userLogout}/>
-            <section className="bg-white dark:bg-gray-900">
-            <GoBack />
-                <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
-                    <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update Profile</h2>
-                    <form action="#">
-                        <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
-                            {/* First Name */}
-                            <div className="w-full">
-                                <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    First Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    id="firstName"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.firstName || ""}
-                                
-                                    required
-                                />
-                            </div>
+  // Handle file input for logo
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    setLogo(file);
+  };
 
-                            {/* Last Name */}
-                            <div className="w-full">
-                                <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Last Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    id="lastName"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.lastName || ""}
-                                    required
-                                />
-                            </div>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const formData = new FormData();
+        formData.append('description', description);
+        formData.append('websiteURL', websiteURL);
+        formData.append('id', user.id);
+        formData.append('address', user.address);
+        formData.append('logoPath', user.logoPath? user.logoPath : null);
+        if (logo) {
+            formData.append('logo', logo);
+        }
+        else {
+            formData.append('logo', null);
+        }
 
-                            {/* Email */}
-                            <div className="sm:col-span-2">
-                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.email || ""}
-                                    required
-                                />
-                            </div>
+        // Make the API call
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+        const res = await api.updateUniversity(formData);
+        console.log('Updated profile:', res);
+        // Optionally navigate or show a success message after update
+        // navigate('/profile');
+        } catch (error) {
+        console.error('Error updating profile:', error);
+        }
+  };
 
-                            {/* Phone Number */}
-                            <div className="w-full">
-                                <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Phone Number
-                                </label>
-                                <input
-                                    type="text"
-                                    name="phoneNumber"
-                                    id="phoneNumber"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue = {user?.phoneNumber || ""}
-                                    required
-                                />
-                            </div>
+  return (
+    <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
+      <Navbar user={user} onLogout={userLogout} />
+      <section className="bg-white dark:bg-gray-900">
+        <GoBack />
+        <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
+          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+            Update Profile
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+              {/* Description */}
+              <div className="w-full">
+                <label
+                  htmlFor="description"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Description
+                </label>
+                <input
+                  type="text"
+                  name="description"
+                  id="description"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 
+                             text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 
+                             block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
+                             dark:placeholder-gray-400 dark:text-white 
+                             dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
 
-                            {/* Location */}
-                            <div className="w-full">
-                                <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Location
-                                </label>
-                                <input
-                                    type="text"
-                                    name="location"
-                                    id="location"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.location || ""}
-                                    required
-                                />
-                            </div>
+              {/* Website URL */}
+              <div className="w-full">
+                <label
+                  htmlFor="websiteURL"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Website URL
+                </label>
+                <input
+                  type="text"
+                  name="websiteURL"
+                  id="websiteURL"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 
+                             text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 
+                             block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
+                             dark:placeholder-gray-400 dark:text-white 
+                             dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  value={websiteURL}
+                  onChange={(e) => setWebsiteURL(e.target.value)}
+                  required
+                />
+              </div>
 
-                            {/* Skills */}
-                            <div className="sm:col-span-2">
-                                <label htmlFor="skills" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Skills
-                                </label>
-                                <textarea
-                                    id="skills"
-                                    rows="4"
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.skills || ""}
-                                ></textarea>
-                            </div>
-
-                            {/* Languages */}
-                            <div className="sm:col-span-2">
-                                <label htmlFor="languages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Languages Spoken
-                                </label>
-                                <textarea
-                                    id="languages"
-                                    rows="4"
-                                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.languageSpoken || ""}
-                                ></textarea>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end items-center space-x-4">
-                            <button
-                                type="submit"
-                                className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                                onSubmit={handleUpdate}
-                            >
-                                Update Profile
-                            </button>
-                            <button
-                                type="button"
-                                className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-                                onClick = {() => window.location.reload()}
-                            >
-                                <svg
-                                    className="w-5 h-5 mr-1 -ml-1"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                        clipRule="evenodd"
-                                    ></path>
-                                </svg>
-                                Cancel Modifications
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-            <Footer />
+              {/* Logo */}
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="logoPath"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Logo
+                </label>
+                <input
+                  type="file"
+                  id="logoPath"
+                  name="logoPath"
+                  onChange={handleLogoChange}
+                  className="block w-full text-sm text-gray-900 border 
+                             border-gray-300 rounded-lg cursor-pointer 
+                             bg-gray-50 focus:outline-none dark:bg-gray-700 
+                             dark:border-gray-600 dark:placeholder-gray-400"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end items-center space-x-4">
+              <button
+                type="submit"
+                className="text-white bg-primary-700 hover:bg-primary-800 
+                           focus:ring-4 focus:outline-none focus:ring-primary-300 
+                           font-medium rounded-lg text-sm px-5 py-2.5 
+                           text-center dark:bg-primary-600 dark:hover:bg-primary-700 
+                           dark:focus:ring-primary-800"
+              >
+                Update Profile
+              </button>
+              <button
+                type="button"
+                className="text-red-600 inline-flex items-center hover:text-white 
+                           border border-red-600 hover:bg-red-600 focus:ring-4 
+                           focus:outline-none focus:ring-red-300 font-medium rounded-lg 
+                           text-sm px-5 py-2.5 text-center 
+                           dark:border-red-500 dark:text-red-500 
+                           dark:hover:text-white dark:hover:bg-red-600 
+                           dark:focus:ring-red-900"
+                onClick={() => window.location.reload()}
+              >
+                <svg
+                  className="w-5 h-5 mr-1 -ml-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Cancel Modifications
+              </button>
+            </div>
+          </form>
         </div>
-    );
+      </section>
+      <Footer />
+    </div>
+  );
 };
 
 export default UniversityUpdate;

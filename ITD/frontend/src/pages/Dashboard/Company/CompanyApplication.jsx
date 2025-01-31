@@ -13,11 +13,11 @@ const CompanyApplication = () => {
     const handleAccept = async () => {
         try {
             console.log("Accepting Application...", applicationId); // Debug log
-            const res = await api.acceptApplication({"applicationId": applicationId, "internshipPositionId": positionId}); // Use `applicationId` directly
+            const res = await api.acceptApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
             const data = await res.json();
             setApplication(data);
             console.log("Accepted Application:", data); // Debug log
-            navigate(`/companies/dashboard/positions/:${positionId}`);
+            navigate(`/companies/dashboard/positions/${positionId}`);
         }
         catch (error) { 
             console.error("Error acceptin application:", error.message);
@@ -31,7 +31,7 @@ const CompanyApplication = () => {
     const handleReject = async () => {
         try {
             console.log("Reject Application...", applicationId); // Debug log
-            const res = await api.rejectApplication({"applicationId": applicationId, "internshipPositionId": positionId}); // Use `applicationId` directly
+            const res = await api.rejectApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
             const data = await res.json();
             setApplication(data);
             console.log("Rejected Application:", data); // Debug log
@@ -67,7 +67,6 @@ const CompanyApplication = () => {
                 alert("Failed to load application details. Please try again later.");
             }
         };
-
         fetchApplication();
     }, [applicationId]);
 

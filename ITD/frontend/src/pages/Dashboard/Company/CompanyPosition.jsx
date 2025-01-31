@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../../../api/api";
 import { toast } from "react-hot-toast";
 import GoBack from "../../../components/GoBack";
 import CompanyPositionApplications from "./CompanyPositionApplications";
-
+import { UserContext } from "../../../context/UserContext";
 const CompanyPosition = () => {
+    const { user } = useContext(UserContext);
     const [position, setPosition] = useState({});
-    const { positionId } = useParams(); // Extract the dynamic `positionId` from the route
-    const navigate = useNavigate(); // Hook to navigate programmatically
+    const { positionId } = useParams(); 
+    const navigate = useNavigate(); 
     const [applications, setApplications] = useState([]);
     const [showPosition, setShowPosition]= useState(false);
     
@@ -16,7 +17,7 @@ const CompanyPosition = () => {
     const handleClosePosition = async () => {   
         try {
             console.log("Closing Position...", positionId); // Debug log
-            const res = await api.closePosition({"internshipPositionId": positionId}); // Use `positionId` directly
+            const res = await api.closePosition({"internshipPositionId": positionId}); 
             const data = await res.json();
             console.log("Closed Position:", data); // Debug log
             if (data.type === "success") {
@@ -40,7 +41,7 @@ const CompanyPosition = () => {
             console.log("Fetching applications...", positionId); // Debug log
             setShowPosition(true);
             console.log("Fetching Applications..."); // Debug log
-            const res = await api.getApplicationListCompany({"internshipPositionId": positionId}); // Use `positionId` directly
+            const res = await api.getApplicationListCompany({"internshipPositionId": parseInt(positionId)}); // Use `positionId` directly
             const data = await res.json();
             console.log("Qui")
             if (res.type === "not_found") {
@@ -90,7 +91,7 @@ const CompanyPosition = () => {
         };
 
         fetchPosition();
-    }, [positionId]);
+    }, [user]);
 
     return (
         <div>
@@ -101,10 +102,10 @@ const CompanyPosition = () => {
                 {/* Header Section */}
                 <div className="mb-6">
                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {position.roleTitle || "Role Title"}
+                    {position?.roleTitle || "Role Title"}
                     </h2>
                     <p className="text-lg text-gray-500 dark:text-gray-400">
-                    {position.programName || "Program Name"}
+                    {position?.programName || "Program Name"}
                     </p>
                 </div>
 
@@ -115,7 +116,7 @@ const CompanyPosition = () => {
                         Location
                     </p>
                     <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                        {position.location || "Not specified"}
+                        {position?.location || "Not specified"}
                     </p>
                     </div>
 
@@ -124,7 +125,7 @@ const CompanyPosition = () => {
                         Compensation
                     </p>
                     <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                        ${position.compensation || "Not specified"}
+                        ${position?.compensation || "Not specified"}
                     </p>
                     </div>
 
@@ -133,7 +134,7 @@ const CompanyPosition = () => {
                         Duration
                     </p>
                     <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                        {position.duration || "Not specified"} months
+                        {position?.duration || "Not specified"} months
                     </p>
                     </div>
 
@@ -143,12 +144,12 @@ const CompanyPosition = () => {
                     </p>
                     <p
                         className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                        position.status === "Open"
+                        position?.status === "Open"
                             ? "bg-green-100 text-green-800"
                             : "bg-red-100 text-red-800"
                         }`}
                     >
-                        {position.status || "Unknown"}
+                        {position?.status || "Unknown"}
                     </p>
                     </div>
                 </div>
@@ -160,7 +161,7 @@ const CompanyPosition = () => {
                         Benefits
                     </p>
                     <p className="text-base text-gray-800 dark:text-gray-200">
-                        {position.benefits || "Not specified"}
+                        {position?.benefits || "Not specified"}
                     </p>
                     </div>
 
@@ -169,7 +170,7 @@ const CompanyPosition = () => {
                         Languages Required
                     </p>
                     <p className="text-base text-gray-800 dark:text-gray-200">
-                        {position.languagesRequired || "Not specified"}
+                        {position?.languagesRequired || "Not specified"}
                     </p>
                     </div>
 
@@ -178,7 +179,7 @@ const CompanyPosition = () => {
                         Skills Required
                     </p>
                     <p className="text-base text-gray-800 dark:text-gray-200">
-                        {position.skillsRequired || "Not specified"}
+                        {position?.skillsRequired || "Not specified"}
                     </p>
                     </div>
 
@@ -187,7 +188,7 @@ const CompanyPosition = () => {
                         Description
                     </p>
                     <p className="text-base text-gray-800 dark:text-gray-200">
-                        {position.description || "Not specified"}
+                        {position?.description || "Not specified"}
                     </p>
                     </div>
                 </div>
@@ -195,7 +196,7 @@ const CompanyPosition = () => {
                 {/* Footer Section */}
 
                 <div className="mt-6 text-right">
-                {position.status === "Open" && (
+                {position?.status === "Open" && (
                     <button
                     className="mx-2 px-6 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
                     onClick={handleClosePosition} 

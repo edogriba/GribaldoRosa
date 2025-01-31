@@ -1,16 +1,23 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { UserContext } from '../../../context/UserContext';
 import GoBack from '../../../components/GoBack';
+import { useNavigate } from 'react-router-dom';
+
 
 const CompanyUpdate = () => {
     const { user, userLogout } = useContext(UserContext);
-
+    const navigate = useNavigate();
     const handleUpdate = async (e) => {
         console.log("Update Profile");
     }
 
+    useEffect(() => {
+        if(user.type !== 'company') {
+            navigate('/login');
+        }
+    }, [user]);
     return (
         <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
             <Navbar user={user} onLogout={userLogout}/>
@@ -20,37 +27,6 @@ const CompanyUpdate = () => {
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update Profile</h2>
                     <form action="#">
                         <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
-                            {/* First Name */}
-                            <div className="w-full">
-                                <label htmlFor="companyName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    First Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="companyName"
-                                    id="companyName"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.companyName || ""}
-                                
-                                    required
-                                />
-                            </div>
-
-                            {/* Email */}
-                            <div className="w-full">
-                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    defaultValue={user?.email || ""}
-                                    required
-                                />
-                            </div>
-
                             {/* Location */}
                             <div className="sm:col-span-2">
                                 <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
