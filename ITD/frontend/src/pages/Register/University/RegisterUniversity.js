@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../../../api/api';
 
 const RegisterUniversity = () => {
   const [universityEmail, setUniversityEmail] = useState('');
@@ -12,38 +13,38 @@ const RegisterUniversity = () => {
   const [location, setLocation] = useState('');
   const [websiteURL, setWebsiteURL] = useState('');
   const [description, setDescription] = useState('');
-  const [logoPath, setLogoPath] = useState('');
+  const [logo, setlogo] = useState('');
   const [termAccepted, setTermAccepted] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
+    const dataUniversity = {
         university_email: universityEmail,
         university_password: universityPassword,
         name: universityName,
         location: location,
         websiteURL: websiteURL,
         description: description,
-        logoPath: logoPath
+        logo: logo
     };
 
-    try {
-        const response = await axios.post('http://127.0.0.1:5000/api/register/university', data);
-
-        // Save the token to localStorage
-        localStorage.setItem('token', response.data.token);
-
-        // Debug
-        console.log(response.data);
-
-        // Redirect to dashboard or another protected route
-        return <Link to="/"></Link>;
-    } 
-    catch (error) {
-        console.error('Error registering university:', error.response?.data?.message || error.message);
-        toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
-        }
+    try {      
+      const res = await api.universityRegistration(dataUniversity, (!!logo));
+      console.log(res)                                        // debug
+      const data = await res.json();
+      console.log(data)                                      // debug
+      // Save the token to localStorage
+      localStorage.setItem('access token', res.access_token);
+      console.log("data: ", dataUniversity);                                    // debug
+      // Redirect to student dashboard or another protected route
+      toast.success('Registration successful!');
+      navigate("/universities/home");
+    } catch (error) {
+      console.error('Error registering university:', error.response?.data?.message || error.message);
+      toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
+    }
     };
 
   return (
@@ -189,7 +190,7 @@ const RegisterUniversity = () => {
                     name="logo"
                     id="logo"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    onChange={(e) => setLogoPath(e.target.value)}
+                    onChange={(e) => setlogo(e.target.value)}
                   />
                 </div>
 
@@ -230,9 +231,11 @@ const RegisterUniversity = () => {
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{' '}
-                  <Link to="/login">
-                    Login here
-                  </Link>
+                  <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                  <span className="text-sm text-primary-900 dark:text-gray-400">
+                  here
+                  </span>
+                </Link>
                 </p>
               </form>
             </div>

@@ -3,10 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../../../api/api";
 import { toast } from "react-hot-toast";
 import GoBack from "../../../components/GoBack";
+import Status from "../../../components/Status";
 
 const StudentApplication = () => {
     const [application, setApplication] = useState({});
-    const { applicationId } = useParams(); // Extract the dynamic `applicationId` from the route
+    const {positionId, applicationId } = useParams(); // Extract the dynamic `applicationId` from the route
     const navigate = useNavigate(); // Hook to navigate programmatically
 
     useEffect(() => {
@@ -33,7 +34,7 @@ const StudentApplication = () => {
     return (
         <div>
             {/* Go Back Button */}
-            <GoBack />
+            <GoBack location={`/students/dashboard/applications`}/>
             <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 dark:border-gray-700 rounded-lg shadow-lg">
                 {/* Header Section */}
                 <div className="mb-6 border-b pb-4">
@@ -86,17 +87,7 @@ const StudentApplication = () => {
                         <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
                             Status
                         </p>
-                        <p
-                            className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                                application.application?.status === "Pending"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : application.application?.status === "Accepted"
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-red-100 text-red-800"
-                            }`}
-                        >
-                            {application.application?.status || "Unknown"}
-                        </p>
+                       <Status status={application.application?.status}/>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">

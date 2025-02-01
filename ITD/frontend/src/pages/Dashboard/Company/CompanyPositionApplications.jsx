@@ -33,7 +33,7 @@ const CompanyPositionApplications = (applications) => {
                                     {/* Application Status */}
                                                                         
                                     <div className="flex justify-center items-center">
-                                        <Status />
+                                        <Status status={application.application.status}/>
                                     </div>
 
                                     {/* View Details Button */}

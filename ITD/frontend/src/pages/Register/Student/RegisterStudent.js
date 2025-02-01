@@ -10,13 +10,14 @@ const RegisterStudent = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [profilePicturePath, setProfilePicturePath] = useState('');
+  const [profilePicture, setProfilePicture] = useState(null);
   const [location, setLocation] = useState('');
   const [degreeProgram, setDegreeProgram] = useState('');
   const [gpa, setGpa] = useState('');
   const [graduationYear, setGraduationYear] = useState('');
-  const [cvPath, setCvPath] = useState('');
+  const [CV, setCV] = useState(null);
   const [skills, setSkills] = useState('');
+  
   const [languageSpoken, setLanguageSpoken] = useState('');
 
   const [universities, setUniversities] = useState([]); // Array to hold universities
@@ -40,6 +41,23 @@ const RegisterStudent = () => {
     fetchUniversities();
   }, []);
   
+  const handleCVUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCV(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleProfilePictureUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfilePicture(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,12 +68,12 @@ const RegisterStudent = () => {
       firstName,
       lastName,
       phoneNumber,
-      profilePicturePath,
+      profilePicture,
       location,
       degreeProgram,
       GPA: parseFloat(gpa), // Ensure GPA is a number
       graduationYear: parseInt(graduationYear, 10), // Ensure graduationYear is an integer
-      CVpath: cvPath,
+      CV: CV,
       skills,
       languageSpoken,
       university // Ensure university ID is an integer
@@ -63,7 +81,7 @@ const RegisterStudent = () => {
     
     console.log("DataStudent: ", dataStudent);                               // debug
     try {
-      const res = await api.studentRegistration(dataStudent);
+      const res = await api.studentRegistration(dataStudent, (!!profilePicture || !!CV));
       console.log(res)                                        // debug
       const data = await res.json();
       console.log(data)                                      // debug
@@ -71,7 +89,7 @@ const RegisterStudent = () => {
       localStorage.setItem('access token', res.access_token);
       console.log("data: ", dataStudent);                                    // debug
       // Redirect to student dashboard or another protected route
-      toast.success('Registration successful! Please log in with your credentials!');
+      toast.success('Registration successful!');
       navigate('/students/home')
     } catch (error) {
       console.error('Error registering student:', error.response?.data?.message || error.message);
@@ -176,15 +194,15 @@ const RegisterStudent = () => {
               </div>
               {/* Profile Picture */}
               <div>
-                <label htmlFor="profilePicturePath" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label htmlFor="profilePicture" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Profile Picture (Optional)
                 </label>
                 <input
                   type="file"
-                  name="profilePicturePath"
-                  id="profilePicturePath"
+                  name="profilePicture"
+                  id="profilePicture"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  onChange={(e) => setProfilePicturePath(e.target.value)}
+                  onChange={handleProfilePictureUpload}
                 />
               </div>
               {/* Location */}
@@ -251,15 +269,15 @@ const RegisterStudent = () => {
               </div>
               {/* CV */}
               <div>
-                <label htmlFor="CVpath" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label htmlFor="CV" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   CV
                 </label>
                 <input
                   type="file"
-                  name="CVpath"
-                  id="CVpath"
+                  name="CV"
+                  id="CV"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  onChange={(e) => setCvPath(e.target.value)}
+                  onChange={handleCVUpload}
                   required
                 />
               </div>

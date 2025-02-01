@@ -2045,7 +2045,7 @@ Headers: {
   - **Body (JSON)**:
     - `type` (str): `server_error`
     - `message` (str): Error message.
-
+// ERRORE??
 <details>
 <summary>Example Request</summary>
 

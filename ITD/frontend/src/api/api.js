@@ -1,22 +1,24 @@
 import {
   getUniversityList,
-  universityRegistration
+  universityRegistration,
+  updateUniversity
 } from './university';
 
 import {
   getStudentsList,
   studentRegistration,
-  getInternshipListStudent
+  updateStudent
 } from './student'
 
 import {
   companyRegistration,
+  updateCompany
 } from './company'
 
 import {
   userLogin, 
   userLogout, 
-  userAuthenticated
+  userAuthenticated,
 } from './user'
 
 import { 
@@ -37,7 +39,12 @@ import {
   getPositionListStudent,
   getPosition,
   createPosition, 
-  closePosition 
+  closePosition,
+  getInternshipListStudent,
+  getInternshipListCompany,
+  getInternshipListUniversity,
+  getInternship,
+  finishInternship
 } from './internship';
 
 export const Method = {
@@ -65,10 +72,17 @@ export const api = {
   closePosition,
   getApplicationListCompany,
   getApplicationListStudent,
-  getInternshipListStudent, 
   getApplicationStudent,
   getApplicationCompany,
   acceptApplication,
   rejectApplication,
-  assessApplication
+  assessApplication,
+  getInternshipListStudent,
+  getInternshipListCompany,
+  getInternshipListUniversity,
+  updateStudent,
+  updateCompany,
+  updateUniversity,
+  getInternship,
+  finishInternship
 };

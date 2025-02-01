@@ -15,7 +15,7 @@ const CompanyPositionList = () => {
     useEffect(() => {
         const fetchPositions = async () => {
         try {
-            const res = await api.getPositionListCompany({"id": user.id});
+            const res = await api.getPositionListCompany({"companyId": user.id});
             const data = await res.json();
 
             setPositions(data.internship_positions);

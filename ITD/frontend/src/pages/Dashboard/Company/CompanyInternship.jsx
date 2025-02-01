@@ -1,87 +1,114 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../../../api/api";
 import { toast } from "react-hot-toast";
 import GoBack from "../../../components/GoBack";
+import { UserContext } from "../../../context/UserContext";
 import Status from "../../../components/Status";
 
-const CompanyApplication = () => {
-    const [application, setApplication] = useState({});
-    const { applicationId, positionId } = useParams(); // Extract the dynamic `applicationId` from the route
-    const navigate = useNavigate(); // Hook to navigate programmatically
+const CompanyInternship = () => {
+    const { user } = useContext(UserContext);
+    const [internship, setInternship] = useState(null);
+    const { internshipId } = useParams(); 
+    const [complaints, setComplaints] = useState([]);
+    const [showComplaints, setShowComplaints]= useState(false);
+    const navigate = useNavigate();  
+    console.log("Internship Id:", internshipId); // Debug log   
 
-    const handleAccept = async () => {
+    const handleCloseInternship = async () => {   
         try {
-            console.log("Accepting Application...", applicationId); // Debug log
-            const res = await api.acceptApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
+            console.log("Closing Internship...", internshipId); // Debug log
+            const res = await api.finishInternship({"internshipId": parseInt(internshipId)}); 
             const data = await res.json();
-            setApplication(data);
-            console.log("Accepted Application:", data); // Debug log
-            navigate(`/companies/dashboard/positions/${positionId}`);
+            console.log("Closed Internship:", data); // Debug log
+            if (data.type === "success") {
+                toast.success("Internship was closed successfully");
+            }
+            // Redirect to the company dashboard
+            navigate("/companies/dashboard/internships");
         }
         catch (error) { 
-            console.error("Error acceptin application:", error.message);
+            console.error("Error closing internship:", error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");
             }
-            alert("Failed to accept the application. Please try again later.");
+            alert("Failed to close the internship. Please try again later.");
         }
     }
-    const handleReject = async () => {
-        try {
-            console.log("Reject Application...", applicationId); // Debug log
-            const res = await api.rejectApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
-            const data = await res.json();
-            setApplication(data);
-            console.log("Rejected Application:", data); // Debug log
-            navigate(`/companies/dashboard/positions/${positionId}`);
-        }
-        catch (error) { 
-            console.error("Error rejecting position:", error.message);
-            if (error.status === 404) {
-                toast.error("Session expired please login again");
-                navigate("/login");
+    const fetchRelatedComplaints = async () => {   
+            try {
+                console.log("Fetching complaints"); // Debug log
+                setShowComplaints(true);
+                console.log("Fetching Applications..."); // Debug log
+                const res = await api.getComplaints({"internshipId": parseInt(internshipId)}); // Use `positionId` directly
+                const data = await res.json();
+
+                if (res.type === "not_found") {
+                    toast.error("No applications associated to this");
+                }
+                console.log("Complaints fetched:", data.complaints); // Debug log
+                setComplaints(data.complaints);
+    
+                // Redirect to the company dashboard
+                //navigate(`/companies/dashboard/positions/${positionId}/applications`);
             }
-            alert("Failed to reject the application. Please try again later.");
+            catch (error) { 
+                console.error("Fetching complaints:", error.message);
+                if (error.status === 401) {
+                    toast.error("Session expired please login again");
+                    navigate("/login");
+                }
+                alert("Failed to fetch the complaints of the internship. Please try again later.");
+            }
         }
-    }
-    const handleAssess = async () => {
-        console.log("Assessing Application...", applicationId); // Debug log
-    }
+    
+        const hideRelatedComplaints = () => { 
+    
+            setShowComplaints(false);
+        }
 
     useEffect(() => {
-        const fetchApplication = async () => {
+        const fetchInternship = async () => {
             try {
-                console.log("Fetched applicationId:", applicationId); // Debug log
-                const res = await api.getApplicationCompany({"applicationId": applicationId}); // Use `applicationId` directly
+                //console.log("Fetching Internship...", useParams()); // Debug log
+                console.log("Fetched Internship Id:", internshipId); // Debug log
+                const res = await api.getInternship({"internshipId": parseInt(internshipId)}); // Use `internshipId` directly
                 const data = await res.json();
-                console.log("Fetched Application:", data); // Debug log
-                setApplication(data); // Assuming the API returns the entire application object
+                console.log("Fetched Internship:", data); // Debug log
+                setInternship(data);
+                console.log("Fetched Internship:", data.internship); // Debug log
+            
+                
             } catch (error) {
-                console.error("Error fetching application:", error.message);
+                console.error("Error fetching internship:", error.message);
                 if (error.status === 404) {
                     toast.error("Session expired please login again");
                     navigate("/login");
                 }
-                alert("Failed to load application details. Please try again later.");
+                alert("Failed to load internships. Please try again later.");
             }
         };
-        fetchApplication();
-    }, [applicationId]);
+
+        fetchInternship();
+    }, [user]);
 
     return (
         <div>
             {/* Go Back Button */}
-            <GoBack location="/companies/dashboard/applications"/>
-            <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 dark:border-gray-700 rounded-lg shadow-lg">
+            <GoBack location="/companies/dashboard/internships"/>
+            {internship && (
+            <div className="max-w-4xl mx-auto p-6 bg-white  dark:bg-gray-800 dark:border-gray-700">
+      
+                {/* Header Section */}
+                <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 dark:border-gray-700 rounded-lg shadow-lg">
                 {/* Header Section */}
                 <div className="mb-6 border-b pb-4">
                     <h2 className="text-3xl font-bold text-primary-700 dark:text-primary-400">
-                    {application.internshipPosition?.roleTitle || "Position Title"} - {application.company?.companyName || "Company Name"}
+                    {internship.internshipPosition?.roleTitle || "Position Title"} - {internship.company?.companyName || "Company Name"}
                     </h2>
                     <p className="text-lg text-gray-500 dark:text-gray-400">
-                        {application.internshipPosition?.programName || "Program Name"}
+                        {internship.internshipPosition?.programName || "Program Name"}
                     </p>
                 </div>
                 {/* Position Details Header */}
@@ -100,7 +127,7 @@ const CompanyApplication = () => {
                             Location
                         </p>
                         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                            {application.internshipPosition?.location || "Not specified"}
+                            {internship.internshipPosition?.location || "Not specified"}
                         </p>
                     </div>
 
@@ -109,7 +136,7 @@ const CompanyApplication = () => {
                             Compensation
                         </p>
                         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                            ${application.internshipPosition?.compensation || "Not specified"}
+                            ${internship.internshipPosition?.compensation || "Not specified"}
                         </p>
                     </div>
 
@@ -118,19 +145,19 @@ const CompanyApplication = () => {
                             Duration
                         </p>
                         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                            {application.internshipPosition?.duration || "Not specified"} months
+                            {internship.internshipPosition?.duration || "Not specified"} months
                         </p>
                     </div>
 
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <Status status={application.application?.status} />
+                        <Status status={internship.internship?.status} />
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
                             Skills Required
                         </p>
                         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                        {application.internshipPosition?.skillsRequired || "Not specified"}
+                        {internship.internshipPosition?.skillsRequired || "Not specified"}
                         </p>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
@@ -138,7 +165,7 @@ const CompanyApplication = () => {
                             Description
                         </p>
                         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                        {application.internshipPosition?.description || "Not specified"}
+                        {internship.internshipPosition?.description || "Not specified"}
                         </p>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
@@ -146,7 +173,7 @@ const CompanyApplication = () => {
                             Languages Required
                         </p>
                         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                        {application.internshipPosition?.languagesRequired || "Not specified"}
+                        {internship.internshipPosition?.languagesRequired || "Not specified"}
                         </p>
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
@@ -154,7 +181,7 @@ const CompanyApplication = () => {
                             Benefits
                         </p>
                         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                        {application.internshipPosition?.benefits || "Not specified"}
+                        {internship.internshipPosition?.benefits || "Not specified"}
                         </p>
                     </div>
                 </div>
@@ -174,7 +201,7 @@ const CompanyApplication = () => {
                             Student Name
                         </p>
                         <p className="text-base text-gray-800 dark:text-gray-200">
-                            {application.student?.firstName} {application.student?.lastName}
+                            {internship.student?.firstName} {internship.student?.lastName}
                         </p>
                     </div>
 
@@ -183,7 +210,7 @@ const CompanyApplication = () => {
                             Student Email
                         </p>
                         <p className="text-base text-gray-800 dark:text-gray-200">
-                            {application.student?.email}
+                            {internship.student?.email}
                         </p>
                     </div>
 
@@ -192,7 +219,7 @@ const CompanyApplication = () => {
                             Student Degree Program
                         </p>
                         <p className="text-base text-gray-800 dark:text-gray-200">
-                            {application.student?.degreeProgram}
+                            {internship.student?.degreeProgram}
                         </p>
                     </div>
 
@@ -201,7 +228,7 @@ const CompanyApplication = () => {
                             Student GPA
                         </p>
                         <p className="text-base text-gray-800 dark:text-gray-200">
-                            {application.student?.GPA || "Not specified"}
+                            {internship.student?.GPA || "Not specified"}
                         </p>
                     </div>
 
@@ -210,7 +237,7 @@ const CompanyApplication = () => {
                             Location
                         </p>
                         <p className="text-base text-gray-800 dark:text-gray-200">
-                            {application.student?.location || "Not specified"}
+                            {internship.student?.location || "Not specified"}
                         </p>
                     </div>
 
@@ -219,7 +246,7 @@ const CompanyApplication = () => {
                             Phone Number
                         </p>
                         <p className="text-base text-gray-800 dark:text-gray-200">
-                            {application.student?.phoneNumber || "Not specified"}
+                            {internship.student?.phoneNumber || "Not specified"}
                         </p>
                     </div>
 
@@ -228,7 +255,7 @@ const CompanyApplication = () => {
                             Graduation Year
                         </p>
                         <p className="text-base text-gray-800 dark:text-gray-200">
-                            {application.student?.graduationYear || "Not specified"}
+                            {internship.student?.graduationYear || "Not specified"}
                         </p>
                     </div>
 
@@ -238,7 +265,7 @@ const CompanyApplication = () => {
                             Student CV
                         </p>
                         <a
-                            href={application.student?.CV}
+                            href={internship.student?.CV}
                             className="text-primary-600 hover:underline"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -247,32 +274,41 @@ const CompanyApplication = () => {
                         </a>
                     </div>
                 </div>
-                {/* Action Buttons */}
-                { (application.application?.status === "Pending" || application.application?.status === "Assess")  &&
-                <div className="flex justify-end mt-6 space-x-4">
-                    <button
-                        onClick={handleAccept}
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                    >
-                        Accept
-                    </button>
-                    <button
-                        onClick={handleReject}
-                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                    >
-                        Reject
-                    </button>
-                    <button
-                        onClick={handleAssess}
-                        className="px-4 py-2 bg-yellow-300 text-white rounded-lg hover:bg-yellow-500"
-                    >
-                        Assess
-                    </button>
                 </div>
-                }   
-            </div>
+
+                {/* Footer Section */}
+
+                <div className="mt-6 text-right">
+                {internship.internshipPosition?.status === "Open" && (
+                    <button
+                    className="mx-2 px-6 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
+                    onClick={handleCloseInternship} 
+                    >
+                    Finish Internship
+                    </button>
+                )}
+                    
+                {!showComplaints && (
+                    <button
+                    className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                    onClick={fetchRelatedComplaints} 
+                    >
+                    See Complaints
+                    </button>
+
+                )}
+                {showComplaints && (
+                    <button
+                    className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                    onClick={hideRelatedComplaints} 
+                    >
+                    Hide Complaints
+                    </button>
+                )}
+                </div>
+            </div>)}
         </div>
     );
 };
 
-export default CompanyApplication;
+export default CompanyInternship;

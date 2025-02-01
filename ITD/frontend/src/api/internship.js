@@ -6,8 +6,13 @@ const InternshipEndPoint = {
     POSITION_LIST_STUDENT: '/api/internship_position/get_by_student',
     POSITION: '/api/internship_position/get_by_id',
     CREATE_POSITION: '/api/internship_position/post',
-    CLOSE_POSITION: '/api/internship_position/close'
-};
+    CLOSE_POSITION: '/api/internship_position/close',
+    INTERNSHIP_LIST_STUDENT: '/api/internship/get_by_student',
+    INTERNSHIP_LIST_COMPANY: '/api/internship/get_by_company',
+    INTERNSHIP_LIST_UNIVERSITY: '/api/internship/get_by_university',
+    INTERNSHIP: '/api/internship/get_by_id',
+    FINISH_INTERNSHIP: '/api/internship/finish',
+  };
 
 
 export const getPositionListCompany = async (data) => 
@@ -24,3 +29,18 @@ export const createPosition = async (data) =>
 
 export const closePosition = async (data) => 
   requestAuthWithErrorToast(`${InternshipEndPoint.CLOSE_POSITION}`, Method.POST,  data);
+
+export const getInternshipListStudent = async (data) => 
+  requestAuth(`${InternshipEndPoint.INTERNSHIP_LIST_STUDENT}`, Method.POST,  data );
+
+export const getInternshipListCompany = async (data) => 
+  requestAuth(`${InternshipEndPoint.INTERNSHIP_LIST_COMPANY}`, Method.POST,  data );
+
+export const getInternshipListUniversity = async (data) =>
+  requestAuth(`${InternshipEndPoint.INTERNSHIP_LIST_UNIVERSITY}`, Method.POST, data);
+
+export const getInternship = async (data) =>
+  requestAuth(`${InternshipEndPoint.INTERNSHIP}`, Method.POST, data);
+
+export const finishInternship = async (data) =>
+  requestAuthWithErrorToast(`${InternshipEndPoint.FINISH_INTERNSHIP}`, Method.POST, data);

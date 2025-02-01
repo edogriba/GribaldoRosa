@@ -58,7 +58,7 @@ const CreateInternshipPosition = () => {
 
   return (
     <section className="bg-white dark:bg-gray-900">
-        <GoBack />
+        <GoBack location="/companies/home"/>
                 <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
                     <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Create Internship Position</h2>
                     <form onSubmit={handleSubmit}>
@@ -72,6 +72,7 @@ const CreateInternshipPosition = () => {
                                     type="text"
                                     name="roleTitle"
                                     id="roleTitle"
+                                    placeholder='e.g. Software Developer Intern'
                                     onChange={(e) => setRoleTitle(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required
@@ -87,6 +88,7 @@ const CreateInternshipPosition = () => {
                                     type="text"
                                     name="programName"
                                     id="programName"
+                                    placeholder='e.g. Software Engineering Internship'
                                     onChange={(e) => setProgramName(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required
@@ -102,6 +104,7 @@ const CreateInternshipPosition = () => {
                                     type="text"
                                     name="location"
                                     id="location"
+                                    placeholder='e.g. New York, USA'
                                     onChange={(e) => setLocation(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required
@@ -117,6 +120,7 @@ const CreateInternshipPosition = () => {
                                     type="number"
                                     name="compensation"
                                     id="compensation"
+                                    placeholder='e.g. 1000'
                                     onChange={(e) => setCompensation(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required
@@ -132,6 +136,7 @@ const CreateInternshipPosition = () => {
                                     type="number"
                                     name="duration"
                                     id="duration"
+                                    placeholder='e.g. 6'
                                     onChange={(e) => setDuration(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required
@@ -146,6 +151,7 @@ const CreateInternshipPosition = () => {
                                 <textarea
                                     id="benefits"
                                     rows="3"
+                                    placeholder='e.g. Health Insurance, Paid Apartment'
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onChange={(e) => setBenefits(e.target.value)}
                                     required
@@ -160,7 +166,8 @@ const CreateInternshipPosition = () => {
                                 </label>
                                 <textarea
                                     id="skillsRequired"
-                                    rows="3"
+                                    rows="3"                                    
+                                    placeholder="e.g. Python, Java, SQL"
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onChange={(e) => setSkillsRequired(e.target.value)} 
                                     required
@@ -174,6 +181,7 @@ const CreateInternshipPosition = () => {
                                 <textarea
                                     id="description"
                                     rows="3"
+                                    placeholder="The role is suted for students who are passionate about..."
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onChange={(e) => setDescription(e.target.value)} 
                                     required
@@ -188,6 +196,7 @@ const CreateInternshipPosition = () => {
                                 <textarea
                                     id="languagesRequired"
                                     rows="3"
+                                    placeholder="e.g. English, French, Spanish"
                                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onChange={(e) => setLanguagesRequired(e.target.value)}  
                                     required

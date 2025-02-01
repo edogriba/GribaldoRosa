@@ -1,11 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { useContext } from 'react';
 import { UserContext } from '../../../context/UserContext';
+import { useNavigate } from 'react-router-dom';
+
 const HomeUniversity = () => {
-    const { user, userLogout } = useContext(UserContext);
+    const { user, userLogout } = useContext(UserContext);   
+    const navigate = useNavigate(); 
+    useEffect(() => {
+        if(user.type !== 'university') {
+            navigate('/login');
+        }
+    }, [user]);
     console.log(user);
     return (
         <div>
