@@ -2,7 +2,7 @@ from sqlite3 import connect, Row
 from typing import Union
 from os import getenv
 from dotenv import load_dotenv
-                                # pending -> rejected / accepted -> refused (if accepted) / confirmed (if accepted)
+                                # pending -> rejected / accepted / accessed -> refused (if accepted) / confirmed (if accepted)
 class ApplicationDB:            # confirmed (student), refused (student), pending, rejected (company), accepted (company)
     def __init__(self):
         load_dotenv()

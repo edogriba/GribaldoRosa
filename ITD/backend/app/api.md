@@ -91,6 +91,12 @@
     - [30. Update University Profile](#30-update-university-profile)
       - [Request Parameters](#request-parameters-25)
       - [Response](#response-29)
+    - [31. Create Assessment](#31-create-assessment)
+      - [Request Parameters](#request-parameters-26)
+      - [Response](#response-30)
+    - [32. Create Complaint](#32-create-complaint)
+      - [Request Parameters](#request-parameters-27)
+      - [Response](#response-31)
 
 ## Endpoints
 
@@ -1426,6 +1432,7 @@ Headers: {
   - **Body (JSON)**:
     - `type` (str): `success`
     - `application` (dict): Application details.
+    - `assessment` (dict | None): Last assessment.    
     - `internshipPosition` (dict): Internship position details.
     - `student` (dict): Student details.
     - `company` (dict): Company details.
@@ -1477,6 +1484,12 @@ Headers: {
     "internshipPositionId": 1,
     "studentId": 1,
     "status": "pending"
+  },
+  "assessment": {
+    "assessmentId": 3,
+    "applicationId": 1,
+    "date": "2023-10-15",
+    "link": "https://assessment-link.com" 
   },
   "internshipPosition": {
     "internshipPositionId": 1,
@@ -2029,6 +2042,7 @@ Headers: {
     - `application` (dict): Application details.
     - `student` (dict): Student details.
     - `company` (dict): Company details.
+    - `complaints` (list): List of complaints.
 
 
 - **400 Bad Request**:
@@ -2045,7 +2059,7 @@ Headers: {
   - **Body (JSON)**:
     - `type` (str): `server_error`
     - `message` (str): Error message.
-// ERRORE??
+
 <details>
 <summary>Example Request</summary>
 
@@ -2119,7 +2133,26 @@ Headers: {
     "logoPath": "/images/xyz_logo.png",
     "description": "Leading software solutions provider.",
     "location": "New York, NY"
-    }
+    },
+    "complaints": [
+      {
+        "complaintId": 1,
+        "internshipId": 1,
+        "sourceId": 1,
+        "date": "2023-10-15",
+        "content": "The internship did not meet the expectations."
+      },
+      {
+        "complaintId": 2,
+        "internshipId": 1,
+        "sourceId": 2,
+        "date": "2023-10-16",
+        "content": "The working hours were too long."
+      }
+    ]
+    ```
+
+    </details>
   }
 ```
 
@@ -2675,6 +2708,149 @@ Form Data: {
     "description": "Leading technology university.",
     "logoPath": "/images/mit_logo.png"
   }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 31. Create Assessment
+
+- **Endpoint**: `/api/assessment/create`
+- **Method**: `POST`
+- **Description**: Creates an assessment for an application.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `applicationId` (int, required): The ID of the application.
+  - `date` (str, required): The date of the assessment.
+  - `link` (str, required): The link to the assessment.
+
+#### Response
+
+- **201 Created**:
+  - **Body (JSON)**:
+    - `type` (str): `created`
+    - `message` (str): "Assessment created successfully."
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message, such as "Invalid application Id." or "Invalid application status."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "Only the company that posted the internship can create assessment."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/assessment/create
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "applicationId": 1,
+  "date": "2023-10-15",
+  "link": "https://assessment-link.com"
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "created",
+  "message": "Assessment created successfully"
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 32. Create Complaint
+
+- **Endpoint**: `/api/complaint/create`
+- **Method**: `POST`
+- **Description**: Creates a new complaint for an internship.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `internshipId` (int, required): The ID of the internship.
+  - `date` (str, required): The date of the complaint.
+  - `content` (str, required): The content of the complaint.
+
+#### Response
+
+- **201 Created**:
+  - **Body (JSON)**:
+    - `type` (str): `created`
+    - `message` (str): "Complaint added successfully."
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message, such as "Invalid complaint data."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "You are not authorized to create a complaint for this internship."
+
+- **404 Not Found**:
+  - **Body (JSON)**:
+    - `type` (str): `not_found`
+    - `message` (str): "Internship not found."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/complaint/create
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "internshipId": 1,
+  "date": "2023-10-15",
+  "content": "The internship did not meet the expectations."
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "created",
+  "message": "Complaint added successfully"
 }
 ```
 

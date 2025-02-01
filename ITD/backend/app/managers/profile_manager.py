@@ -56,7 +56,7 @@ class ProfileManager:
             return json_created( "Update successful", user = student.to_dict() )
         
         except Exception as e:
-            return e
+            raise e
 
 
     def update_university(self, user_data, logo):
@@ -94,7 +94,7 @@ class ProfileManager:
             return json_created( "Update successful", user = university.to_dict() )
 
         except Exception as e:
-            return e
+            raise e
         
     
     def update_company(self, user_data, logo):
@@ -132,7 +132,7 @@ class ProfileManager:
             return json_created( "Update successful", user = company.to_dict() )
 
         except Exception as e:
-            return e
+            raise e
     
 
 def validate_student_data(user_data) -> Union[tuple, bool]:

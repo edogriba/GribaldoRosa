@@ -54,7 +54,7 @@ class RegistrationManager:
             return json_created( "Registration successful", user = student.to_dict(), access_token = access_token )
         
         except Exception as e:
-            return e
+            raise e
 
 
     def register_university(self, user_data, logo):
@@ -93,7 +93,7 @@ class RegistrationManager:
             return json_created( "Registration successful", user = university.to_dict(), access_token = access_token )
 
         except Exception as e:
-            return e
+            raise e
 
 
     def register_company(self, user_data, logo):
@@ -131,7 +131,7 @@ class RegistrationManager:
             return json_created( "Registration successful", user = company.to_dict(), access_token = access_token )
 
         except Exception as e:
-            return e
+            raise e
 
 
 def validate_student_data(user_data) -> Union[tuple, bool]:
