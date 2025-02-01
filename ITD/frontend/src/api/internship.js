@@ -2,11 +2,11 @@ import { Method } from './api';
 import { requestAuth, requestAuthWithErrorToast } from './request';
 
 const InternshipEndPoint = {
-    POSITION_LIST_COMPANY: '/api/internship/get_by_company',
-    POSITION_LIST_STUDENT: '/api/internship/get_by_student',
-    POSITION: '/api/internship/get_by_id',
-    CREATE_POSITION: '/api/internship/post',
-    CLOSE_POSITION: '/api/internship/close'
+    POSITION_LIST_COMPANY: '/api/internship_position/get_by_company',
+    POSITION_LIST_STUDENT: '/api/internship_position/get_by_student',
+    POSITION: '/api/internship_position/get_by_id',
+    CREATE_POSITION: '/api/internship_position/post',
+    CLOSE_POSITION: '/api/internship_position/close'
 };
 
 
