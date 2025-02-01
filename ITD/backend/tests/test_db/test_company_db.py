@@ -5,7 +5,7 @@ from app.db.dbModels.user_db import UserDB
 from app.db.dbModels.company_db import CompanyDB
 from dotenv import load_dotenv
 
-class TestUniversityDB(unittest.TestCase):
+class TestCompanyDB(unittest.TestCase):
     def setUp(self):
         load_dotenv()
         self.con = connect(os.getenv("TEST_DATABASE"))
@@ -224,7 +224,7 @@ class TestUniversityDB(unittest.TestCase):
         company = self.db.get_by_id(user_id)
 
         self.assertIsNotNone(company)
-        self.assertEqual(company["logoPath"], None)
+        self.assertEqual(company["logoPath"], "/path/to/logo.png")
         self.assertEqual(company["description"], new_description)
         self.assertEqual(company["location"], location)
 

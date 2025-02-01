@@ -134,20 +134,28 @@ class UniversityDB:
         finally:
             cur.close()
 
-    def update(self, id: int, address: str, websiteURL: str, description: str, logoPath: Optional[str]) -> Union[None, Exception]:
+    def update(self, id: int, websiteURL: str, description: str, logoPath: Optional[str]) -> Union[None, Exception]:
         """
         Update a university record in the database.
         :param id: The id of the university.
-        :param item: A tuple containing (name: str, address: str, websiteURL: str, description: str, logoPath: str).
+        :param websiteURL: The website URL of the university.
+        :param description: The description of the university.
+        :param logoPath: The logo path of the university (optional).
         :raises Exception: If an error occurs during the query execution.
         """
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ UPDATE University 
-                            SET Address = ?, WebsiteURL = ?, Description = ?, LogoPath = ? 
-                            WHERE UserId = ? """
-                cur.execute(query, (address, websiteURL, description, logoPath, id))
+                if logoPath is not None:
+                    query = """ UPDATE University 
+                                SET WebsiteURL = ?, Description = ?, LogoPath = ? 
+                                WHERE UserId = ? """
+                    cur.execute(query, (websiteURL, description, logoPath, id))
+                else:
+                    query = """ UPDATE University 
+                                SET WebsiteURL = ?, Description = ? 
+                                WHERE UserId = ? """
+                    cur.execute(query, (websiteURL, description, id))
                 if not cur.rowcount > 0:
                     raise Exception("University not found")
         except Exception as e:

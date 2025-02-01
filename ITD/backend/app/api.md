@@ -82,6 +82,15 @@
       - [Response](#response-25)
     - [27. Search Internship Positions without Filters](#27-search-internship-positions-without-filters)
       - [Response](#response-26)
+    - [28. Update Student Profile](#28-update-student-profile)
+      - [Request Parameters](#request-parameters-23)
+      - [Response](#response-27)
+    - [29. Update Company Profile](#29-update-company-profile)
+      - [Request Parameters](#request-parameters-24)
+      - [Response](#response-28)
+    - [30. Update University Profile](#30-update-university-profile)
+      - [Request Parameters](#request-parameters-25)
+      - [Response](#response-29)
 
 ## Endpoints
 
@@ -134,14 +143,14 @@
 
 #### Request Parameters
 
-- **Body (JSON)**:
-  - `university_mail` (str, required): Email of the university.
+- **Form Data (multipart/form-data)**:
+  - `university_email` (str, required): Email of the university.
   - `university_password` (str, required): Password of the university.
   - `name` (str, required): Name of the university.
   - `location` (str, required): Location of the university.
   - `websiteURL` (str, required): URL of the university's website.
   - `description` (str, required): Description of the university.
-  - `logoPath` (str, optional): Path of the university's logo.
+  - `logo` (file, optional): Logo file of the university.
 
 #### Response
 
@@ -175,6 +184,8 @@
 
 ```json
 POST /api/register/university
+Content-Type: multipart/form-data
+
 {
   "university_email": "admin@mit.edu",
   "university_password": "securepassword",
@@ -182,7 +193,7 @@ POST /api/register/university
   "location": "Cambridge, MA",
   "websiteURL": "https://www.mit.edu/",
   "description": "Leading technology university.",
-  "logoPath": "/images/mit_logo.png"
+  "logo": "<FILE:mit_logo.png>"
 }
 
 ```
@@ -218,22 +229,20 @@ POST /api/register/university
 
 - **Endpoint**: `/api/register/student`
 - **Method**: `POST`
-- **Description**: Registers a new student with required details.
-
 #### Request Parameters
 
-- **Body (JSON)**:
+- **Form Data (multipart/form-data)**:
   - `email` (str, required): Email of the student.
   - `password` (str, required): Password for the student.
   - `firstName` (str, required): First name of the student.
   - `lastName` (str, required): Last name of the student.
   - `phoneNumber` (str, required): Phone number of the student.
-  - `profilePicturePath` (str, optional): Path to the student's profile picture.
+  - `profilePicture` (file, optional): Profile picture file of the student.
   - `location` (str, required): Location of the student.
   - `degreeProgram` (str, required): Degree program the student is enrolled in.
   - `GPA` (float, optional): GPA of the student.
   - `graduationYear` (int, optional): Graduation year of the student.
-  - `CVpath` (str, required): Path to the student's CV.
+  - `CV` (file, required): CV file of the student.
   - `skills` (str, required): Skills of the student.
   - `languageSpoken` (str, required): Languages spoken by the student.
   - `university` (int, required): ID of the university the student is associated with.
@@ -277,18 +286,20 @@ POST /api/register/university
 
 ```json
 POST /api/register/student
+Content-Type: multipart/form-data
+
 {
   "email": "student@mit.edu",
   "password": "securepassword",
   "firstName": "Alice",
   "lastName": "Smith",
   "phoneNumber": "1234567890",
-  "profilePicturePath": "/images/alice.png",
+  "profilePicture": "<FILE:alice.png>",
   "location": "Cambridge, MA",
   "degreeProgram": "Computer Science",
   "GPA": 3.8,
   "graduationYear": 2025,
-  "CVpath": "/cvs/alice_smith.pdf",
+  "CV": "<FILE:alice_smith.pdf>",
   "skills": "Python, Machine Learning",
   "languageSpoken": "English, Spanish",
   "university": 1
@@ -337,11 +348,11 @@ POST /api/register/student
 
 #### Request Parameters
 
-- **Body (JSON)**:
+- **Form Data (multipart/form-data)**:
   - `email` (str, required): Email of the company.
   - `password` (str, required): Password for the company.
   - `companyName` (str, required): Name of the company.
-  - `logoPath` (str, optional): Path to the company's logo.
+  - `logo` (file, optional): Logo file of the company.
   - `description` (str, required): Description of the company.
   - `location` (str, required): Location of the company.
 
@@ -376,11 +387,13 @@ POST /api/register/student
 
 ```json
 POST /api/register/company
+Content-Type: multipart/form-data
+
 {
   "email": "company@xyz.com",
   "password": "securepassword",
   "companyName": "XYZ Corporation",
-  "logoPath": "/images/xyz_logo.png",
+  "logo": "<FILE:xyz_logo.png>",
   "description": "Leading software solutions provider.",
   "location": "New York, NY"
 }
@@ -1995,7 +2008,7 @@ Headers: {
 
 - **Endpoint**: `/api/internship/get_by_id`
 - **Method**: `POST`
-- **Description**: Retrieves the full details of an internship position by its ID.
+- **Description**: Retrieves the full details of an internship by its ID.
 
 #### Request Parameters
 
@@ -2003,14 +2016,14 @@ Headers: {
   - `Authorization` (str, required): Bearer token for authentication.
 
 - **Body (JSON)**:
-  - `internshipPositionId` (int, required): The ID of the internship position.
+  - `internshipId` (int, required): The ID of the internship.
 
 #### Response
 
 - **200 OK**:
   - **Body (JSON)**:
     - `type` (str): `success`
-    - `message` (str): "Internship position retrieved successfully."
+    - `message` (str): "Internship retrieved successfully."
     - `internship` (dict): Internship details.
     - `internshipPosition` (dict): Internship position details.
     - `application` (dict): Application details.
@@ -2026,7 +2039,7 @@ Headers: {
 - **404 Not Found**:
   - **Body (JSON)**:
     - `type` (str): `not_found`
-    - `message` (str): Error message, such as "Internship position not found."
+    - `message` (str): Error message, such as "Internship not found."
 
 - **500 Internal Server Error**:
   - **Body (JSON)**:
@@ -2042,7 +2055,7 @@ Headers: {
   "Authorization": "Bearer <access_token>"
 }
 {
-  "internshipPositionId": 1
+  "internshipId": 1
 }
 ```
 
@@ -2054,7 +2067,7 @@ Headers: {
 ```json
 {
   "type": "success",
-  "message": "Internship position retrieved successfully.",
+  "message": "Internship retrieved successfully.",
   "internship": {
     "internshipId": 3,
     "internshipPositionId": 1,
@@ -2307,6 +2320,7 @@ Headers: {
     {
       "internshipPositionId": 1,
       "companyId": 1,
+      "companyName": "Amazon",
       "programName": "Summer Internship",
       "duration": 3,
       "location": "New York, NY",
@@ -2373,6 +2387,7 @@ Headers: {
     {
       "internshipPositionId": 1,
       "companyId": 1,
+      "companyName": "Amazon",
       "programName": "Summer Internship",
       "duration": 3,
       "location": "New York, NY",
@@ -2387,6 +2402,7 @@ Headers: {
     {
       "internshipPositionId": 2,
       "companyId": 2,
+      "companyName": "Google",
       "programName": "Winter Internship",
       "duration": 2,
       "location": "San Francisco, CA",
@@ -2399,6 +2415,266 @@ Headers: {
       "status": "closed"
     }
   ]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 28. Update Student Profile
+
+- **Endpoint**: `/api/update/student`
+- **Method**: `POST`
+- **Description**: Updates the profile of an authenticated student.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Form Data (multipart/form-data)**:
+  - `phoneNumber` (str, required): Phone number of the student.
+  - `profilePicture` (file, optional): Profile picture file of the student.
+  - `location` (str, required): Location of the student.
+  - `degreeProgram` (str, required): Degree program the student is enrolled in.
+  - `GPA` (float, required): GPA of the student.
+  - `graduationYear` (int, required): Graduation year of the student.
+  - `CV` (file, optional): CV file of the student.
+  - `skills` (str, required): Skills of the student.
+  - `languageSpoken` (str, required): Languages spoken by the student.
+  - `universityId` (int, required): ID of the university the student is associated with.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Update successful."
+    - `user` (dict): Updated user details.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message, such as "Invalid data provided."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "Unauthorized access."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/update/student
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+Form Data: {
+  "phoneNumber": "1234567890",
+  "profilePicture": "<FILE:profile.png>",
+  "location": "Cambridge, MA",
+  "degreeProgram": "Computer Science",
+  "GPA": 3.9,
+  "graduationYear": 2024,
+  "CV": "<FILE:cv.pdf>",
+  "skills": "Python, Data Science",
+  "languageSpoken": "English, French",
+  "universityId": 1
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Update successful",
+  "user": {
+    "id": 1,
+    "email": "student@mit.edu",
+    "type": "student",
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "phoneNumber": "1234567890",
+    "profilePicture": "/images/profile.png",
+    "location": "Cambridge, MA",
+    "universityId": 1,
+    "degreeProgram": "Computer Science",
+    "GPA": 3.9,
+    "graduationYear": 2024,
+    "skills": "Python, Data Science",
+    "CV": "/cvs/cv.pdf",
+    "languageSpoken": "English, French"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 29. Update Company Profile
+
+- **Endpoint**: `/api/update/company`
+- **Method**: `POST`
+- **Description**: Updates the profile of an authenticated company.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Form Data (multipart/form-data)**:
+  - `logo` (file, optional): Logo file of the company.
+  - `description` (str, required): Description of the company.
+  - `location` (str, required): Location of the company.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Update successful."
+    - `user` (dict): Updated user details.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message, such as "Invalid data provided."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "Unauthorized access."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/update/company
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+Form Data: {
+  "logo": "<FILE:xyz_logo.png>",
+  "description": "Leading software solutions provider.",
+  "location": "New York, NY"
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Update successful",
+  "user": {
+    "id": 1,
+    "email": "company@xyz.com",
+    "type": "company",
+    "companyName": "XYZ Corporation",
+    "logoPath": "/images/xyz_logo.png",
+    "description": "Leading software solutions provider.",
+    "location": "New York, NY"
+  }
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 30. Update University Profile
+
+- **Endpoint**: `/api/update/university`
+- **Method**: `POST`
+- **Description**: Updates the profile of an authenticated university.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Form Data (multipart/form-data)**:
+  - `websiteURL` (str, required): URL of the university's website.
+  - `description` (str, required): Description of the university.
+  - `logo` (file, optional): Logo file of the university.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Update successful."
+    - `user` (dict): Updated user details.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message, such as "Invalid data provided."
+
+- **401 Unauthorized**:
+  - **Body (JSON)**:
+    - `type` (str): `unauthorized`
+    - `message` (str): "Unauthorized access."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/update/university
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+Form Data: {
+  "websiteURL": "https://www.mit.edu",
+  "description": "Leading technology university.",
+  "logo": "<FILE:mit_logo.png>"
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Update successful",
+  "user": {
+    "id": 1,
+    "email": "university@mit.edu",
+    "type": "university",
+    "name": "MIT",
+    "address": "Cambridge, MA",
+    "websiteURL": "https://www.mit.edu",
+    "description": "Leading technology university.",
+    "logoPath": "/images/mit_logo.png"
+  }
 }
 ```
 

@@ -127,12 +127,11 @@ class University(User):
 
 
     @staticmethod
-    def update(id: int, address: str, websiteURL: str, description: str, logoPath: Optional[str]) -> Union['University', Exception, None]:
+    def update(id: int, websiteURL: str, description: str, logoPath: Optional[str]) -> Union['University', Exception, None]:
         """
         Update an existing university record in the database and return the updated University object.
 
         :param id: The unique identifier of the university.
-        :param address: The address of the university.
         :param websiteURL: The website URL of the university.
         :param description: The description of the university.
         :param logoPath: The file path of the university's logo.
@@ -141,7 +140,7 @@ class University(User):
         """
         try:
             uniConn = UniversityDB()
-            uniConn.update(id, address, websiteURL, description, logoPath)
+            uniConn.update(id, websiteURL, description, logoPath)
             uniData = uniConn.get_by_id(id)
             return University(**uniData) if uniData else None
         except Exception as e:

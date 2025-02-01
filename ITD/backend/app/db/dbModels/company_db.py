@@ -139,16 +139,24 @@ class CompanyDB:
         """
         Update a company record in the database.
         :param id: The id of the company.
-        :param item: A tuple containing (logoPath: str, description: str, location: str).
+        :param logoPath: The path to the company's logo.
+        :param description: The description of the company.
+        :param location: The location of the company.
         :raises Exception: If an error occurs during the query execution.
         """
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ UPDATE Company 
-                            SET LogoPath = ?, Description = ?, Location = ?
-                            WHERE UserId = ? """
-                cur.execute(query, (logoPath, description, location, id))
+                if logoPath is not None:
+                    query = """ UPDATE Company 
+                                SET LogoPath = ?, Description = ?, Location = ?
+                                WHERE UserId = ? """
+                    cur.execute(query, (logoPath, description, location, id))
+                else:
+                    query = """ UPDATE Company 
+                                SET Description = ?, Location = ?
+                                WHERE UserId = ? """
+                    cur.execute(query, (description, location, id))
                 if not cur.rowcount > 0:
                     raise Exception("Company not found")
         except Exception as e:

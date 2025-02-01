@@ -189,7 +189,7 @@ class TestStudentDB(unittest.TestCase):
         )
         student = self.db.get_by_id(user_id)
         self.assertEqual(student['phoneNumber'], "0987654321")
-        self.assertIsNone(student['profilePicture'])
+        self.assertEqual(student['profilePicture'], "path/to/profile.jpg")
         self.assertEqual(student['location'], "New City")
         self.assertEqual(student['degreeProgram'], "Data Science")
         self.assertIsNone(student['GPA'])

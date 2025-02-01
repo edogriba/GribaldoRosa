@@ -46,7 +46,9 @@ class SearchManager:
             internships = InternshipPosition.search_internship_positions(filters)
         except Exception as e:
             raise e
-        return json_success("Internships found successfully.", internships = [internship.to_dict() for internship in internships] if internships else [])
+        return json_success("Internships found successfully.", internships = [
+            {**internship.to_dict(), 'companyName': Company.get_by_id(internship.get_companyId()).get_companyName()} for internship in internships
+        ] if internships else [])
     
 
     @staticmethod
@@ -55,5 +57,7 @@ class SearchManager:
             internships = InternshipPosition.search_internship_positions({})
         except Exception as e:
             raise e
-        return json_success("Internships found successfully.", internships = [internship.to_dict() for internship in internships] if internships else [])
+        return json_success("Internships found successfully.", internships = [
+            {**internship.to_dict(), 'companyName': Company.get_by_id(internship.get_companyId()).get_companyName()} for internship in internships
+        ] if internships else [])
         

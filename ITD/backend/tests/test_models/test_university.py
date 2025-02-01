@@ -292,17 +292,15 @@ class TestUniversity(unittest.TestCase):
     def test_update(self, mock_close, mock_get_by_id, mock_update):
         university = University.update(
             id=1,
-            address="123 Updated St",
             websiteURL="http://www.updateduniversity.com",
             description="An updated test university",
             logoPath="/path/to/updated_logo.png"
         )
         self.assertIsInstance(university, University)
-        self.assertEqual(university.address, "123 Updated St")
         self.assertEqual(university.websiteURL, "http://www.updateduniversity.com")
         self.assertEqual(university.description, "An updated test university")
         self.assertEqual(university.logoPath, "/path/to/updated_logo.png")
-        mock_update.assert_called_once_with(1, "123 Updated St", "http://www.updateduniversity.com", "An updated test university", "/path/to/updated_logo.png")
+        mock_update.assert_called_once_with(1, "http://www.updateduniversity.com", "An updated test university", "/path/to/updated_logo.png")
         mock_get_by_id.assert_called_once_with(1)
         mock_close.assert_called_once()
 
@@ -313,13 +311,12 @@ class TestUniversity(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             University.update(
                 id=1,
-                address="123 Updated St",
                 websiteURL="http://www.updateduniversity.com",
                 description="An updated test university",
                 logoPath="/path/to/updated_logo.png"
             )
         self.assertTrue("Database update error" in str(context.exception))
-        mock_update.assert_called_once_with(1, "123 Updated St", "http://www.updateduniversity.com", "An updated test university", "/path/to/updated_logo.png")
+        mock_update.assert_called_once_with(1, "http://www.updateduniversity.com", "An updated test university", "/path/to/updated_logo.png")
         mock_close.assert_called_once()
 
 
@@ -329,13 +326,12 @@ class TestUniversity(unittest.TestCase):
     def test_update_returns_none(self, mock_close, mock_get_by_id, mock_update):
         university = University.update(
             id=1,
-            address="123 Updated St",
             websiteURL="http://www.updateduniversity.com",
             description="An updated test university",
             logoPath="/path/to/updated_logo.png"
         )
         self.assertIsNone(university)
-        mock_update.assert_called_once_with(1, "123 Updated St", "http://www.updateduniversity.com", "An updated test university", "/path/to/updated_logo.png")
+        mock_update.assert_called_once_with(1, "http://www.updateduniversity.com", "An updated test university", "/path/to/updated_logo.png")
         mock_get_by_id.assert_called_once_with(1)
         mock_close.assert_called_once()
 
