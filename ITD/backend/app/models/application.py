@@ -227,6 +227,18 @@ class Application():
         try:
             self.update_status("Refused")
         except Exception as e:
+            raise e  
+
+    def access(self) -> Union[None, Exception]:
+        """
+        Access the application by updating its status to "Accessed".
+        This method changes the status of the application to "Accessed", indicating that the application has been accessed.
+
+        :raises Exception: If an error occurs during the update process.
+        """
+        try:
+            self.update_status("Accessed")
+        except Exception as e:
             raise e
 
 
@@ -241,6 +253,14 @@ class Application():
         :return: True if the application status is "Pending", otherwise False.
         """
         return self.status == "Pending"
+    
+    def is_accessed(self) -> bool:
+        """
+        Check if the application has been accessed.
+        
+        :return: True if the application status is "Accessed", otherwise False.
+        """
+        return self.status == "Accessed"
     
     def is_accepted(self) -> bool:
         """

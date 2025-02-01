@@ -541,7 +541,27 @@ def create_main_app():
         except Exception as e:
             return handle_error(e)
           
-    # access control (valutare studente by company)     (data e link, e idApplications) -> cambio stato (guardo rasd)
-    # get_last_assesment_by_application_id(application_id) -> data e link       -> questo è da aggiungere a get_application_by_id() ma aggiungo link e data solo se l'application è ancora in fase di assesment
-    # complaints    (idInternship, data, content) -> ritorno nulla
+
+    @app.route('/api/assessment/create', methods=['POST'])
+    @jwt_required
+    def create_assessment():
+        try:
+            data = request.get_json()
+            application_manager = ApplicationManager()
+            return application_manager.create_assessment(**data)
+        except Exception as e:
+            return handle_error(e)
+        
+    
+    @app.route('/api/complaint/create', methods=['POST'])
+    @jwt_required
+    def create_complaint():
+        try:
+            data = request.get_json()
+            internship_manager = InternshipManager()
+            return internship_manager.create_complaint(data)
+        except Exception as e:
+            return handle_error(e)
+        
+
     return app

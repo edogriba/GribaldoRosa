@@ -2,7 +2,7 @@ from flask_jwt_extended import get_current_user
 from typing import Union
 
 from ..services.auth_service import *
-from ..models import InternshipPosition, Internship, Student, Company, Application
+from ..models import InternshipPosition, Internship, Student, Company, Application, Complaint
 from ..utils import json_unauthorized, json_invalid_request, json_not_found, json_created, json_success
 from ..services.auth_service import is_id_valid
 
@@ -29,7 +29,7 @@ class InternshipManager:
             return json_created("Internship position added successfully.")
         
         except Exception as e:
-            return e
+            raise e
         
         
     def get_internship_position_by_id(self, internshipPositionId: int):
@@ -50,7 +50,7 @@ class InternshipManager:
                 return json_not_found("Internship not found.")
         
         except Exception as e:
-            return e
+            raise e
 
 
     def get_internship_positions_by_company(self, companyId: int):
@@ -69,7 +69,7 @@ class InternshipManager:
                                 internship_positions = [internship_position.to_dict() for internship_position in internship_positions])
         
         except Exception as e:
-            return e
+            raise e
         
 
     def close_internship_position(self, internshipPositionId: int):
@@ -102,7 +102,7 @@ class InternshipManager:
             return json_success("Internship position closed successfully.")
         
         except Exception as e:
-            return e
+            raise e
     
     
     def get_internships_preview_by_company(self, companyId: int):
@@ -123,7 +123,7 @@ class InternshipManager:
             return json_success("Internships retrieved successfully.", internshipsPreview = internshipsPreview)
         
         except Exception as e:
-            return e
+            raise e
         
     
     def get_internships_preview_by_student(self, studentId: int):
@@ -144,7 +144,7 @@ class InternshipManager:
             return json_success("Internships retrieved successfully.", internshipsPreview = internshipsPreview)
         
         except Exception as e:
-            return e
+            raise e
         
     
     def get_internships_preview_by_university(self, universityId: int):
@@ -165,7 +165,7 @@ class InternshipManager:
             return json_success("Internships retrieved successfully.", internshipsPreview = internshipsPreview)
         
         except Exception as e:
-            return e
+            raise e
         
     
     def get_full_internship_data_by_id(self, internshipId: int):
@@ -200,16 +200,23 @@ class InternshipManager:
             if not company:
                 return json_not_found("Company not found.")
             
-            # mancano complaints
+            if (get_current_user().get_id() != student.get_id() and 
+                get_current_user().get_id() != company.get_id() and 
+                get_current_user().get_id() != student.get_universityId()):
+                return json_unauthorized("You are not authorized to view this internship.")
+            
+            complaints = Complaint.get_by_internship_id(internshipId)
+
             return json_success("Internship retrieved successfully.", 
                                 internship = internship.to_dict(),
                                 internshipPosition = internshipPosition.to_dict(),
                                 application = application.to_dict(),
                                 student = student.to_dict(),
-                                company = company.to_dict())
+                                company = company.to_dict(),
+                                complaints = [complaint.to_dict() for complaint in complaints] if complaints else [])
         
         except Exception as e:
-            return e
+            raise e
         
     
     def finish_internship(self, internshipId: int):
@@ -238,7 +245,44 @@ class InternshipManager:
                 return json_not_found("Internship not found.")
         
         except Exception as e:
-            return e
+            raise e
+
+
+    def create_complaint(self, complaint_data):
+        """
+        Create a new complaint.
+
+        :param complaint_data: Dictionary containing the complaint data.
+        :return: JSON response containing the newly added complaint if the request is successful, 
+                 or an error message if the request fails
+        """
+        try:
+            values = {
+                "internshipId": complaint_data.get("internshipId"),
+                "date": complaint_data.get("date"),
+                "content": complaint_data.get("content")
+            }
+
+            internship = Internship.get_by_id(values.get("internshipId"))
+            if not internship:
+                return json_not_found("Internship not found.")
+            
+            if (get_current_user().get_id() != Application.get_by_id(internship.get_applicationId()).get_studentId() and 
+                get_current_user().get_id() != InternshipPosition.get_by_id(internship.get_internshipPositionId()).get_companyId()):
+                return json_unauthorized("You are not authorized to create a complaint for this internship.")
+            
+            if internship.is_finished():
+                return json_invalid_request("You cannot create a complaint for a finished internship.")
+            
+            complaint = Complaint.add(**values, sourceId = get_current_user().get_id())
+            if complaint:
+                return json_created("Complaint added successfully.")
+            else:
+                return json_invalid_request("Invalid complaint data.")
+        
+        except Exception as e:
+            raise e
+
 
 
 def validate_internship_position_data(internship_data):

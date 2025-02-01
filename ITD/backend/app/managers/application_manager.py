@@ -1,5 +1,5 @@
 from flask_jwt_extended import get_current_user
-from ..models import Application, InternshipPosition, Internship
+from ..models import Application, InternshipPosition, Internship, Assessment
 from ..utils import json_invalid_request, json_unauthorized, json_success, json_created, json_not_found
 
     # pending -> rejected / accepted -> refused (if accepted) / confirmed (if accepted)
@@ -24,7 +24,7 @@ class ApplicationManager:
             return json_created("Application created successfully.")
         
         except Exception as e:
-            return e
+            raise e
         
 
     def accept_application(self, applicationId: int, internshipPositionId: int):
@@ -47,14 +47,14 @@ class ApplicationManager:
             if get_current_user().get_id() != internshipPosition.get_companyId():
                 return json_unauthorized("Only the company that posted the internship can accept applications.")
             
-            if application.is_pending():
+            if application.is_pending() or application.is_accessed():
                 application.accept()
                 return json_success("Application accepted successfully.")
             else:
                 return json_invalid_request("Invalid application status.")
         
         except Exception as e:
-            return e
+            raise e
         
 
     def reject_application(self, applicationId: int, internshipPositionId: int):
@@ -77,14 +77,14 @@ class ApplicationManager:
             if get_current_user().get_id() != internshipPosition.get_companyId():
                 return json_unauthorized("Only the company that posted the internship can reject applications.")
             
-            if application.is_pending():
+            if application.is_pending() or application.is_accessed():
                 application.reject()
                 return json_success("Application rejected successfully.")
             else:
                 return json_invalid_request("Invalid application status.")
         
         except Exception as e:
-            return e
+            raise e
     
 
     def confirm_application(self, applicationId: int, internshipPositionId: int):
@@ -118,7 +118,7 @@ class ApplicationManager:
             return json_success("Application confirmed successfully.")
         
         except Exception as e:
-            return e
+            raise e
         
     
     def refuse_application(self, applicationId: int, internshipPositionId: int):
@@ -149,7 +149,7 @@ class ApplicationManager:
                 return json_invalid_request("Invalid application status.")
         
         except Exception as e:
-            return e
+            raise e
         
         
     def get_application_by_id(self, applicationId: int):
@@ -174,14 +174,24 @@ class ApplicationManager:
             if get_current_user().get_id() != application.get_studentId() and get_current_user().get_id() != internshipPosition.get_companyId():
                 return json_unauthorized("You can only view your own applications.")
             
+            if application.is_accessed():
+                assessment = Assessment.get_last_assessment_by_application_id(applicationId)
+                return json_success("Application found successfully.",
+                            application          = application.to_dict(),
+                            assessment           = assessment.to_dict() if assessment else None,
+                            internshipPosition   = internshipPosition.to_dict(),
+                            student              = application.get_student().to_dict(),
+                            company              = internshipPosition.get_company().to_dict())
+            
             return json_success("Application found successfully.", 
                             application          = application.to_dict(),
+                            assessment           = None,
                             internshipPosition   = internshipPosition.to_dict(),
                             student              = application.get_student().to_dict(),
                             company              = internshipPosition.get_company().to_dict())
             
         except Exception as e:
-            return e
+            raise e
         
     
     def get_applications_by_student(self, studentId: int):
@@ -206,7 +216,7 @@ class ApplicationManager:
                 return json_not_found("Applications not found.")
         
         except Exception as e:
-            return e
+            raise e
 
 
     def get_applications_by_internship_position(self, internshipPositionId: int):
@@ -230,7 +240,64 @@ class ApplicationManager:
                 return json_not_found("Applications not found.")
         
         except Exception as e:
-            return e
+            raise e
+
+
+    def create_assessment(self, applicationId: int, date: str, link: str):
+        """
+        Create an assessment for an application.
+
+        :param applicationId: The ID of the application.
+        :param date: The date of the assessment.
+        :param link: The link to the assessment.
+        :return: JSON response indicating the success or failure of the assessment creation.
+        """
+        
+        try:
+            application = Application.get_by_id(applicationId)
+
+            if not application:
+                return json_invalid_request("Invalid application Id.")
+
+            if get_current_user().get_id() != application.get_internshipPosition().get_companyId():
+                return json_unauthorized("Only the company that posted the internship can create assessment.")
+            
+            if application.is_pending() or application.is_accessed():
+                application.access()
+                Assessment.add(applicationId, date, link)
+                return json_success("Assessment create successfully.")
+            else:
+                return json_invalid_request("Invalid application status.")
+        
+        except Exception as e:
+            raise e
+        
+    
+    def get_last_assessment_by_application_id(self, applicationId: int):
+        """
+        Get the last assessment by application ID.
+
+        :param applicationId: The ID of the application.
+        :return: JSON response containing the assessment if the request is successful, 
+             or an error message if the request fails
+        """
+        try:
+            application = Application.get_by_id(applicationId)
+
+            if not application:
+                return json_invalid_request("Invalid application Id.")
+
+            if get_current_user().get_id() != application.get_studentId() and get_current_user().get_id() != application.get_internshipPosition().get_companyId():
+                return json_unauthorized("You can only view your own assessments.")
+            
+            assessment = Assessment.get_last_assessment_by_application_id(applicationId)
+            if assessment:
+                return json_success("Assessment found successfully.", assessment = assessment.to_dict())
+            else:
+                return json_not_found("Assessment not found.")
+        
+        except Exception as e:
+            raise e
 
 
 def validate_application_data_creation(internshipPositionId: int):
