@@ -6,7 +6,7 @@ from datetime import timedelta
 
 from .utils import handle_error, validate_request, json_success
 from .models import User, Student, University, Company
-from .managers import LoginManager, RegistrationManager, InternshipManager, ApplicationManager
+from .managers import LoginManager, RegistrationManager, InternshipManager, ApplicationManager, SearchManager
 
 
 def create_main_app():
@@ -486,8 +486,41 @@ def create_main_app():
         except Exception as e:
             return handle_error(e)
     
+
+    #####################
+    #   Search Routes   #
+    #####################
+    @app.route('/api/search/filters', methods=['GET'])
+    @jwt_required()
+    def get_search_filters():
+        try:
+            search_manager = SearchManager()
+            return search_manager.get_search_filters()
+        except Exception as e:
+            return handle_error(e)
+
+
+    @app.route('/api/search_with_filters', methods=['POST'])
+    @jwt_required()
+    def search_with_filters():
+        try:
+            data = request.get_json()
+            search_manager = SearchManager()
+            return search_manager.search_internship_positions_with_filters(data)
+        except Exception as e:
+            return handle_error(e)  
+        
+    
+    @app.route('/api/search_without_filters', methods=['GET'])
+    @jwt_required()
+    def search_without_filters():
+        try:
+            search_manager = SearchManager()
+            return search_manager.search_internship_positions_without_filters()
+        except Exception as e:
+            return handle_error(e)
+          
     # access control (valutare studente by company)     (data e link, e idApplications) -> cambio stato (guardo rasd)
     # get_last_assesment_by_application_id(application_id) -> data e link       -> questo è da aggiungere a get_application_by_id() ma aggiungo link e data solo se l'application è ancora in fase di assesment
-    # search
     # complaints    (idInternship, data, content) -> ritorno nulla
     return app

@@ -206,7 +206,117 @@ class InternshipPositionDB:
             raise e
         finally:
             cur.close()
-        
+
+    def get_role_titles(self) -> Union[list, Exception]:
+        """
+        Retrieve all distinct role titles from the database.
+
+        :return: A list of role titles.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = """ SELECT DISTINCT RoleTitle FROM InternshipPosition """
+                rows = cur.execute(query).fetchall()
+                return [row["RoleTitle"] for row in rows] if rows else []
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def get_locations(self) -> Union[list, Exception]:
+        """
+        Retrieve all distinct locations from the database.
+
+        :return: A list of locations.
+        :raises Exception: If an error occurs during the database query execution.
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                query = """ SELECT DISTINCT Location FROM InternshipPosition """
+                rows = cur.execute(query).fetchall()
+                return [row["Location"] for row in rows] if rows else []
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def search(self, filters: dict) -> Union[list, Exception]:
+        """
+        Search for internship positions based on the provided filters.
+
+        :param filters: A dictionary containing the search filters.
+        :return: A list of dictionaries representing the internship positions.
+        :raises Exception: If an error occurs during the database query execution.
+
+        values = {
+                'roleTitle': filters.get('roleTitle', None),        DONE
+                'location': filters.get('location', None),          DONE
+                'companyName': filters.get('companyName', None),
+                'minStipend': filters.get('minStipend', None),      DONE
+                'minDuration': filters.get('minDuration', None),    DONE
+                'maxDuration': filters.get('maxDuration', None),    DONE
+            }
+        """
+        try:
+            with self.con:
+                cur = self.con.cursor()
+                conditions = []
+                parameters = []
+
+                if 'roleTitle' in filters and filters['roleTitle'] is not None:
+                    conditions.append("RoleTitle = ?")
+                    parameters.append(filters['roleTitle'])
+                if 'location' in filters and filters['location'] is not None:
+                    conditions.append("I.Location = ?")
+                    parameters.append(filters['location'])
+                if 'companyName' in filters and filters['companyName'] is not None:
+                    conditions.append("CompanyName = ?")
+                    parameters.append(filters['companyName'])
+                if 'minStipend' in filters and filters['minStipend'] is not None:
+                    conditions.append("Compensation >= ?")
+                    parameters.append(filters['minStipend'])
+                if 'minDuration' in filters and filters['minDuration'] is not None:
+                    conditions.append("Duration >= ?")
+                    parameters.append(filters['minDuration'])
+                if 'maxDuration' in filters and filters['maxDuration'] is not None:
+                    conditions.append("Duration <= ?")
+                    parameters.append(filters['maxDuration'])
+
+                query = """ SELECT * 
+                            FROM InternshipPosition AS I JOIN Company AS C ON C.UserId = I.CompanyId
+                            WHERE I.Status = 'Open'"""
+                if conditions:
+                    query += " AND " + " AND ".join(conditions)
+
+                cur.execute(query, parameters)
+                rows = cur.fetchall()
+                return [
+                    {
+                        "internshipPositionId": row["InternshipPositionId"],
+                        "companyId": row["CompanyId"],
+                        "programName": row["ProgramName"],
+                        "duration": row["Duration"],
+                        "location": row["Location"],
+                        "roleTitle": row["RoleTitle"],
+                        "skillsRequired": row["SkillsRequired"],
+                        "compensation": row["Compensation"],
+                        "benefits": row["Benefits"],
+                        "languagesRequired": row["LanguagesRequired"],
+                        "description": row["Description"],
+                        "status": row["Status"]
+                    } for row in rows
+                ] if rows else []
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()  
+
     ################
     #    UPDATE    #
     ################

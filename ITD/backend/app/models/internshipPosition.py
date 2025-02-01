@@ -208,3 +208,54 @@ class InternshipPosition():
         :return: True if the internship position is closed, otherwise False.
         """
         return self.status == 'Closed'
+    
+    @staticmethod
+    def get_role_titles() -> Union[list, Exception]:
+        """
+        Retrieve the role titles of internship positions.
+
+        :return: A list of role titles.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            internshipPositionConn = InternshipPositionDB()
+            return internshipPositionConn.get_role_titles()
+        except Exception as e:
+            raise e
+        finally:
+            internshipPositionConn.close()
+    
+    @staticmethod
+    def get_locations() -> Union[list, Exception]:
+        """
+        Retrieve the locations of internship positions.
+
+        :return: A list of locations.
+        :raises Exception: If an error occurs during the retrieval process.
+        """
+        try:
+            internshipPositionConn = InternshipPositionDB()
+            return internshipPositionConn.get_locations()
+        except Exception as e:
+            raise e
+        finally:
+            internshipPositionConn.close()
+
+    @staticmethod
+    def search_internship_positions(filters: dict) -> Union[list, Exception]:
+        """
+        Search for internship positions based on the given filters.
+
+        :param filters: The filters to search for internship positions.
+        :return: A list of InternshipPosition instances with the internship position details.
+        :raises Exception: If an error occurs during the search process.
+        """
+        try:
+            internshipPositionConn = InternshipPositionDB()
+            rows = internshipPositionConn.search(filters)
+            return [InternshipPosition(**row) for row in rows] if rows else []
+        except Exception as e:
+            raise e
+        finally:
+            internshipPositionConn.close()
+    

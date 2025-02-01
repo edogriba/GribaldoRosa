@@ -103,6 +103,23 @@ class Company(User):
 
 
     @staticmethod
+    def get_companies_names() -> Union[list, Exception]:
+        """
+        Retrieve a list of company names from the database.
+
+        :return: A list of company names.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            companyConn = CompanyDB()
+            companyNames = companyConn.get_companies_names()
+            return companyNames
+        except Exception as e:
+            raise e
+        finally:
+            companyConn.close()
+
+    @staticmethod
     def update(id: int, logoPath: Optional[str], description: str, location: str) -> Union['Company', None, Exception]:
         """
         Update an existing company record in the database and return the updated company data as a dictionary.
