@@ -82,12 +82,6 @@ const StudentApplicationList = () => {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" className="p-4">
-                                <div className="flex items-center">
-                                    <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                    <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
-                                </div>
-                            </th>
                             <th scope="col" className="px-6 py-3">
                                 Company
                             </th>
@@ -109,14 +103,8 @@ const StudentApplicationList = () => {
                     {filteredApplications.map((application) => {
                         return (
                             <tr key={application.application.applicationId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td className="w-4 p-4">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                        <label htmlFor="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                    </div>
-                                </td>
                                 <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                    <img className="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image"/>
+                                    <img className="w-10 h-10 rounded-full" src={application.company.logoPath ? `/uploads/${application.company.logoPath}` : `/user.jpg`} alt="Profile"/>
                                     <div className="ps-3">
                                         <div className="text-base font-semibold">{application.company.companyName}</div>
                                         <div className="font-normal text-gray-500">{application.company.email}</div>

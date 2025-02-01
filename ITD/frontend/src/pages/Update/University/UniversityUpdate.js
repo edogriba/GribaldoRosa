@@ -60,33 +60,30 @@ const UniversityUpdate = () => {
     <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
       <Navbar user={user} onLogout={userLogout} />
       <section className="bg-white dark:bg-gray-900">
-        <GoBack location="universities/home"/>
+        <GoBack location="/universities/home"/>
         <div className="max-w-2xl px-4 py-1 mx-auto lg:py-3">
           <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
             Update Profile
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
-              {/* Description */}
+              {/* Logo */}
               <div className="w-full">
                 <label
-                  htmlFor="description"
+                  htmlFor="logoPath"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Description
+                  Logo
                 </label>
                 <input
-                  type="text"
-                  name="description"
-                  id="description"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 
-                             text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 
-                             block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
-                             dark:placeholder-gray-400 dark:text-white 
-                             dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
+                  type="file"
+                  id="logoPath"
+                  name="logoPath"
+                  onChange={handleLogoChange}
+                  className="block w-full text-sm text-gray-900 border 
+                             border-gray-300 rounded-lg cursor-pointer 
+                             bg-gray-50 focus:outline-none dark:bg-gray-700 
+                             dark:border-gray-600 dark:placeholder-gray-400"
                 />
               </div>
 
@@ -113,24 +110,28 @@ const UniversityUpdate = () => {
                 />
               </div>
 
-              {/* Logo */}
+              {/* Description */}
               <div className="sm:col-span-2">
-                <label
-                  htmlFor="logoPath"
+              <label
+                  htmlFor="description"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Logo
+                  Description
                 </label>
-                <input
-                  type="file"
-                  id="logoPath"
-                  name="logoPath"
-                  onChange={handleLogoChange}
-                  className="block w-full text-sm text-gray-900 border 
-                             border-gray-300 rounded-lg cursor-pointer 
-                             bg-gray-50 focus:outline-none dark:bg-gray-700 
-                             dark:border-gray-600 dark:placeholder-gray-400"
-                />
+                <textarea
+                  type="text"
+                  name="description"
+                  id="description"
+                  rows="4"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 
+                             text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 
+                             block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
+                             dark:placeholder-gray-400 dark:text-white 
+                             dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required>
+                </textarea>
               </div>
             </div>
             <div className="flex justify-end items-center space-x-4">

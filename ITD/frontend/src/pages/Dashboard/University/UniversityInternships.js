@@ -16,10 +16,12 @@ const UniversityInternships = () => {
         }
     }, [user]);
     return (
-        <div>
+        <div className='flex flex-col justify-between min-h-screen dark:bg-gray-900'>
+            <div>
             <Navbar user={user} onLogout={userLogout}/>
             <UniversityTab activeTab='internships'/>
             <UniversityInternshipList />
+            </div>
             <Footer />
         </div>
     );

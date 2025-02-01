@@ -31,6 +31,9 @@ import UniversityInternships from './pages/Dashboard/University/UniversityIntern
 import CompanyPositionView from './pages/Dashboard/Company/CompanyPositionView';
 import StudentApplicationView from './pages/Dashboard/Student/StudentApplicationView';
 import CompanyApplicationView from './pages/Dashboard/Company/CompanyApplicationView';
+import CompanyInternship from './pages/Dashboard/Company/CompanyInternship';
+import StudentInternship from './pages/Dashboard/Student/StudentInternship';
+import UniversityInternship from './pages/Dashboard/University/UniversityInternship';
 function App() {
   return (
     <UserProvider> 
@@ -58,9 +61,12 @@ function App() {
           <Route path="/students/dashboard/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
           <Route path="/students/dashboard/applications/:applicationId" element={<ProtectedRoute><StudentApplicationView /></ProtectedRoute>} />
           <Route path="/students/dashboard/internships" element={<ProtectedRoute><StudentInternships /></ProtectedRoute>} />
+          <Route path="/students/dashboard/internships/:internshipId" element={<ProtectedRoute><StudentInternship /></ProtectedRoute>} />
           <Route path="/companies/dashboard/internships" element={<ProtectedRoute><CompanyInternships/></ProtectedRoute>} />
+          <Route path="/companies/dashboard/internships/:internshipId" element={<ProtectedRoute><CompanyInternship /></ProtectedRoute>} />
           <Route path="/companies/dashboard/positions" element={<ProtectedRoute><CompanyPositions /></ProtectedRoute>} />
           <Route path="/universities/dashboard/internships" element={<ProtectedRoute><UniversityInternships /></ProtectedRoute>} />
+          <Route path="/universities/dashboard/internships/:internshipId" element={<ProtectedRoute><UniversityInternship /></ProtectedRoute>} />
           <Route path="/companies/dashboard/positions/:positionId" element={<ProtectedRoute><CompanyPositionView /></ProtectedRoute>} />
           <Route path="/companies/dashboard/positions/:positionId/applications/:applicationId" element={<ProtectedRoute><CompanyApplicationView /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />

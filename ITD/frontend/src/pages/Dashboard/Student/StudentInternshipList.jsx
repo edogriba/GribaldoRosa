@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext} from "react"
 import { UserContext } from "../../../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../../api/api";
 
 const StudentInternshipList = () => {
@@ -8,6 +8,7 @@ const StudentInternshipList = () => {
     const navigate = useNavigate();
     const [internships, setInternships] = useState([]);
     const [internshipStatus, setInternshipStatus] = useState('All');
+    const [filteredInternships, setFilteredInternships] = useState([]);
 
     useEffect( () => {   
         const fetchInternships = async () => {
@@ -16,8 +17,8 @@ const StudentInternshipList = () => {
                 const res = await api.getInternshipListStudent({"studentId": user.id});
                 const data = await res.json();
                 console.log("data", data);
-                console.log("app", data.internships);
-                setInternships(data.internships);
+                console.log("app", data.internshipsPreview);
+                setInternships(data.internshipsPreview);
                 console.log(res);
             }
             catch(error) {
@@ -31,6 +32,20 @@ const StudentInternshipList = () => {
         }
         fetchInternships();
     }, []);
+
+    useEffect(() => {
+            const filterResults = () => {
+                let filtered = internships;
+    
+                if (internshipStatus !== "All") {
+                    filtered = filtered.filter((internship) => internship.status === internshipStatus);
+                }
+                console.log("filtered", filtered);
+                setFilteredInternships(filtered);
+            };
+    
+            filterResults();
+        }, [internshipStatus, internships]);
     return (
         <div>    
             <div>    
@@ -51,9 +66,9 @@ const StudentInternshipList = () => {
                                     value={internshipStatus}
                                     onChange={(e) => setInternshipStatus(e.target.value)}
                                 >
-                                    <option key="all" value="all">All statuses</option>
-                                    <option key="Ongoing" value="Pending">Ongoing</option>
-                                    <option key="Finished" value="Accepted">Finished</option>
+                                    <option key="All" value="All">All statuses</option>
+                                    <option key="Ongoing" value="Ongoing">Ongoing</option>
+                                    <option key="Finished" value="Finished">Finished</option>
                                 </select>
                             </div>
                         </div>
@@ -63,17 +78,11 @@ const StudentInternshipList = () => {
                     <table  className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" className="p-4">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                        <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
-                                    </div>
+                                <th scope="col" className="px-6 py-3">
+                                    Logo
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Company
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Program Name
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Position
@@ -89,35 +98,27 @@ const StudentInternshipList = () => {
                         <tbody>
                         {internships.map((internship) => {
                             return (
-                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td className="w-4 p-4">
-                                        <div className="flex items-center">
-                                            <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                            <label htmlFor="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
+                                <tr key={internship.internshipId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <img className="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image"/>
-                                        <div className="ps-3">
-                                            <div className="text-base font-semibold">{internship.company.companyName}</div>
-                                            <div className="font-normal text-gray-500">{internship.company.email}</div>
-                                        </div>  
+                                        <img className="w-10 h-10 rounded-full" src={internship.company_photoPath ? `/uploads/${internship.company.logoPath}` : `/user.jpg`} alt="Profile"/>
                                     </th>
                                     <td className="px-6 py-4">
-                                        {internship.internship.programName}
+                                        {internship.company_name}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {internship.internship.roleTitle}
+                                        {internship.roleTitle}
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center">
-                                            <span className={`inline-flex items-center rounded bg-${internship.internship.status === "Ongoing" ? "green" : "red" }-100 text-${internship.internship.status === "Ongoing" ? "green" : "red" }-800 px-2.5 py-0.5 text-xs font-medium dark:bg-primary-900 dark:text-primary-300`}>
-                                                {internship.internship.status}
+                                            <span className={`inline-flex items-center rounded bg-${internship.status === "Ongoing" ? "green" : "red" }-100 text-${internship.status === "Ongoing" ? "green" : "red" }-800 px-2.5 py-0.5 text-xs font-medium dark:bg-primary-900 dark:text-primary-300`}>
+                                                {internship.status}
                                             </span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <a href="#" className="font-medium text-primary-600 dark:text-primary-500 hover:underline">View</a>
+                                        <Link to={`${internship.internshipId}`} className="font-medium text-primary-600 dark:text-primary-500 hover:underline">
+                                        <p href="#" className="font-medium text-primary-600 dark:text-primary-500 hover:underline">View</p>
+                                        </Link>
                                     </td>
                                 </tr>
                             )

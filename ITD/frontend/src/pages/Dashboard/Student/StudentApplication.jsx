@@ -7,7 +7,7 @@ import Status from "../../../components/Status";
 
 const StudentApplication = () => {
     const [application, setApplication] = useState({});
-    const { applicationId } = useParams(); // Extract the dynamic `applicationId` from the route
+    const {positionId, applicationId } = useParams(); // Extract the dynamic `applicationId` from the route
     const navigate = useNavigate(); // Hook to navigate programmatically
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const StudentApplication = () => {
     return (
         <div>
             {/* Go Back Button */}
-            <GoBack location="/students/dashboard/applications/"/>
+            <GoBack location={`/students/dashboard/applications`}/>
             <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 dark:border-gray-700 rounded-lg shadow-lg">
                 {/* Header Section */}
                 <div className="mb-6 border-b pb-4">

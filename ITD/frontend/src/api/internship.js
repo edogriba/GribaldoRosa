@@ -9,7 +9,9 @@ const InternshipEndPoint = {
     CLOSE_POSITION: '/api/internship_position/close',
     INTERNSHIP_LIST_STUDENT: '/api/internship/get_by_student',
     INTERNSHIP_LIST_COMPANY: '/api/internship/get_by_company',
-    INTERNSHIP_LIST_UNIVERSITY: '/api/internship/get_by_university'
+    INTERNSHIP_LIST_UNIVERSITY: '/api/internship/get_by_university',
+    INTERNSHIP: '/api/internship/get_by_id',
+    FINISH_INTERNSHIP: '/api/internship/finish',
   };
 
 
@@ -36,3 +38,9 @@ export const getInternshipListCompany = async (data) =>
 
 export const getInternshipListUniversity = async (data) =>
   requestAuth(`${InternshipEndPoint.INTERNSHIP_LIST_UNIVERSITY}`, Method.POST, data);
+
+export const getInternship = async (data) =>
+  requestAuth(`${InternshipEndPoint.INTERNSHIP}`, Method.POST, data);
+
+export const finishInternship = async (data) =>
+  requestAuthWithErrorToast(`${InternshipEndPoint.FINISH_INTERNSHIP}`, Method.POST, data);

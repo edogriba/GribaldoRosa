@@ -15,10 +15,12 @@ const CompanyPositions = () => {
         }
     }, [user]);
     return (
-        <div>
-            <Navbar user={user} onLogout={userLogout}/>
-            <CompanyTab activeTab='positions'/>
-            <CompanyPositionList/>
+        <div className='flex flex-col justify-between min-h-screen dark:bg-gray-900'>
+            <div>
+                <Navbar user={user} onLogout={userLogout}/>
+                <CompanyTab activeTab='positions'/>
+                <CompanyPositionList/>
+            </div>
             <Footer />
         </div>
     );

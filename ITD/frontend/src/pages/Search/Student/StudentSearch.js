@@ -19,7 +19,7 @@ const StudentSearch = () => {
             <div>
                 <Navbar  user={user} onLogout={userLogout}/>
                 <div>
-                    <GoBack location="students/home"/>
+                    <GoBack location="/students/home"/>
                 </div>
                 <SearchFilter />
             </div>

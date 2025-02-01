@@ -42,7 +42,9 @@ import {
   closePosition,
   getInternshipListStudent,
   getInternshipListCompany,
-  getInternshipListUniversity
+  getInternshipListUniversity,
+  getInternship,
+  finishInternship
 } from './internship';
 
 export const Method = {
@@ -80,5 +82,7 @@ export const api = {
   getInternshipListUniversity,
   updateStudent,
   updateCompany,
-  updateUniversity
+  updateUniversity,
+  getInternship,
+  finishInternship
 };
