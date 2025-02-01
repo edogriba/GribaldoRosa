@@ -153,7 +153,7 @@ class StudentDB:
     ################ 
 
     def update(self, id: int, phoneNumber: str, profilePicture: Union[str, None], location: str, degreeProgram: str, GPA: Union[float, None], 
-               graduationYear: Union[int, None], CV: str, skills: str, languageSpoken: str, universityId: int) -> Union[None, Exception]:
+               graduationYear: Union[int, None], CV: Union[str, None], skills: str, languageSpoken: str, universityId: int) -> Union[None, Exception]:
         """
         Update an existing student record in the database and return the updated student data as a dictionary.
 
@@ -175,10 +175,27 @@ class StudentDB:
         try:
             with self.con:
                 cur = self.con.cursor()
-                query = """ UPDATE Student
-                            SET PhoneNumber = ?, ProfilePicturePath = ?, Location = ?, DegreeProgram = ?, Gpa = ?, GraduationYear = ?, CVpath = ?, Skills = ?, LanguageSpoken = ?, UniversityId = ?
-                            WHERE UserId = ? """
-                cur.execute(query, (phoneNumber, profilePicture, location, degreeProgram, GPA, graduationYear, CV, skills, languageSpoken, universityId, id))
+                if profilePicture and CV:
+                    query = """ UPDATE Student
+                                SET PhoneNumber = ?, ProfilePicturePath = ?, Location = ?, DegreeProgram = ?, Gpa = ?, GraduationYear = ?, CVpath = ?, Skills = ?, LanguageSpoken = ?, UniversityId = ?
+                                WHERE UserId = ? """
+                    cur.execute(query, (phoneNumber, profilePicture, location, degreeProgram, GPA, graduationYear, CV, skills, languageSpoken, universityId, id))
+                elif profilePicture:
+                    query = """ UPDATE Student
+                                SET PhoneNumber = ?, ProfilePicturePath = ?, Location = ?, DegreeProgram = ?, Gpa = ?, GraduationYear = ?, Skills = ?, LanguageSpoken = ?, UniversityId = ?
+                                WHERE UserId = ? """
+                    cur.execute(query, (phoneNumber, profilePicture, location, degreeProgram, GPA, graduationYear, skills, languageSpoken, universityId, id))
+                elif CV:
+                    query = """ UPDATE Student
+                                SET PhoneNumber = ?, Location = ?, DegreeProgram = ?, Gpa = ?, GraduationYear = ?, CVpath = ?, Skills = ?, LanguageSpoken = ?, UniversityId = ?
+                                WHERE UserId = ? """
+                    cur.execute(query, (phoneNumber, location, degreeProgram, GPA, graduationYear, CV, skills, languageSpoken, universityId, id))
+                else:
+                    query = """ UPDATE Student
+                                SET PhoneNumber = ?, Location = ?, DegreeProgram = ?, Gpa = ?, GraduationYear = ?, Skills = ?, LanguageSpoken = ?, UniversityId = ?
+                                WHERE UserId = ? """
+                    cur.execute(query, (phoneNumber, location, degreeProgram, GPA, graduationYear, skills, languageSpoken, universityId, id))
+                
                 if not cur.rowcount > 0:
                     raise Exception("Student not found")
         except Exception as e:

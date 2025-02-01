@@ -249,9 +249,10 @@ def is_skills_valid(skills: str) -> bool:
     :return: True if the skills list is valid and not empty, False otherwise.
     """
     try:
-        skills_regex = r'^([\w\+\#\.]+)(,\s*[\w\+\#\.]+)*$'
+        #skills_regex = r'^([\w\+\#\.\s]+)(,\s*[\w\+\#\.\s]+)*$'
         max_length = 1024
-        return bool(skills and re.match(skills_regex, skills) and len(skills) <= max_length)
+        #return bool(skills and re.match(skills_regex, skills) and len(skills) <= max_length)
+        return bool(skills and len(skills) <= max_length)
     except Exception:
         return False
 

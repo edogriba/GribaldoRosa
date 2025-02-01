@@ -266,6 +266,9 @@ class TestAuthService(unittest.TestCase):
 
 
     def test_is_skills_valid(self):
+        self.assertTrue(is_skills_valid("C, Data Structures, Assembly"))
+        self.assertTrue(is_skills_valid("Python, Java, C++, SQL, HTML, CSS, JavaScript, React, Angular, Node.js, Express, MongoDB, Firebase, AWS, Docker, Kubernetes, Jenkins"))
+        self.assertTrue(is_skills_valid("Python"))
         self.assertTrue(is_skills_valid("Python, Java"))
         self.assertTrue(is_skills_valid("Python, Java, C++"))
         self.assertTrue(is_skills_valid("Python, Java, C++, SQL"))

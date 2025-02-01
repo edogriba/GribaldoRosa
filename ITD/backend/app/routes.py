@@ -4,9 +4,9 @@ from flask_jwt_extended import JWTManager, jwt_required, get_current_user
 
 from datetime import timedelta
 
-from .utils import handle_error, validate_request, json_success
+from .utils import handle_error, validate_request, json_success, json_invalid_request
 from .models import User, Student, University, Company
-from .managers import LoginManager, RegistrationManager, InternshipManager, ApplicationManager, SearchManager
+from .managers import LoginManager, RegistrationManager, InternshipManager, ApplicationManager, SearchManager, ProfileManager
 
 
 def create_main_app():
@@ -102,6 +102,9 @@ def create_main_app():
             data = request.form.to_dict()
             logo = request.files['logo'] if 'logo' in request.files else None
 
+            if logo and not (logo.filename.endswith('.jpg') or logo.filename.endswith('.jpeg') or logo.filename.endswith('.png')):
+                return json_invalid_request("Invalid file format. Only JPG and PNG are allowed.")
+
             registrationManager = RegistrationManager()
             return registrationManager.register_university(data, logo)
         
@@ -113,11 +116,17 @@ def create_main_app():
     def student_register():
         try:            
             data = request.form.to_dict()
-            profilePicture = request.files['profilePicture'] if 'profilePicture' in request.files else None
+            pic = request.files['profilePicture'] if 'profilePicture' in request.files else None
             cv = request.files['cv'] if 'cv' in request.files else None
 
+            if pic and not (pic.filename.endswith('.jpg') or pic.filename.endswith('.jpeg') or pic.filename.endswith('.png')):
+                return json_invalid_request("Invalid file format. Only JPG and PNG are allowed.")
+
+            if cv and not cv.filename.endswith('.pdf'):
+                return json_invalid_request("Invalid file format. Only PDF is allowed.")
+
             registrationManager = RegistrationManager()
-            return registrationManager.register_student(data, profilePicture, cv)
+            return registrationManager.register_student(data, pic, cv)
 
         except Exception as e:
             return handle_error(e)   
@@ -129,6 +138,9 @@ def create_main_app():
             data = request.form.to_dict()
             
             logo = request.files['logo'] if 'logo' in request.files else None
+
+            if logo and not (logo.filename.endswith('.jpg') or logo.filename.endswith('.jpeg') or logo.filename.endswith('.png')):
+                return json_invalid_request("Invalid file format. Only JPG and PNG are allowed.")
 
             registrationManager = RegistrationManager()
             return registrationManager.register_company(data, logo)
@@ -142,25 +154,34 @@ def create_main_app():
     def update_student():
         try:            
             data = request.form.to_dict()
-            profilePicture = request.files['profilePicture'] if 'profilePicture' in request.files else None
+            pic = request.files['profilePicture'] if 'profilePicture' in request.files else None
             cv = request.files['cv'] if 'cv' in request.files else None
 
-            registrationManager = RegistrationManager()
-            return registrationManager.update_student(data, profilePicture, cv)
+            if pic and not (pic.filename.endswith('.jpg') or pic.filename.endswith('.jpeg') or pic.filename.endswith('.png')):
+                return json_invalid_request("Invalid file format. Only JPG and PNG are allowed.")
+            
+            if cv and not cv.filename.endswith('.pdf'):
+                return json_invalid_request("Invalid file format. Only PDF is allowed.")
+
+            profileManager = ProfileManager()
+            return profileManager.update_student(data, pic, cv)
 
         except Exception as e:
             return handle_error(e)
         
     
-    @app.route('/api/update/company', methods=['POST', 'OPTIONS'])
+    @app.route('/api/update/company', methods=['POST'])
     @jwt_required()
     def update_company():
         try:           
             data = request.form.to_dict()
             logo = request.files['logo'] if 'logo' in request.files else None
             
-            registrationManager = RegistrationManager()
-            return registrationManager.update_company(data, logo)
+            if logo and not (logo.filename.endswith('.jpg') or logo.filename.endswith('.jpeg') or logo.filename.endswith('.png')):
+                return json_invalid_request("Invalid file format. Only JPG and PNG are allowed.")
+
+            profileManager = ProfileManager()
+            return profileManager.update_company(data, logo)
 
         except Exception as e:
             return handle_error(e)
@@ -173,11 +194,11 @@ def create_main_app():
             data = request.form.to_dict()
             logo = request.files['logo'] if 'logo' in request.files else None
 
-            if not data:
-                raise Exception("No data provided")
+            if logo and not (logo.filename.endswith('.jpg') or logo.filename.endswith('.jpeg') or logo.filename.endswith('.png')):
+                return json_invalid_request("Invalid file format. Only JPG and PNG are allowed.")
 
-            registrationManager = RegistrationManager()
-            return registrationManager.update_university(data, logo)
+            profileManager = ProfileManager()
+            return profileManager.update_university(data, logo)
 
         except Exception as e:
             return handle_error(e)

@@ -82,6 +82,9 @@ def delete_file_user(user_id: int, filename: str) -> Union[None, Exception]:
     """
     try:
         file_path = get_upload_file_path_user(user_id, filename)
+        if not os.path.exists(file_path):
+            return
+        
         delete_file(file_path)
     except Exception as e:
         raise Exception(f"Error deleting file: {e}")
@@ -97,7 +100,8 @@ def update_file_user(user_id: int, old_filename: str, new_file) -> Union[None, E
     :raises Exception: If an error occurs during the update process.
     """
     try:
-        delete_file_user(user_id, old_filename)
+        if old_filename:
+            delete_file_user(user_id, old_filename)
 
         save_file(new_file, get_upload_folder_user(user_id))
     except Exception as e:
