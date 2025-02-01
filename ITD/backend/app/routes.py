@@ -543,7 +543,7 @@ def create_main_app():
           
 
     @app.route('/api/assessment/create', methods=['POST'])
-    @jwt_required
+    @jwt_required()
     def create_assessment():
         try:
             data = request.get_json()
@@ -554,7 +554,7 @@ def create_main_app():
         
     
     @app.route('/api/complaint/create', methods=['POST'])
-    @jwt_required
+    @jwt_required()
     def create_complaint():
         try:
             data = request.get_json()
