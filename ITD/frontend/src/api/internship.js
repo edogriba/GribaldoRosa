@@ -12,6 +12,9 @@ const InternshipEndPoint = {
     INTERNSHIP_LIST_UNIVERSITY: '/api/internship/get_by_university',
     INTERNSHIP: '/api/internship/get_by_id',
     FINISH_INTERNSHIP: '/api/internship/finish',
+    SEARCH_NO_FILTERS: '/api/search_without_filters',
+    GET_FILTERS: '/api/search/filters',
+    SEARCH_WITH_FILTERS: '/api/search_with_filters',
   };
 
 
@@ -44,3 +47,12 @@ export const getInternship = async (data) =>
 
 export const finishInternship = async (data) =>
   requestAuthWithErrorToast(`${InternshipEndPoint.FINISH_INTERNSHIP}`, Method.POST, data);
+
+export const getFilters = async () =>
+  requestAuthWithErrorToast(`${InternshipEndPoint.GET_FILTERS}`, Method.GET);
+
+export const searchNoFilters = async () =>
+  requestAuthWithErrorToast(`${InternshipEndPoint.SEARCH_NO_FILTERS}`, Method.GET);
+
+export const searchFilters = async (data) =>
+  requestAuthWithErrorToast(`${InternshipEndPoint.SEARCH_WITH_FILTERS}`, Method.POST, data);

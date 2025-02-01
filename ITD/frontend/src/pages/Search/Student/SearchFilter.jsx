@@ -1,18 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../../api/api';
+import SearchResults from './SearchResults';
+import { toast } from 'react-hot-toast';
 
 const SearchFilter = () => {
+    // Filter values
     const [location, setLocation] = useState('');
-    const [companies, setCompanies] = useState([]);
+    const [roleTitle, setRoleTitle] = useState('');
+    const [company, setCompany] = useState('');
     const [minCompensation, setMinCompensation] = useState(0);
     const [duration, setDuration] = useState('');
+
+    // Filters options
+    const [companies, setCompanies] = useState([]);
     const [locations, setLocations] = useState([]);
     const [roleTitles, setRoleTitles] = useState([]);
 
-    const noFilterRequest = () => {
+    const [showResults, setShowResults] = useState(false);
+
+    // Retrieved results
+    const [positions, setPositions] = useState([]);
+
+    const noFilterRequest = async () => {
         try {
             console.log("No filter request");
-            //const res = await api.getPositionStudentListStudent();
+            const res = await api.searchNoFilters();
+            const data = await res.json();
+            console.log(data);
+            if (data.internships.length === 0) {
+                toast.success('No positions found.');
+            }
+            setPositions(data.internships);
+               
+            setShowResults(true);
+            
         }
         catch (error) {
             console.error('Error fetching applications:', error.message);
@@ -20,15 +41,61 @@ const SearchFilter = () => {
         };
     }
 
-    const filterRequest = () => {
+    const filterRequest = async () => {
         try {
-            const data = {
-                location,
-                companies,
-                minCompensation,
-                duration,
-            };
-            console.log(data);
+
+            let minDuration = null;
+            let maxDuration = null;
+
+            switch (duration) {
+                case '0-3':
+                    minDuration = 0;
+                    maxDuration = 3;
+                    break;
+                case '3-6':
+                    minDuration = 3;
+                    maxDuration = 6;
+                    break;
+                case '6-12':
+                    minDuration = 6;
+                    maxDuration = 12;
+                    break;
+                case '12+':
+                    minDuration = 12;
+                    maxDuration = null;
+                    break;
+                default:
+                    minDuration = null;
+                    maxDuration = null;
+            }
+            const filtersData = {};
+            if (location) {
+                filtersData.location = location;
+            }
+            if (company) {
+                filtersData.companyName = company;
+            }
+            if (minCompensation) {
+                filtersData.minStipend = parseInt(minCompensation);
+            }
+            if (minDuration !== null) {
+                filtersData.minDuration = minDuration;
+            }
+            if (maxDuration !== null) {
+                filtersData.maxDuration = maxDuration;
+            }
+            if (roleTitle) {
+                filtersData.roleTitle = roleTitle;
+            }
+            console.log(filtersData);
+            const response = await api.searchFilters(filtersData);
+            const data = await response.json();
+            if (data.internships.length === 0) {
+                toast.success('No positions found.');
+            }
+            setPositions(data.internships);
+            setShowResults(true);
+
         }
         catch (error) {
             console.error('Error fetching applications:', error.message);
@@ -37,11 +104,14 @@ const SearchFilter = () => {
     };
 
     useEffect(() => {
-        const fetchLocations = async () => {
+        const fetchFilters= async () => {
             try {
-                // const res = await api.getLocationList();
-                // const data = await res.json();
-                // setLocations(data.locations);
+                const res = await api.getFilters();
+                const data = await res.json();
+                console.log(data);
+                setLocations(data.locations);
+                setCompanies(data.companiesNames);
+                setRoleTitles(data.roleTitles);
                 console.log("Fetching locations...");
             } catch (error) {
                 console.error('Error fetching locations:', error.message);
@@ -49,32 +119,7 @@ const SearchFilter = () => {
             }
         };
 
-        const fetchCompanies = async () => {
-            try {
-                // const res = await api.getCompanyList();
-                // const data = await res.json();
-                // setCompanies(data.companies);
-                console.log("Fetching companies...");
-            } catch (error) {
-                console.error('Error fetching companies:', error.message);
-                alert('Failed to load companies. Please try again later.');
-            }
-        };
-
-        const fetchRoleTitles = async () => {
-            try {
-                // const res = await api.getRoleTitlesList();
-                // const data = await res.json();
-                // setCompanies(data.companies);
-                console.log("Fetching role titles...");
-            } catch (error) {
-                console.error('Error fetching role title:', error.message);
-                alert('Failed to load role titles. Please try again later.');
-            }
-        };
-        fetchRoleTitles();
-        fetchCompanies();
-        fetchLocations();
+        fetchFilters();
     }, []);
 
     return (
@@ -87,9 +132,11 @@ const SearchFilter = () => {
                     <label className="block text-sm font-medium text-gray-700">Role Titles</label>
                     <select  
                         className="mt-1 block w-3/4 rounded-md border-gray-300 p-2"
+                        onChange={(e) => setRoleTitle(e.target.value)}
                     >
-                        {roleTitles.map((role) => (
-                            <option key={role.roleTitle} value={role.roleTitle}>{role.roleTitle}</option>
+                        <option value="">All roles</option>
+                        {roleTitles?.map((role) => (
+                            <option key={role} value={role}>{role}</option>
                         ))}
                     </select>
                 </div>
@@ -100,21 +147,21 @@ const SearchFilter = () => {
                         onChange={(e) => setLocation(e.target.value)}
                         className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-3/4 p-2.5"
                     >
-                        <option value="" disabled>Select your location</option>
-                        {locations.map((loc) => (
-                            <option key={loc.id} value={loc.id}>{loc.name}</option>
+                        <option value="">All locations</option>
+                        {locations?.map((loc) => (
+                            <option key={loc} value={loc}>{loc}</option>
                         ))}
                     </select>
                 </div>
                 <div className="mb-4 flex flex-col items-center">
                     <label className="block text-sm font-medium text-gray-700">Companies</label>
                     <select 
-                        multiple
-                        onChange={(e) => setMinCompensation(e.target.value)}
+                        onChange={(e) => setCompany(e.target.value)}
                         className="mt-1 block w-3/4 rounded-md border-gray-300 p-2"
                     >
-                        {companies.map((company) => (
-                            <option key={company.id} value={company.id}>{company.name}</option>
+                        <option value="">All companies</option>
+                        {companies?.map((company) => (
+                            <option key={company} value={company}>{company}</option>
                         ))}
                     </select>
                 </div>
@@ -125,7 +172,7 @@ const SearchFilter = () => {
                         onChange={(e) => setDuration(e.target.value)}
                         className="mt-1 block w-3/4 rounded-md border-gray-300 p-2"
                     >
-                        <option value="" disabled>Select duration</option>
+                        <option value="">All durations</option>
                         <option value="0-3">0-3 months</option>
                         <option value="3-6">3-6 months</option>
                         <option value="6-12">6-12 months</option>
@@ -146,8 +193,10 @@ const SearchFilter = () => {
             </div>
             <div className="flex justify-end mt-6">
                 <button type="button" onClick={noFilterRequest} className="bg-secondary-600 text-white px-4 py-2 rounded-md mr-2">Browse All</button>
-                <button type="submit" onClick={filterRequest} className="bg-primary-500 text-white px-4 py-2 rounded-md">Apply</button>
+                <button type="submit" onClick={filterRequest} className="bg-primary-500 text-white px-4 py-2 rounded-md">Search</button>
             </div>
+        {showResults && <SearchResults positions={positions} />}
+
         </div>
     );
 };

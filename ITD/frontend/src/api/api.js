@@ -28,7 +28,8 @@ import {
   getApplicationCompany,
   acceptApplication,
   rejectApplication,
-  assessApplication
+  assessApplication,
+  createApplication
 } from './application';
 
 
@@ -44,7 +45,10 @@ import {
   getInternshipListCompany,
   getInternshipListUniversity,
   getInternship,
-  finishInternship
+  finishInternship,
+  searchNoFilters,
+  searchFilters,
+  getFilters,
 } from './internship';
 
 export const Method = {
@@ -84,5 +88,9 @@ export const api = {
   updateCompany,
   updateUniversity,
   getInternship,
-  finishInternship
+  finishInternship,
+  searchNoFilters,
+  searchFilters,
+  getFilters,
+  createApplication
 };

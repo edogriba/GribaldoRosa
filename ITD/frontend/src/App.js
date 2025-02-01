@@ -34,6 +34,7 @@ import CompanyApplicationView from './pages/Dashboard/Company/CompanyApplication
 import CompanyInternship from './pages/Dashboard/Company/CompanyInternship';
 import StudentInternship from './pages/Dashboard/Student/StudentInternship';
 import UniversityInternship from './pages/Dashboard/University/UniversityInternship';
+import StudentPositionView from './pages/Search/Student/StudentPositionView';
 function App() {
   return (
     <UserProvider> 
@@ -57,6 +58,7 @@ function App() {
           <Route path="/companies/update" element={<ProtectedRoute><CompanyUpdate /></ProtectedRoute>} />
           <Route path="/universities/update" element={<ProtectedRoute><UniversityUpdate /></ProtectedRoute>} />
           <Route path="/students/search" element={<ProtectedRoute><StudentSearch /></ProtectedRoute>} />
+          <Route path="/students/search/:positionId" element={<ProtectedRoute><StudentPositionView /></ProtectedRoute>} />
           <Route path="/companies/create-position" element={<ProtectedRoute><CompanyCreatePositionView /></ProtectedRoute>} />
           <Route path="/students/dashboard/applications" element={<ProtectedRoute><StudentApplications /></ProtectedRoute>} />
           <Route path="/students/dashboard/applications/:applicationId" element={<ProtectedRoute><StudentApplicationView /></ProtectedRoute>} />
