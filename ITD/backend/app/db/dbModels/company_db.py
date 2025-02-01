@@ -117,6 +117,24 @@ class CompanyDB:
             cur.close()
 
     
+    def get_companies_names(self) -> Union[list, Exception]:
+        """
+        Retrieve the names of all companies in the database.
+        :return: A list of dictionaries containing the 'name' of each company.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            cur = self.con.cursor()
+            query = """ SELECT DISTINCT CompanyName FROM Company """
+            rows = cur.execute(query).fetchall()
+            return [row["CompanyName"] for row in rows] if rows else []
+        except Exception as e:
+            self.con.rollback()
+            raise e
+        finally:
+            cur.close()
+
+
     def update(self, id: int, logoPath: Optional[str], description: str, location: str) -> Union[None, Exception]:
         """
         Update a company record in the database.

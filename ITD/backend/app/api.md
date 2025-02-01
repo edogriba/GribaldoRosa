@@ -75,6 +75,13 @@
     - [24. Finish Internship](#24-finish-internship)
       - [Request Parameters](#request-parameters-21)
       - [Response](#response-23)
+    - [25. Get Search Filters](#25-get-search-filters)
+      - [Response](#response-24)
+    - [26. Search Internship Positions with Filters](#26-search-internship-positions-with-filters)
+      - [Request Parameters](#request-parameters-22)
+      - [Response](#response-25)
+    - [27. Search Internship Positions without Filters](#27-search-internship-positions-without-filters)
+      - [Response](#response-26)
 
 ## Endpoints
 
@@ -2170,6 +2177,228 @@ Headers: {
 {
   "type": "success",
   "message": "Internship finished successfully"
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 25. Get Search Filters
+
+- **Endpoint**: `/api/search/filters`
+- **Method**: `GET`
+- **Description**: Retrieves search filters for internship positions.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Search filters found successfully."
+    - `roleTitles` (list): List of role titles.
+    - `locations` (list): List of locations.
+    - `companiesNames` (list): List of company names.
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+GET /api/search/filters
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Search filters found successfully",
+  "roleTitles": ["Software Engineer Intern", "Data Analyst Intern"],
+  "locations": ["New York, NY", "San Francisco, CA"],
+  "companiesNames": ["XYZ Corporation", "ABC Inc."]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 26. Search Internship Positions with Filters
+
+- **Endpoint**: `/api/search_with_filters`
+- **Method**: `POST`
+- **Description**: Searches for internship positions based on provided filters.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+- **Body (JSON)**:
+  - `roleTitle` (str, optional): The title of the role.
+  - `location` (str, optional): The location of the internship.
+  - `companyName` (str, optional): The name of the company.
+  - `minStipend` (int, optional): The minimum stipend for the internship.
+  - `minDuration` (int, optional): The minimum duration of the internship.
+  - `maxDuration` (int, optional): The maximum duration of the internship.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internships found successfully."
+    - `internships` (list): List of internships matching the filters.
+
+- **400 Bad Request**:
+  - **Body (JSON)**:
+    - `type` (str): `invalid_request`
+    - `message` (str): Error message, such as "Invalid role title." or "Invalid location."
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+POST /api/search_with_filters
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+{
+  "roleTitle": "Software Engineer Intern",
+  "location": "New York, NY",
+  "companyName": "XYZ Corporation",
+  "minStipend": 3000,
+  "minDuration": 3,
+  "maxDuration": 6
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Internships found successfully",
+  "internships": [
+    {
+      "internshipPositionId": 1,
+      "companyId": 1,
+      "programName": "Summer Internship",
+      "duration": 3,
+      "location": "New York, NY",
+      "roleTitle": "Software Engineer Intern",
+      "skillsRequired": "Python, JavaScript",
+      "compensation": 3000,
+      "benefits": "Health insurance, Gym membership",
+      "languagesRequired": "English",
+      "description": "An exciting opportunity to work with our software development team.",
+      "status": "open"
+    }
+  ]
+}
+```
+
+</details>
+
+------------------------------------------------
+
+### 27. Search Internship Positions without Filters
+
+- **Endpoint**: `/api/search_without_filters`
+- **Method**: `GET`
+- **Description**: Retrieves all internship positions without any filters.
+
+#### Request Parameters
+
+- **Headers**:
+  - `Authorization` (str, required): Bearer token for authentication.
+
+#### Response
+
+- **200 OK**:
+  - **Body (JSON)**:
+    - `type` (str): `success`
+    - `message` (str): "Internships found successfully."
+    - `internships` (list): List of all internships.
+
+- **500 Internal Server Error**:
+  - **Body (JSON)**:
+    - `type` (str): `server_error`
+    - `message` (str): Error message.
+
+<details>
+<summary>Example Request</summary>
+
+```json
+GET /api/search_without_filters
+Headers: {
+  "Authorization": "Bearer <access_token>"
+}
+```
+
+</details>
+
+<details>
+<summary>Example Response</summary>
+
+```json
+{
+  "type": "success",
+  "message": "Internships found successfully",
+  "internships": [
+    {
+      "internshipPositionId": 1,
+      "companyId": 1,
+      "programName": "Summer Internship",
+      "duration": 3,
+      "location": "New York, NY",
+      "roleTitle": "Software Engineer Intern",
+      "skillsRequired": "Python, JavaScript",
+      "compensation": 3000,
+      "benefits": "Health insurance, Gym membership",
+      "languagesRequired": "English",
+      "description": "An exciting opportunity to work with our software development team.",
+      "status": "open"
+    },
+    {
+      "internshipPositionId": 2,
+      "companyId": 2,
+      "programName": "Winter Internship",
+      "duration": 2,
+      "location": "San Francisco, CA",
+      "roleTitle": "Data Analyst Intern",
+      "skillsRequired": "SQL, Python",
+      "compensation": 2500,
+      "benefits": "Health insurance, Gym membership",
+      "languagesRequired": "English",
+      "description": "An exciting opportunity to work with our data analysis team.",
+      "status": "closed"
+    }
+  ]
 }
 ```
 

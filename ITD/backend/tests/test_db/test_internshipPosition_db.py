@@ -1,7 +1,7 @@
 import unittest
 import os
 from sqlite3 import connect, Row
-from app.db.dbModels.internshipPosition_db import InternshipPositionDB
+from app.db.dbModels import InternshipPositionDB, UserDB, CompanyDB
 from dotenv import load_dotenv
 
 class TestInternshipPositionDB(unittest.TestCase):
@@ -23,15 +23,38 @@ class TestInternshipPositionDB(unittest.TestCase):
                                 Description TEXT NOT NULL,
                                 Status TEXT NOT NULL DEFAULT 'Open'
                             ); """)
+        self.con.execute(""" DROP TABLE IF EXISTS User """)
+        self.con.execute(""" CREATE TABLE User (
+                                UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+                                Email TEXT NOT NULL,
+                                Password TEXT NOT NULL,
+                                Type TEXT NOT NULL
+                            ); """)
+        self.con.execute(""" DROP TABLE IF EXISTS Company """)
+        self.con.execute(""" CREATE TABLE IF NOT EXISTS Company (
+                                UserId INTEGER PRIMARY KEY,
+                                CompanyName TEXT NOT NULL,
+                                LogoPath TEXT,
+                                Description TEXT NOT NULL,
+                                Location TEXT NOT NULL,
+                                FOREIGN KEY (UserId) REFERENCES User(UserId)
+                        ); """)
+        
         self.con.commit()
-        self.con.close()
 
         self.db = InternshipPositionDB()
-        self.db.con = connect(os.getenv("TEST_DATABASE"))
+        self.db.con = self.con
         self.db.con.row_factory = Row
+        self.user_db = UserDB()
+        self.user_db.con = self.con
+        self.user_db.con.row_factory = Row
+        self.company_db = CompanyDB()
+        self.company_db.con = self.con
+        self.company_db.con.row_factory = Row
+
     
     def tearDown(self):
-        self.db.con.close()
+        self.con.close()
         os.remove(os.getenv("TEST_DATABASE"))
 
 
@@ -137,6 +160,146 @@ class TestInternshipPositionDB(unittest.TestCase):
     
     def test_update_status_invalid(self):
         self.assertFalse(self.db.update_status(999, "Closed"))
+
+
+    def test_get_role_titles(self):
+        self.db.insert(1, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(2, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(3, "Program C", 3, "Location C", "Role A", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        role_titles = self.db.get_role_titles()
+        self.assertEqual(len(role_titles), 2)
+        self.assertIn("Role A", role_titles)
+        self.assertIn("Role B", role_titles)
+
+
+    def test_get_role_titles_empty(self):
+        role_titles = self.db.get_role_titles()
+        self.assertEqual(len(role_titles), 0)
+
+    
+    def test_get_locations(self):
+        self.db.insert(1, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(2, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(3, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        locations = self.db.get_locations()
+        self.assertEqual(len(locations), 2)
+        self.assertIn("Location A", locations)
+        self.assertIn("Location B", locations)
+
+
+    def test_get_locations_empty(self):
+        locations = self.db.get_locations()
+        self.assertEqual(len(locations), 0)
+
+
+    def test_search_by_company_name(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(2, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(3, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        filters = {"companyName": "Company A"}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["companyId"], self.companyId)
+
+
+    def test_search_by_role_title(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(2, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(3, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        filters = {"roleTitle": "Role A"}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["roleTitle"], "Role A")
+
+
+    def test_search_by_location(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(2, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(3, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        filters = {"location": "Location A"}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 1)
+
+
+    def test_search_by_min_stipend(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(self.companyId, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(self.companyId, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        filters = {"minStipend": 1500}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["compensation"], 1500)
+
+
+    def test_search_by_min_duration(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(self.companyId, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(self.companyId, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        filters = {"minDuration": 4}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 1)
+
+
+    def test_search_by_max_duration(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(self.companyId, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(self.companyId, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        filters = {"maxDuration": 6}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 2)
+
+
+    def test_search_by_role_title_and_location(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(2, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(3, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        filters = {"roleTitle": "Role A", "location": "Location A"}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["roleTitle"], "Role A")
+        self.assertEqual(results[0]["location"], "Location A")
+
+
+    def test_search_no_results(self):
+        self.companyId = self.company_db.insert("company@example.com", "password", "Company A", "path/to/logo", "Description", "Location")
+        self.db.insert(self.companyId, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        self.db.insert(2, "Program B", 12, "Location B", "Role B", "Skill B", 2000, "Benefit B", "Spanish", "Description B", "Closed")
+        self.db.insert(3, "Program C", 3, "Location A", "Role C", "Skill C", 1500, "Benefit C", "French", "Description C", "Open")
+        
+        self.db.insert(1, "Program A", 6, "Location A", "Role A", "Skill A", 1000, "Benefit A", "English", "Description A", "Open")
+        filters = {"roleTitle": "Nonexistent Role"}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 0)
+
+        filters = {"location": "Nonexistent Location"}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 0)
+
+        filters = {"minStipend": 5000}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 0)
+
+        filters = {"minDuration": 12}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 0)
+
+        filters = {"maxDuration": 1}
+        results = self.db.search(filters)
+        self.assertEqual(len(results), 0)
 
 
 if __name__ == '__main__':

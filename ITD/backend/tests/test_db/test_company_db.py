@@ -229,5 +229,35 @@ class TestUniversityDB(unittest.TestCase):
         self.assertEqual(company["location"], location)
 
 
+    def test_get_companies_names(self):
+        email1 = "company1@example.com"
+        password1 = "password123"
+        companyName1 = "Company One"
+        logoPath1 = "/path/to/logo1.png"
+        description1 = "First company"
+        location1 = "Location One"
+
+        email2 = "company2@example.com"
+        password2 = "password123"
+        companyName2 = "Company Two"
+        logoPath2 = "/path/to/logo2.png"
+        description2 = "Second company"
+        location2 = "Location Two"
+
+        self.db.insert(email1, password1, companyName1, logoPath1, description1, location1)
+        self.db.insert(email2, password2, companyName2, logoPath2, description2, location2)
+
+        company_names = self.db.get_companies_names()
+
+        self.assertIn(companyName1, company_names)
+        self.assertIn(companyName2, company_names)
+        self.assertEqual(len(company_names), 2)
+
+
+    def test_get_companies_names_empty(self):
+        company_names = self.db.get_companies_names()
+        self.assertEqual(company_names, [])
+
+
 if __name__ == '__main__':
     unittest.main()

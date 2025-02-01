@@ -623,5 +623,148 @@ class TestInternshipPosition(unittest.TestCase):
         self.assertTrue(self.internshipPosition4.is_closed())
     
 
+    @patch.object(InternshipPositionDB, 'get_role_titles', return_value=['Role A', 'Role B', 'Role C'])
+    @patch.object(InternshipPositionDB, 'close')
+    def test_get_role_titles(self, mock_close, mock_get_role_titles):
+        roles = InternshipPosition.get_role_titles()
+        self.assertEqual(roles, ['Role A', 'Role B', 'Role C'])
+        mock_get_role_titles.assert_called_once()
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'get_role_titles', return_value=[])
+    @patch.object(InternshipPositionDB, 'close')
+    def test_get_role_titles_returns_empty_list(self, mock_close, mock_get_role_titles):
+        roles = InternshipPosition.get_role_titles()
+        self.assertEqual(roles, [])
+        mock_get_role_titles.assert_called_once()
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'get_role_titles', side_effect=Exception('Database error'))
+    @patch.object(InternshipPositionDB, 'close')
+    def test_get_role_titles_raises_exception(self, mock_close, mock_get_role_titles):
+        with self.assertRaises(Exception) as context:
+            InternshipPosition.get_role_titles()
+        self.assertTrue('Database error' in str(context.exception))
+        mock_get_role_titles.assert_called_once()
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'get_locations', return_value=['Location A', 'Location B', 'Location C'])
+    @patch.object(InternshipPositionDB, 'close')
+    def test_get_locations(self, mock_close, mock_get_locations):
+        locations = InternshipPosition.get_locations()
+        self.assertEqual(locations, ['Location A', 'Location B', 'Location C'])
+        mock_get_locations.assert_called_once()
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'get_locations', return_value=[])
+    @patch.object(InternshipPositionDB, 'close')
+    def test_get_locations_returns_empty_list(self, mock_close, mock_get_locations):
+        locations = InternshipPosition.get_locations()
+        self.assertEqual(locations, [])
+        mock_get_locations.assert_called_once()
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'get_locations', side_effect=Exception('Database error'))
+    @patch.object(InternshipPositionDB, 'close')
+    def test_get_locations_raises_exception(self, mock_close, mock_get_locations):
+        with self.assertRaises(Exception) as context:
+            InternshipPosition.get_locations()
+        self.assertTrue('Database error' in str(context.exception))
+        mock_get_locations.assert_called_once()
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'search', return_value=[
+        {
+            'internshipPositionId': 1,
+            'companyId': 1,
+            'programName': 'Program A',
+            'duration': 6,
+            'location': 'Location A',
+            'roleTitle': 'Role A',
+            'skillsRequired': 'Skills A',
+            'compensation': 1000,
+            'benefits': 'Benefits A',
+            'languagesRequired': 'English',
+            'description': 'Description A',
+            'status': 'Open'
+        },
+        {
+            'internshipPositionId': 2,
+            'companyId': 2,
+            'programName': 'Program B',
+            'duration': 12,
+            'location': 'Location B',
+            'roleTitle': 'Role B',
+            'skillsRequired': 'Skills B',
+            'compensation': None,
+            'benefits': 'Benefits B',
+            'languagesRequired': 'Spanish',
+            'description': 'Description B',
+            'status': 'Closed'
+        }
+    ])
+    @patch.object(InternshipPositionDB, 'close')
+    def test_search_internship_positions(self, mock_close, mock_search):
+        filters = {'programName': 'Program A'}
+        internships = InternshipPosition.search_internship_positions(filters)
+        self.assertEqual(len(internships), 2)
+
+        self.assertEqual(internships[0].internshipPositionId, 1)
+        self.assertEqual(internships[0].companyId, 1)
+        self.assertEqual(internships[0].programName, 'Program A')
+        self.assertEqual(internships[0].duration, 6)
+        self.assertEqual(internships[0].location, 'Location A')
+        self.assertEqual(internships[0].roleTitle, 'Role A')
+        self.assertEqual(internships[0].skillsRequired, 'Skills A')
+        self.assertEqual(internships[0].compensation, 1000)
+        self.assertEqual(internships[0].benefits, 'Benefits A')
+        self.assertEqual(internships[0].languagesRequired, 'English')
+        self.assertEqual(internships[0].description, 'Description A')
+        self.assertEqual(internships[0].status, 'Open')
+
+        self.assertEqual(internships[1].internshipPositionId, 2)
+        self.assertEqual(internships[1].companyId, 2)
+        self.assertEqual(internships[1].programName, 'Program B')
+        self.assertEqual(internships[1].duration, 12)
+        self.assertEqual(internships[1].location, 'Location B')
+        self.assertEqual(internships[1].roleTitle, 'Role B')
+        self.assertEqual(internships[1].skillsRequired, 'Skills B')
+        self.assertIsNone(internships[1].compensation)
+        self.assertEqual(internships[1].benefits, 'Benefits B')
+        self.assertEqual(internships[1].languagesRequired, 'Spanish')
+        self.assertEqual(internships[1].description, 'Description B')
+        self.assertEqual(internships[1].status, 'Closed')
+
+        mock_search.assert_called_once_with(filters)
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'search', return_value=[])
+    @patch.object(InternshipPositionDB, 'close')
+    def test_search_internship_positions_returns_empty_list(self, mock_close, mock_search):
+        filters = {'programName': 'Nonexistent Program'}
+        internships = InternshipPosition.search_internship_positions(filters)
+        self.assertEqual(len(internships), 0)
+        mock_search.assert_called_once_with(filters)
+        mock_close.assert_called_once()
+
+
+    @patch.object(InternshipPositionDB, 'search', side_effect=Exception('Database error'))
+    @patch.object(InternshipPositionDB, 'close')
+    def test_search_internship_positions_raises_exception(self, mock_close, mock_search):
+        filters = {'programName': 'Program A'}
+        with self.assertRaises(Exception) as context:
+            InternshipPosition.search_internship_positions(filters)
+        self.assertTrue('Database error' in str(context.exception))
+        mock_search.assert_called_once_with(filters)
+        mock_close.assert_called_once()
+
+
 if __name__ == '__main__':
     unittest.main()

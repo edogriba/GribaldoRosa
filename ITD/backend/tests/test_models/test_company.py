@@ -242,5 +242,35 @@ class TestCompany(unittest.TestCase):
         mock_close.assert_called_once()
 
         
+    @patch.object(CompanyDB, 'get_companies_names', return_value=['Test Company', 'Test Company 2'])
+    @patch.object(CompanyDB, 'close')
+    def test_get_companies_names(self, mock_close, mock_get_companies_names):
+        company_names = Company.get_companies_names()
+        self.assertIsInstance(company_names, list)
+        self.assertEqual(company_names, ['Test Company', 'Test Company 2'])
+        mock_get_companies_names.assert_called_once()
+        mock_close.assert_called_once()
+
+    
+    @patch.object(CompanyDB, 'get_companies_names', return_value=[])
+    @patch.object(CompanyDB, 'close')
+    def test_get_companies_names_empty(self, mock_close, mock_get_companies_names):
+        company_names = Company.get_companies_names()
+        self.assertIsInstance(company_names, list)
+        self.assertEqual(company_names, [])
+        mock_get_companies_names.assert_called_once()
+        mock_close.assert_called_once()
+
+    
+    @patch.object(CompanyDB, 'get_companies_names', side_effect=Exception("Database error"))
+    @patch.object(CompanyDB, 'close')
+    def test_get_companies_names_with_exception(self, mock_close, mock_get_companies_names):
+        with self.assertRaises(Exception) as context:
+            Company.get_companies_names()
+        self.assertTrue('Database error' in str(context.exception))
+        mock_get_companies_names.assert_called_once()
+        mock_close.assert_called_once()
+
+        
 if __name__ == '__main__':
     unittest.main()
