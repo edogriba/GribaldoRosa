@@ -57,7 +57,10 @@ const StudentResults = ({positions}) => {
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" className="px-6 py-3">
-                                    Program Name
+                                    Company
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    ProgramName
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Location
@@ -65,9 +68,7 @@ const StudentResults = ({positions}) => {
                                 <th scope="col" className="px-6 py-3">
                                     Position
                                 </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Status
-                                </th>
+                                
                                 <th scope="col" className="px-6 py-3">
                                     Details
                                 </th>
@@ -78,6 +79,9 @@ const StudentResults = ({positions}) => {
                 {positions ? positions.map((position, index) => (
                 <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td className="px-6 py-4">
+                    {position.companyName}
+                </td>
+                <td className="px-6 py-4">
                     {position.programName}
                 </td>
                 <td className="px-6 py-4">
@@ -86,13 +90,7 @@ const StudentResults = ({positions}) => {
                 <td className="px-6 py-4">
                     {position.roleTitle}
                 </td>
-                <td className="px-6 py-4">
-                    <div className="flex items-center">
-                        <span className={`inline-flex items-center rounded bg-${position.status === "Open" ? "green" : "red" }-100 text-${position.status === "Open" ? "green" : "red" }-800 px-2.5 py-0.5 text-xs font-medium dark:bg-primary-900 dark:text-primary-300`}>
-                            {position.status}
-                        </span>
-                    </div>
-                </td>
+                
                 <td className="px-6 py-4">
                     {myApplications.some(application => application.internship.internshipPositionId === position.internshipPositionId) ? (
                     <Link to={`/students/dashboard/applications/${myApplications.find(application => application.internship.internshipPositionId === position.internshipPositionId).application.applicationId}`} className="font-medium text-primary-600 dark:text-primary-500 hover:underline">
