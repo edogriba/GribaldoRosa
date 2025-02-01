@@ -85,13 +85,28 @@ class TestUtils(unittest.TestCase):
 
 
     @patch('app.utils.utils.delete_file')
+    @patch('app.utils.utils.os.path.exists')
     @patch('app.utils.utils.get_upload_file_path_user')
-    def test_delete_file_user(self, mock_get_upload_file_path_user, mock_delete_file):
+    def test_delete_file_user(self, mock_get_upload_file_path_user, mock_path_exists, mock_delete_file):
         mock_get_upload_file_path_user.return_value = '/fake/upload/folder/1/test.txt'
+        mock_path_exists.return_value = True
 
         delete_file_user(1, 'test.txt')
 
         mock_delete_file.assert_called_once_with('/fake/upload/folder/1/test.txt')
+        mock_path_exists.assert_called_once_with('/fake/upload/folder/1/test.txt')
+
+
+    @patch('app.utils.utils.get_upload_file_path_user')
+    @patch('app.utils.utils.os.path.exists')
+    def test_delete_file_user_file_not_found(self, mock_path_exists, mock_get_upload_file_path_user):
+        mock_get_upload_file_path_user.return_value = '/fake/upload/folder/1/test.txt'
+        mock_path_exists.return_value = False
+
+        result = delete_file_user(1, 'test.txt')
+
+        self.assertIsNone(result)
+        mock_path_exists.assert_called_once_with('/fake/upload/folder/1/test.txt')
 
 
     @patch('app.utils.utils.save_file')
