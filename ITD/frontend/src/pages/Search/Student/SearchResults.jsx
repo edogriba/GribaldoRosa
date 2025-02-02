@@ -92,7 +92,7 @@ const StudentResults = ({positions}) => {
                 </td>
                 
                 <td className="px-6 py-4">
-                    {myApplications.some(application => application.internship.internshipPositionId === position.internshipPositionId) ? (
+                    {myApplications?.some(application => application.internship.internshipPositionId === position.internshipPositionId) ? (
                     <Link to={`/students/dashboard/applications/${myApplications.find(application => application.internship.internshipPositionId === position.internshipPositionId).application.applicationId}`} className="font-medium text-primary-600 dark:text-primary-500 hover:underline">
                         <p className="font-medium text-primary-600 dark:text-primary-500 hover:underline">Already applied</p>
                     </Link>) : (
