@@ -327,8 +327,9 @@ class TestStudentModel(unittest.TestCase):
         self.assertEqual(self.student7.get_languageSpoken(), "Dutch")
         self.assertEqual(self.student8.get_languageSpoken(), "Russian")
 
-    
-    def test_to_dict(self):
+
+    @patch('app.models.student.Student.get_universityName', return_value="Test University")
+    def test_to_dict(self, mock_get_universityName):
         student_dict = self.student1.to_dict()
         expected_dict = {
             'id': 1,
@@ -345,7 +346,8 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': 2023,
             'skills': "Python, Java",
             'CV': "path/to/cv1",
-            'languageSpoken': "English"
+            'languageSpoken': "English",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
 
@@ -365,7 +367,8 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': 2024,
             'skills': "C++, JavaScript",
             'CV': "path/to/cv2",
-            'languageSpoken': "Spanish"
+            'languageSpoken': "Spanish",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
 
@@ -385,7 +388,8 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': 2025,
             'skills': "Ruby, Go",
             'CV': "path/to/cv3",
-            'languageSpoken': "French"
+            'languageSpoken': "French",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
 
@@ -405,7 +409,8 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': None,
             'skills': "SQL, R",
             'CV': "path/to/cv4",
-            'languageSpoken': "German"
+            'languageSpoken': "German",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
 
@@ -425,7 +430,8 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': 2027,
             'skills': "Kotlin, Swift",
             'CV': "path/to/cv5",
-            'languageSpoken': "Italian"
+            'languageSpoken': "Italian",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
 
@@ -445,7 +451,8 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': None,
             'skills': "Perl, Rust",
             'CV': "path/to/cv6",
-            'languageSpoken': "Portuguese"
+            'languageSpoken': "Portuguese",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
 
@@ -465,7 +472,8 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': None,
             'skills': "Scala, Haskell",
             'CV': "path/to/cv7",
-            'languageSpoken': "Dutch"
+            'languageSpoken': "Dutch",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
 
@@ -485,9 +493,21 @@ class TestStudentModel(unittest.TestCase):
             'graduationYear': None,
             'skills': "Lisp, Prolog",
             'CV': "path/to/cv8",
-            'languageSpoken': "Russian"
+            'languageSpoken': "Russian",
+            'universityName': "Test University"
         }
         self.assertEqual(student_dict, expected_dict)
+        
+        mock_get_universityName.assert_has_calls([
+            unittest.mock.call(1),
+            unittest.mock.call(2),
+            unittest.mock.call(3),
+            unittest.mock.call(4),
+            unittest.mock.call(5),
+            unittest.mock.call(6),
+            unittest.mock.call(7),
+            unittest.mock.call(8)
+        ])
 
 
     @patch.object(StudentDB, 'insert', return_value=1)
