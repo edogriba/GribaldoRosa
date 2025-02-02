@@ -234,7 +234,7 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            print(data)
+
             data['internshipPositionId'] = int(data['internshipPositionId'])
             internship_manager = InternshipManager()
             return internship_manager.get_internship_position_by_id(**data)
@@ -453,7 +453,7 @@ def create_main_app():
                 return validation_error
             
             data = request.get_json()
-            print(data)
+
             internship_manager = InternshipManager()
             return internship_manager.get_internships_preview_by_student(**data)
         except Exception as e:

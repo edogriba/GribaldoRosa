@@ -325,5 +325,4 @@ def validate_internship_position_data(internship_data):
 
         return True
     except Exception as e:
-        print(f"Error: {e}")
         return json_invalid_request("Invalid internship position data")

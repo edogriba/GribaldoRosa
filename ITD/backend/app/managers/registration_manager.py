@@ -190,7 +190,6 @@ def validate_student_data(user_data) -> Union[tuple, bool]:
 
         return True
     except Exception as e:
-        print(f"Error: {e}")
         return json_invalid_request("Invalid data")
     
     
@@ -228,7 +227,6 @@ def validate_university_data(user_data) -> Union[tuple, bool]:
         
         return True
     except Exception as e:
-        print(f"Exception in validate_university_data: {e}")
         return json_invalid_request("Invalid data")
 
 
@@ -263,5 +261,4 @@ def validate_company_data(user_data) -> Union[tuple, bool]:
         
         return True
     except Exception as e:
-        print(f"Exception in validate_company_data: {e}")
         return json_invalid_request("Invalid data")
