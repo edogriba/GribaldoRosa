@@ -1,7 +1,7 @@
 import { toast } from 'react-hot-toast';
+
 const buildURL = (baseURL, path, params) => {
   const url = new URL(path, baseURL);
-
   // Add query parameters if any are provided
   Object.keys(params).forEach((key) =>
     url.searchParams.append(key, params[key])
@@ -52,7 +52,7 @@ export async function requestAuth(path, method, body, params = {}, file = false)
 
   if (file === true) {
     headers = {
-      "Authorization": `Bearer ${accessToken}` // Attach the access token
+      "Authorization": `Bearer ${accessToken}` // Attach the access token for authorization
     };
     return window.fetch(buildURL(endpoint, path, params), {
       method: method,
@@ -63,7 +63,7 @@ export async function requestAuth(path, method, body, params = {}, file = false)
   else {
     headers = {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${accessToken}` // Attach the access token
+      "Authorization": `Bearer ${accessToken}` // Attach the access token for authorization
     };
     return window.fetch(buildURL(endpoint, path, params), {
       method: method,

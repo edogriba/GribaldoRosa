@@ -5,7 +5,7 @@ import { UserContext } from "../context/UserContext";
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(UserContext); // Access `loading` from context
 
-  // Show a loading spinner or message while the user state is being initialized
+  // Show a loading message while the user state is being initialized
   const [timeoutReached, setTimeoutReached] = React.useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (loading) {
-    if (timeoutReached) {
+    if (timeoutReached) { // If the loading takes too long, redirect to login
       return <Navigate to="/login" />;
     }
     return <div>Loading...</div>;

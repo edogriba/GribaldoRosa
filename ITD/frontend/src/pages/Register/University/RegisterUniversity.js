@@ -208,12 +208,12 @@ const RegisterUniversity = () => {
                       className="font-light text-gray-500 dark:text-gray-300"
                     >
                       I accept the{' '}
-                      <a
+                      <p
                         className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                        href="/policy" // TO DO: Add policy page
+                        
                       >
                         Terms and Conditions
-                      </a>
+                      </p>
                     </label>
                   </div>
                 </div>

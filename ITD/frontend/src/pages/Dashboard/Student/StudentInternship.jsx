@@ -51,16 +51,13 @@ const StudentInternship = () => {
     const fetchRelatedComplaints = async () => {   
             try {
                 setShowComplaints(true);
-                const res = await api.getInternship({"internshipId": parseInt(internshipId)}); // Use `positionId` directly
+                const res = await api.getInternship({"internshipId": parseInt(internshipId)}); 
                 const data = await res.json();
 
                 if (res.type === "not_found") {
                     toast.error("No applications associated to this");
                 }
                 setComplaints(data.complaints);
-    
-                // Redirect to the Student dashboard
-                //navigate(`/companies/dashboard/positions/${positionId}/applications`);
             }
             catch (error) { 
                 console.error("Fetching complaints:", error.message);
@@ -86,7 +83,7 @@ const StudentInternship = () => {
     useEffect(() => {
         const fetchInternship = async () => {
             try {
-                const res = await api.getInternship({"internshipId": parseInt(internshipId)}); // Use `internshipId` directly
+                const res = await api.getInternship({"internshipId": parseInt(internshipId)}); 
                 const data = await res.json();
                 setInternship(data);
                 const companyId = data.company.id;

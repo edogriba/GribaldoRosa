@@ -31,7 +31,7 @@ const StudentPosition = () => {
     useEffect(() => {
         const fetchPosition = async () => {
             try {
-                const res = await api.getPosition({"internshipPositionId": parseInt(positionId)}); // Use `positionId` directly
+                const res = await api.getPosition({"internshipPositionId": parseInt(positionId)}); 
                 const data = await res.json();
                 setPosition(data.internship_position);
                 

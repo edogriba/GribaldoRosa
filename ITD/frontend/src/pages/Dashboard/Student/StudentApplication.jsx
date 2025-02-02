@@ -9,8 +9,8 @@ import Status from "../../../components/Status";
 const StudentApplication = () => {
     const [application, setApplication] = useState({});
     const [positionId, setPositionId] = useState("");
-    const {applicationId } = useParams(); // Extract the dynamic `applicationId` from the route
-    const navigate = useNavigate(); // Hook to navigate programmatically
+    const {applicationId } = useParams(); 
+    const navigate = useNavigate(); 
 
     const handleConfirm = async () => {
         try {
@@ -44,7 +44,7 @@ const StudentApplication = () => {
     useEffect(() => {
         const fetchApplication = async () => {
             try {
-                const res = await api.getApplicationStudent({"applicationId": applicationId}); // Use `applicationId` directly
+                const res = await api.getApplicationStudent({"applicationId": applicationId}); 
                 const data = await res.json();
                 setApplication(data);
                 setPositionId(data.internshipPosition.internshipPositionId) 

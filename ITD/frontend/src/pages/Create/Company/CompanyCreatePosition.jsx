@@ -16,7 +16,7 @@ const CreateInternshipPosition = () => {
     const [description, setDescription] = useState('');
     const [skillsRequired, setSkillsRequired] = useState('');
     const [languagesRequired, setLanguagesRequired] = useState('');
-    const [companyId] = useState(user.id); // Set the companyId to the user's companyId
+    const [companyId] = useState(user.id);
     const [benefits, setBenefits] = useState(''); 
     const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ const CreateInternshipPosition = () => {
             throw new Error(data.message);
         }
         toast.success('Position created successfully');
-        navigate('/companies/dashboard/positions'); // Navigate to the positions list after creation
+        navigate('/companies/dashboard/positions'); 
         
     } catch (error) {
         console.error('Error creating position:', error);
@@ -55,6 +55,9 @@ const CreateInternshipPosition = () => {
         }
     }
   };
+  if (user.type !== 'company') {
+    navigate('/login');
+  }
 
   return (
     <section className="bg-white dark:bg-gray-900">

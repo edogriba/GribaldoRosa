@@ -8,15 +8,15 @@ import Status from "../../../components/Status";
 const CompanyApplication = () => {
     const [application, setApplication] = useState({});
     const { applicationId, positionId } = useParams();
-    const [showModal, setShowModal] = useState(false) // Extract the dynamic `applicationId` from the route
+    const [showModal, setShowModal] = useState(false) 
     const [date, setDate] = useState("");
     const [link, setLink] = useState("");
-    const navigate = useNavigate(); // Hook to navigate programmatically
+    const navigate = useNavigate(); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response  = await api.createAssessment({"applicationId": parseInt(applicationId), "date": date, "link": link}); // Use `applicationId` directly
+            const response  = await api.createAssessment({"applicationId": parseInt(applicationId), "date": date, "link": link}); 
             const data = await response.json();
             if (data.type === 'created') {
                 toast.success("Assessment added successfully");
@@ -34,7 +34,7 @@ const CompanyApplication = () => {
     }
     const handleAccept = async () => {
         try {
-            const res = await api.acceptApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
+            const res = await api.acceptApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); 
             const data = await res.json();
             setApplication(data);
             navigate(`/companies/dashboard/positions/${positionId}`);
@@ -50,7 +50,7 @@ const CompanyApplication = () => {
     }
     const handleReject = async () => {
         try {
-            const res = await api.rejectApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
+            const res = await api.rejectApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); 
             const data = await res.json();
             setApplication(data);
             navigate(`/companies/dashboard/positions/${positionId}`);
@@ -67,9 +67,9 @@ const CompanyApplication = () => {
     useEffect(() => {
         const fetchApplication = async () => {
             try {
-                const res = await api.getApplicationCompany({"applicationId": applicationId}); // Use `applicationId` directly
+                const res = await api.getApplicationCompany({"applicationId": applicationId}); 
                 const data = await res.json();
-                setApplication(data); // Assuming the API returns the entire application object
+                setApplication(data); 
             } catch (error) {
                 console.error("Error fetching application:", error.message);
                 if (error.status === 404) {

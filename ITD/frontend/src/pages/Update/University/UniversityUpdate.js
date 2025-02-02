@@ -5,13 +5,11 @@ import { UserContext } from '../../../context/UserContext';
 import GoBack from '../../../components/GoBack';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
-import toast from 'react-hot-toast';
 
 const UniversityUpdate = () => {
   const { user, userLogout } = useContext(UserContext);
   const navigate = useNavigate();
   
-  // Correctly using array destructuring for useState
   const [description, setDescription] = useState(user?.description || '');
   const [logo, setLogo] = useState(null);
   const [websiteURL, setWebsiteURL] = useState(user?.websiteURL || '');

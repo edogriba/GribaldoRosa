@@ -18,6 +18,7 @@ const StudentUpdate = () => {
   const [gpa, setGpa] = useState(user?.GPA || null);
   const [degreeProgram, setDegreeProgram] = useState(user?.degreeProgram || '');
   const [graduationYear, setGraduationYear] = useState(user?.graduationYear || null);
+ 
   // File states (store File objects directly)
   const [CV, setCV] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
@@ -73,7 +74,6 @@ const StudentUpdate = () => {
     }
   };
 
-  // If user is not a student or doesn't exist, redirect
   useEffect(() => {
     if (!user || user.type !== 'student') {
       navigate('/login');

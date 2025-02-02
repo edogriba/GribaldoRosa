@@ -26,6 +26,7 @@ const UserProvider = ({ children }) => {
       throw new Error("Login failed");
     }
   };
+
   const userRegistration = async (response) => {
     try {
       
@@ -48,7 +49,6 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  // Function to log out the user
   const userLogout = async () => {
     try {
       await api.userLogout(); 

@@ -20,8 +20,8 @@ const RegisterStudent = () => {
   
   const [languageSpoken, setLanguageSpoken] = useState('');
 
-  const [universities, setUniversities] = useState([]); // Array to hold universities
-  const [university, setUniversity] = useState(''); // Selected university ID
+  const [universities, setUniversities] = useState([]); 
+  const [university, setUniversity] = useState(''); 
   
   const navigate = useNavigate();
 
@@ -71,8 +71,8 @@ const RegisterStudent = () => {
       profilePicture,
       location,
       degreeProgram,
-      GPA: parseFloat(gpa), // Ensure GPA is a number
-      graduationYear: parseInt(graduationYear, 10), // Ensure graduationYear is an integer
+      GPA: parseFloat(gpa), 
+      graduationYear: parseInt(graduationYear, 10), // Ensure graduationYear is an integer, 10 is the base
       CV: CV,
       skills,
       languageSpoken,

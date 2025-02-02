@@ -36,16 +36,13 @@ const CompanyPosition = () => {
     const fetchRelatedApplications = async () => {   
         try {
             setShowPosition(true);
-            const res = await api.getApplicationListCompany({"internshipPositionId": parseInt(positionId)}); // Use `positionId` directly
+            const res = await api.getApplicationListCompany({"internshipPositionId": parseInt(positionId)}); 
             const data = await res.json();
             
             if (res.type === "not_found") {
                 toast.error("No applications associated to this");
             }
             setApplications(data.applications);
-
-            // Redirect to the company dashboard
-            //navigate(`/companies/dashboard/positions/${positionId}/applications`);
         }
         catch (error) { 
             console.error("Fetching applications:", error.message);
@@ -65,7 +62,7 @@ const CompanyPosition = () => {
     useEffect(() => {
         const fetchPosition = async () => {
             try {
-                const res = await api.getPosition({"internshipPositionId": positionId}); // Use `positionId` directly
+                const res = await api.getPosition({"internshipPositionId": positionId});
                 const data = await res.json();
                 setPosition(data.internship_position);
             } catch (error) {
