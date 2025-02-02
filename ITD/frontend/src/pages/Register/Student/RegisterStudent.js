@@ -83,6 +83,7 @@ const RegisterStudent = () => {
       localStorage.setItem('access token', res.access_token);
       if (res.status === 201) {
         toast.success('Registration successful! Please login with your credentials');
+        navigate('/login');
       }
       else {
         toast.error('Registration failed: ' + (res.message || 'Please try again.'));

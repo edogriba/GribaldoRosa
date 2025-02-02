@@ -15,11 +15,14 @@ const StudentApplicationList = () => {
         const filterResults = () => {
             let filtered = applications;
 
-            if (applicationStatus !== "All") {
-                filtered = filtered.filter((application) => application.application.status === applicationStatus);
+            if (applications ) {
+
+                if (applicationStatus !== "All") {
+                    filtered = filtered.filter((application) => application.application.status === applicationStatus);
+                }
+                
+                setFilteredApplications(filtered);
             }
-            
-            setFilteredApplications(filtered);
         };
 
         filterResults();

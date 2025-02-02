@@ -16,8 +16,9 @@ const CompanyPosition = () => {
 
     const handleClosePosition = async () => {   
         try {
-            const res = await api.closePosition({"internshipPositionId": positionId}); 
+            const res = await api.closePosition({"internshipPositionId": parseInt(positionId)}); 
             const data = await res.json();
+            console.log(data);
             if (data.type === "success") {
                 toast.success("Internship was closed successfully");
             }

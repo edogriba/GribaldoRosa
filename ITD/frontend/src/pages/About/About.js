@@ -54,7 +54,7 @@ const About = () => {
                         <div className="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
                             <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
                                 <span>
-                                    <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="/edogriba.jpg" alt="Bonnie Avatar"/>
+                                    <img className="object-cover rounded-lg sm:rounded-none sm:rounded-l-lg" src="/edogriba.jpg" alt="Bonnie Avatar"/>
                                 </span>
                                 <div className="p-5">
                                     <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -85,7 +85,7 @@ const About = () => {
                             </div> 
                             <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
                                 <span>
-                                    <img className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="" alt="Jese Avatar" />
+                                    <img className="object-cover w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="/fede.jpeg" alt="Avatar" />
                                 </span>
                                 <div className="p-5">
                                     <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">

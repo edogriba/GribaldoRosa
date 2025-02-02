@@ -97,7 +97,7 @@ class InternshipManager:
             internship.close()
             applications = Application.get_by_internshipPositionId(internshipPositionId)
             for application in applications:
-                if application.is_pending() or application.is_accepted():
+                if application.is_pending() or application.is_accepted() or application.is_assessed():
                     application.reject()
             return json_success("Internship position closed successfully.")
         
@@ -236,8 +236,8 @@ class InternshipManager:
             
             internship = Internship.get_by_id(internshipId)
             if internship:
-                if internship.get_companyId() == get_current_user().get_id():
-                    internship.make_finished()
+                if InternshipPosition.get_by_id(internship.get_internshipPositionId()).get_companyId() == get_current_user().get_id():
+                    internship.finish()
                     return json_success("Internship finished successfully.")
                 else:
                     return json_unauthorized("You are not authorized to finish this internship.")

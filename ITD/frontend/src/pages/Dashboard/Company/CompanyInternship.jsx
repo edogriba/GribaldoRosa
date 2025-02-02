@@ -52,6 +52,7 @@ const CompanyInternship = () => {
         try {
             const res = await api.finishInternship({"internshipId": parseInt(internshipId)}); 
             const data = await res.json();
+            console.log(data);
             if (data.type === "success") {
                 toast.success("Internship was closed successfully");
             }
@@ -299,7 +300,7 @@ const CompanyInternship = () => {
                 {/* Footer Section */}
 
                 <div className="mt-6 text-right">
-                {internship.internshipPosition?.status === "Open" && (
+                {internship.internship?.status === "Ongoing" && (
                     <button
                     className="mx-2 px-6 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
                     onClick={handleCloseInternship} 
@@ -307,13 +308,14 @@ const CompanyInternship = () => {
                     Finish Internship
                     </button>
                 )}
+                {internship.internship.status === "Ongoing" && (
                 <button
                         className="mx-2 px-6 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring focus:ring-orange-300"
                         onClick={() => setShowModal(true)}
                     >
                         Add Complaint
                 </button>
-
+                )}
                     {showModal && (
                         <div className="fixed inset-0 flex items-center justify-center z-50">
                             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">

@@ -21,6 +21,7 @@ const CompanyApplication = () => {
             if (data.type === 'created') {
                 toast.success("Assessment added successfully");
                 setShowModal(false);
+                window.location.reload();
             }
         }
         catch (error) {

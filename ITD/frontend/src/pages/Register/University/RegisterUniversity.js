@@ -44,6 +44,7 @@ const RegisterUniversity = () => {
 
       if (res.status === 201) {
         toast.success('Registration successful! Please login with your credentials');
+        navigate('/login');
       }
       else {
         toast.error('Registration failed: ' + res.message);
@@ -86,7 +87,7 @@ const RegisterUniversity = () => {
                     name="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="name@company.com"
+                    placeholder="name@university.com"
                     onChange={(e) => setUniversityEmail(e.target.value)}
                     required
                   />
@@ -121,7 +122,7 @@ const RegisterUniversity = () => {
                     type="text"
                     name="universityName"
                     id="universityName"
-                    placeholder="Your company name"
+                    placeholder="Your university name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     onChange={(e) => setUniversityName(e.target.value)}
                     required
@@ -139,7 +140,7 @@ const RegisterUniversity = () => {
                   <textarea
                     name="description"
                     id="description"
-                    placeholder="Describe your company"
+                    placeholder="Describe your university"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     onChange={(e) => setDescription(e.target.value)}
                     required
@@ -158,7 +159,7 @@ const RegisterUniversity = () => {
                     type="text"
                     name="location"
                     id="location"
-                    placeholder="Company location"
+                    placeholder="University location"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     onChange={(e) => setLocation(e.target.value)}
                     required
@@ -168,16 +169,16 @@ const RegisterUniversity = () => {
                 {/* WebsiteURL */}
                 <div>
                   <label
-                    htmlFor="wensiteURL"
+                    htmlFor="websiteURL"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     WebsiteURL
                   </label>
                   <input
                     type="text"
-                    name="wensiteURL"
-                    id="wensiteURL"
-                    placeholder="URL of the Company's website'"
+                    name="websiteURL"
+                    id="websiteURL"
+                    placeholder="URL of the University's website'"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     onChange={(e) => setWebsiteURL(e.target.value)}
                     required
