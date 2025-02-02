@@ -114,6 +114,7 @@ class RegistrationManager:
                 'description'   : user_data.get('description'),
                 'location'      : user_data.get('location'),
             }
+            print(values)
 
             values.update({'logoPath': secure_filename(logo.filename)}) if logo else None
 

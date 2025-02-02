@@ -38,8 +38,7 @@ const RegisterCompany = () => {
         if (logo) {
             formData.append('logo', logo);
         }
-
-        const res = await api.companyRegistration(formData, (!!logo));
+        const res = await api.companyRegistration(formData);
         // Save the token to localStorage
         localStorage.setItem('access token', res.access_token);
         if (res.status === 201) {
