@@ -126,24 +126,4 @@ If you encounter any issues, check the logs or consult the project documentation
 
 ## Structure
 
-The project is structured as follows:
-
-- `backend/`        : Flask API
-  - `app/`                : Flask App
-    - `api.md`                  :
-    - `routes.py`               :
-  - `requirements.txt`    : Requirements
-  - `.env`                : Backend environment
-  - `run.py`              : To run the project
-  - `SC.db`               : Database SQLite
-- `frontend/`       : React application
-  - `public/`             : Static files that are served as-is
-  - `src/`                : Source files
-    - `api/`                    : API interface
-    - `assets/`                 : Assets such as images, styles, etc.
-    - `components/`             : Reusable components
-    - `hooks/`                  : Share logic between components
-    - `pages/`                  : Pages
-    - `util/`                   : Utility functions and helpers
-    - `.env`                    : Frontend environment
-- `README.md`       : This file
+The project's structure is in the ITD.
