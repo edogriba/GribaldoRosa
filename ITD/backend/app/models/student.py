@@ -1,5 +1,5 @@
-from app.models import User, University
-from app.db.dbModels.student_db import StudentDB
+from app.models import User
+from app.db.dbModels import StudentDB, UniversityDB
 from typing import Optional, Union
 
 class Student(User):
@@ -70,6 +70,9 @@ class Student(User):
     def get_languageSpoken(self) -> str:
         return self.languageSpoken
     
+    def get_universityName(self) -> str:
+        return UniversityDB.get_by_id(self.universityId).get_name()
+    
     def to_dict(self) -> dict:
         user_dict = super().to_dict()
         user_dict.update({
@@ -85,7 +88,7 @@ class Student(User):
             'skills': self.skills,
             'CV': self.CV,
             'languageSpoken': self.languageSpoken,
-            'universityName': University.get_by_id(self.universityId).get_name()
+            'universityName': Student.get_universityName(self.universityId)
         })
         return user_dict
 
@@ -144,6 +147,26 @@ class Student(User):
         
         finally:
             studentConn.close()
+
+
+    @staticmethod
+    def get_universityName(id: int) -> Union[str, None, Exception]:
+        """
+        Retrieve a student record by its unique identifier and return it as a Student object.
+
+        :param id: The unique identifier of the student.
+        :return: A Student object populated with the retrieved data if found, otherwise None.
+        :raises Exception: If an error occurs during the query execution.
+        """
+        try:
+            universityConn = UniversityDB()
+            universityData = universityConn.get_by_id(id)
+            return universityData['name'] if universityData else None
+        except Exception as e:
+            raise e
+        finally:
+            universityConn.close()
+
 
     @staticmethod
     def get_by_id(id: int) -> Union['Student', None, Exception]:
