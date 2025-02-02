@@ -34,7 +34,7 @@ const StudentApplicationList = () => {
                 setFilteredApplications(data.applications);
             }
             catch(error) {
-                console.error(error);
+                console.log(error);
             }
         }
         if(user.type !== 'student') {

@@ -15,7 +15,7 @@ const UniversityInternshipList = () => {
                     setInternships(data.internshipsPreview);
                 }
                 catch(error) {
-                    console.error(error);
+                    console.log(error);
                 }
             }
             if(user.type !== 'university') {

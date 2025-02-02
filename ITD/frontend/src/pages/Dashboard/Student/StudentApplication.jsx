@@ -22,7 +22,7 @@ const StudentApplication = () => {
                 toast.error("Failed to confirm application. Please try again later.");
             }
         } catch (error) {
-            console.error("Error confirming application:", error.message);
+            console.log("Error confirming application:", error.message);
             alert("Failed to confirm application. Please try again later.");
         }   
     };
@@ -36,7 +36,7 @@ const StudentApplication = () => {
                 toast.error("Failed to refuse application. Please try again later.");
             }
         } catch (error) {
-            console.error("Error refusing application:", error.message);
+            console.log("Error refusing application:", error.message);
             alert("Failed to refuse application. Please try again later.");
         }   
     };
@@ -49,7 +49,7 @@ const StudentApplication = () => {
                 setApplication(data);
                 setPositionId(data.internshipPosition.internshipPositionId) 
             } catch (error) {
-                console.error("Error fetching application:", error.message);
+                console.log("Error fetching application:", error.message);
                 if (error.status === 404) {
                     toast.error("Session expired please login again");
                     navigate("/login");

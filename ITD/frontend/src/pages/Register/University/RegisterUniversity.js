@@ -44,7 +44,7 @@ const RegisterUniversity = () => {
       toast.success('Registration successful!');
       navigate("/universities/home");
     } catch (error) {
-      console.error('Error registering university:', error.response?.data?.message || error.message);
+      console.log('Error registering university:', error.response?.data?.message || error.message);
       toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
     }
     };

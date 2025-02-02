@@ -27,7 +27,7 @@ const CompanyPositionList = () => {
             }
             setPossiblePositions(roles);
         } catch (error) {
-            console.error('Error fetching positions:', error.message);
+            console.log('Error fetching positions:', error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");

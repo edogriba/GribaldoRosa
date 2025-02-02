@@ -24,7 +24,7 @@ const CompanyApplication = () => {
             }
         }
         catch (error) {
-            console.error("Error assessing application:", error.message);
+            console.log("Error assessing application:", error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");
@@ -40,7 +40,7 @@ const CompanyApplication = () => {
             navigate(`/companies/dashboard/positions/${positionId}`);
         }
         catch (error) { 
-            console.error("Error acceptin application:", error.message);
+            console.log("Error acceptin application:", error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");
@@ -56,7 +56,7 @@ const CompanyApplication = () => {
             navigate(`/companies/dashboard/positions/${positionId}`);
         }
         catch (error) { 
-            console.error("Error rejecting position:", error.message);
+            console.log("Error rejecting position:", error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");
@@ -71,7 +71,7 @@ const CompanyApplication = () => {
                 const data = await res.json();
                 setApplication(data); 
             } catch (error) {
-                console.error("Error fetching application:", error.message);
+                console.log("Error fetching application:", error.message);
                 if (error.status === 404) {
                     toast.error("Session expired please login again");
                     navigate("/login");

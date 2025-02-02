@@ -19,7 +19,7 @@ const StudentPosition = () => {
             navigate("/students/dashboard/applications");
         }
         catch (error) {
-            console.error("Error closing position:", error.message);
+            console.log("Error closing position:", error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");
@@ -36,7 +36,7 @@ const StudentPosition = () => {
                 setPosition(data.internship_position);
                 
             } catch (error) {
-                console.error("Error fetching position:", error.message);
+                console.log("Error fetching position:", error.message);
                 if (error.status === 404) {
                     toast.error("Session expired please login again");
                     navigate("/login");

@@ -34,7 +34,7 @@ const SearchFilter = () => {
             
         }
         catch (error) {
-            console.error('Error fetching applications:', error.message);
+            console.log('Error fetching applications:', error.message);
             alert('Failed to fetch applications. Please try again later.');
         };
     }
@@ -95,7 +95,7 @@ const SearchFilter = () => {
 
         }
         catch (error) {
-            console.error('Error fetching applications:', error.message);
+            console.log('Error fetching applications:', error.message);
             alert('Failed to filter applications. Please try again later.');
         }   
     };
@@ -109,7 +109,7 @@ const SearchFilter = () => {
                 setCompanies(data.companiesNames);
                 setRoleTitles(data.roleTitles);
             } catch (error) {
-                console.error('Error fetching locations:', error.message);
+                console.log('Error fetching locations:', error.message);
                 alert('Failed to load locations. Please try again later.');
             }
         };

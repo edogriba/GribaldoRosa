@@ -19,7 +19,7 @@ const StudentInternshipList = () => {
                 setFilteredInternships(data.internshipsPreview);
             }
             catch(error) {
-                console.error(error);
+                console.log(error);
             }
         }
         if(user.type !== 'student') {

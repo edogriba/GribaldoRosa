@@ -22,7 +22,7 @@ const StudentResults = ({positions}) => {
             setMyApplications(data.applications); 
             }
         catch(error) {
-            console.error(error);
+            console.log(error);
         }
     }
     useEffect(() => {

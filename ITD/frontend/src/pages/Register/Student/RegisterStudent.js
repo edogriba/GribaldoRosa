@@ -32,7 +32,7 @@ const RegisterStudent = () => {
           const data = await res.json();
           setUniversities(data.universities);
       } catch (error) {
-        console.error('Error fetching universities:', error.message);
+        console.log('Error fetching universities:', error.message);
         alert('Failed to load universities. Please try again later.');
       }
     };
@@ -80,7 +80,7 @@ const RegisterStudent = () => {
       toast.success('Registration successful!');
       navigate('/students/home')
     } catch (error) {
-      console.error('Error registering student:', error.response?.data?.message || error.message);
+      console.log('Error registering student:', error.response?.data?.message || error.message);
       toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
     }
   };

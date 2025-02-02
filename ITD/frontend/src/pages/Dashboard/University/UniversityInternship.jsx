@@ -51,7 +51,7 @@ const UniversityInternship = () => {
                 setComplaints(transformedComplaints);
                 
             } catch (error) {
-                console.error("Error fetching internship:", error.message);
+                console.log("Error fetching internship:", error.message);
                 if (error.status === 404) {
                     toast.error("Session expired please login again");
                     navigate("/login");

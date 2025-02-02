@@ -40,7 +40,7 @@ const StudentInternship = () => {
             window.location.reload();
         }
         catch (error) {
-            console.error("Error adding complaint:", error.message);
+            console.log("Error adding complaint:", error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");
@@ -60,7 +60,7 @@ const StudentInternship = () => {
                 setComplaints(data.complaints);
             }
             catch (error) { 
-                console.error("Fetching complaints:", error.message);
+                console.log("Fetching complaints:", error.message);
                 if (error.status === 401) {
                     toast.error("Session expired please login again");
                     navigate("/login");
@@ -101,7 +101,7 @@ const StudentInternship = () => {
                 });
                 setComplaints(transformedComplaints);            
             } catch (error) {
-                console.error("Error fetching internship:", error.message);
+                console.log("Error fetching internship:", error.message);
                 if (error.status === 404) {
                     toast.error("Session expired please login again");
                     navigate("/login");

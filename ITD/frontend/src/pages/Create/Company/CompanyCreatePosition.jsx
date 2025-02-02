@@ -47,7 +47,7 @@ const CreateInternshipPosition = () => {
         navigate('/companies/dashboard/positions'); 
         
     } catch (error) {
-        console.error('Error creating position:', error);
+        console.log('Error creating position:', error);
     
         if (error.status === 404) {
             toast.error("Session expired please login again");

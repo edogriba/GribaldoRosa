@@ -47,7 +47,7 @@ const RegisterCompany = () => {
           navigate("/companies/home");
         }
       } catch (error) {
-        console.error('Error registering company:', error.response?.data?.message || error.message);
+        console.log('Error registering company:', error.response?.data?.message || error.message);
         toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
       }
     };

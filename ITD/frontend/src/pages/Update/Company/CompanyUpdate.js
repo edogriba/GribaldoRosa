@@ -38,7 +38,7 @@ const CompanyUpdate = () => {
             window.location.reload();    
         }
         catch (error) {
-                console.error('Error updating profile:', error);
+                console.log('Error updating profile:', error);
         }
     }
 

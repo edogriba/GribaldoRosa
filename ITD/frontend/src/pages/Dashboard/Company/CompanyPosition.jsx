@@ -24,7 +24,7 @@ const CompanyPosition = () => {
             navigate("/companies/dashboard/positions");
         }
         catch (error) { 
-            console.error("Error closing position:", error.message);
+            console.log("Error closing position:", error.message);
             if (error.status === 404) {
                 toast.error("Session expired please login again");
                 navigate("/login");
@@ -45,7 +45,7 @@ const CompanyPosition = () => {
             setApplications(data.applications);
         }
         catch (error) { 
-            console.error("Fetching applications:", error.message);
+            console.log("Fetching applications:", error.message);
             if (error.status === 401) {
                 toast.error("Session expired please login again");
                 navigate("/login");
@@ -66,7 +66,7 @@ const CompanyPosition = () => {
                 const data = await res.json();
                 setPosition(data.internship_position);
             } catch (error) {
-                console.error("Error fetching position:", error.message);
+                console.log("Error fetching position:", error.message);
                 if (error.status === 404) {
                     toast.error("Session expired please login again");
                     navigate("/login");

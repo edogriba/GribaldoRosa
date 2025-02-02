@@ -44,7 +44,7 @@ const UserProvider = ({ children }) => {
         throw new Error("Registration failed with status " + response.status); 
       }
     } catch (error) {
-      console.error("Registration failed:", error.message);
+      console.log("Registration failed:", error.message);
       throw new Error("Registration failed");
     }
   };
@@ -56,7 +56,7 @@ const UserProvider = ({ children }) => {
       setUser(null);
       toast.success("Logout successful");
     } catch (error) {
-      console.error("Logout failed:", error.message);
+      console.log("Logout failed:", error.message);
       toast.error("Logout failed");
     }
   };
@@ -86,12 +86,12 @@ const UserProvider = ({ children }) => {
           console.log("Token has expired")
         }
         else {
-          console.error("Failed to validate access token:", response.status);
+          console.log("Failed to validate access token:", response.status);
         }
         setLoading(false);
 
       } catch (error) {
-        console.error('Error initializing user:', error.message);
+        console.log('Error initializing user:', error.message);
       }
       
     };

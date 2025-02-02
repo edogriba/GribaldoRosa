@@ -24,7 +24,7 @@ const CompanyInternshipList = () => {
                 setPossibleRoles(roles);
             }
             catch(error) {
-                console.error(error);
+                console.log(error);
             }
         }
         if(user.type !== 'company') {
