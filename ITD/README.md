@@ -38,7 +38,7 @@ Before proceeding, ensure you have the following installed:
 
    ```bash
    npm install
-   npm install @mui/material @emotion/react @emotion/styled @mui/styled-engine-sc styled-components
+   npm install @emotion/react @emotion/styled styled-components
    npm install react-router-dom
    ```
 

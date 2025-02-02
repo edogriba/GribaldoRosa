@@ -147,7 +147,7 @@ export const Navbar = ({ user, onLogout }) => {
                             : "text-gray-900 dark:text-white"
                         }
                       >
-                        Profile
+                        Dashboard
                       </NavLink>
                     </li>
                   </>

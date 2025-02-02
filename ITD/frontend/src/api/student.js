@@ -13,7 +13,7 @@ export const getStudentsList = async () =>
 
 
 export const studentRegistration = async (data) => 
-  request(`${StudentEndPoint.STUDENT_REGISTRATION}`, Method.POST,  data );
+  request(`${StudentEndPoint.STUDENT_REGISTRATION}`, Method.POST,  data , {}, true);
 
 export const updateStudent = async (data) =>
   requestAuthWithErrorToast(`${StudentEndPoint.STUDENT_UPDATE}`, Method.POST, data, {}, true);

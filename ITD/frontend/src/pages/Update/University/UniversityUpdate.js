@@ -23,7 +23,9 @@ const UniversityUpdate = () => {
   // Handle file input for logo
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
-    setLogo(file);
+    if (file) {
+      setLogo(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -39,7 +41,7 @@ const UniversityUpdate = () => {
             formData.append('logo', logo);
         }
 
-        const res = await api.updateUniversity(formData);
+        await api.updateUniversity(formData);
         navigate('/universities/dashboard/profile');   
         window.location.reload();    
         } catch (error) {

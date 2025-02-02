@@ -1,42 +1,51 @@
-import React, { useContext }  from 'react';
+import React  from 'react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState} from 'react';
 import { api } from '../../../api/api';
-import { UserContext } from '../../../context/UserContext';
 import { toast } from 'react-hot-toast';
 
 const RegisterCompany = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [logo, setLogo] = useState(null);
-    const { userRegistration } = useContext(UserContext);
     const navigate = useNavigate();
+
+    const handleLogoChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setLogo(file);
+      }
+    };
 
     const handleSubmit = async (e) => {
       e.preventDefault();
 
-      const dataCompany = {
-        email,
-        password,
-        companyName,
-        description,
-        location,
-        logo
-      };
-
       try {      
-        const res = await api.companyRegistration(dataCompany, (!!logo));
-        const data = await res.json();
+
+        const formData = new FormData();
+            
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('companyName', companyName);
+        formData.append('description', description);
+        formData.append('location', location);
+        
+        if (logo) {
+            formData.append('logo', logo);
+        }
+
+        const res = await api.companyRegistration(formData, (!!logo));
         // Save the token to localStorage
         localStorage.setItem('access token', res.access_token);
-        toast.success('Registration successful!');
-        navigate("/companies/home");
+        if (res.status === 201) {
+          toast.success('Registration successful!');
+          navigate("/companies/home");
+        }
       } catch (error) {
         console.error('Error registering company:', error.response?.data?.message || error.message);
         toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));
@@ -164,7 +173,7 @@ const RegisterCompany = () => {
                     name="logo"
                     id="logo"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    onChange={(e) => setLogo(e.target.value)}
+                    onChange={handleLogoChange}
                   />
                 </div>
                 <div className="flex items-start">

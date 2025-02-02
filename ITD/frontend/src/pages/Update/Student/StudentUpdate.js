@@ -5,7 +5,6 @@ import Footer from '../../../components/Footer';
 import GoBack from '../../../components/GoBack';
 import { UserContext } from '../../../context/UserContext';
 import { api } from '../../../api/api';
-import { toast } from 'react-hot-toast';
 
 const StudentUpdate = () => {
   const { user, userLogout } = useContext(UserContext);
@@ -62,7 +61,7 @@ const StudentUpdate = () => {
       if (profilePicture) {
         formData.append('profilePicture', profilePicture);
       }
-      const res = await api.updateStudent(formData);
+      await api.updateStudent(formData);
       navigate('/students/dashboard/profile');   
       window.location.reload();    
       

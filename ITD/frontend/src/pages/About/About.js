@@ -139,7 +139,7 @@ const About = () => {
                                     <p className="text-2xl font-medium text-gray-900 dark:text-white">"S&C connected us with talented students who have become valuable members of our team. It's a fantastic resource for finding interns."</p>
                                 </blockquote>
                                 <figcaption className="flex items-center justify-center mt-6 space-x-3">
-                                    <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gouch.png" alt="Tech"/>
+                                    <img className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gouch.png" alt="Tech"/>
                                 <div className="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
                                         <div className="pr-3 font-medium text-gray-900 dark:text-white">TechCorp</div>
                                     </div>
@@ -157,7 +157,7 @@ const About = () => {
                                     <p className="text-2xl font-medium text-gray-900 dark:text-white">"The internship tracking feature helped me stay on top of my progress and ensured I met all my goals. Highly recommend S&C!"</p>
                                 </blockquote>
                                 <figcaption className="flex items-center justify-center mt-6 space-x-3">
-                                <img class="w-6 h-6 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png" alt="profile"/>
+                                <img className="w-6 h-6 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png" alt="profile"/>
                                     <div className="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
                                         <div className="pr-3 font-medium text-gray-900 dark:text-white">Alice</div>
                                     </div>

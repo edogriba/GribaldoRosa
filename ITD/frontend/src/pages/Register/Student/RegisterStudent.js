@@ -30,7 +30,6 @@ const RegisterStudent = () => {
       try {
           const res = await api.getUniversityList();
           const data = await res.json();
-
           setUniversities(data.universities);
       } catch (error) {
         console.error('Error fetching universities:', error.message);
@@ -40,48 +39,42 @@ const RegisterStudent = () => {
 
     fetchUniversities();
   }, []);
-  
-  const handleCVUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setCV(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
 
   const handleProfilePictureUpload = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfilePicture(reader.result);
-    };
-    reader.readAsDataURL(file);
+    setProfilePicture(file);
+  };
+  
+  const handleCVUpload = (e) => {
+    const file = e.target.files[0];
+    setCV(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const dataStudent = {
-      email,
-      password,
-      firstName,
-      lastName,
-      phoneNumber,
-      profilePicture,
-      location,
-      degreeProgram,
-      GPA: parseFloat(gpa), 
-      graduationYear: parseInt(graduationYear, 10), // Ensure graduationYear is an integer, 10 is the base
-      CV: CV,
-      skills,
-      languageSpoken,
-      university 
-    };
     
     try {
-      const res = await api.studentRegistration(dataStudent, (!!profilePicture || !!CV));
-      const data = await res.json();
+      const formData = new FormData();
+            
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('firstName', firstName);
+            formData.append('lastName', lastName);
+            formData.append('phoneNumber', phoneNumber);
+            formData.append('location', location);
+            formData.append('degreeProgram', degreeProgram);
+            formData.append('GPA', gpa);
+            formData.append('graduationYear', graduationYear);  
+            formData.append('skills', skills);
+            formData.append('languageSpoken', languageSpoken);
+            formData.append('university', university);
+            if (profilePicture) {
+                formData.append('profilePicture', profilePicture);
+            }
+            if (CV) {
+                formData.append('CV', CV);
+            }
+      const res = await api.studentRegistration(formData, (!!profilePicture || !!CV));
       // Save the token to localStorage
       localStorage.setItem('access token', res.access_token);
       toast.success('Registration successful!');
