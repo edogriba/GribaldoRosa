@@ -115,7 +115,7 @@ class ApplicationManager:
                 application.accept()
                 return json_invalid_request("Internship could not be added.")
             
-            return json_success("Application confirmed successfully.")
+            return json_created("Application confirmed successfully.")
         
         except Exception as e:
             raise e
