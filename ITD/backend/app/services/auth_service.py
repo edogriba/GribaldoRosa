@@ -9,7 +9,9 @@ def is_string_valid(question) -> bool:
     :param question: The input to validate.
     :return: True if the input is a string, otherwise False.
     """
-    return isinstance(question, str)
+    if not isinstance(question, str) or question.strip() == "":
+        return False
+    return True
 
 
 def is_int_valid(question) -> bool:
@@ -125,9 +127,8 @@ def is_location_valid(location: str) -> bool:
     :return: True if the location is valid and not empty, False otherwise.
     """
     try:
-        location_regex = r'^[a-zA-Z0-9\s,.-]+$'
         max_length = 255
-        return bool(re.match(location_regex, location)) and len(location) <= max_length
+        return is_string_valid(location) and len(location) <= max_length
     except Exception as e:
         return False
 
@@ -154,9 +155,8 @@ def is_name_valid(name: str) -> bool:
     :return: True if the name is valid and not empty, False otherwise.
     """
     try:
-        name_regex = r'^[a-zA-Z\s]+$'
         max_length = 100  
-        return bool(re.match(name_regex, name)) and len(name) <= max_length
+        return is_string_valid(name) and len(name) <= max_length
     except Exception as e:
         return False
 
@@ -201,7 +201,7 @@ def is_graduationYear_valid(graduationYear: int) -> bool:
     try:
         if graduationYear == "":
             return False
-        return not graduationYear or is_int_valid(graduationYear) and 1900 <= graduationYear <= 2025
+        return not graduationYear or is_int_valid(graduationYear) and 1900 <= graduationYear <= 2030
     except Exception as e:
         return False
     
@@ -249,10 +249,8 @@ def is_skills_valid(skills: str) -> bool:
     :return: True if the skills list is valid and not empty, False otherwise.
     """
     try:
-        #skills_regex = r'^([\w\+\#\.\s]+)(,\s*[\w\+\#\.\s]+)*$'
         max_length = 1024
-        #return bool(skills and re.match(skills_regex, skills) and len(skills) <= max_length)
-        return bool(skills and len(skills) <= max_length)
+        return is_string_valid(skills) and len(skills) <= max_length
     except Exception:
         return False
 
@@ -278,9 +276,8 @@ def is_languageSpoken_valid(languageSpoken: str) -> bool:
     :return: True if the language spoken is valid and not empty, False otherwise.
     """
     try:
-        languages_regex = r'^[a-zA-Z\s,.-]+$'
         max_length = 1024
-        return bool(re.match(languages_regex, languageSpoken)) and len(languageSpoken) <= max_length
+        return is_string_valid(languageSpoken) and len(languageSpoken) <= max_length
     except Exception:
         return False
 

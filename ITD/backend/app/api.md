@@ -1762,6 +1762,7 @@ Headers: {
     - `type` (str): `success`
     - `message` (str): "Internships retrieved successfully."
     - `internshipsPreview` (list): List of internship previews.
+      - `student_id` (int)
       - `student_name` (str)
       - `student_photoPath` (str | None)
       - `internshipId` (int)
@@ -1812,6 +1813,7 @@ Headers: {
   "message": "Internships retrieved successfully.",
   "internshipsPreview": [
     {
+      "student_id": 2,
       "student_name": "Alice Smith",
       "student_photoPath": "/images/alice.png",
       "internshipId": 1,
@@ -1819,6 +1821,7 @@ Headers: {
       "status": "open"
     },
     {
+      "student_id": 3,
       "student_name": "Bob Johnson",
       "student_photoPath": "/images/bob.png",
       "internshipId": 2,
@@ -1854,6 +1857,7 @@ Headers: {
     - `type` (str): `success`
     - `message` (str): "Internships retrieved successfully."
     - `internshipsPreview` (list): List of internship previews.
+      - `company_id` (int)
       - `company_name` (str)
       - `company_photoPath` (str | None)
       - `internshipId` (int)
@@ -1904,6 +1908,7 @@ Headers: {
   "message": "Internships retrieved successfully.",
   "internshipsPreview": [
     {
+      "company_id": 2,
       "company_name": "XYZ Corporation",
       "company_photoPath": "/images/xyz_logo.png",
       "internshipId": 1,
@@ -1911,6 +1916,7 @@ Headers: {
       "status": "open"
     },
     {
+      "company_id": 1,
       "company_name": "ABC Inc.",
       "company_photoPath": "/images/abc_logo.png",
       "internshipId": 2,

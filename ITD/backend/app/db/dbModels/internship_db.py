@@ -193,6 +193,7 @@ class InternshipDB:                 # Ongoing Finished
 
         :param companyId: The ID of the company.
         :return: A list of dictionaries representing the internships or an empty list if not found. Each dictionary contains:
+            - student_id (int): The ID of the student.
             - student_name (str): The full name of the student.
             - student_photoPath (str | None): The path to the student's photo.
             - internshipId (int): The ID of the internship.
@@ -203,7 +204,7 @@ class InternshipDB:                 # Ongoing Finished
         """
         try:
             cur = self.con.cursor()
-            query = """ SELECT S.FirstName, S.LastName, S.ProfilePicturePath, I.InternshipId, I.Status, IP.RoleTitle
+            query = """ SELECT S.FirstName, S.LastName, S.UserId, S.ProfilePicturePath, I.InternshipId, I.Status, IP.RoleTitle
                         FROM Internship AS I, Application AS A, Student AS S, InternshipPosition AS IP
                         WHERE I.ApplicationId = A.ApplicationId AND 
                               A.StudentId = S.UserId AND 
@@ -213,6 +214,7 @@ class InternshipDB:                 # Ongoing Finished
             
             return [
                 {
+                    "student_id": row["UserId"],
                     "student_name": row["FirstName"] + " " + row["LastName"],
                     "student_photoPath": row["ProfilePicturePath"],
                     "internshipId": row["InternshipId"],
@@ -234,6 +236,7 @@ class InternshipDB:                 # Ongoing Finished
 
         :param studentId: The ID of the student.
         :return: A list of dictionaries representing the internships or an empty list if not found. Each dictionary contains:
+            - company_id (int): The ID of the company.
             - company_name (str): The name of the company.
             - company_photoPath (str | None): The path to the company's photo.
             - internshipId (int): The ID of the internship.
@@ -244,7 +247,7 @@ class InternshipDB:                 # Ongoing Finished
         """
         try:
             cur = self.con.cursor()
-            query = """ SELECT C.CompanyName, C.LogoPath, I.InternshipId, I.Status, IP.RoleTitle
+            query = """ SELECT C.CompanyName, C.UserId, C.LogoPath, I.InternshipId, I.Status, IP.RoleTitle
                         FROM Internship AS I, Application AS A, Company AS C, InternshipPosition AS IP
                         WHERE I.ApplicationId = A.ApplicationId AND 
                               A.InternshipPositionId = IP.InternshipPositionId AND 
@@ -254,6 +257,7 @@ class InternshipDB:                 # Ongoing Finished
             
             return [
                 {
+                    "company_id": row["UserId"],
                     "company_name": row["CompanyName"],
                     "company_photoPath": row["LogoPath"],
                     "internshipId": row["InternshipId"],

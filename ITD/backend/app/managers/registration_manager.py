@@ -31,12 +31,13 @@ class RegistrationManager:
                 'CVpath'        : None,
                 'skills'        : user_data.get('skills'),
                 'languageSpoken': user_data.get('languageSpoken'),
-                'universityId'  : int(user_data.get('university'))
+                'universityId'  : user_data.get('university')
             }
             values.update({'gpa': float(values['gpa'])}) if values['gpa'] else None
             values.update({'graduationYear': int(values['graduationYear'])}) if values['graduationYear'] else None
             values.update({'profilePicturePath': secure_filename(profilePicture.filename)}) if profilePicture else None
             values.update({'CVpath': secure_filename(CV.filename)}) if CV else None
+            values.update({'universityId': int(values['universityId'])}) if values['universityId'] else None
 
             validation_result = validate_student_data(values)
             if validation_result is not True:

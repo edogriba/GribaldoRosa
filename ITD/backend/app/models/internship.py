@@ -140,6 +140,7 @@ class Internship():
         :param companyId: The ID of the company.
         :return: A list of dictionaries with the internship details.
             Each dictionary contains:
+            - student_id (int): The ID of the student.
             - student_name (str): The full name of the student.
             - student_photoPath (str | None): The path to the student's photo.
             - internshipId (int): The ID of the internship.
@@ -165,6 +166,7 @@ class Internship():
         :param studentId: The ID of the student.
         :return: A list of dictionaries with the internship details.
             Each dictionary contains:
+            - company_id (int): The ID of the company.
             - company_name (str): The name of the company.
             - company_photoPath (str | None): The path to the company's photo.
             - internshipId (int): The ID of the internship.
