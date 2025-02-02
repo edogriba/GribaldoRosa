@@ -44,12 +44,10 @@ const StudentApplication = () => {
     useEffect(() => {
         const fetchApplication = async () => {
             try {
-                console.log("Fetched applicationId:", applicationId); // Debug log
                 const res = await api.getApplicationStudent({"applicationId": applicationId}); // Use `applicationId` directly
                 const data = await res.json();
-                console.log("Fetched Application:", data); // Debug log
                 setApplication(data);
-                setPositionId(data.internshipPosition.internshipPositionId) // Assuming the API returns the entire application object
+                setPositionId(data.internshipPosition.internshipPositionId) 
             } catch (error) {
                 console.error("Error fetching application:", error.message);
                 if (error.status === 404) {

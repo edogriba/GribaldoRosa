@@ -19,14 +19,12 @@ const CompanyInternship = () => {
     const [content, setContent] = useState("");
     const [date, setDate] = useState("");
     const navigate = useNavigate();  
-    console.log("Internship Id:", internshipId); // Debug log  
     
     if ( user.type !== "company") {
         navigate("/login");
     }
     const addComplaint = async () => {
         try {
-            console.log("Adding Complaint..."); // Debug log
             const complaint = {
                 "internshipId": internshipId,
                 "date": date,
@@ -52,14 +50,11 @@ const CompanyInternship = () => {
 
     const handleCloseInternship = async () => {   
         try {
-            console.log("Closing Internship...", internshipId); // Debug log
             const res = await api.finishInternship({"internshipId": parseInt(internshipId)}); 
             const data = await res.json();
-            console.log("Closed Internship:", data); // Debug log
             if (data.type === "success") {
                 toast.success("Internship was closed successfully");
             }
-            // Redirect to the company dashboard
             window.location.reload();
         }
         catch (error) { 
@@ -88,11 +83,8 @@ const CompanyInternship = () => {
     useEffect(() => {
         const fetchInternship = async () => {
             try {
-                //console.log("Fetching Internship...", useParams()); // Debug log
-                console.log("Fetched Internship Id:", internshipId); // Debug log
                 const res = await api.getInternship({"internshipId": parseInt(internshipId)}); // Use `internshipId` directly
                 const data = await res.json();
-                console.log("Fetched Internship:", data); // Debug log
                 setInternship(data);
                 const companyId = data.company.id;
                 const companyName = data.company.companyName;
@@ -107,10 +99,7 @@ const CompanyInternship = () => {
                       return complaint;
                     }
                 });
-                setComplaints(transformedComplaints);
-                console.log("Fetched Complaints:", data.complaints); // Debug log
-                console.log("Fetched Internship:", data.internship); // Debug log
-            
+                setComplaints(transformedComplaints);            
                 
             } catch (error) {
                 console.error("Error fetching internship:", error.message);

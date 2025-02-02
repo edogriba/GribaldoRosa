@@ -16,14 +16,11 @@ const CompanyPosition = () => {
 
     const handleClosePosition = async () => {   
         try {
-            console.log("Closing Position...", positionId); // Debug log
             const res = await api.closePosition({"internshipPositionId": positionId}); 
             const data = await res.json();
-            console.log("Closed Position:", data); // Debug log
             if (data.type === "success") {
                 toast.success("Internship was closed successfully");
             }
-            // Redirect to the company dashboard
             navigate("/companies/dashboard/positions");
         }
         catch (error) { 
@@ -38,16 +35,13 @@ const CompanyPosition = () => {
 
     const fetchRelatedApplications = async () => {   
         try {
-            console.log("Fetching applications...", positionId); // Debug log
             setShowPosition(true);
-            console.log("Fetching Applications..."); // Debug log
             const res = await api.getApplicationListCompany({"internshipPositionId": parseInt(positionId)}); // Use `positionId` directly
             const data = await res.json();
             
             if (res.type === "not_found") {
                 toast.error("No applications associated to this");
             }
-            console.log("Applications fetched:", data.applications); // Debug log
             setApplications(data.applications);
 
             // Redirect to the company dashboard
@@ -71,15 +65,9 @@ const CompanyPosition = () => {
     useEffect(() => {
         const fetchPosition = async () => {
             try {
-                //console.log("Fetching Position...", useParams()); // Debug log
-                console.log("Fetched Position Id:", positionId); // Debug log
                 const res = await api.getPosition({"internshipPositionId": positionId}); // Use `positionId` directly
                 const data = await res.json();
-                console.log("Fetched Position:", data); // Debug log
-
-                console.log("Fetched Position:", data.internship_position); // Debug log
                 setPosition(data.internship_position);
-                
             } catch (error) {
                 console.error("Error fetching position:", error.message);
                 if (error.status === 404) {

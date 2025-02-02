@@ -76,19 +76,14 @@ const RegisterStudent = () => {
       CV: CV,
       skills,
       languageSpoken,
-      university // Ensure university ID is an integer
+      university 
     };
     
-    console.log("DataStudent: ", dataStudent);                               // debug
     try {
       const res = await api.studentRegistration(dataStudent, (!!profilePicture || !!CV));
-      console.log(res)                                        // debug
       const data = await res.json();
-      console.log(data)                                      // debug
       // Save the token to localStorage
       localStorage.setItem('access token', res.access_token);
-      console.log("data: ", dataStudent);                                    // debug
-      // Redirect to student dashboard or another protected route
       toast.success('Registration successful!');
       navigate('/students/home')
     } catch (error) {

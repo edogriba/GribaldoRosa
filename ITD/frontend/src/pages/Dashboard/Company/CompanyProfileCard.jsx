@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 const CompanyProfileCard = () => {
     const { user } = useContext(UserContext);
-    console.log(`public/uploads/${user.id}/${user.logoPath}`)
     return (
         <div className="w-full max-w-sm my-auto ml-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div className="flex flex-col justify-center items-center p-10">

@@ -22,7 +22,6 @@ const CompanyUpdate = () => {
 
     const handleUpdate = async () => {
         try {
-            console.log("WEEE")
             const formData = new FormData();
             
             formData.append('location', location);
@@ -30,15 +29,8 @@ const CompanyUpdate = () => {
             if (logo) {
                 formData.append('logo', logo);
             }
-            
-            console.log("WEEE")
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
             const res = await api.updateCompany(formData);
-            console.log('Updated profile:', res);
             const data = await res.json();
-            console.log('Data:', data);
             if (res.status === 201) {
                 toast.success('Profile updated successfully');
             }

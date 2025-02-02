@@ -27,7 +27,6 @@ const StudentInternship = () => {
 
     const addComplaint = async () => {
         try {
-            console.log("Adding Complaint..."); // Debug log
             const complaint = {
                 "internshipId": internshipId,
                 "date": date,
@@ -51,16 +50,13 @@ const StudentInternship = () => {
     }
     const fetchRelatedComplaints = async () => {   
             try {
-                console.log("Fetching complaints"); // Debug log
                 setShowComplaints(true);
-                console.log("Fetching Applications..."); // Debug log
                 const res = await api.getInternship({"internshipId": parseInt(internshipId)}); // Use `positionId` directly
                 const data = await res.json();
 
                 if (res.type === "not_found") {
                     toast.error("No applications associated to this");
                 }
-                console.log("Complaints fetched:", data.complaints); // Debug log
                 setComplaints(data.complaints);
     
                 // Redirect to the Student dashboard
@@ -90,11 +86,8 @@ const StudentInternship = () => {
     useEffect(() => {
         const fetchInternship = async () => {
             try {
-                //console.log("Fetching Internship...", useParams()); // Debug log
-                console.log("Fetched Internship Id:", internshipId); // Debug log
                 const res = await api.getInternship({"internshipId": parseInt(internshipId)}); // Use `internshipId` directly
                 const data = await res.json();
-                console.log("Fetched Internship:", data); // Debug log
                 setInternship(data);
                 const companyId = data.company.id;
                 const companyName = data.company.companyName;
@@ -109,11 +102,7 @@ const StudentInternship = () => {
                       return complaint;
                     }
                 });
-                console.log("Transformed Complaints:", transformedComplaints);
-                setComplaints(transformedComplaints);
-                console.log("Fetched Complaints:", complaints); 
-            
-                
+                setComplaints(transformedComplaints);            
             } catch (error) {
                 console.error("Error fetching internship:", error.message);
                 if (error.status === 404) {

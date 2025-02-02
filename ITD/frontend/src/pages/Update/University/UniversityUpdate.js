@@ -42,7 +42,6 @@ const UniversityUpdate = () => {
         }
 
         const res = await api.updateUniversity(formData);
-        console.log('Updated profile:', res);
         navigate('/universities/dashboard/profile');   
         window.location.reload();    
         } catch (error) {

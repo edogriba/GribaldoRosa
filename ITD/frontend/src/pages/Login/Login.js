@@ -21,11 +21,8 @@ const Login = () => {
     };
 
     try {
-      console.log("UI", email, password); // Debug
-      console.log("UI", dataUser); // Debug
       const response = await api.userLogin(dataUser);
-      console.log("WeEE", response); // Debug
-      await userLogin(response); // Update user context
+      await userLogin(response);
       toast.success('Login successful');
     }
     catch (error) {

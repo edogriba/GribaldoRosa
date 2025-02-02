@@ -10,15 +10,12 @@ const UniversityInternshipList = () => {
     useEffect( () => {   
             const fetchInternships = async () => {
                 try {
-                    console.log("WEEE", user.id);
                     const res = await api.getInternshipListUniversity({"universityId": user.id});
                     const data = await res.json();
-                    console.log("data", data);
-                    console.log("app", data.internshipsPreview);
                     setInternships(data.internshipsPreview);
                 }
                 catch(error) {
-                    console.log(error);
+                    console.error(error);
                 }
             }
             if(user.type !== 'university') {

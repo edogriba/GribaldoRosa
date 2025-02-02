@@ -14,7 +14,6 @@ const HomeUniversity = () => {
             navigate('/login');
         }
     }, [user]);
-    console.log(user);
     return (
         <div>
             <Navbar  user={user} onLogout={userLogout}/>

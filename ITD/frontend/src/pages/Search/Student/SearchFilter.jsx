@@ -23,10 +23,8 @@ const SearchFilter = () => {
 
     const noFilterRequest = async () => {
         try {
-            console.log("No filter request");
             const res = await api.searchNoFilters();
             const data = await res.json();
-            console.log(data);
             if (data.internships.length === 0) {
                 toast.success('No positions found.');
             }
@@ -87,7 +85,6 @@ const SearchFilter = () => {
             if (roleTitle) {
                 filtersData.roleTitle = roleTitle;
             }
-            console.log(filtersData);
             const response = await api.searchFilters(filtersData);
             const data = await response.json();
             if (data.internships.length === 0) {
@@ -108,11 +105,9 @@ const SearchFilter = () => {
             try {
                 const res = await api.getFilters();
                 const data = await res.json();
-                console.log(data);
                 setLocations(data.locations);
                 setCompanies(data.companiesNames);
                 setRoleTitles(data.roleTitles);
-                console.log("Fetching locations...");
             } catch (error) {
                 console.error('Error fetching locations:', error.message);
                 alert('Failed to load locations. Please try again later.');

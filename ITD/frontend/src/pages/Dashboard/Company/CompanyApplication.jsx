@@ -16,7 +16,6 @@ const CompanyApplication = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("Assessing Application...", applicationId); // Debug log
             const response  = await api.createAssessment({"applicationId": parseInt(applicationId), "date": date, "link": link}); // Use `applicationId` directly
             const data = await response.json();
             if (data.type === 'created') {
@@ -35,11 +34,9 @@ const CompanyApplication = () => {
     }
     const handleAccept = async () => {
         try {
-            console.log("Accepting Application...", applicationId); // Debug log
             const res = await api.acceptApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
             const data = await res.json();
             setApplication(data);
-            console.log("Accepted Application:", data); // Debug log
             navigate(`/companies/dashboard/positions/${positionId}`);
         }
         catch (error) { 
@@ -53,11 +50,9 @@ const CompanyApplication = () => {
     }
     const handleReject = async () => {
         try {
-            console.log("Reject Application...", applicationId); // Debug log
             const res = await api.rejectApplication({"applicationId": parseInt(applicationId), "internshipPositionId": parseInt(positionId)}); // Use `applicationId` directly
             const data = await res.json();
             setApplication(data);
-            console.log("Rejected Application:", data); // Debug log
             navigate(`/companies/dashboard/positions/${positionId}`);
         }
         catch (error) { 
@@ -72,10 +67,8 @@ const CompanyApplication = () => {
     useEffect(() => {
         const fetchApplication = async () => {
             try {
-                console.log("Fetched applicationId:", applicationId); // Debug log
                 const res = await api.getApplicationCompany({"applicationId": applicationId}); // Use `applicationId` directly
                 const data = await res.json();
-                console.log("Fetched Application:", data); // Debug log
                 setApplication(data); // Assuming the API returns the entire application object
             } catch (error) {
                 console.error("Error fetching application:", error.message);
