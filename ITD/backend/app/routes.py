@@ -117,7 +117,7 @@ def create_main_app():
         try:            
             data = request.form.to_dict()
             pic = request.files['profilePicture'] if 'profilePicture' in request.files else None
-            cv = request.files['cv'] if 'cv' in request.files else None
+            cv = request.files['CV'] if 'CV' in request.files else None
 
             if pic and not (pic.filename.endswith('.jpg') or pic.filename.endswith('.jpeg') or pic.filename.endswith('.png')):
                 return json_invalid_request("Invalid file format. Only JPG and PNG are allowed.")

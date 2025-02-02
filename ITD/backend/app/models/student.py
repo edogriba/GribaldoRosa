@@ -1,4 +1,4 @@
-from app.models.user import User
+from app.models import User, University
 from app.db.dbModels.student_db import StudentDB
 from typing import Optional, Union
 
@@ -85,6 +85,7 @@ class Student(User):
             'skills': self.skills,
             'CV': self.CV,
             'languageSpoken': self.languageSpoken,
+            'universityName': University.get_by_id(self.universityId).get_name()
         })
         return user_dict
 
