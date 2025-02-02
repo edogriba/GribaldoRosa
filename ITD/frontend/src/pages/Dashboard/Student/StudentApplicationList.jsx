@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../../context/UserContext";
 import { api } from "../../../api/api";
 import Status from "../../../components/Status";
+
 const StudentApplicationList = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -132,7 +133,7 @@ const StudentApplicationList = () => {
                                     </Link>                               
                                 </td>
                             </tr>
-                        )
+                        );
                     })}
                     </tbody>
                 </table>) : <div className="text-center">No applications found</div>}

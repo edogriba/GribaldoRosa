@@ -60,7 +60,7 @@ const StudentApplication = () => {
         };
 
         fetchApplication();
-    }, [applicationId]);
+    }, [applicationId, navigate]);
 
     return (
         <div>
@@ -241,6 +241,7 @@ const StudentApplication = () => {
                         >
                             View CV
                         </a>
+
                     </div>
                 </div>
                 { (application.application?.status === "Accepted")  &&

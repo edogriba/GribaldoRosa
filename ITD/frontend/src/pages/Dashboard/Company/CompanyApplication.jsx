@@ -69,10 +69,6 @@ const CompanyApplication = () => {
             alert("Failed to reject the application. Please try again later.");
         }
     }
-    const handleAssess = async () => {
-        console.log("Assessing Application...", applicationId); // Debug log
-    }
-
     useEffect(() => {
         const fetchApplication = async () => {
             try {
@@ -91,7 +87,7 @@ const CompanyApplication = () => {
             }
         };
         fetchApplication();
-    }, [applicationId]);
+    }, [applicationId, navigate]);
 
     return (
         <div>
@@ -255,7 +251,6 @@ const CompanyApplication = () => {
                         </p>
                     </div>
 
-
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
                             Student CV
@@ -265,8 +260,9 @@ const CompanyApplication = () => {
                             className="text-primary-600 hover:underline"
                             target="_blank"
                             rel="noopener noreferrer"
+                            download
                         >
-                            View CV
+                            Download CV
                         </a>
                     </div>
                 </div>

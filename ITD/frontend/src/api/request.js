@@ -36,7 +36,7 @@ export async function request(path, method, body, params = {}, file = false) {
       "Content-Type": "application/json",
     };
   }
-  console.log(headers);
+  
   return window.fetch(buildURL(endpoint, path, params), {
     method: method,
     headers: headers,
@@ -76,8 +76,6 @@ export async function requestAuth(path, method, body, params = {}, file = false)
 export async function requestAuthWithErrorToast(path, method, body, params = {}, file = false) {
   try {
     const response = await requestAuth(path, method, body, params, file);
-    console.log(response);
-
     return response;
 
   } catch (error) {
@@ -92,8 +90,6 @@ export async function requestAuthWithErrorToast(path, method, body, params = {},
 export async function requestWithErrorToast(path, method, body, params = {}, file = false) {
   try {
     const response = await request(path, method, body, params, file);
-    console.log(response);
-
     return response;
   } catch (error) {
 

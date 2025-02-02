@@ -25,13 +25,12 @@ const StudentInternshipList = () => {
                 console.log(error);
             }
         }
-        // TO DO: Check type of user and redirect to login if not student
         if(user.type !== 'student') {
             api.userLogout();
             navigate('/login');
         }
         fetchInternships();
-    }, []);
+    }, [navigate, user.id, user.type]);
 
     useEffect(() => {
             const filterResults = () => {
@@ -48,7 +47,7 @@ const StudentInternshipList = () => {
         }, [internshipStatus, internships]);
     return (
         <div>    
-            <div>    
+            <div>      
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <div className="p-10 gap-4 lg:flex lg:items-center lg:justify-between">
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">My internships</h2>
@@ -74,7 +73,7 @@ const StudentInternshipList = () => {
                         </div>
                     </div>
                     <div className="px-10 mb-10">
-                    {internships ? (
+                    {filteredInternships ? (
                     <table  className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -96,8 +95,7 @@ const StudentInternshipList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                        {internships.map((internship) => {
-                            return (
+                        {filteredInternships.map((internship) => {
                                 <tr key={internship.internshipId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                         <img className="w-10 h-10 rounded-full" src={internship.company_photoPath ? `/uploads/${internship.company_photoPath}` : `/user.jpg`} alt="Profile"/>
@@ -117,15 +115,14 @@ const StudentInternshipList = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <Link to={`${internship.internshipId}`} className="font-medium text-primary-600 dark:text-primary-500 hover:underline">
-                                        <p href="#" className="font-medium text-primary-600 dark:text-primary-500 hover:underline">View</p>
+                                        <p className="font-medium text-primary-600 dark:text-primary-500 hover:underline">View</p>
                                         </Link>
                                     </td>
                                 </tr>
-                            )
                         })}
                         </tbody>
                     </table>
-                    ) : <div className="text-center">No internships found</div>}
+                    ) : (<div className="text-center">No internships found</div>)}
                     </div>
                 </div>
             </div>  

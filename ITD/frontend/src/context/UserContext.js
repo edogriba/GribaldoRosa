@@ -1,50 +1,46 @@
 import React, { createContext, useState, useEffect } from "react";
-import { api } from "../api/api"; // Replace with your actual API utilities
+import { api } from "../api/api"; 
 import toast from "react-hot-toast";
 
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Stores the authenticated user's data
-  const [loading, setLoading] = useState(true); // Indicates if the app is loading
-  // Function to log in the user
+  const [user, setUser] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+
   const userLogin = async (response) => {
     try {
       if (response.status === 200) {
         const userData = await response.json();
-        console.log(userData)
-
-        const accessToken = userData.access_token; // Ensure your backend returns this
+        const accessToken = userData.access_token;
 
         if (accessToken) {
           localStorage.setItem("access_token", accessToken);
-          setUser(userData.user); // Set user context
+          setUser(userData.user); 
         } 
       }
       else {
-        throw new Error("Login failed with status " + response.status); // Handle errors
+        throw new Error("Login failed with status " + response.status); 
       }
     } catch (error) {
-      //console.error("Login failed:", error.message);
       throw new Error("Login failed");
     }
   };
   const userRegistration = async (response) => {
     try {
-      // Debug response
+      
       if (response.status === 201) {
         const userData = await response.json();
-        console.log(userData)
-        const accessToken = userData.access_token; // Ensure your backend returns this
+        const accessToken = userData.access_token; 
 
         if (accessToken) {
           localStorage.setItem("access_token", accessToken);
-          setUser(userData.user); // Set user context
+          setUser(userData.user); 
           toast.success("Registration successful");
         } 
       } 
       else {
-        throw new Error("Registration failed with status " + response.status); // Handle errors
+        throw new Error("Registration failed with status " + response.status); 
       }
     } catch (error) {
       console.error("Registration failed:", error.message);
@@ -55,8 +51,7 @@ const UserProvider = ({ children }) => {
   // Function to log out the user
   const userLogout = async () => {
     try {
-      await api.userLogout(); // Call logout endpoint to clear cookies on the server
-
+      await api.userLogout(); 
       localStorage.removeItem("access_token");
       setUser(null);
       toast.success("Logout successful");
@@ -81,12 +76,11 @@ const UserProvider = ({ children }) => {
           return;
         }
 
-        // Validate the access token by calling a protected route
         const response = await api.userAuthenticated()
 
         if (response.status === 200) {
           const data = await response.json();
-          setUser(data.user); // Set user context or state
+          setUser(data.user); 
         } 
         else if (response.status === 401) {
           localStorage.removeItem("access_token");

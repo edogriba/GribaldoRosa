@@ -14,9 +14,9 @@ const StudentUpdate = () => {
   const [location, setLocation] = useState(user?.location || '');
   const [skills, setSkills] = useState(user?.skills || '');
   const [languages, setLanguages] = useState(user?.languageSpoken || '');
-  const [gpa, setGpa] = useState(user?.GPA || 0);
+  const [gpa, setGpa] = useState(user?.GPA || null);
   const [degreeProgram, setDegreeProgram] = useState(user?.degreeProgram || '');
-
+  const [graduationYear, setGraduationYear] = useState(user?.graduationYear || null);
   // File states (store File objects directly)
   const [CV, setCV] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
@@ -47,9 +47,12 @@ const StudentUpdate = () => {
       formData.append('phoneNumber', phoneNumber);
       formData.append('location', location);
       formData.append('skills', skills);
-      formData.append('languages', languages);
-      formData.append('GPA', gpa);
+      formData.append('languageSpoken', languages);
+      formData.append('GPA', parseFloat(gpa));
       formData.append('degreeProgram', degreeProgram);
+      formData.append('graduationYear', parseInt(graduationYear));
+      formData.append('studentId', user.id);
+      formData.append('universityId', user.universityId);
 
       if (CV) {
         formData.append('CV', CV);
@@ -237,6 +240,29 @@ const StudentUpdate = () => {
                   className="block p-2.5 w-full text-sm text-gray-900 
                              bg-gray-50 rounded-lg border border-gray-300 
                              focus:ring-primary-500 focus:border-primary-500 
+                             dark:bg-gray-700 dark:border-gray-600 
+                             dark:placeholder-gray-400 dark:text-white 
+                             dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                />
+              </div>
+
+              {/* Graduation Year */}
+              <div className="w-full">
+                <label
+                  htmlFor="graduationYear"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Graduation Year
+                </label>
+                <input
+                  type="number"
+                  name="graduationYear"
+                  id="graduationYear"
+                  value={graduationYear}
+                  onChange={(e) => setGraduationYear(e.target.value)}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 
+                             text-sm rounded-lg focus:ring-primary-600 
+                             focus:border-primary-600 block w-full p-2.5 
                              dark:bg-gray-700 dark:border-gray-600 
                              dark:placeholder-gray-400 dark:text-white 
                              dark:focus:ring-primary-500 dark:focus:border-primary-500"
