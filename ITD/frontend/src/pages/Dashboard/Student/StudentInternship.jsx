@@ -82,8 +82,8 @@ const StudentInternship = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await addComplaint();
         setShowModal(false);
+        await addComplaint();
     };
 
 
@@ -295,16 +295,15 @@ const StudentInternship = () => {
 
 
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
+                        <p className="mb-5 text-sm text-gray-400 dark:text-gray-500 uppercase">
                             Student CV
                         </p>
-                        <a
-                            href={internship.student?.CV}
-                            className="text-primary-600 hover:underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a 
+                            href={`/uploads/${internship.student?.id}/${internship.student?.CV}`}
+                            download
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
-                            View CV
+                            Download CV
                         </a>
                     </div>
                 </div>
@@ -323,9 +322,17 @@ const StudentInternship = () => {
                     </button>
 
                 )}
+                {showComplaints && (
+                    <button
+                    className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                    onClick={hideRelatedComplaints} 
+                    >
+                    Hide Complaints
+                    </button>
+                )}
                 
                 <button
-                        className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                        className="mx-2 px-6 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring focus:ring-orange-300"
                         onClick={() => setShowModal(true)}
                     >
                         Add Complaint
@@ -344,7 +351,7 @@ const StudentInternship = () => {
                                         value={date}
                                         max={new Date().toISOString().split("T")[0]}
                                         onChange={(e) => setDate(e.target.value)}
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="Select date"
                                         required
                                     />
@@ -377,14 +384,7 @@ const StudentInternship = () => {
                             </div>
                         </div>
                     )}
-                {showComplaints && (
-                    <button
-                    className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
-                    onClick={hideRelatedComplaints} 
-                    >
-                    Hide Complaints
-                    </button>
-                )}
+                
                 </div>
                 {showComplaints && (
                 <div className="mt-6 text-right">

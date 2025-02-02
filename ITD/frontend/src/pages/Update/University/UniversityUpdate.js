@@ -5,6 +5,7 @@ import { UserContext } from '../../../context/UserContext';
 import GoBack from '../../../components/GoBack';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
+import toast from 'react-hot-toast';
 
 const UniversityUpdate = () => {
   const { user, userLogout } = useContext(UserContext);
@@ -39,18 +40,11 @@ const UniversityUpdate = () => {
         if (logo) {
             formData.append('logo', logo);
         }
-        else {
-            formData.append('logo', null);
-        }
 
-        // Make the API call
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
         const res = await api.updateUniversity(formData);
         console.log('Updated profile:', res);
-        // Optionally navigate or show a success message after update
-        // navigate('/profile');
+        navigate('/universities/dashboard/profile');   
+        window.location.reload();    
         } catch (error) {
         console.error('Error updating profile:', error);
         }
@@ -168,7 +162,7 @@ const UniversityUpdate = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                Cancel Modifications
+                Cancel Changes
               </button>
             </div>
           </form>

@@ -143,6 +143,7 @@ const CompanyApplication = () => {
 
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         <Status status={application.application?.status} />
+                    {application.application?.status === "Assessed" ? (<div><div>Assessment date: {application.assessment.date} </div> <div>Link: <a className="underline" href={`${application.assessment.link}`} >{application.assessment.link}</a></div></div>) : ( <div></div>)}
                     </div>
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
@@ -252,22 +253,20 @@ const CompanyApplication = () => {
                     </div>
 
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
+                        <p className="mb-5 text-sm text-gray-400 dark:text-gray-500 uppercase">
                             Student CV
                         </p>
-                        <a
-                            href={application.student?.CV}
-                            className="text-primary-600 hover:underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a 
+                            href={`/uploads/${application.student?.id}/${application.student?.CV}`}
                             download
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
                             Download CV
                         </a>
                     </div>
                 </div>
                 {/* Action Buttons */}
-                { (application.application?.status === "Pending" || application.application?.status === "Assess")  &&
+                { (application.application?.status === "Pending" || application.application?.status === "Assessed")  &&
                 <div className="flex justify-end mt-6 space-x-4">
                     <button
                         onClick={handleAccept}

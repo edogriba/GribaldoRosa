@@ -81,8 +81,8 @@ const CompanyInternship = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await addComplaint();
         setShowModal(false);
+        await addComplaint();
     };
 
     useEffect(() => {
@@ -293,16 +293,15 @@ const CompanyInternship = () => {
 
 
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
+                        <p className="mb-5 text-sm text-gray-400 dark:text-gray-500 uppercase">
                             Student CV
                         </p>
-                        <a
-                            href={internship.student?.CV}
-                            className="text-primary-600 hover:underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a 
+                            href={`/uploads/${internship.student?.id}/${internship.student?.CV}`}
+                            download
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
-                            View CV
+                            Download CV
                         </a>
                     </div>
                 </div>
@@ -320,7 +319,7 @@ const CompanyInternship = () => {
                     </button>
                 )}
                 <button
-                        className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                        className="mx-2 px-6 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring focus:ring-orange-300"
                         onClick={() => setShowModal(true)}
                     >
                         Add Complaint

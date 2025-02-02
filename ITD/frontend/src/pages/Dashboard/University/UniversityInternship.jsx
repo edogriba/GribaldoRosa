@@ -235,16 +235,15 @@ const UniversityInternship = () => {
 
 
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        <p className="text-sm text-gray-400 dark:text-gray-500 uppercase">
+                        <p className="mb-5 text-sm text-gray-400 dark:text-gray-500 uppercase">
                             Student CV
                         </p>
-                        <a
-                            href={internship.student?.CV}
-                            className="text-primary-600 hover:underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a 
+                            href={`/uploads/${internship.student?.id}/${internship.student?.CV}`}
+                            download
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
-                            View CV
+                            Download CV
                         </a>
                     </div>
                 </div>

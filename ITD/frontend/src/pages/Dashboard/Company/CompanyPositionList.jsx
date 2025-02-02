@@ -199,7 +199,7 @@ const CompanyPositionList = () => {
                                 </div>
 
                                 )) ) : (
-                                    <p>No positions available</p>
+                                    <p>No positions found</p>
                                 )}
                             </div>
                         </div>

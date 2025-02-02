@@ -108,13 +108,13 @@ const CompanyInternshipList = () => {
                         {/* Internship list */}
                         <div className="mt-6 flow-root sm:mt-8">
                             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                            { Array.isArray(filteredInternships) ? (filteredInternships.map((internship) => (
+                            { filteredInternships ? (filteredInternships.map((internship) => (
                                     <div
                                         key={internship.internshipId}
                                         className="relative bg-gray-50 p-5 rounded shadow grid grid-cols-2 gap-4 py-6 sm:grid-cols-4 lg:grid-cols-5">
                                         {/* Internship ID */}
                                         <div className="flex justify-center">
-                                            <img className="w-10 h-10 rounded-full" src={internship.student_photoPath ? `/uploads/${internship.student_photoPath}` : `/user.jpg`} alt="Profile"/>
+                                            <img className="w-10 h-10 rounded-full" src={internship.student_photoPath ? `/uploads/${internship.student_id}/${internship.student_photoPath}` : `/user.jpg`} alt="Profile"/> {/* TO DO BUT I NEED ID*/}  
                                         </div>
                                         {/* Name Surname */}
                                         <div className="flex justify-start">
@@ -162,7 +162,7 @@ const CompanyInternshipList = () => {
                                         </div>
                                     </div>
                                 )) ) : (
-                                    <p>No internships available</p>
+                                    <p>No internships found</p>
                                 )}
                             </div>
                         </div>

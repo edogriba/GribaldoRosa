@@ -49,7 +49,7 @@ const CompanyPositionApplications = (applications) => {
                                 </div>
 
                                 )) ) : (
-                                    <p>No  available</p>
+                                    <p>No applications found</p>
                                 )}
                             </div>
                         </div>

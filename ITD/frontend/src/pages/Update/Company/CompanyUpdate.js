@@ -5,6 +5,7 @@ import { UserContext } from '../../../context/UserContext';
 import GoBack from '../../../components/GoBack';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
+import toast from 'react-hot-toast';
 
 const CompanyUpdate = () => {
     const { user, userLogout } = useContext(UserContext);
@@ -19,31 +20,33 @@ const CompanyUpdate = () => {
       };
     
 
-    const handleUpdate = async (e) => {
-    try {
+    const handleUpdate = async () => {
+        try {
+            console.log("WEEE")
             const formData = new FormData();
-            formData.append('description', description);
+            
             formData.append('location', location);
-            formData.append('id', user.id);
-            formData.append('logoPath', user.logoPath? user.logoPath : null);
+            formData.append('description', description);
             if (logo) {
                 formData.append('logo', logo);
             }
-            else {
-                formData.append('logo', null);
-            }
-
-            // Make the API call
+            
+            console.log("WEEE")
             for (let [key, value] of formData.entries()) {
                 console.log(key, value);
             }
             const res = await api.updateCompany(formData);
             console.log('Updated profile:', res);
-            // Optionally navigate or show a success message after update
-            navigate('companies/profile');
+            const data = await res.json();
+            console.log('Data:', data);
+            if (res.status === 201) {
+                toast.success('Profile updated successfully');
             }
+            navigate('/companies/dashboard/profile');   
+            window.location.reload();    
+        }
         catch (error) {
-            console.error('Error updating profile:', error);
+                console.error('Error updating profile:', error);
         }
     }
 
@@ -113,15 +116,16 @@ const CompanyUpdate = () => {
 
                         <div className="flex justify-end items-center space-x-4">
                             <button
-                                type="submit"
+                                type="button"
                                 className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                                onSubmit={handleUpdate}
+                                onClick={handleUpdate}
                             >
                                 Update Profile
                             </button>
                             <button
                                 type="button"
                                 className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                                onClick={() => (window.location.reload())}
                             >
                                 <svg
                                     className="w-5 h-5 mr-1 -ml-1"
@@ -135,7 +139,7 @@ const CompanyUpdate = () => {
                                         clipRule="evenodd"
                                     ></path>
                                 </svg>
-                                Cancel
+                                Cancel Changes
                             </button>
                         </div>
                     </form>

@@ -5,6 +5,7 @@ import Footer from '../../../components/Footer';
 import GoBack from '../../../components/GoBack';
 import { UserContext } from '../../../context/UserContext';
 import { api } from '../../../api/api';
+import { toast } from 'react-hot-toast';
 
 const StudentUpdate = () => {
   const { user, userLogout } = useContext(UserContext);
@@ -60,12 +61,14 @@ const StudentUpdate = () => {
       if (profilePicture) {
         formData.append('profilePicture', profilePicture);
       }
-
-      // Adjust this call based on how your api.updateStudent is implemented
       const res = await api.updateStudent(formData);
       console.log('Updated profile:', res);
-      // Optionally navigate or display a success message
-      // navigate('/profile');
+      navigate('/students/dashboard/profile');   
+      window.location.reload();    
+      
+      
+
+
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -326,7 +329,7 @@ const StudentUpdate = () => {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                Cancel Modifications
+                Cancel Changes
               </button>
             </div>
           </form>

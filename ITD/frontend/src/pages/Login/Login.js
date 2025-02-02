@@ -30,7 +30,6 @@ const Login = () => {
     }
     catch (error) {
       console.error('Error logging in:', error.response?.data?.message || error.message);
-      //alert('Login failed: ' + (error.response?.data?.message || 'Please try again.'));
       toast.error('Login failed: ' + (error.response?.data?.message || 'Please try again.'));
     }
   }
@@ -44,7 +43,7 @@ const Login = () => {
         navigate("/universities/home");
       }
     }
-  }, [user, navigate]); // Run when `user` updates
+  }, [user, navigate]); 
   
   return(
     <div className="flex flex-col justify-between min-h-screen dark:bg-gray-900">
@@ -77,6 +76,7 @@ const Login = () => {
                       type="email"
                       name="email"
                       id="email"
+                      autoComplete="email"
                       value={email} // Bind email state
                       onChange={(e) => setEmail(e.target.value)} // Update email state
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -96,6 +96,7 @@ const Login = () => {
                       type="password"
                       name="password"
                       id="password"
+                      autoComplete="current-password"
                       value={password} // Bind password state
                       onChange={(e) => setPassword(e.target.value)} // Update password state
                       placeholder="••••••••"

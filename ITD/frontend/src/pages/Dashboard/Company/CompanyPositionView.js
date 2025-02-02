@@ -14,9 +14,11 @@ const CompanyPositionView = () => {
         }
     }, [user]);
     return (
-        <div>
+        <div className="flex flex-col justify-between min-h-screen">
+            <div>
             <Navbar user={user} onLogout={userLogout}/>
             <CompanyPosition/>
+            </div>
             <Footer />
         </div>
     );
