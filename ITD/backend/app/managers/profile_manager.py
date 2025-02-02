@@ -45,10 +45,15 @@ class ProfileManager:
             if not student:
                 return json_internal_server_error("Update failed")
 
+            print("Update successful")
+            print(profilePicture if profilePicture else "No profile picture")
             if profilePicture:
+                print("Updating profile picture")
                 update_file_user(values['id'], get_current_user().get_profilePicture(), profilePicture)
 
+            print(CV if CV else "No CV")
             if CV:
+                print("Updating CV")
                 update_file_user(values['id'], get_current_user().get_cv(), CV)
 
             return json_created( "Update successful", user = student.to_dict() )
@@ -141,38 +146,50 @@ def validate_student_data(user_data) -> Union[tuple, bool]:
     :return: True if the student data is valid, otherwise JSON response with error message
     """
     try:
+        print(user_data)
         if not is_phoneNumber_valid(user_data["phoneNumber"]):
+            print("Invalid phone number")
             return json_invalid_request("Invalid phone number")
 
         if not is_optional_path_valid(user_data["profilePicturePath"]):
+            print("Invalid profile picture path")
             return json_invalid_request("Invalid profile picture path")
 
         if not is_location_valid(user_data["location"]):
+            print("Invalid location")
             return json_invalid_request("Invalid location")
 
         if not is_degreeProgram_valid(user_data["degreeProgram"]):
+            print("Invalid degree program")
             return json_invalid_request("Invalid degree program")
 
         if not is_gpa_valid(user_data["gpa"]):
+            print("Invalid GPA")
             return json_invalid_request("Invalid GPA")
 
         if not is_graduationYear_valid(user_data["graduationYear"]):
+            print("Invalid graduation year")
             return json_invalid_request("Invalid graduation year")
 
         if not is_optional_path_valid(user_data["CVpath"]):
+            print("Invalid CV path")
             return json_invalid_request("Invalid CV path")
 
         if not is_skills_valid(user_data["skills"]):
+            print("Invalid skills")
             return json_invalid_request("Invalid skills")
 
         if not is_languageSpoken_valid(user_data["languageSpoken"]):
+            print("Invalid language spoken")
             return json_invalid_request("Invalid language spoken")
 
         if not is_id_valid(user_data["universityId"]):
+            print("Invalid university")
             return json_invalid_request("Invalid university")
 
         return True
     except Exception as e:
+        print(e)
         return json_invalid_request("Invalid data")
     
     
