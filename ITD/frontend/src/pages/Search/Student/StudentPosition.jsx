@@ -14,12 +14,8 @@ const StudentPosition = () => {
     
     const handleApply = async () => {
         try {
-
-            console.log("Applying to Position...", positionId); // Debug log
             const res = await api.createApplication({"internshipPositionId": parseInt(positionId)});
             const data = await res.json();
-
-            // Redirect to the company dashboard
             navigate("/students/dashboard/applications");
         }
         catch (error) {
@@ -35,13 +31,8 @@ const StudentPosition = () => {
     useEffect(() => {
         const fetchPosition = async () => {
             try {
-                //console.log("Fetching Position...", useParams()); // Debug log
-                console.log("Fetched Position Id:", positionId); // Debug log
                 const res = await api.getPosition({"internshipPositionId": parseInt(positionId)}); // Use `positionId` directly
                 const data = await res.json();
-                console.log("Fetched Position:", data); // Debug log
-
-                console.log("Fetched Position:", data.internship_position); // Debug log
                 setPosition(data.internship_position);
                 
             } catch (error) {

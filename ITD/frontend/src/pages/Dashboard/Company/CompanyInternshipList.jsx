@@ -14,21 +14,17 @@ const CompanyInternshipList = () => {
     useEffect( () => {   
         const fetchInternships = async () => {
             try {
-                console.log("WEEE", user.id);
                 const res = await api.getInternshipListCompany({"companyId": user.id});
                 const data = await res.json();
-                console.log("data", data);
-                console.log("app", data.internships);
                 setInternships(data.internshipsPreview);
                 let roles = [];
                 if (data.internshipsPreview) {
                     roles = [...new Set(data.internshipsPreview.map((pos) => pos.roleTitle))];
                 }
                 setPossibleRoles(roles);
-                console.log(res);
             }
             catch(error) {
-                console.log(error);
+                console.error(error);
             }
         }
         if(user.type !== 'company') {
@@ -48,7 +44,6 @@ const CompanyInternshipList = () => {
             if (internshipRole !== "All") {
                 filtered = filtered.filter((internship) => internship.roleTitle === internshipRole);
             }
-            console.log("filtered", filtered);
             setFilteredInternships(filtered);
         };
 

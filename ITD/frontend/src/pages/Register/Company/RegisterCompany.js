@@ -32,13 +32,9 @@ const RegisterCompany = () => {
 
       try {      
         const res = await api.companyRegistration(dataCompany, (!!logo));
-        console.log(res)                                        // debug
         const data = await res.json();
-        console.log(data)                                      // debug
         // Save the token to localStorage
         localStorage.setItem('access token', res.access_token);
-        console.log("data: ", dataCompany);                                    // debug
-        // Redirect to student dashboard or another protected route
         toast.success('Registration successful!');
         navigate("/companies/home");
       } catch (error) {

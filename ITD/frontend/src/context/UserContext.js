@@ -55,7 +55,6 @@ const UserProvider = ({ children }) => {
       localStorage.removeItem("access_token");
       setUser(null);
       toast.success("Logout successful");
-      console.log("Logout successful");
     } catch (error) {
       console.error("Logout failed:", error.message);
       toast.error("Logout failed");

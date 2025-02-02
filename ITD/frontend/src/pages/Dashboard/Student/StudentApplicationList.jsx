@@ -28,17 +28,13 @@ const StudentApplicationList = () => {
     useEffect( () => {   
         const fetchApplications = async () => {
             try {
-                console.log("WEEE", user.id);
                 const res = await api.getApplicationListStudent({'studentId': user.id});
                 const data = await res.json();
-                console.log("data", data);
-                console.log("app", data.applications);
                 setApplications(data.applications);
                 setFilteredApplications(data.applications);
-                console.log(res);
             }
             catch(error) {
-                console.log(error);
+                console.error(error);
             }
         }
         if(user.type !== 'student') {

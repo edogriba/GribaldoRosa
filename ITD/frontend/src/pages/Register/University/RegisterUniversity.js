@@ -32,13 +32,9 @@ const RegisterUniversity = () => {
 
     try {      
       const res = await api.universityRegistration(dataUniversity, (!!logo));
-      console.log(res)                                        // debug
       const data = await res.json();
-      console.log(data)                                      // debug
       // Save the token to localStorage
       localStorage.setItem('access token', res.access_token);
-      console.log("data: ", dataUniversity);                                    // debug
-      // Redirect to student dashboard or another protected route
       toast.success('Registration successful!');
       navigate("/universities/home");
     } catch (error) {

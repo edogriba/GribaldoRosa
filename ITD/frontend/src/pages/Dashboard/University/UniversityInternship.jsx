@@ -32,13 +32,9 @@ const UniversityInternship = () => {
     useEffect(() => {
         const fetchInternship = async () => {
             try {
-                //console.log("Fetching Internship...", useParams()); // Debug log
-                console.log("Fetched Internship Id:", internshipId); // Debug log
                 const res = await api.getInternship({"internshipId": parseInt(internshipId)}); // Use `internshipId` directly
                 const data = await res.json();
-                console.log("Fetched Internship:", data); // Debug log
                 setInternship(data);
-                console.log("Fetched Internship:", data.internship); // Debug log
                 const companyId = data.company.id;
                 const companyName = data.company.companyName;
                 const studentId = data.student.id;

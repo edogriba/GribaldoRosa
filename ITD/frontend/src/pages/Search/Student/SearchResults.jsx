@@ -17,20 +17,15 @@ const StudentResults = ({positions}) => {
 
     const fetchApplications = async () => {
         try {
-            console.log("WEEE", user.id);
             const res = await api.getApplicationListStudent({'studentId': user.id});
             const data = await res.json();
-            console.log("data", data);
-            console.log("app", data.applications);
             setMyApplications(data.applications); 
-            console.log("WEE", myApplications); 
             }
         catch(error) {
-            console.log(error);
+            console.error(error);
         }
     }
     useEffect(() => {
-        console.log("Updated applications:", myApplications);
       }, [myApplications]);
    
     useEffect(() => {

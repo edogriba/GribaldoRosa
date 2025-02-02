@@ -62,7 +62,6 @@ const StudentUpdate = () => {
         formData.append('profilePicture', profilePicture);
       }
       const res = await api.updateStudent(formData);
-      console.log('Updated profile:', res);
       navigate('/students/dashboard/profile');   
       window.location.reload();    
       
