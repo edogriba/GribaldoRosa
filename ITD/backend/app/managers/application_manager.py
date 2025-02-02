@@ -47,7 +47,7 @@ class ApplicationManager:
             if get_current_user().get_id() != internshipPosition.get_companyId():
                 return json_unauthorized("Only the company that posted the internship can accept applications.")
             
-            if application.is_pending() or application.is_accessed():
+            if application.is_pending() or application.is_assessed():
                 application.accept()
                 return json_success("Application accepted successfully.")
             else:
@@ -77,7 +77,7 @@ class ApplicationManager:
             if get_current_user().get_id() != internshipPosition.get_companyId():
                 return json_unauthorized("Only the company that posted the internship can reject applications.")
             
-            if application.is_pending() or application.is_accessed():
+            if application.is_pending() or application.is_assessed():
                 application.reject()
                 return json_success("Application rejected successfully.")
             else:
@@ -174,7 +174,7 @@ class ApplicationManager:
             if get_current_user().get_id() != application.get_studentId() and get_current_user().get_id() != internshipPosition.get_companyId():
                 return json_unauthorized("You can only view your own applications.")
             
-            if application.is_accessed():
+            if application.is_assessed():
                 assessment = Assessment.get_last_assessment_by_application_id(applicationId)
                 return json_success("Application found successfully.",
                             application          = application.to_dict(),
@@ -262,8 +262,8 @@ class ApplicationManager:
             if get_current_user().get_id() != application.get_internshipPosition().get_companyId():
                 return json_unauthorized("Only the company that posted the internship can create assessment.")
             
-            if application.is_pending() or application.is_accessed():
-                application.access()
+            if application.is_pending() or application.is_assessed():
+                application.assess()
                 Assessment.add(applicationId, date, link)
                 return json_success("Assessment create successfully.")
             else:

@@ -229,15 +229,15 @@ class Application():
         except Exception as e:
             raise e  
 
-    def access(self) -> Union[None, Exception]:
+    def assess(self) -> Union[None, Exception]:
         """
-        Access the application by updating its status to "Accessed".
-        This method changes the status of the application to "Accessed", indicating that the application has been accessed.
+        Access the application by updating its status to "Assessed".
+        This method changes the status of the application to "Assessed", indicating that the application has been accessed.
 
         :raises Exception: If an error occurs during the update process.
         """
         try:
-            self.update_status("Accessed")
+            self.update_status("Assessed")
         except Exception as e:
             raise e
 
@@ -254,13 +254,13 @@ class Application():
         """
         return self.status == "Pending"
     
-    def is_accessed(self) -> bool:
+    def is_assessed(self) -> bool:
         """
         Check if the application has been accessed.
         
-        :return: True if the application status is "Accessed", otherwise False.
+        :return: True if the application status is "Assessed", otherwise False.
         """
-        return self.status == "Accessed"
+        return self.status == "Assessed"
     
     def is_accepted(self) -> bool:
         """
