@@ -15,6 +15,8 @@ const InternshipEndPoint = {
     SEARCH_NO_FILTERS: '/api/search_without_filters',
     GET_FILTERS: '/api/search/filters',
     SEARCH_WITH_FILTERS: '/api/search_with_filters',
+    CREATE_COMPLAINT: '/api/complaint/create',
+    CREATE_ASSESSMENT: '/api/assessment/create',
   };
 
 
@@ -56,3 +58,9 @@ export const searchNoFilters = async () =>
 
 export const searchFilters = async (data) =>
   requestAuthWithErrorToast(`${InternshipEndPoint.SEARCH_WITH_FILTERS}`, Method.POST, data);
+
+export const addComplaint = async (data) =>
+  requestAuthWithErrorToast(`${InternshipEndPoint.CREATE_COMPLAINT}`, Method.POST, data);
+
+export const createAssessment = async (data) =>
+  requestAuthWithErrorToast(`${InternshipEndPoint.CREATE_ASSESSMENT}`, Method.POST, data);

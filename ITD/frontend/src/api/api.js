@@ -29,7 +29,9 @@ import {
   acceptApplication,
   rejectApplication,
   assessApplication,
-  createApplication
+  createApplication,
+  refuseApplication,
+  confirmApplication
 } from './application';
 
 
@@ -49,6 +51,8 @@ import {
   searchNoFilters,
   searchFilters,
   getFilters,
+  addComplaint,
+  createAssessment,
 } from './internship';
 
 export const Method = {
@@ -92,5 +96,9 @@ export const api = {
   searchNoFilters,
   searchFilters,
   getFilters,
-  createApplication
+  createApplication,
+  addComplaint,
+  createAssessment,
+  confirmApplication,
+  refuseApplication
 };

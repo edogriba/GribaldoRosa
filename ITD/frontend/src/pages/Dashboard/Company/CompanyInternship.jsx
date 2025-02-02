@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import GoBack from "../../../components/GoBack";
 import { UserContext } from "../../../context/UserContext";
 import Status from "../../../components/Status";
+import ComplaintList from "../../Complaints/ComplaintList";
 
 const CompanyInternship = () => {
     const { user } = useContext(UserContext);
@@ -12,8 +13,42 @@ const CompanyInternship = () => {
     const { internshipId } = useParams(); 
     const [complaints, setComplaints] = useState([]);
     const [showComplaints, setShowComplaints]= useState(false);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const [content, setContent] = useState("");
+    const [date, setDate] = useState("");
     const navigate = useNavigate();  
-    console.log("Internship Id:", internshipId); // Debug log   
+    console.log("Internship Id:", internshipId); // Debug log  
+    
+    if ( user.type !== "company") {
+        navigate("/login");
+    }
+    const addComplaint = async () => {
+        try {
+            console.log("Adding Complaint..."); // Debug log
+            const complaint = {
+                "internshipId": internshipId,
+                "date": date,
+                "content": content
+            };
+            const response = await api.addComplaint(complaint);
+            const data = await response.json();
+            if (data.type === "created") {
+                toast.success("Complaint added successfully");
+            }
+            window.location.reload();
+        }
+        catch (error) {
+            console.error("Error adding complaint:", error.message);
+            if (error.status === 404) {
+                toast.error("Session expired please login again");
+                navigate("/login");
+            }
+            alert("Failed to add complaint. Please try again later.");
+        }
+    }
+
 
     const handleCloseInternship = async () => {   
         try {
@@ -25,7 +60,7 @@ const CompanyInternship = () => {
                 toast.success("Internship was closed successfully");
             }
             // Redirect to the company dashboard
-            navigate("/companies/dashboard/internships");
+            window.location.reload();
         }
         catch (error) { 
             console.error("Error closing internship:", error.message);
@@ -36,37 +71,19 @@ const CompanyInternship = () => {
             alert("Failed to close the internship. Please try again later.");
         }
     }
-    const fetchRelatedComplaints = async () => {   
-            try {
-                console.log("Fetching complaints"); // Debug log
-                setShowComplaints(true);
-                console.log("Fetching Applications..."); // Debug log
-                const res = await api.getComplaints({"internshipId": parseInt(internshipId)}); // Use `positionId` directly
-                const data = await res.json();
+    const showRelatedComplaints = () => {
+        setShowComplaints(true);
+    }
+    
+    const hideRelatedComplaints = () => { 
+        setShowComplaints(false);
+    }
 
-                if (res.type === "not_found") {
-                    toast.error("No applications associated to this");
-                }
-                console.log("Complaints fetched:", data.complaints); // Debug log
-                setComplaints(data.complaints);
-    
-                // Redirect to the company dashboard
-                //navigate(`/companies/dashboard/positions/${positionId}/applications`);
-            }
-            catch (error) { 
-                console.error("Fetching complaints:", error.message);
-                if (error.status === 401) {
-                    toast.error("Session expired please login again");
-                    navigate("/login");
-                }
-                alert("Failed to fetch the complaints of the internship. Please try again later.");
-            }
-        }
-    
-        const hideRelatedComplaints = () => { 
-    
-            setShowComplaints(false);
-        }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await addComplaint();
+        setShowModal(false);
+    };
 
     useEffect(() => {
         const fetchInternship = async () => {
@@ -77,6 +94,21 @@ const CompanyInternship = () => {
                 const data = await res.json();
                 console.log("Fetched Internship:", data); // Debug log
                 setInternship(data);
+                const companyId = data.company.id;
+                const companyName = data.company.companyName;
+                const studentId = data.student.id;
+                const studentSurname = data.student.lastName;
+                let transformedComplaints = data.complaints.map(complaint => {
+                    if (complaint.sourceId === companyId) {
+                      return { ...complaint, sourceId: companyName };
+                    } else if (complaint.sourceId === studentId) {
+                      return { ...complaint, sourceId: studentSurname };
+                    } else {
+                      return complaint;
+                    }
+                });
+                setComplaints(transformedComplaints);
+                console.log("Fetched Complaints:", data.complaints); // Debug log
                 console.log("Fetched Internship:", data.internship); // Debug log
             
                 
@@ -287,11 +319,63 @@ const CompanyInternship = () => {
                     Finish Internship
                     </button>
                 )}
-                    
+                <button
+                        className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                        onClick={() => setShowModal(true)}
+                    >
+                        Add Complaint
+                </button>
+
+                    {showModal && (
+                        <div className="fixed inset-0 flex items-center justify-center z-50">
+                            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                                <h2 className="text-2xl font-bold mb-4">Add Complaint</h2>
+                                <form onSubmit={handleSubmit}>
+                                    
+                                    <div className="mb-4 relative max-w-sm">
+                                    <input 
+                                        type="date"
+                                        id="complaintDate"
+                                        value={date}
+                                        max={new Date().toISOString().split("T")[0]}
+                                        onChange={(e) => setDate(e.target.value)}
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Select date"
+                                        required
+                                    />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Content</label>
+                                        <textarea
+                                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                                            value={content}
+                                            onChange={(e) => setContent(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <button
+                                            type="button"
+                                            className="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+                                            onClick={() => setShowModal(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
                 {!showComplaints && (
                     <button
                     className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
-                    onClick={fetchRelatedComplaints} 
+                    onClick={showRelatedComplaints} 
                     >
                     See Complaints
                     </button>
@@ -306,6 +390,11 @@ const CompanyInternship = () => {
                     </button>
                 )}
                 </div>
+                {showComplaints && (
+                <div className="mt-6 text-right">
+                    <ComplaintList complaints={complaints} />
+                </div>
+                )}
             </div>)}
         </div>
     );

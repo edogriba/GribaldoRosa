@@ -7,8 +7,38 @@ import Status from "../../../components/Status";
 
 const StudentApplication = () => {
     const [application, setApplication] = useState({});
-    const {positionId, applicationId } = useParams(); // Extract the dynamic `applicationId` from the route
+    const [positionId, setPositionId] = useState("");
+    const {applicationId } = useParams(); // Extract the dynamic `applicationId` from the route
     const navigate = useNavigate(); // Hook to navigate programmatically
+
+    const handleConfirm = async () => {
+        try {
+            const res = await api.confirmApplication({"applicationId": applicationId, "internshipPositionId": positionId});
+            if (res.status === 200) {
+                toast.success("Application confirmed successfully");
+                navigate("/students/dashboard/applications");
+            } else {
+                toast.error("Failed to confirm application. Please try again later.");
+            }
+        } catch (error) {
+            console.error("Error confirming application:", error.message);
+            alert("Failed to confirm application. Please try again later.");
+        }   
+    };
+    const handleRefuse = async () => {
+        try {
+            const res = await api.refuseApplication({"applicationId": applicationId, "internshipPositionId": positionId});
+            if (res.status === 200) {
+                toast.success("Application accepted successfully");
+                navigate("/students/dashboard/applications");
+            } else {
+                toast.error("Failed to refuse application. Please try again later.");
+            }
+        } catch (error) {
+            console.error("Error refusing application:", error.message);
+            alert("Failed to refuse application. Please try again later.");
+        }   
+    };
 
     useEffect(() => {
         const fetchApplication = async () => {
@@ -17,7 +47,8 @@ const StudentApplication = () => {
                 const res = await api.getApplicationStudent({"applicationId": applicationId}); // Use `applicationId` directly
                 const data = await res.json();
                 console.log("Fetched Application:", data); // Debug log
-                setApplication(data); // Assuming the API returns the entire application object
+                setApplication(data);
+                setPositionId(data.internshipPosition.internshipPositionId) // Assuming the API returns the entire application object
             } catch (error) {
                 console.error("Error fetching application:", error.message);
                 if (error.status === 404) {
@@ -212,6 +243,22 @@ const StudentApplication = () => {
                         </a>
                     </div>
                 </div>
+                { (application.application?.status === "Accepted")  &&
+                <div className="flex justify-end mt-6 space-x-4">
+                    <button
+                        onClick={handleConfirm}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    >
+                        Confirm
+                    </button>
+                    <button
+                        onClick={handleRefuse}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                        Refuse
+                    </button>
+                    </div>
+                }   
             </div>
         </div>
     );

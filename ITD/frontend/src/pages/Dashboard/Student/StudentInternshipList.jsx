@@ -100,7 +100,7 @@ const StudentInternshipList = () => {
                             return (
                                 <tr key={internship.internshipId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <img className="w-10 h-10 rounded-full" src={internship.company_photoPath ? `/uploads/${internship.company.logoPath}` : `/user.jpg`} alt="Profile"/>
+                                        <img className="w-10 h-10 rounded-full" src={internship.company_photoPath ? `/uploads/${internship.company_photoPath}` : `/user.jpg`} alt="Profile"/>
                                     </th>
                                     <td className="px-6 py-4">
                                         {internship.company_name}

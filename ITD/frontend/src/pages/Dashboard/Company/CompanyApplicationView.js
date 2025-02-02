@@ -4,6 +4,7 @@ import Footer from '../../../components/Footer';
 import { UserContext } from '../../../context/UserContext';
 import CompanyApplication from './CompanyApplication';
 import { useNavigate } from 'react-router-dom';
+
 const CompanyApplicationView = () => {
     const { user, userLogout } = useContext(UserContext);
     const {navigate} = useNavigate();

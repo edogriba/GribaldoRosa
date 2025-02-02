@@ -7,9 +7,32 @@ import Status from "../../../components/Status";
 
 const CompanyApplication = () => {
     const [application, setApplication] = useState({});
-    const { applicationId, positionId } = useParams(); // Extract the dynamic `applicationId` from the route
+    const { applicationId, positionId } = useParams();
+    const [showModal, setShowModal] = useState(false) // Extract the dynamic `applicationId` from the route
+    const [date, setDate] = useState("");
+    const [link, setLink] = useState("");
     const navigate = useNavigate(); // Hook to navigate programmatically
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            console.log("Assessing Application...", applicationId); // Debug log
+            const response  = await api.createAssessment({"applicationId": parseInt(applicationId), "date": date, "link": link}); // Use `applicationId` directly
+            const data = await response.json();
+            if (data.type === 'created') {
+                toast.success("Assessment added successfully");
+                setShowModal(false);
+            }
+        }
+        catch (error) {
+            console.error("Error assessing application:", error.message);
+            if (error.status === 404) {
+                toast.error("Session expired please login again");
+                navigate("/login");
+            }
+            alert("Failed to assess the application. Please try again later.");
+        }
+    }
     const handleAccept = async () => {
         try {
             console.log("Accepting Application...", applicationId); // Debug log
@@ -73,7 +96,7 @@ const CompanyApplication = () => {
     return (
         <div>
             {/* Go Back Button */}
-            <GoBack location="/companies/dashboard/applications"/>
+            <GoBack location={`/companies/dashboard/positions/${positionId}`}/>
             <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 dark:border-gray-700 rounded-lg shadow-lg">
                 {/* Header Section */}
                 <div className="mb-6 border-b pb-4">
@@ -263,11 +286,57 @@ const CompanyApplication = () => {
                         Reject
                     </button>
                     <button
-                        onClick={handleAssess}
+                        onClick={() => setShowModal(true)}
                         className="px-4 py-2 bg-yellow-300 text-white rounded-lg hover:bg-yellow-500"
                     >
                         Assess
                     </button>
+                    {showModal && (
+                        <div className="fixed inset-0 flex items-center justify-center z-50">
+                            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                                <h2 className="text-2xl font-bold mb-4">Create Virtual Assessment Meeting</h2>
+                                <form onSubmit={handleSubmit}>
+                                    
+                                    <div className="mb-4 relative max-w-sm">
+                                    <input 
+                                        type="date"
+                                        id="complaintDate"
+                                        value={date}
+                                        min={new Date().toISOString().split("T")[0]}
+                                        onChange={(e) => setDate(e.target.value)}
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Select date"
+                                        required
+                                    />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Link for the Virtual Assessment</label>
+                                        <textarea
+                                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                                            value={link}
+                                            onChange={(e) => setLink(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <button
+                                            type="button"
+                                            className="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+                                            onClick={() => setShowModal(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 }   
             </div>

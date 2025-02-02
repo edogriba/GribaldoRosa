@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import GoBack from "../../../components/GoBack";
 import { UserContext } from "../../../context/UserContext";
 import Status from "../../../components/Status";
+import ComplaintList from "../../Complaints/ComplaintList";
 
 const UniversityInternship = () => {
     const { user } = useContext(UserContext);
@@ -14,37 +15,19 @@ const UniversityInternship = () => {
     const [showComplaints, setShowComplaints]= useState(false);
     const navigate = useNavigate();  
 
-    const fetchRelatedComplaints = async () => {   
-            try {
-                console.log("Fetching complaints"); // Debug log
-                setShowComplaints(true);
-                console.log("Fetching Applications..."); // Debug log
-                const res = await api.getComplaints({"internshipId": parseInt(internshipId)}); // Use `positionId` directly
-                const data = await res.json();
+    if ( user.type !== "university") {
+        navigate("/login");
+    }
 
-                if (res.type === "not_found") {
-                    toast.error("No applications associated to this");
-                }
-                console.log("Complaints fetched:", data.complaints); // Debug log
-                setComplaints(data.complaints);
+    const showRelatedComplaints = () => {
+            setShowComplaints(true);
+    }
+        
     
-                // Redirect to the University dashboard
-                //navigate(`/companies/dashboard/positions/${positionId}/applications`);
-            }
-            catch (error) { 
-                console.error("Fetching complaints:", error.message);
-                if (error.status === 401) {
-                    toast.error("Session expired please login again");
-                    navigate("/login");
-                }
-                alert("Failed to fetch the complaints of the internship. Please try again later.");
-            }
-        }
+    const hideRelatedComplaints = () => { 
     
-        const hideRelatedComplaints = () => { 
-    
-            setShowComplaints(false);
-        }
+        setShowComplaints(false);
+    }
 
     useEffect(() => {
         const fetchInternship = async () => {
@@ -56,7 +39,20 @@ const UniversityInternship = () => {
                 console.log("Fetched Internship:", data); // Debug log
                 setInternship(data);
                 console.log("Fetched Internship:", data.internship); // Debug log
-            
+                const companyId = data.company.id;
+                const companyName = data.company.companyName;
+                const studentId = data.student.id;
+                const studentSurname = data.student.lastName;
+                let transformedComplaints = data.complaints.map(complaint => {
+                    if (complaint.sourceId === companyId) {
+                      return { ...complaint, sourceId: companyName };
+                    } else if (complaint.sourceId === studentId) {
+                      return { ...complaint, sourceId: studentSurname };
+                    } else {
+                      return complaint;
+                    }
+                });
+                setComplaints(transformedComplaints);
                 
             } catch (error) {
                 console.error("Error fetching internship:", error.message);
@@ -261,7 +257,7 @@ const UniversityInternship = () => {
                 {!showComplaints && (
                     <button
                     className="mx-2 px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring focus:ring-primary-300"
-                    onClick={fetchRelatedComplaints} 
+                    onClick={showRelatedComplaints} 
                     >
                     See Complaints
                     </button>
@@ -276,7 +272,13 @@ const UniversityInternship = () => {
                     </button>
                 )}
                 </div>
+                {showComplaints && (
+                <div className="mt-6 text-right">
+                    <ComplaintList complaints={complaints} />
+                </div>
+                )}
             </div>)}
+
         </div>
     );
 };

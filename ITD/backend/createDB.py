@@ -1,6 +1,6 @@
-from app.db.dbModels import UserDB, StudentDB, UniversityDB, CompanyDB, InternshipPositionDB, ApplicationDB, InternshipDB
+from app.db.dbModels import UserDB, StudentDB, UniversityDB, CompanyDB, InternshipPositionDB, ApplicationDB, InternshipDB, AssessmentDB, ComplaintDB
 
-""""
+'''
 user_conn = UserDB()
 user_conn.create_table()
 user_conn.close()
@@ -28,4 +28,12 @@ application_conn.close()
 internship_conn = InternshipDB()
 internship_conn.create_table()
 internship_conn.close()
-"""
+
+internship_conn = ComplaintDB()
+internship_conn.create_table()
+internship_conn.close()
+
+assessment_conn = AssessmentDB()
+assessment_conn.create_table()
+assessment_conn.close()
+'''

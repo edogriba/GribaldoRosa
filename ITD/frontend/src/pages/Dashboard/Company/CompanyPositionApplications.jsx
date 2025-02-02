@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Status from '../../../components/Status';
 
 const CompanyPositionApplications = (applications) => {
-    console.log("YUhuuu", applications);
     return (
         <div>
             <div className="mt-6 flow-root sm:mt-8">

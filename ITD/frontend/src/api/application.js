@@ -8,7 +8,9 @@ const ApplicationEndPoint = {
     ACCEPT_APPLICATION: '/api/application/accept',
     ASSESS_APPLICATION: '/api/application/assess',
     REJECT_APPLICATION: '/api/application/reject',
-    CREATE_APPLICATION: '/api/application/create'
+    CREATE_APPLICATION: '/api/application/create',
+    CONFIRM_APPLICATION: '/api/application/confirm',
+    REFUSE_APPLICATION: '/api/application/refuse',
 };
 
 export const getApplicationListCompany = async (data) => 
@@ -34,3 +36,9 @@ export const rejectApplication = async (data) =>
 
 export const createApplication = async (data) =>  
   requestAuthWithErrorToast(`${ApplicationEndPoint.CREATE_APPLICATION}`, Method.POST,  data);
+
+export const confirmApplication = async (data) =>
+  requestAuthWithErrorToast(`${ApplicationEndPoint.CONFIRM_APPLICATION}`, Method.POST, data);
+
+export const refuseApplication = async (data) =>
+  requestAuthWithErrorToast(`${ApplicationEndPoint.REFUSE_APPLICATION}`, Method.POST, data);

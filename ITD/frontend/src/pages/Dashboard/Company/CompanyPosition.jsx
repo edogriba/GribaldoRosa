@@ -43,7 +43,7 @@ const CompanyPosition = () => {
             console.log("Fetching Applications..."); // Debug log
             const res = await api.getApplicationListCompany({"internshipPositionId": parseInt(positionId)}); // Use `positionId` directly
             const data = await res.json();
-            console.log("Qui")
+            
             if (res.type === "not_found") {
                 toast.error("No applications associated to this");
             }
@@ -225,7 +225,6 @@ const CompanyPosition = () => {
                 {/* Optional Rendering Application Section */}
                 {showPosition && (
                     <div>
-                        
                         <CompanyPositionApplications applications={applications} />
                     </div>
                 )}
