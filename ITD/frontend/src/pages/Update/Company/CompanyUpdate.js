@@ -30,7 +30,6 @@ const CompanyUpdate = () => {
                 formData.append('logo', logo);
             }
             const res = await api.updateCompany(formData);
-            const data = await res.json();
             if (res.status === 201) {
                 toast.success('Profile updated successfully');
             }

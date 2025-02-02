@@ -23,7 +23,7 @@ const StudentApplicationList = () => {
         };
 
         filterResults();
-    }, [applicationStatus, applicationStatus, applications]);
+    }, [applicationStatus, applications]);
 
     useEffect( () => {   
         const fetchApplications = async () => {

@@ -14,8 +14,7 @@ const StudentPosition = () => {
     
     const handleApply = async () => {
         try {
-            const res = await api.createApplication({"internshipPositionId": parseInt(positionId)});
-            const data = await res.json();
+            await api.createApplication({"internshipPositionId": parseInt(positionId)});
             navigate("/students/dashboard/applications");
         }
         catch (error) {

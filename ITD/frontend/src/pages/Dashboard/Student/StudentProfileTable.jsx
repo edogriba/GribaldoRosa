@@ -44,7 +44,7 @@ const StudentProfileTable = () => {
                                     <td className="px-4 py-3">{user.degreeProgram}</td>
                                     <td className="px-4 py-3">{user.GPA}</td>
                                     <td className="px-4 py-3">{user.graduationYear}</td>
-                                    <td className="px-4 py-3">{user.universityId}</td>
+                                    <td className="px-4 py-3">{user.universityName}</td>
                                 </tr>
                             </tbody>
                         </table>

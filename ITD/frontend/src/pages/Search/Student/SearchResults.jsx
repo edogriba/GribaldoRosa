@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
 
 const StudentResults = ({positions}) => {  
-    const { user, userLogout } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [myApplications, setMyApplications] = useState([]);
     const navigate = useNavigate();
 

@@ -42,8 +42,10 @@ const RegisterCompany = () => {
         // Save the token to localStorage
         localStorage.setItem('access token', res.access_token);
         if (res.status === 201) {
-          toast.success('Registration successful!');
-          navigate("/companies/home");
+          toast.success('Registration successful! Please login with your credentials');
+        }
+        else {
+          toast.error('Registration failed: ' + res.message);
         }
       } catch (error) {
         console.log('Error registering company:', error.response?.data?.message || error.message);

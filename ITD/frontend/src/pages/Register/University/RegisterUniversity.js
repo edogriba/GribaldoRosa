@@ -38,11 +38,16 @@ const RegisterUniversity = () => {
       if (logo) {
           formData.append('logo', logo);
       }   
-      const res = await api.universityRegistration(formData, (!!logo));
+      const res = await api.universityRegistration(formData);
       // Save the token to localStorage
       localStorage.setItem('access token', res.access_token);
-      toast.success('Registration successful!');
-      navigate("/universities/home");
+
+      if (res.status === 201) {
+        toast.success('Registration successful! Please login with your credentials');
+      }
+      else {
+        toast.error('Registration failed: ' + res.message);
+      }
     } catch (error) {
       console.log('Error registering university:', error.response?.data?.message || error.message);
       toast.error('Registration failed: ' + (error.response?.data?.message || 'Please try again.'));

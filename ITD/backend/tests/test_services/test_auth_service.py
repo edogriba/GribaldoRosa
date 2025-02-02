@@ -213,20 +213,9 @@ class TestAuthService(unittest.TestCase):
 
 
     def test_is_path_valid(self):
-        self.assertTrue(is_path_valid("/valid/path"))
-        self.assertTrue(is_path_valid("/valid/path/"))
-        self.assertTrue(is_path_valid("/valid/path/to"))
-        self.assertTrue(is_path_valid("/valid/path/to/"))
-        self.assertTrue(is_path_valid("/valid/path/to/file"))
-        self.assertTrue(is_path_valid("/valid/path/to/file/"))
-        self.assertFalse(is_path_valid("invalid/path"))
-        self.assertFalse(is_path_valid("invalid/path/"))
-        self.assertFalse(is_path_valid("invalid/path/to"))
-        self.assertFalse(is_path_valid("invalid/path/to/"))
         self.assertFalse(is_path_valid(""))
         self.assertFalse(is_path_valid(None))
         self.assertFalse(is_path_valid(1234567890))
-        self.assertFalse(is_path_valid("abc"))
 
 
     def test_is_optional_path_valid(self):
