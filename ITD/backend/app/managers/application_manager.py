@@ -115,7 +115,7 @@ class ApplicationManager:
                 application.accept()
                 return json_invalid_request("Internship could not be added.")
             
-            return json_created("Application confirmed successfully.")
+            return json_success("Application confirmed successfully.")
         
         except Exception as e:
             raise e
@@ -265,7 +265,7 @@ class ApplicationManager:
             if application.is_pending() or application.is_assessed():
                 application.assess()
                 Assessment.add(applicationId, date, link)
-                return json_success("Assessment create successfully.")
+                return json_created("Assessment create successfully.")
             else:
                 return json_invalid_request("Invalid application status.")
         
