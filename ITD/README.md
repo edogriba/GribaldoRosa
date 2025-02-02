@@ -24,8 +24,7 @@ cd GribaldoRosa/ITD
 
 Before proceeding, ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (v20 or higher)
-- [npm](https://www.npmjs.com/)
-- [Git](https://git-scm.com/)
+- [Git](https://git-scm.com/downloads)
 
 
 ### Installation and Setup
@@ -46,7 +45,7 @@ Before proceeding, ensure you have the following installed:
 ### Start the development server
 
 ```bash
-npm start dev
+npm start
 ```
 
 The React app should now be running at [http://localhost:3000/](http://localhost:3000/).
